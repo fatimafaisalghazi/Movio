@@ -107,7 +107,6 @@ class SearchRepositoryImpl(
 
     override suspend fun getTopRatedSeries(query: String, page: Int): List<Series> {
         val res = remoteDataSource.getTopRatedSeries(
-            query = query,
             page = page
         ).seriesResults?.map {
             it.toSeries()
