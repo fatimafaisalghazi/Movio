@@ -10,7 +10,10 @@ import com.madrid.data.dataSource.remote.response.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.response.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SimilarMoviesResponse
-import com.madrid.data.dataSource.remote.response.series.SearchSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonEpisodesResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesDetailsResponse
@@ -80,7 +83,7 @@ interface MovieApi {
     suspend fun searchSeriesByQuery(
         @Query("query") name: String,
         @Query("page") page: Int
-    ): SearchSeriesResponse
+    ): TopRatedSeriesResponse
 
     @GET("tv/{series_id}")
     suspend fun getSeriesDetailsById(
@@ -119,7 +122,22 @@ interface MovieApi {
     @GET("tv/top_rated")
     suspend fun getTopRatedSeries(
         @Query("page") page: Int
-    ): SearchSeriesResponse
+    ): TopRatedSeriesResponse
+
+    @GET("tv/airing_today")
+    suspend fun getAiringTvShowsToday(
+        @Query("page") page: Int
+    ): AiringTodayTvShowsResponse
+
+    @GET("tv/on_the_air")
+    suspend fun getOnTheAirTvShows(
+        @Query("page") page: Int
+    ): OnAirTvShowsResponse
+
+    @GET("tv/popular")
+    suspend fun getPopularTvShows(
+        @Query("page") page: Int
+    ): RecommendedSeriesResponse
 
     @GET("genre/tv/list")
     suspend fun getSeriesGenres(): GenresResponse
