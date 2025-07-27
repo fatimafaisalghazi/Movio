@@ -125,7 +125,7 @@ fun SeriesDetailsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 MovioText(
-                    text = "ٍCurrent Seasons",
+                    text = "Current Seasons",
                     color = Theme.color.surfaces.onSurface,
                     textStyle = Theme.textStyle.headline.mediumMedium18
                 )
