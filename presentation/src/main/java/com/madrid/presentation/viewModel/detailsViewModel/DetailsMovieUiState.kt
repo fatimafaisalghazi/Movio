@@ -23,18 +23,3 @@ data class DetailsMovieUiState(
     val similarMovies : List<SimilarMovie> = emptyList()
 
 )
-
-data class Movie (
-    val id : Int = 0 ,
-    val imageUrl: String = "",
-    val rate: Double = 0.0 ,
-    val name : String  = ""
-)
-
-data class Review(
-    val personImageUrl : String  = "",
-    val personName : String = "",
-    val reviewTime : String = "",
-    val rate : Double  = 0.0 ,
-    val reviewText : String  = ""
-)

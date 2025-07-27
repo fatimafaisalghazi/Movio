@@ -125,7 +125,7 @@ class DetailsMovieViewModel(
 
                 val reviewUiStates = domainReviews.map { review ->
                     ReviewUiState(
-                        reviewerName = review.userId ?: "Anonymous",
+                        reviewerName = review.reviewerName?: "Anonymous",
                         reviewerImageUrl = "",
                         rating = review.rate?.toFloat() ?: 0f,
                         date = review.dateOfRelease ?: "",
