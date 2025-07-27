@@ -8,7 +8,7 @@ import com.madrid.domain.entity.SimilarSeries
 import com.madrid.domain.entity.Trailer
 import kotlinx.coroutines.flow.Flow
 
-interface SeriesDetailsRepository {
+interface SeriesRepository {
 
     suspend fun getSeriesDetailsById(seriesId: Int): Series
     suspend fun getSeriesTrailersById(seriesId: Int): Trailer

@@ -8,7 +8,7 @@ import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResult
 import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResult
-import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonEpisodesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonsNetwork
 import com.madrid.data.dataSource.remote.response.series.SeriesCastNetwork
@@ -20,6 +20,8 @@ import com.madrid.data.dataSource.remote.response.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesReviewResult
 import com.madrid.data.dataSource.remote.response.series.SimilarSeriesNetwork
 import com.madrid.data.dataSource.remote.response.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResults
 import com.madrid.data.dataSource.remote.utils.getDefaultSeries
 import com.madrid.domain.entity.Cast
 import com.madrid.domain.entity.Episode
@@ -31,9 +33,15 @@ import com.madrid.domain.entity.SimilarSeries
 
 
 // region Search
-fun TopRatedSeriesResponse.toTvShows(): List<Series> {
+fun SearchSeriesResponse.toTvShows(): List<Series> {
     return this.seriesResults?.map {
         it.toSeries()
+    } ?: emptyList()
+}
+
+fun TopRatedSeriesResponse.toTvShows(): List<Series>{
+    return this.results?.map { it ->
+        it?.toSeries() ?: getDefaultSeries()
     } ?: emptyList()
 }
 
@@ -62,6 +70,19 @@ fun SeriesResult.toSeries(): Series {
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
         yearOfRelease = this.releaseDate ?: "",
+        description = this.overview ?: "",
+        genre = listOf(),
+    )
+}
+
+
+fun TopRatedSeriesResults.toSeries(): Series{
+    return Series(
+        id = this.id ?: 0,
+        title = this.name ?: "",
+        imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
+        rate = this.voteAverage ?: 0.0,
+        yearOfRelease = "",
         description = this.overview ?: "",
         genre = listOf(),
     )

@@ -105,16 +105,6 @@ class SearchRepositoryImpl(
         return res
     }
 
-    override suspend fun getTopRatedSeries(query: String, page: Int): List<Series> {
-        val res = remoteDataSource.getTopRatedSeries(
-            page = page
-        ).seriesResults?.map {
-            it.toSeries()
-        } ?: listOf()
-        return res
-    }
-
-
     override suspend fun getRecommendedMovie(): List<Movie> {
         return emptyList()
     }

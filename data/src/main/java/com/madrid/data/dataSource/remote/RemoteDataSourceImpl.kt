@@ -10,16 +10,16 @@ import com.madrid.data.dataSource.remote.response.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.response.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SimilarMoviesResponse
-import com.madrid.data.dataSource.remote.response.series.AiringTodaySeriesResult
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
-import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonEpisodesResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.response.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.response.trending.AllTrendingResponse
 import com.madrid.data.repositories.remote.RemoteDataSource
 
@@ -70,7 +70,7 @@ class RemoteDataSourceImpl(
     }
 
     // Series
-    override suspend fun searchSeriesByQuery(name: String, page: Int): TopRatedSeriesResponse {
+    override suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse {
         return api.searchSeriesByQuery(name, page)
     }
 
@@ -119,7 +119,7 @@ class RemoteDataSourceImpl(
         return api.searchMoviesByQuery(name, 1)
     }
 
-    override suspend fun searchSeriesByQuery(name: String): TopRatedSeriesResponse {
+    override suspend fun searchSeriesByQuery(name: String): SearchSeriesResponse {
         return api.searchSeriesByQuery(name, 1)
     }
 

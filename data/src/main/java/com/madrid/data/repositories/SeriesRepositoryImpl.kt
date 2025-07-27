@@ -16,13 +16,13 @@ import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
 import com.madrid.domain.entity.SimilarSeries
 import com.madrid.domain.entity.Trailer
-import com.madrid.domain.repository.SeriesDetailsRepository
+import com.madrid.domain.repository.SeriesRepository
 import kotlinx.coroutines.flow.Flow
 
-class SeriesDetailsRepositoryImpl(
+class SeriesRepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
-) : SeriesDetailsRepository {
+) : SeriesRepository {
 
     //region series details
     override suspend fun getSeriesDetailsById(seriesId: Int): Series {

@@ -13,12 +13,13 @@ import com.madrid.data.dataSource.remote.response.movie.SimilarMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
-import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonEpisodesResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.response.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.response.trending.AllTrendingResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -83,7 +84,7 @@ interface MovieApi {
     suspend fun searchSeriesByQuery(
         @Query("query") name: String,
         @Query("page") page: Int
-    ): TopRatedSeriesResponse
+    ): SearchSeriesResponse
 
     @GET("tv/{series_id}")
     suspend fun getSeriesDetailsById(

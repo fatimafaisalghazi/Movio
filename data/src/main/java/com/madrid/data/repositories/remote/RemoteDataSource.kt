@@ -10,16 +10,16 @@ import com.madrid.data.dataSource.remote.response.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.response.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SimilarMoviesResponse
-import com.madrid.data.dataSource.remote.response.series.AiringTodaySeriesResult
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
-import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonEpisodesResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.response.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.response.trending.AllTrendingResponse
 
 interface RemoteDataSource {
@@ -27,8 +27,8 @@ interface RemoteDataSource {
     // region Search
     suspend fun searchMoviesByQuery(name: String, page: Int): SearchMovieResponse
     suspend fun searchMoviesByQuery(name: String): SearchMovieResponse
-    suspend fun searchSeriesByQuery(name: String, page: Int): TopRatedSeriesResponse
-    suspend fun searchSeriesByQuery(name: String): TopRatedSeriesResponse
+    suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse
+    suspend fun searchSeriesByQuery(name: String): SearchSeriesResponse
     suspend fun searchArtistByQuery(name: String, page: Int): SearchArtistResponse
     // endregion
 
