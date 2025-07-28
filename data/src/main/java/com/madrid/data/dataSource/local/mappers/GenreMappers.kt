@@ -5,7 +5,7 @@ import com.madrid.data.dataSource.local.table.SeriesGenreTable
 import com.madrid.data.dataSource.remote.response.genre.MovieGenre
 
 
-fun MovieGenre.toMovieGenreEntity(): MovieGenreTable {
+fun MovieGenre.toMovieGenreTable(): MovieGenreTable {
     return MovieGenreTable(
         genreId = this.id ?: 0,
         genreTitle = this.name ?: "Unknown",
@@ -13,7 +13,7 @@ fun MovieGenre.toMovieGenreEntity(): MovieGenreTable {
     )
 }
 
-fun MovieGenre.toSeriesGenreEntity(): SeriesGenreTable {
+fun MovieGenre.toSeriesGenreTable(): SeriesGenreTable {
     return SeriesGenreTable(
         genreId = this.id ?: 0,
         genreTitle = this.name ?: "Unknown",

@@ -1,15 +1,15 @@
 package com.madrid.data.repositories
 
+import com.madrid.data.dataSource.local.mappers.toArtist
+import com.madrid.data.dataSource.local.mappers.toMovie
+import com.madrid.data.dataSource.local.mappers.toMovieGenreTable
+import com.madrid.data.dataSource.local.mappers.toSeries
+import com.madrid.data.dataSource.local.mappers.toSeriesGenreTable
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
-import com.madrid.data.dataSource.local.mappers.toArtist
-import com.madrid.data.dataSource.local.mappers.toArtistEntity
-import com.madrid.data.dataSource.local.mappers.toMovieGenreEntity
-import com.madrid.data.dataSource.local.mappers.toMovie
-import com.madrid.data.dataSource.local.mappers.toMovieEntity
-import com.madrid.data.dataSource.local.mappers.toSeries
-import com.madrid.data.dataSource.local.mappers.toSeriesEntity
-import com.madrid.data.dataSource.local.mappers.toSeriesGenreEntity
+import com.madrid.data.dataSource.mapper.toArtistTable
+import com.madrid.data.dataSource.mapper.toMovieTable
+import com.madrid.data.dataSource.mapper.toSeriesTable
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toSeries
 import com.madrid.data.repositories.local.LocalDataSource
@@ -30,7 +30,7 @@ class SearchRepositoryImpl(
         if (result.size < 7) {
             localSource.getAllMovieGenres().ifEmpty {
                 remoteDataSource.getMovieGenres().genres?.map {
-                    localSource.insertMovieGenre(it.toMovieGenreEntity())
+                    localSource.insertMovieGenre(it.toMovieGenreTable())
                 }
             }
             remoteDataSource.searchMoviesByQuery(
@@ -45,7 +45,7 @@ class SearchRepositoryImpl(
                         )
                     )
                 }
-                localSource.insertMovie(movieResult.toMovieEntity())
+                localSource.insertMovie(movieResult.toMovieTable())
             }
             result = localSource.searchMovieByQueryFromDB(query, page)
         }
@@ -57,7 +57,7 @@ class SearchRepositoryImpl(
         if (result.size < 7) {
             localSource.getAllSeriesGenres().ifEmpty {
                 remoteDataSource.getSeriesGenres().genres?.map {
-                    localSource.insertSeriesGenre(it.toSeriesGenreEntity())
+                    localSource.insertSeriesGenre(it.toSeriesGenreTable())
                 }
             }
             remoteDataSource.searchSeriesByQuery(
@@ -72,7 +72,7 @@ class SearchRepositoryImpl(
                         )
                     )
                 }
-                localSource.insertSeries(seriesResult.toSeriesEntity())
+                localSource.insertSeries(seriesResult.toSeriesTable())
             }
             result = localSource.searchSeriesByQueryFromDB(query, page)
         }
@@ -86,7 +86,7 @@ class SearchRepositoryImpl(
                 name = query,
                 page = page
             ).artistResults?.map {
-                localSource.insertArtist(it.toArtistEntity())
+                localSource.insertArtist(it.toArtistTable())
             }
         }
         return localSource.searchArtistByQueryFromDB(query, page).map {
@@ -125,7 +125,7 @@ class SearchRepositoryImpl(
             page = page
         ).movieResults
         movies?.map { movie ->
-            localSource.insertMovie(movie.toMovieEntity())
+            localSource.insertMovie(movie.toMovieTable())
             movie.genreIds?.map { genreId ->
                 localSource.relateMovieToGenre(
                     MovieGenreCrossRef(

@@ -1,10 +1,8 @@
 package com.madrid.data.repositories
 
 import android.util.Log
-import com.madrid.data.dataSource.local.mappers.toMovieGenreEntity
 import com.madrid.data.dataSource.remote.mapper.toCredits
 import com.madrid.data.dataSource.remote.mapper.toEpisode
-import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toReviewResult
 import com.madrid.data.dataSource.remote.mapper.toSeries
 import com.madrid.data.dataSource.remote.mapper.toSimilarSeries
