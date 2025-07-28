@@ -63,7 +63,7 @@ fun SearchScreen(
 
     RefreshScreenHolder(
         refreshState = uiState.searchUiState.refreshState,
-        onRefresh = {viewModel.onRefresh(searchQuery , typeOfFilterSearch)}
+        onRefresh = { viewModel.onRefresh(searchQuery, typeOfFilterSearch) }
     ) {
         ContentSearchScreen(
             isError = uiState.searchUiState.isError,
@@ -119,8 +119,16 @@ fun SearchScreen(
             onClickSeeAll = {
                 navController.navigate(Destinations.SeeAllForYouScreen)
             },
-            highlightrecentSearch = viewModel::highlightCharactersInText
-
+            highlightrecentSearch = viewModel::highlightCharactersInText,
+            onTopResultClick = { movieId ->
+                navController.navigate(Destinations.MovieDetailsScreen(movieId))
+            },
+            onSearchedClick = { movieId ->
+                navController.navigate(Destinations.MovieDetailsScreen(movieId))
+            },
+            onArtistClick = { actorId ->
+                navController.navigate(Destinations.ActorDetails(actorId))
+            }
         )
         uiState.searchUiState.errorMessage?.let { errorMsg ->
             LaunchedEffect(errorMsg) {
@@ -146,8 +154,8 @@ fun SearchScreen(
 @OptIn(FlowPreview::class)
 @Composable
 fun ContentSearchScreen(
-    isError : Boolean,
-    typeOfFilterSearch : FilterPagesItem ,
+    isError: Boolean,
+    typeOfFilterSearch: FilterPagesItem,
     addRecentSearch: (String) -> Unit,
     topRated: LazyPagingItems<SearchScreenState.MovieUiState>,
     movies: LazyPagingItems<SearchScreenState.MovieUiState>,
@@ -171,6 +179,9 @@ fun ContentSearchScreen(
     isLoading: Boolean = false,
     onClickSeeAll: () -> Unit,
     onSeriesClick: (Int) -> Unit = {},
+    onTopResultClick: (Int) -> Unit,
+    onSearchedClick: (Int) -> Unit,
+    onArtistClick: (Int) -> Unit,
     highlightrecentSearch: (String, String, Color, Color, TextStyle) -> AnnotatedString,
 ) {
     val showSearchResults = searchQuery.isNotBlank()
@@ -186,10 +197,10 @@ fun ContentSearchScreen(
                     onSearchBarClick()
                     addRecentSearch(query)
                     when (typeOfFilterSearch) {
-                        FilterPagesItem.TOP_RATED-> onClickTopRated()
-                        FilterPagesItem.MOVIES-> onClickMovies()
+                        FilterPagesItem.TOP_RATED -> onClickTopRated()
+                        FilterPagesItem.MOVIES -> onClickMovies()
                         FilterPagesItem.SERIES -> onClickSeries()
-                        FilterPagesItem.ARTISTS-> onClickArtist()
+                        FilterPagesItem.ARTISTS -> onClickArtist()
                     }
                 }
             }
@@ -228,7 +239,7 @@ fun ContentSearchScreen(
             forYouAndExploreScreen(
                 showSearchResults = showSearchResults,
                 isLoading = isLoading,
-                isError =  isError,
+                isError = isError,
                 forYouMovies = forYouMovies,
                 onMovieClick = onMovieClick,
                 exploreMoreMovies = exploreMoreMovies,
@@ -266,6 +277,15 @@ fun ContentSearchScreen(
                 },
                 onSeriesClick = { seriesId ->
                     onSeriesClick(seriesId)
+                },
+                onMovieClick = { moviesId ->
+                    onSearchedClick(moviesId)
+                },
+                onActorClick = { actorId ->
+                    onArtistClick(actorId)
+                },
+                onTopResultClick = { movieId ->
+                    onTopResultClick(movieId)
                 }
             )
         }
