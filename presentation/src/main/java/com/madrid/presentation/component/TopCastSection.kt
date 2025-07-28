@@ -3,6 +3,7 @@ package com.madrid.presentation.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -37,7 +38,8 @@ fun TopCastSection(
             primaryText = stringResource(com.madrid.presentation.R.string.top_cast),
             secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
             endIcon = painterResource(R.drawable.outline_alt_arrow_left),
-            onSeeAllClick = { onSeeAllClick() }
+            onSeeAllClick = { onSeeAllClick() },
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
