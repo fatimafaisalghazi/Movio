@@ -27,7 +27,7 @@ class SearchRepositoryImpl(
 
     override suspend fun getMovieByQuery(query: String, page: Int): List<Movie> {
         var result = localSource.searchMovieByQueryFromDB(query, page)
-        if (result.size < 7) {
+        if (result.isEmpty()) {
             localSource.getAllMovieGenres().ifEmpty {
                 remoteDataSource.getMovieGenres().genres?.map {
                     localSource.insertMovieGenre(it.toMovieGenreTable())
@@ -54,7 +54,7 @@ class SearchRepositoryImpl(
 
     override suspend fun getSeriesByQuery(query: String, page: Int): List<Series> {
         var result = localSource.searchSeriesByQueryFromDB(query, page)
-        if (result.size < 7) {
+        if (result.isEmpty()) {
             localSource.getAllSeriesGenres().ifEmpty {
                 remoteDataSource.getSeriesGenres().genres?.map {
                     localSource.insertSeriesGenre(it.toSeriesGenreTable())
@@ -81,7 +81,7 @@ class SearchRepositoryImpl(
 
     override suspend fun getArtistByQuery(query: String, page: Int): List<Artist> {
         val result = localSource.searchArtistByQueryFromDB(query, page)
-        if (result.size < 7) {
+        if (result.isEmpty()) {
             remoteDataSource.searchArtistByQuery(
                 name = query,
                 page = page
