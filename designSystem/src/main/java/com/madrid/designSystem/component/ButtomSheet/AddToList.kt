@@ -1,5 +1,6 @@
 package com.madrid.designSystem.component.BottomSheet
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,15 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -30,10 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.R
+import com.madrid.designSystem.component.MovioIcon
+import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.theme.Theme
 import kotlinx.coroutines.launch
 
 data class UserList(
@@ -52,9 +51,9 @@ fun UserListItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp) // Match design height
+            .height(56.dp)
             .clickable(
-                enabled = !userList.isLoading, // Disable clicking when loading
+                enabled = !userList.isLoading,
                 role = Role.Checkbox,
                 onClickLabel = if (userList.isSelected) "Remove from list" else "Add to list"
             ) { onToggleSelection(userList) }
@@ -62,77 +61,60 @@ fun UserListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
+        MovioText(
             text = userList.name,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White, // White text as shown in design
+            textStyle = MaterialTheme.typography.bodyLarge,
+            color = Color.White, 
             modifier = Modifier.weight(1f)
         )
 
-        // Selection indicator matching Figma design
         Box(
             modifier = Modifier.size(40.dp),
             contentAlignment = Alignment.Center
         ) {
             when {
                 userList.isLoading -> {
-                    // Loading state - circular progress indicator
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        color = Color.White.copy(alpha = 0.7f),
-                        strokeWidth = 2.dp,
-                        strokeCap = StrokeCap.Round
+                    MovioIcon(
+                        painter = painterResource(id = R.drawable.loading),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
                     )
                 }
 
                 userList.isSelected -> {
-                    // Selected state - purple circle with white checkmark
                     Box(
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(40.dp)
                             .clip(CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-                        Card(
-                            modifier = Modifier.size(32.dp),
-                            shape = CircleShape,
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color(0xFF8B5CF6) // Purple color from design
-                            )
-                        ) {
-                            Box(
-                                modifier = Modifier.size(32.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Check,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                            }
-                        }
+                        MovioIcon(
+                            painter = painterResource(id = R.drawable.bold_check_circle),
+                            contentDescription = null,
+                            tint = Color(0xFF8B5CF6),
+                            modifier = Modifier.size(40.dp)
+                        )
                     }
                 }
 
                 else -> {
-                    // Unselected state - outlined circle with plus
                     Box(
                         modifier = Modifier
                             .size(32.dp)
                             .border(
-                                width = 1.dp,
-                                color = Color.White.copy(alpha = 0.3f),
+                                width = 2.dp,
+                                color = Theme.color.surfaces.onSurfaceContainer,
                                 shape = CircleShape
                             )
                             .clip(CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
+                        MovioIcon(
+                            painter = painterResource(id = R.drawable.add),
+                            tint = Theme.color.surfaces.onSurfaceContainer,
                             contentDescription = null,
-                            tint = Color.White.copy(alpha = 0.7f),
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(40.dp)
                         )
                     }
                 }
@@ -158,16 +140,23 @@ fun CreateNewListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Icon(
-            imageVector = Icons.Default.Add,
+        Box(
+            modifier = Modifier
+                .size(32.dp)
+//                .background(Theme.color.surfaces.surfaceContainer)
+                .clip(CircleShape),
+        ) {
+            MovioIcon(
+                painter = painterResource(id = R.drawable.add),
             contentDescription = null,
             tint = Color.White,
-            modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(40.dp)
         )
-        Text(
+        }
+        MovioText(
             text = "Create a new list",
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White
+            textStyle = MaterialTheme.typography.bodyLarge,
+            color = Color.White,
         )
     }
 }
@@ -239,7 +228,6 @@ fun AddToListBottomSheetContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewAddToListBottomSheetContent() {
-    // Dark background to match the design
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -248,7 +236,7 @@ fun PreviewAddToListBottomSheetContent() {
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = Color(0xFF1A1B23) // Dark background from design
+                containerColor = Color(0xFF1A1B23)
             )
         ) {
             AddToListBottomSheetContent(
