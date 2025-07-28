@@ -1,6 +1,5 @@
 package com.madrid.presentation.screens.detailsScreen.detailsMovieScreen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.BottomMediaActions
-import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastSection
 import com.madrid.presentation.component.header.MovieDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
@@ -83,13 +81,6 @@ fun MovieDetailsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
             TopCastSection(
-                castMembers = uiState.casts.map { cast ->
-                    CastMember(
-                        id = cast.id.toString(),
-                        name = cast.name,
-                        imageUrl = cast.imageUrl
-                    )
-                },
                 onSeeAllClick = {
                     navController.navigate(
                         Destinations.TopCast(
@@ -98,11 +89,15 @@ fun MovieDetailsScreen(
                         )
                     )
                 },
+                onCastMemberClick = {castId ->
+                    navController.navigate(Destinations.ActorDetails(
+                    artistId = castId
+                ))},
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
             Spacer(modifier = Modifier.height(32.dp))
 
-            if(uiState.reviews.isNotEmpty()){
+            if (uiState.reviews.isNotEmpty()) {
                 ReviewScreen(
                     onSeeAllReviews = {
                         navController.navigate(

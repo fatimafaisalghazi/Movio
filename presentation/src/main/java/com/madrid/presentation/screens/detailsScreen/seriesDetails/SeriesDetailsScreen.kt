@@ -29,7 +29,6 @@ import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
-import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastSection
 import com.madrid.presentation.component.header.MovieDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
@@ -98,29 +97,29 @@ fun SeriesDetailsScreen(
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            TopCastSection(
-                castMembers = uiState.topCast.map { cast ->
-                    CastMember(
-                        id = cast.id.toString(),
-                        name = cast.name,
-                        imageUrl = cast.imageUrl
-                    )
-                },
-                onSeeAllClick = {
-                    navController.navigate(
-                        Destinations.TopCast(
-                            mediaId = uiState.seriesId,
-                            isMovie = false
+                TopCastSection(
+                    onCastMemberClick = { castId ->
+                        navController.navigate(
+                            Destinations.ActorDetails(
+                                artistId = castId
+                            )
                         )
-                    )
-                },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            Spacer(Modifier.height(12.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    },
+                    onSeeAllClick = {
+                        navController.navigate(
+                            Destinations.TopCast(
+                                mediaId = uiState.seriesId,
+                                isMovie = false
+                            )
+                        )
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                        Spacer (Modifier.height(12.dp))
+                        Row (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -170,7 +169,7 @@ fun SeriesDetailsScreen(
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))
-            if(uiState.reviews.isNotEmpty()){
+            if (uiState.reviews.isNotEmpty()) {
                 ReviewScreen(
                     onSeeAllReviews = {
                         navController.navigate(
