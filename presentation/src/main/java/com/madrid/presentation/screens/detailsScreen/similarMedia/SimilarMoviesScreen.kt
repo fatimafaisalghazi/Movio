@@ -1,6 +1,5 @@
 package com.madrid.presentation.screens.detailsScreen.similarMedia
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -55,33 +54,15 @@ fun SimilarMoviesSection(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(similarMovies) { movie ->
-                MovieCard(
-                    movie = movie,
-                    onClick = { onMovieClick(movie) }
+                MovioVerticalCard(
+                    description = movie.title,
+                    movieImage = movie.imageUrl,
+                    rate = movie.rating.toString(),
+                    width = 124.dp,
+                    height = 160.dp,
+                    onClick = { onMovieClick(movie) },
                 )
             }
         }
-    }
-}
-
-
-@Composable
-private fun MovieCard(
-    movie: SimilarMovie,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .clickable(onClick = onClick)
-    ) {
-        MovioVerticalCard(
-            description = movie.title,
-            movieImage = movie.imageUrl,
-            rate = movie.rating.toString(),
-            width = 124.dp,
-            height = 160.dp,
-            onClick = onClick,
-        )
     }
 }
