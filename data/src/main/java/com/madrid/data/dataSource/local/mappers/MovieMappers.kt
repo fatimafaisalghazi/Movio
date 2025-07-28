@@ -1,6 +1,6 @@
 package com.madrid.data.dataSource.local.mappers
 
-import com.madrid.data.dataSource.local.entity.MovieEntity
+import com.madrid.data.dataSource.local.table.MovieEntity
 import com.madrid.data.dataSource.remote.response.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieResult
 import com.madrid.domain.entity.Movie

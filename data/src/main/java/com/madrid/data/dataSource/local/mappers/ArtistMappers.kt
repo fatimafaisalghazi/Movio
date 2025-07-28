@@ -1,10 +1,9 @@
 package com.madrid.data.dataSource.local.mappers
 
 
-import com.madrid.data.dataSource.local.entity.ArtistEntity
+import com.madrid.data.dataSource.local.table.ArtistEntity
 import com.madrid.data.dataSource.remote.response.artist.ArtistsResult
 import com.madrid.domain.entity.Artist
-import kotlinx.datetime.LocalDate
 
 fun Artist.toArtistEntity(): ArtistEntity {
     return ArtistEntity(

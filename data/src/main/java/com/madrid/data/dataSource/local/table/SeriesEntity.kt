@@ -1,4 +1,4 @@
-package com.madrid.data.dataSource.local.entity
+package com.madrid.data.dataSource.local.table
 
 
 import androidx.room.Entity

@@ -7,9 +7,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.madrid.data.dataSource.local.entity.SeriesEntity
-import com.madrid.data.dataSource.local.entity.relationship.SeriesGenreCrossRef
-import com.madrid.data.dataSource.local.entity.relationship.SeriesWithGenres
+import com.madrid.data.dataSource.local.table.SeriesEntity
+import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.SeriesWithGenres
 
 @Dao
 interface SeriesDao {

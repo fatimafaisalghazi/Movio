@@ -6,16 +6,16 @@ import com.madrid.data.dataSource.local.dao.MovieDao
 import com.madrid.data.dataSource.local.dao.RecentSearchDao
 import com.madrid.data.dataSource.local.dao.SeriesDao
 import com.madrid.data.dataSource.local.dao.SeriesGenreDao
-import com.madrid.data.dataSource.local.entity.ArtistEntity
-import com.madrid.data.dataSource.local.entity.MovieGenreEntity
-import com.madrid.data.dataSource.local.entity.MovieEntity
-import com.madrid.data.dataSource.local.entity.RecentSearchEntity
-import com.madrid.data.dataSource.local.entity.SeriesEntity
-import com.madrid.data.dataSource.local.entity.SeriesGenreEntity
-import com.madrid.data.dataSource.local.entity.relationship.GenreWithMovies
-import com.madrid.data.dataSource.local.entity.relationship.GenreWithSeries
-import com.madrid.data.dataSource.local.entity.relationship.MovieGenreCrossRef
-import com.madrid.data.dataSource.local.entity.relationship.SeriesGenreCrossRef
+import com.madrid.data.dataSource.local.table.ArtistEntity
+import com.madrid.data.dataSource.local.table.MovieGenreEntity
+import com.madrid.data.dataSource.local.table.MovieEntity
+import com.madrid.data.dataSource.local.table.RecentSearchEntity
+import com.madrid.data.dataSource.local.table.SeriesEntity
+import com.madrid.data.dataSource.local.table.SeriesGenreEntity
+import com.madrid.data.dataSource.local.table.relationship.GenreWithMovies
+import com.madrid.data.dataSource.local.table.relationship.GenreWithSeries
+import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
 import com.madrid.data.repositories.local.LocalDataSource
 
 class LocalDataSourceImpl(

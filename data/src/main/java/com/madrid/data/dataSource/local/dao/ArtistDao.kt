@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.madrid.data.dataSource.local.entity.ArtistEntity
+import com.madrid.data.dataSource.local.table.ArtistEntity
 
 @Dao
 interface ArtistDao {

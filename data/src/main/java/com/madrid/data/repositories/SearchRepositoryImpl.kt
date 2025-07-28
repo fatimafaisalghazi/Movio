@@ -1,7 +1,7 @@
 package com.madrid.data.repositories
 
-import com.madrid.data.dataSource.local.entity.relationship.MovieGenreCrossRef
-import com.madrid.data.dataSource.local.entity.relationship.SeriesGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
 import com.madrid.data.dataSource.local.mappers.toArtist
 import com.madrid.data.dataSource.local.mappers.toArtistEntity
 import com.madrid.data.dataSource.local.mappers.toMovieGenreEntity

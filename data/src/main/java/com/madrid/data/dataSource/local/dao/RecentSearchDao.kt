@@ -3,7 +3,7 @@ package com.madrid.data.dataSource.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.madrid.data.dataSource.local.entity.RecentSearchEntity
+import com.madrid.data.dataSource.local.table.RecentSearchEntity
 
 @Dao
 interface RecentSearchDao {

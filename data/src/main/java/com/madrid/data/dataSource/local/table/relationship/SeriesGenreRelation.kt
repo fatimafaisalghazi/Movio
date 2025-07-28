@@ -1,11 +1,11 @@
-package com.madrid.data.dataSource.local.entity.relationship
+package com.madrid.data.dataSource.local.table.relationship
 
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
-import com.madrid.data.dataSource.local.entity.SeriesEntity
-import com.madrid.data.dataSource.local.entity.SeriesGenreEntity
+import com.madrid.data.dataSource.local.table.SeriesEntity
+import com.madrid.data.dataSource.local.table.SeriesGenreEntity
 
 @Entity(tableName = "SeriesGenreCrossRef", primaryKeys = ["genreId", "seriesId"])
 data class SeriesGenreCrossRef(

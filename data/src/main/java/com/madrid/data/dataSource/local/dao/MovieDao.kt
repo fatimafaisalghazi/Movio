@@ -8,9 +8,9 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import androidx.room.Upsert
-import com.madrid.data.dataSource.local.entity.MovieEntity
-import com.madrid.data.dataSource.local.entity.relationship.MovieGenreCrossRef
-import com.madrid.data.dataSource.local.entity.relationship.MovieWithGenres
+import com.madrid.data.dataSource.local.table.MovieEntity
+import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.MovieWithGenres
 
 @Dao
 interface MovieDao {

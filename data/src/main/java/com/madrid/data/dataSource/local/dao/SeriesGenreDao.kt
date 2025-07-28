@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import com.madrid.data.dataSource.local.entity.SeriesGenreEntity
-import com.madrid.data.dataSource.local.entity.relationship.GenreWithSeries
+import com.madrid.data.dataSource.local.table.SeriesGenreEntity
+import com.madrid.data.dataSource.local.table.relationship.GenreWithSeries
 
 
 @Dao
