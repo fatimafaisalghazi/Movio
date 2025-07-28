@@ -6,6 +6,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,7 +49,8 @@ fun RatingStars(
     isInteractive: Boolean = true
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .size(28.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -61,11 +65,10 @@ fun RatingStars(
                 contentDescription = "Star $starNumber",
                 tint = if (isSelected) Theme.color.brand.primary else Theme.color.surfaces.onSurfaceContainer,
                 modifier = Modifier
-                    .size(32.dp)
                     .clickable(enabled = isInteractive) {
                         onRatingChange(starNumber)
                     }
-                    .padding(4.dp)
+                    .padding(8.dp)
             )
         }
     }
@@ -84,15 +87,13 @@ fun RatingBottomSheetContent(
 
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(115.dp),
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -108,19 +109,23 @@ fun RatingBottomSheetContent(
                         shape = CircleShape
                     )
             )
+            Spacer(modifier.size(8.dp))
             MovioText(
                 text = movieTitle,
                 textStyle = MaterialTheme.typography.titleMedium,
                 color = Theme.color.surfaces.onSurface,
                 textAlign = TextAlign.Center
             )
+            Spacer(modifier.size(5.dp))
             MovioText(
+                modifier = Modifier.size(328.dp,17.dp),
                 text = if (isSubmitted) "Thank you for your rating!" else "Add your overall rating for this movie",
                 textStyle = MaterialTheme.typography.labelSmall,
                 color = Theme.color.surfaces.onSurfaceContainer,
                 textAlign = TextAlign.Center
             )
         }
+        Spacer(modifier.size(16.dp))
         RatingStars(
             currentRating = selectedRating,
             onRatingChange = { newRating ->
@@ -133,6 +138,7 @@ fun RatingBottomSheetContent(
                 .height(48.dp),
             isInteractive = !isSubmitted
         )
+        Spacer(modifier.size(20.dp))
         Button(
             onClick = {
                 if (!isSubmitted) {
@@ -148,8 +154,8 @@ fun RatingBottomSheetContent(
                 .height(48.dp),
             shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Theme.color.brand.primary,
-                contentColor = Theme.color.brand.onPrimary
+                disabledContainerColor = Color(0xFF724CF8),
+                disabledContentColor = Color.White.copy(alpha = 0.7f)
             )
         ) {
             Text(text = if (isSubmitted) "Done" else "Submit")
