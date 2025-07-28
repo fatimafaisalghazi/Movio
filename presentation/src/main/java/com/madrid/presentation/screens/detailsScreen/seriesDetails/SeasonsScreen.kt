@@ -66,7 +66,7 @@ fun SeasonsScreenContent(
             Log.d("TAG bob", "SeasonsScreenContent: ${uiState.currentSeasonsUiStates.size}")
             itemsIndexed(seasons) { index, season ->
                 MovioSeasonCard(
-                    movieTitle =  (season.seasonNumber).toString(),
+                    movieTitle =  "",
                     movieImage = season.imageUrl,
                     movieRate = season.rate,
                     totalNumberOfEpisodes = season.numberOfEpisodes.toString(),
