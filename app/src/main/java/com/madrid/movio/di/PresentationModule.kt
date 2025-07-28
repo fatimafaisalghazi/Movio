@@ -21,11 +21,8 @@ val presentationModule = module {
     viewModelOf(::SeeAllForYouViewModel)
     viewModelOf(::TopCastViewModel)
     viewModelOf(::ActorDetailsViewModel)
-    viewModelOf(::SeriesDetailsViewModel)
     viewModelOf(::HomeViewModel)
     viewModel { SeriesDetailsViewModel(get(), get()) }
     viewModelOf(::ReviewsScreenViewModel)
-    viewModel { SeriesDetailsViewModel(get(), get()) }
     viewModelOf(::SimilarMediaViewModel)
-    viewModel { SeriesDetailsViewModel(get(), get()) }
 }

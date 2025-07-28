@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.BottomMediaActions
+import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastSection
 import com.madrid.presentation.component.header.MovieDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
@@ -89,11 +90,21 @@ fun MovieDetailsScreen(
                         )
                     )
                 },
-                onCastMemberClick = {castId ->
-                    navController.navigate(Destinations.ActorDetails(
-                    artistId = castId
-                ))},
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                onCastMemberClick = { castId ->
+                    navController.navigate(
+                        Destinations.ActorDetails(
+                            artistId = castId
+                        )
+                    )
+                },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                castMembers = uiState.casts.map { cast ->
+                    CastMember(
+                        id = cast.id.toString(),
+                        name = cast.name,
+                        imageUrl = cast.imageUrl
+                    )
+                }
             )
             Spacer(modifier = Modifier.height(32.dp))
 

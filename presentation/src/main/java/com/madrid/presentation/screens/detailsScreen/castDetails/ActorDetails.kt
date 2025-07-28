@@ -39,16 +39,21 @@ fun ActorDetails(
     val navController = LocalNavController.current
 
     uiState.selectedActor?.let { actor ->
-        ActorDetailsContent(actor, onBackClick = {
-            navController.popBackStack()
-        })
+        ActorDetailsContent(
+            actor, onBackClick = {
+                navController.popBackStack()
+            },
+            onKnownForClick = {movieId ->
+                navController.navigate(Destinations.MovieDetailsScreen(movieId))}
+        )
     }
 }
 
 @Composable
 fun ActorDetailsContent(
     actor: MovieDetailsUiState.CastUiState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onKnownForClick:(Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -119,7 +124,7 @@ fun ActorDetailsContent(
                         rate = movie.rating,
                         width = 124.dp,
                         height = 160.dp,
-                        onClick = { /* Handle movie click */ },
+                        onClick = {onKnownForClick(movie.mediaId)},
                         modifier = Modifier
                             .navigationBarsPadding()
                             .padding(vertical = 12.dp)

@@ -178,7 +178,7 @@ fun ContentSearchScreen(
     onClearAll: () -> Unit,
     isLoading: Boolean = false,
     onClickSeeAll: () -> Unit,
-    onSeriesClick: (Int) -> Unit = {},
+    onSeriesClick: (Int) -> Unit,
     onTopResultClick: (Int) -> Unit,
     onSearchedClick: (Int) -> Unit,
     onArtistClick: (Int) -> Unit,
