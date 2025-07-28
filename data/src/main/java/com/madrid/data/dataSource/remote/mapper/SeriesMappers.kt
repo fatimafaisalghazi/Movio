@@ -82,7 +82,7 @@ fun TopRatedSeriesResults.toSeries(): Series{
         title = this.name ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
-        yearOfRelease = "",
+        yearOfRelease = this.firstAirDate ?: "",
         description = this.overview ?: "",
         genre = listOf(),
     )
@@ -106,7 +106,7 @@ fun AiringTodaySeriesResult.toSeries(): Series {
         title = this.name ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
-        yearOfRelease = "",
+        yearOfRelease = this.firstAirDate ?: "",
         description = this.overview ?: "",
         genre = listOf(),
     )
@@ -118,7 +118,7 @@ fun RecommendedSeriesResult.toSeries(): Series {
         title = this.name ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
-        yearOfRelease = "",
+        yearOfRelease = this.firstAirDate ?: "",
         description = this.overview ?: "",
         genre = listOf(),
     )
