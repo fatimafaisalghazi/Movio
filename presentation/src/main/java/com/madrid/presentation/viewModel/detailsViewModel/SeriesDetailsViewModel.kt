@@ -42,7 +42,6 @@ class SeriesDetailsViewModel(
                         description = series.description,
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
                         selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber  else args.seasonNumber -1].mapToUiState()
-//                        if (series.seasons.first().seasonNumber == 0) args.seasonNumber else
                     )
                 }
                 loadAllSeasonsEpisodes()
@@ -84,39 +83,12 @@ class SeriesDetailsViewModel(
                     onError = { },
                 )
             }
-//            for (i in 0..seasonCount) {
-//                tryToExecute(
-//                    function = {
-//                        seriesDetailsUseCase.getEpisodesBySeriesId(
-//                            args.seriesId.toInt(),
-//                            i
-//                        )
-//                    },
-//                    onSuccess = { episodes ->
-//                        updateState { currentState ->
-//                            currentState.copy(
-//                                currentSeasonsUiStates = currentState.currentSeasonsUiStates.mapIndexed { index, season ->
-//                                    if (index == i) {
-//                                        season.copy(
-//                                            numberOfEpisodes = episodes.size,
-//                                            episodesUiStates = episodes.map { episode -> episode.toUiState() }
-//                                        )
-//                                    } else {
-//                                        season
-//                                    }
-//                                }
-//                            )
-//                        }
-//                    },
-//                    onError = {}
-//                )
-//            }
         }
     }
 
-    fun updateSelectedSeason(seasonNumber: Int, firstSeasonNumber: Int = 0) = loadSeasonEpisodes(seasonNumber,firstSeasonNumber)
+    fun updateSelectedSeason(seasonNumber: Int) = loadSeasonEpisodes(seasonNumber)
 
-    private fun loadSeasonEpisodes(seasonNumber: Int = 1, firstSeasonNumber: Int = 0) {
+    private fun loadSeasonEpisodes(seasonNumber: Int = 1) {
         tryToExecute(
             function = {
                 seriesDetailsUseCase.getEpisodesBySeriesId(
