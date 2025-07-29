@@ -78,27 +78,6 @@ fun LazyGridScope.forYouAndExploreScreen(
                     }
                 }
             }
-
-            forYouMovies.isEmpty()-> {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Column (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id =  com.madrid.presentation.R.drawable.img_no_sesrch_found),
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .size(128.dp)
-                                .align(CenterHorizontally),
-                            contentScale = ContentScale.Fit
-                        )
-                    }
-                }
-            }
-
             forYouMovies.isNotEmpty() -> {
                 item(
                     span = { GridItemSpan(maxLineSpan) }
