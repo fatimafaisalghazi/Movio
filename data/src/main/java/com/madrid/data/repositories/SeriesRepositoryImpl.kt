@@ -42,10 +42,7 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun getSeriesReviewsById(seriesId: Int): List<Review> {
-        Log.d("TAG lol", "getSeriesReviewsById repo impl: ")
-        val x = remoteDataSource.getSeriesReviewsById(seriesId).toReviewResult().results ?: emptyList()
-        Log.d("TAG lol", "getSeriesReviewsById repo impl: $x")
-        return x
+        return remoteDataSource.getSeriesReviewsById(seriesId).toReviewResult().results
     }
 
     override suspend fun getSimilarSeriesById(seriesId: Int): List<SimilarSeries> {
