@@ -23,6 +23,8 @@ import com.madrid.designSystem.component.FilterBar
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
+import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.viewModel.seeAll.SeeAllTVShowsViewModel
 import com.madrid.presentation.viewModel.seeAll.SeeAllTvShowType
 import org.koin.androidx.compose.koinViewModel
@@ -30,10 +32,11 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SeeAllTVShowsScreen(
-    type:SeeAllTvShowType ,
-    viewModel: SeeAllTVShowsViewModel = koinViewModel{ parametersOf(type)}
+    type: SeeAllTvShowType,
+    viewModel: SeeAllTVShowsViewModel = koinViewModel { parametersOf(type) }
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val navController = LocalNavController.current
     val items = uiState.genre
 
     Log.d("log items", "TopRatingScreen: $items")
@@ -91,7 +94,14 @@ fun SeeAllTVShowsScreen(
                 rate = movie.rate,
                 width = 101.dp,
                 height = 136.dp,
-                onClick = { /* handle click */ }
+                onClick = {
+                    navController.navigate(
+                        Destinations.SeriesDetailsScreen(
+                            uiState.filteredSeries[index].id.toInt(),
+                            seasonNumber = 1
+                        )
+                    )
+                }
             )
         }
     }
