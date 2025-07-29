@@ -78,6 +78,13 @@ interface MovieApi {
         @Path("time_window") timeWindow: String = "day",
         @Query("page") page: Int
     ): SearchMovieResponse
+
+    @GET()
+    suspend fun getMoviesByGenreId(
+        @Query(PAGE) page: Int,
+        @Query(WITH_GENRES) genreId: Int,
+        @Query(SORT_BY) sortBy: String
+    ): SearchMovieResponse
     // endregion
 
     // region Series
@@ -146,6 +153,13 @@ interface MovieApi {
 
     @GET("genre/tv/list")
     suspend fun getSeriesGenres(): GenresResponse
+
+    @GET()
+    suspend fun getSeriesByGenreId(
+        @Query(PAGE) page: Int,
+        @Query(WITH_GENRES) genreId: Int,
+        @Query(SORT_BY) sortBy: String
+    ): SearchSeriesResponse
     // endregion
 
 
@@ -166,4 +180,11 @@ interface MovieApi {
         @Path("person_id") artistId: Int
     ): ArtistKnownForResponse
     // endregion
+
+    companion object {
+        private const val PAGE = "page"
+
+        private const val WITH_GENRES = "with_genres"
+        private const val SORT_BY = "sort_by"
+    }
 }
