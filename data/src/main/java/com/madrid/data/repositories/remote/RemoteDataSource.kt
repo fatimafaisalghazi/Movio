@@ -47,7 +47,6 @@ interface RemoteDataSource {
     // endregion
 
     // region Series
-    suspend fun getTopRatedSeries(query: String, page: Int): SearchSeriesResponse
     suspend fun getSeriesTrailersById(seriesId: Int): TrailerResponse
     suspend fun getSeriesCreditsById(seriesId: Int): SeriesCreditResponse
     suspend fun getSeriesReviewsById(seriesId: Int): SeriesReviewResponse
