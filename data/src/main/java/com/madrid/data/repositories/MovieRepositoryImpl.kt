@@ -2,12 +2,10 @@ package com.madrid.data.repositories
 
 import com.madrid.data.dataSource.remote.mapper.toCredits
 import com.madrid.data.dataSource.remote.mapper.toMovie
+import com.madrid.data.dataSource.remote.mapper.toMovies
 import com.madrid.data.dataSource.remote.mapper.toReviewResult
 import com.madrid.data.dataSource.remote.mapper.toSimilarMovie
 import com.madrid.data.dataSource.remote.mapper.toTrailer
-import com.madrid.data.dataSource.local.mappers.toMovieGenreEntity
-import com.madrid.data.dataSource.remote.mapper.toMovies
-import com.madrid.data.dataSource.local.mappers.toMovieGenreTable
 import com.madrid.data.repositories.local.LocalDataSource
 import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.Cast
