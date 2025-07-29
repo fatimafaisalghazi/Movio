@@ -15,7 +15,9 @@ import com.madrid.data.dataSource.local.table.SeriesGenreTable
 import com.madrid.data.dataSource.local.table.relationship.GenreWithMovies
 import com.madrid.data.dataSource.local.table.relationship.GenreWithSeries
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.MovieWithGenres
 import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.SeriesWithGenres
 import com.madrid.data.dataSource.local.util.calculateOffset
 import com.madrid.data.repositories.local.LocalDataSource
 
@@ -53,14 +55,14 @@ class LocalDataSourceImpl(
         seriesGenreDao.insertGenre(genre)
     }
 
-    override suspend fun searchMovieByQueryFromDB(query: String, page: Int): List<MovieTable> {
+    override suspend fun searchMovieByQueryFromDB(query: String, page: Int): List<MovieWithGenres> {
         val offset = calculateOffset(page)
-        return movieDao.searchMovies("%$query%", offset).map { it.movie }
+        return movieDao.searchMovies("%$query%", offset)
     }
 
-    override suspend fun searchSeriesByQueryFromDB(query: String, page: Int): List<SeriesTable> {
+    override suspend fun searchSeriesByQueryFromDB(query: String, page: Int): List<SeriesWithGenres> {
         val offset = calculateOffset(page)
-        return seriesDao.searchSeries("%$query%", offset).map { it.series }
+        return seriesDao.searchSeries("%$query%", offset)
     }
 
     override suspend fun searchArtistByQueryFromDB(query: String, page: Int): List<ArtistTable> {

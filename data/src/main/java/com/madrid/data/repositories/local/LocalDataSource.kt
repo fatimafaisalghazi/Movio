@@ -9,7 +9,9 @@ import com.madrid.data.dataSource.local.table.SeriesGenreTable
 import com.madrid.data.dataSource.local.table.relationship.GenreWithMovies
 import com.madrid.data.dataSource.local.table.relationship.GenreWithSeries
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.MovieWithGenres
 import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
+import com.madrid.data.dataSource.local.table.relationship.SeriesWithGenres
 
 interface LocalDataSource {
 
@@ -21,8 +23,8 @@ interface LocalDataSource {
 
     suspend fun getTopRatedMovies(): List<MovieTable>
 
-    suspend fun searchMovieByQueryFromDB(query: String, page: Int): List<MovieTable>
-    suspend fun searchSeriesByQueryFromDB(query: String, page: Int): List<SeriesTable>
+    suspend fun searchMovieByQueryFromDB(query: String, page: Int): List<MovieWithGenres>
+    suspend fun searchSeriesByQueryFromDB(query: String, page: Int): List<SeriesWithGenres>
     suspend fun searchArtistByQueryFromDB(query: String, page: Int): List<ArtistTable>
 
     suspend fun getRecentSearches(): List<RecentSearchTable>
