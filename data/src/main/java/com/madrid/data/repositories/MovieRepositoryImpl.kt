@@ -102,11 +102,11 @@ class MovieRepositoryImpl(
         return movies?.map { it.toMovie() } ?: emptyList()
     }
 
-    override suspend fun getNowPlayingMovie(): List<Movie> {
+    override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
         return remoteDataSource.getNowPlayingMovie().toMovies()
     }
 
-    override suspend fun getUpcomingMovie(): List<Movie> {
+    override suspend fun getUpcomingMovie(page: Int): List<Movie> {
         return remoteDataSource.getUpcomingMovie().toMovies()
     }
 }
