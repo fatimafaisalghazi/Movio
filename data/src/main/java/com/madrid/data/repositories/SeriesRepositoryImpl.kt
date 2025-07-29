@@ -26,11 +26,7 @@ class SeriesRepositoryImpl(
 ) : SeriesRepository {
 
     override suspend fun getSeriesDetailsById(seriesId: Int): Series {
-        val seriesResponse = remoteDataSource.getSeriesDetailsById(seriesId)
-        seriesResponse.genres?.map { genre ->
-            localDataSource.increaseSeriesGenreSeenCount(genre.name ?: "")
-        }
-        return seriesResponse.toSeries()
+        return remoteDataSource.getSeriesDetailsById(seriesId).toSeries()
     }
 
     override suspend fun getSeriesTrailersById(seriesId: Int): List<Trailer> {
@@ -73,6 +69,10 @@ class SeriesRepositoryImpl(
 
     override suspend fun getRecommendedSeries(page: Int): List<Series> {
         return remoteDataSource.getRecommendedSeries().toTvShows()
+    }
+
+    override suspend fun increaseSeriesGenreInterestPoints(genreTitle: String) {
+        localDataSource.increaseSeriesGenreSeenCount(genreTitle)
     }
 
     override suspend fun getSeriesGenres(): List<Genre> {

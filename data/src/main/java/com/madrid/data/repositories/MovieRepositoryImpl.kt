@@ -26,12 +26,7 @@ class MovieRepositoryImpl(
 ) : MovieRepository {
 
     override suspend fun getMovieDetailsById(movieId: Int): Movie {
-        val movieResponse = remoteDataSource.getMovieDetailsById(movieId)
-        movieResponse.movieGenres.map { genre ->
-            val genreEntity = genre.toMovieGenreTable()
-            localDataSource.increaseMovieGenreSeenCount(genreEntity.genreTitle)
-        }
-        return movieResponse.toMovie()
+        return remoteDataSource.getMovieDetailsById(movieId).toMovie()
     }
 
     override suspend fun getMovieTrailersById(movieId: Int): List<Trailer> {
@@ -75,6 +70,10 @@ class MovieRepositoryImpl(
             }
             localDataSource.getAllMovieGenres()
         }.map { it.toGenre() }
+    }
+
+    override suspend fun increaseMovieGenreInterestPoints(genreTitle: String) {
+        localDataSource.increaseMovieGenreSeenCount(genreTitle)
     }
 
     override suspend fun getMoviesByGenres(): Map<String, List<Movie>> {
