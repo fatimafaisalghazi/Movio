@@ -242,8 +242,6 @@ fun TopAppBarWithFavoriteState(
             }
         }
     }
-
-    // Share Bottom Sheet
     if (showShareBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { showShareBottomSheet = false },

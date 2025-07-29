@@ -10,18 +10,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.TopAppBar
+import com.madrid.designSystem.component.BottomSheet.AddToListBottomSheetContent
+import com.madrid.designSystem.component.BottomSheet.UserList
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastSection
 import com.madrid.presentation.component.header.MovieDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
+import com.madrid.designSystem.component.ButtomSheet.RatingBottomSheetContent
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.detailsScreen.componant.ExpandableDescription
@@ -31,15 +41,22 @@ import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
 import com.madrid.presentation.viewModel.detailsViewModel.DetailsMovieViewModel
 import org.koin.androidx.compose.koinViewModel
+import com.madrid.designSystem.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailsScreen(
     viewModel: DetailsMovieViewModel = koinViewModel()
 ) {
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
-    val casts = uiState.casts
+    val showRatingBottomSheet = remember { mutableStateOf(false) }
+    val showAddToListBottomSheet = remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
+
     Box(
+
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
@@ -69,9 +86,11 @@ fun MovieDetailsScreen(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
             )
             BottomMediaActions(
-                onRateClick = {},
+                onRateClick = {
+                    showRatingBottomSheet.value = true
+                },
                 onPlayClick = {},
-                onAddToListClick = {},
+                onAddToListClick = { showAddToListBottomSheet.value = true },
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -144,5 +163,48 @@ fun MovieDetailsScreen(
                 }
             )
         }
+        if (showRatingBottomSheet.value) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showRatingBottomSheet.value = false
+                },
+                sheetState = sheetState
+            ) {
+                RatingBottomSheetContent(
+                    movieTitle = uiState.movieName,
+                    // TODO: Replace with actual poster resource ID or URL handling
+                    moviePosterResId = R.drawable.library_main_icon,
+                    onRatingSubmitted = { rating -> Log.d("Rating", "Submitted rating: $rating") }
+                )
+            }
+        }
+        if (showAddToListBottomSheet.value) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showAddToListBottomSheet.value = false
+                },
+                sheetState = sheetState
+            ) {
+                // TODO: Replace with actual data and logic
+                AddToListBottomSheetContent(
+                    onListCreated = {
+                        Log.d("AddToList", "Create new list clicked")
+                        // Handle new list creation logic here
+                    },
+                    initialUserLists = listOf(
+                        UserList("1", "Watch later", isSelected = true),
+                        UserList("2", "Favorites", isSelected = false)
+                        // Add more initial lists as needed
+                    ),
+                    onSelectionChanged = { userList, isSelected -> Log.d("AddToList", "Selection changed: ${userList.name} -> $isSelected") }
+                )
+            }
+        }
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun MovieDetailsScreenPreview() {
+    MovieDetailsScreen()
 }
