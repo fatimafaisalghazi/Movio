@@ -8,7 +8,7 @@ fun MovieGenre.toMovieGenreTable(): MovieGenreTable {
     return MovieGenreTable(
         genreId = this.id ?: 0,
         genreTitle = this.name ?: "Unknown",
-        searchCount = 0
+        interestPoints = 0
     )
 }
 
@@ -16,6 +16,6 @@ fun MovieGenre.toSeriesGenreTable(): SeriesGenreTable {
     return SeriesGenreTable(
         genreId = this.id ?: 0,
         genreTitle = this.name ?: "Unknown",
-        searchCount = 0
+        interestPoints = 0
     )
 }

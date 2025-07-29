@@ -72,7 +72,7 @@ class SeriesRepositoryImpl(
     }
 
     override suspend fun increaseSeriesGenreInterestPoints(genreTitle: String) {
-        localDataSource.increaseSeriesGenreSeenCount(genreTitle)
+        localDataSource.increaseSeriesGenreInterestPoints(genreTitle)
     }
 
     override suspend fun getSeriesGenres(): List<Genre> {

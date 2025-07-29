@@ -73,7 +73,7 @@ class MovieRepositoryImpl(
     }
 
     override suspend fun increaseMovieGenreInterestPoints(genreTitle: String) {
-        localDataSource.increaseMovieGenreSeenCount(genreTitle)
+        localDataSource.increaseMovieGenreInterestPoints(genreTitle)
     }
 
     override suspend fun getMoviesByGenres(): Map<String, List<Movie>> {

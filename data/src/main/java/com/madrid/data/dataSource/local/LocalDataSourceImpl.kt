@@ -97,8 +97,8 @@ class LocalDataSourceImpl(
         movieDao.insertMovieGenreCrossRef(movieGenreCrossRef)
     }
 
-    override suspend fun increaseMovieGenreSeenCount(genreTitle: String) {
-        movieGenreDao.increaseGenreSearchCount(genreTitle)
+    override suspend fun increaseMovieGenreInterestPoints(genreTitle: String) {
+        movieGenreDao.increaseGenreInterestPoints(genreTitle)
     }
 
     override suspend fun getAllMovieGenres(): List<MovieGenreTable> {
@@ -113,8 +113,8 @@ class LocalDataSourceImpl(
         seriesDao.insertSeriesGenreCrossRef(seriesGenreEntity)
     }
 
-    override suspend fun increaseSeriesGenreSeenCount(genreTitle: String) {
-        seriesGenreDao.increaseGenreSearchCount(genreTitle)
+    override suspend fun increaseSeriesGenreInterestPoints(genreTitle: String) {
+        seriesGenreDao.increaseGenreInterestPoints(genreTitle)
     }
 
     override suspend fun getAllSeriesGenres(): List<SeriesGenreTable> {
