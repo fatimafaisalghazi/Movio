@@ -4,7 +4,6 @@ import com.madrid.data.dataSource.local.table.MovieTable
 import com.madrid.domain.entity.Movie
 import kotlinx.datetime.LocalDate
 
-
 fun Movie.toMovieTable(): MovieTable {
     return MovieTable(
         movieId = this.id,

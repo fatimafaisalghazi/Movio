@@ -1,22 +1,15 @@
 package com.madrid.data.repositories
 
 import com.madrid.data.dataSource.local.mappers.toArtist
-import com.madrid.data.dataSource.local.mappers.toArtistEntity
 import com.madrid.data.dataSource.local.mappers.toMovie
-import com.madrid.data.dataSource.local.mappers.toMovieEntity
-import com.madrid.data.dataSource.local.mappers.toMovieGenreEntity
 import com.madrid.data.dataSource.local.mappers.toMovieGenreTable
 import com.madrid.data.dataSource.local.mappers.toSeries
-import com.madrid.data.dataSource.local.mappers.toSeriesEntity
-import com.madrid.data.dataSource.local.mappers.toSeriesGenreEntity
 import com.madrid.data.dataSource.local.mappers.toSeriesGenreTable
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
 import com.madrid.data.dataSource.mapper.toArtistTable
 import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.mapper.toSeriesTable
-import com.madrid.data.dataSource.remote.mapper.toMovie
-import com.madrid.data.dataSource.remote.mapper.toSeries
 import com.madrid.data.repositories.local.LocalDataSource
 import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.Artist
@@ -94,7 +87,7 @@ class SearchRepositoryImpl(
                 localSource.insertArtist(it.toArtistTable())
             }
         }
-        return localSource.searchArtistByQueryFromDB(query, page).map {it.toArtist() }
+        return localSource.searchArtistByQueryFromDB(query, page).map { it.toArtist() }
     }
 
     override suspend fun getRecentSearches(): List<String> {

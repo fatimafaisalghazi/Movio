@@ -16,6 +16,10 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

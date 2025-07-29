@@ -16,6 +16,10 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.repositories.remote.RemoteDataSource
 
 class RemoteDataSourceImpl(
@@ -64,7 +68,7 @@ class RemoteDataSourceImpl(
     // endregion
 
     // region Series
-    override suspend fun getTopRatedSeries(page: Int): SearchSeriesResponse {
+    override suspend fun getTopRatedSeries(page: Int): TopRatedSeriesResponse {
         return api.getTopRatedSeries(page)
     }
 

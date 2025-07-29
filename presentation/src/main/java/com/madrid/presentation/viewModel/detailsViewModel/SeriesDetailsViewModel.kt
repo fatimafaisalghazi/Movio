@@ -45,14 +45,14 @@ class SeriesDetailsViewModel(
                         productionDate = series.airDate,
                         description = series.description,
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
-                        selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber  else args.seasonNumber -1].mapToUiState()
+                        selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState()
                     )
                 }
                 loadAllSeasonsEpisodes()
                 loadCastData()
                 loadReviews()
                 loadSimilarSeries()
-                loadSeasonEpisodes(if (series.seasons.first().seasonNumber == 0) args.seasonNumber  else args.seasonNumber)
+                loadSeasonEpisodes(if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber)
             },
             onError = {},
         )
@@ -65,10 +65,7 @@ class SeriesDetailsViewModel(
             state.first().currentSeasonsUiStates.forEachIndexed { index, season ->
                 tryToExecute(
                     function = {
-                        seriesDetailsUseCase.getEpisodesBySeriesId(
-                            args.seriesId,
-                            season.seasonNumber
-                        )
+                        getEpisodesForSeasonUseCase(args.seriesId, season.seasonNumber)
                     },
                     onSuccess = { episodes ->
                         updateState { currentState ->

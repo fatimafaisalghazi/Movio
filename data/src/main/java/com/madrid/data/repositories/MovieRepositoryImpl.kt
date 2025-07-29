@@ -1,9 +1,9 @@
 package com.madrid.data.repositories
 
-import com.madrid.data.dataSource.local.entity.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.local.mappers.toMovie
-import com.madrid.data.dataSource.local.mappers.toMovieEntity
-import com.madrid.data.dataSource.local.mappers.toMovieGenreEntity
+import com.madrid.data.dataSource.local.mappers.toMovieGenreTable
+import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
+import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toReview
@@ -25,7 +25,7 @@ class MovieRepositoryImpl(
     override suspend fun getMovieDetailsById(movieId: Int): Movie {
         val movieResponse = remoteDataSource.getMovieDetailsById(movieId)
         movieResponse.movieGenres.map { genre ->
-            val genreEntity = genre.toMovieGenreEntity()
+            val genreEntity = genre.toMovieGenreTable()
             localDataSource.increaseMovieGenreSeenCount(genreEntity.genreTitle)
         }
         return movieResponse.toMovie()
@@ -88,7 +88,7 @@ class MovieRepositoryImpl(
             page = page
         ).movieResults
         movies?.map { movie ->
-            localDataSource.insertMovie(movie.toMovieEntity())
+            localDataSource.insertMovie(movie.toMovieTable())
             movie.genreIds?.map { genreId ->
                 localDataSource.relateMovieToGenre(
                     MovieGenreCrossRef(

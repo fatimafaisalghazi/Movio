@@ -16,6 +16,10 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 
 interface RemoteDataSource {
 
@@ -38,7 +42,6 @@ interface RemoteDataSource {
     // endregion
 
     // region Series
-    suspend fun getTopRatedSeries(page: Int): SearchSeriesResponse
     suspend fun getSeriesTrailersById(seriesId: Int): List<TrailerResult>
     suspend fun getSeriesCreditsById(seriesId: Int): SeriesCreditResponse
     suspend fun getSeriesReviewsById(seriesId: Int): SeriesReviewResponse

@@ -1,6 +1,7 @@
 package com.madrid.data.dataSource.remote.mapper
 
 import com.madrid.data.dataSource.remote.dto.series.EpisodeDto
+import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonsNetwork
 import com.madrid.data.dataSource.remote.dto.series.SeriesCastNetwork
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
@@ -8,22 +9,27 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesGenres
 import com.madrid.data.dataSource.remote.dto.series.SeriesResult
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResult
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesNetwork
+import com.madrid.data.dataSource.remote.response.series.AiringTodaySeriesResult
+import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
+import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResult
+import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResult
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResults
 import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Episode
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Season
 import com.madrid.domain.entity.Series
-import com.madrid.domain.entity.SimilarSeries
 
-
-// region Search
 fun SearchSeriesResponse.toTvShows(): List<Series> {
     return this.seriesResults?.map {
         it.toSeries()
     } ?: emptyList()
 }
 
-fun TopRatedSeriesResponse.toTvShows(): List<Series>{
+fun TopRatedSeriesResponse.toTvShows(): List<Series> {
     return this.results?.map { it ->
         it?.toSeries() ?: getDefaultSeries()
     } ?: emptyList()
@@ -61,15 +67,16 @@ fun SeriesResult.toSeries(): Series {
 }
 
 
-fun TopRatedSeriesResults.toSeries(): Series{
+fun TopRatedSeriesResults.toSeries(): Series {
     return Series(
         id = this.id ?: 0,
         title = this.name ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
-        yearOfRelease = this.firstAirDate ?: "",
+        airDate = this.firstAirDate ?: "",
         description = this.overview ?: "",
         genre = listOf(),
+        seasons = emptyList(),
     )
 }
 
@@ -79,9 +86,10 @@ fun OnAirTvShowsResult.toSeries(): Series {
         title = this.name ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
-        yearOfRelease = "",
+        airDate = "",
         description = this.overview ?: "",
         genre = listOf(),
+        seasons = emptyList(),
     )
 }
 
@@ -91,9 +99,10 @@ fun AiringTodaySeriesResult.toSeries(): Series {
         title = this.name ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
-        yearOfRelease = this.firstAirDate ?: "",
+        airDate = this.firstAirDate ?: "",
         description = this.overview ?: "",
         genre = listOf(),
+        seasons = emptyList(),
     )
 }
 
@@ -103,14 +112,12 @@ fun RecommendedSeriesResult.toSeries(): Series {
         title = this.name ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
-        yearOfRelease = this.firstAirDate ?: "",
+        airDate = this.firstAirDate ?: "",
         description = this.overview ?: "",
         genre = listOf(),
+        seasons = emptyList(),
     )
 }
-
-
-// endregion
 
 fun SeriesDetailsResponse.toSeries(): Series {
     return Series(
@@ -189,5 +196,18 @@ fun EpisodeDto.toEpisode(): Episode {
         episodeNumber = this.episodeNumber ?: 0,
         imageUrl = "https://image.tmdb.org/t/p/original${this.stillPath}",
         duration = this.runtime?.toString() ?: "",
+    )
+}
+
+private fun getDefaultSeries(): Series {
+    return Series(
+        id = 0,
+        title = "",
+        imageUrl = "",
+        rate = 0.0,
+        airDate = "",
+        description = "",
+        genre = listOf(),
+        seasons = emptyList(),
     )
 }

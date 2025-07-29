@@ -56,19 +56,19 @@ class SeriesRepositoryImpl(
         ).episodes?.map { it.toEpisode() } ?: emptyList()
     }
 
-    override suspend fun getTopRatedSeries(): List<Series> {
+    override suspend fun getTopRatedSeries(page: Int): List<Series> {
         return remoteDataSource.getTopRatedSeries().toTvShows()
     }
 
-    override suspend fun getOnAirSeries(): List<Series> {
+    override suspend fun getOnAirSeries(page: Int): List<Series> {
         return remoteDataSource.getOnAirSeries().toTvShows()
     }
 
-    override suspend fun getAiringTodaySeries(): List<Series> {
+    override suspend fun getAiringTodaySeries(page: Int): List<Series> {
         return remoteDataSource.getAiringTodaySeries().toTvShows()
     }
 
-    override suspend fun getRecommendedSeries(): List<Series> {
+    override suspend fun getRecommendedSeries(page: Int): List<Series> {
         return remoteDataSource.getRecommendedSeries().toTvShows()
     }
 
