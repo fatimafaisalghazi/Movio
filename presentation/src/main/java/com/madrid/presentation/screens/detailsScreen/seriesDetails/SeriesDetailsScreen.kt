@@ -28,7 +28,7 @@ import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastSection
-import com.madrid.presentation.component.header.MovieDetailsHeader
+import com.madrid.presentation.component.header.SeriesDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
@@ -73,9 +73,9 @@ fun SeriesDetailsScreen(
                 .padding(bottom = 32.dp)
         ) {
             Spacer(modifier = Modifier.height(360.dp))
-            MovieDetailsHeader(
+            SeriesDetailsHeader(
                 movieName = uiState.seriesName,
-                movieCategory = uiState.seriesGenre,
+                seriesCategory = uiState.seriesGenre,
                 date = uiState.productionDate,
                 time = "${uiState.numberOfSeasons} Seasons",
                 rate = uiState.rate.take(3),
