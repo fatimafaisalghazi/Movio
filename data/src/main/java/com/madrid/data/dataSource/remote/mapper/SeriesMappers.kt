@@ -13,6 +13,39 @@ import com.madrid.domain.entity.Episode
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Season
 import com.madrid.domain.entity.Series
+import com.madrid.domain.entity.SimilarSeries
+
+
+// region Search
+fun SearchSeriesResponse.toTvShows(): List<Series> {
+    return this.seriesResults?.map {
+        it.toSeries()
+    } ?: emptyList()
+}
+
+fun TopRatedSeriesResponse.toTvShows(): List<Series>{
+    return this.results?.map { it ->
+        it?.toSeries() ?: getDefaultSeries()
+    } ?: emptyList()
+}
+
+fun OnAirTvShowsResponse.toTvShows(): List<Series> {
+    return this.onAirTvShowsResults?.map {
+        it?.toSeries() ?: getDefaultSeries()
+    } ?: emptyList()
+}
+
+fun AiringTodayTvShowsResponse.toTvShows(): List<Series> {
+    return this.airingTodaySeriesResult?.map {
+        it?.toSeries() ?: getDefaultSeries()
+    } ?: emptyList()
+}
+
+fun RecommendedSeriesResponse.toTvShows(): List<Series> {
+    return this.recommendedSeriesResults?.map {
+        it?.toSeries() ?: getDefaultSeries()
+    } ?: emptyList()
+}
 
 fun SeriesResult.toSeries(): Series {
     return Series(
@@ -26,6 +59,58 @@ fun SeriesResult.toSeries(): Series {
         seasons = emptyList(),
     )
 }
+
+
+fun TopRatedSeriesResults.toSeries(): Series{
+    return Series(
+        id = this.id ?: 0,
+        title = this.name ?: "",
+        imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
+        rate = this.voteAverage ?: 0.0,
+        yearOfRelease = this.firstAirDate ?: "",
+        description = this.overview ?: "",
+        genre = listOf(),
+    )
+}
+
+fun OnAirTvShowsResult.toSeries(): Series {
+    return Series(
+        id = this.id ?: 0,
+        title = this.name ?: "",
+        imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
+        rate = this.voteAverage ?: 0.0,
+        yearOfRelease = "",
+        description = this.overview ?: "",
+        genre = listOf(),
+    )
+}
+
+fun AiringTodaySeriesResult.toSeries(): Series {
+    return Series(
+        id = this.id ?: 0,
+        title = this.name ?: "",
+        imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
+        rate = this.voteAverage ?: 0.0,
+        yearOfRelease = this.firstAirDate ?: "",
+        description = this.overview ?: "",
+        genre = listOf(),
+    )
+}
+
+fun RecommendedSeriesResult.toSeries(): Series {
+    return Series(
+        id = this.id ?: 0,
+        title = this.name ?: "",
+        imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
+        rate = this.voteAverage ?: 0.0,
+        yearOfRelease = this.firstAirDate ?: "",
+        description = this.overview ?: "",
+        genre = listOf(),
+    )
+}
+
+
+// endregion
 
 fun SeriesDetailsResponse.toSeries(): Series {
     return Series(

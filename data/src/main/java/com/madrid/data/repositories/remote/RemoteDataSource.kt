@@ -47,6 +47,10 @@ interface RemoteDataSource {
     suspend fun getSeriesGenres(): GenresResponse
     suspend fun getSeriesDetailsById(seriesId: Int): SeriesDetailsResponse
     suspend fun getTrendingSeries(page: Int): SearchSeriesResponse
+    suspend fun getTopRatedSeries(page: Int = 1): TopRatedSeriesResponse
+    suspend fun getOnAirSeries(page: Int = 1): OnAirTvShowsResponse
+    suspend fun getAiringTodaySeries(page: Int = 1): AiringTodayTvShowsResponse
+    suspend fun getRecommendedSeries(page: Int = 1): RecommendedSeriesResponse
     // endregion
 
     // region Artist

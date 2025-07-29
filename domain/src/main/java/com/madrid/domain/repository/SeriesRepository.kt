@@ -15,4 +15,8 @@ interface SeriesRepository {
     suspend fun getEpisodesBySeriesId(seriesId: Int, seasonNumber: Int): List<Episode>
     suspend fun getSeriesByGenres(): Map<String, List<Series>>
     suspend fun getTopRatedSeries(page: Int): List<Series>
+    suspend fun getTopRatedSeries(): List<Series>
+    suspend fun getOnAirSeries(): List<Series>
+    suspend fun getAiringTodaySeries(): List<Series>
+    suspend fun getRecommendedSeries(): List<Series>
 }

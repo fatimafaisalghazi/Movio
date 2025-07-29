@@ -7,6 +7,7 @@ import com.madrid.data.dataSource.remote.mapper.toReview
 import com.madrid.data.dataSource.remote.mapper.toSeries
 import com.madrid.data.dataSource.remote.mapper.toSimilarSeries
 import com.madrid.data.dataSource.remote.mapper.toTrailer
+import com.madrid.data.dataSource.remote.mapper.toTvShows
 import com.madrid.data.repositories.local.LocalDataSource
 import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.Artist
@@ -55,6 +56,22 @@ class SeriesRepositoryImpl(
         ).episodes?.map { it.toEpisode() } ?: emptyList()
     }
 
+    override suspend fun getTopRatedSeries(): List<Series> {
+        return remoteDataSource.getTopRatedSeries().toTvShows()
+    }
+
+    override suspend fun getOnAirSeries(): List<Series> {
+        return remoteDataSource.getOnAirSeries().toTvShows()
+    }
+
+    override suspend fun getAiringTodaySeries(): List<Series> {
+        return remoteDataSource.getAiringTodaySeries().toTvShows()
+    }
+
+    override suspend fun getRecommendedSeries(): List<Series> {
+        return remoteDataSource.getRecommendedSeries().toTvShows()
+    }
+
     override suspend fun getSeriesByGenres(): Map<String, List<Series>> {
         val genresWithSeries = localDataSource.getSeriesByGenres()
         return genresWithSeries.associate { genreWithSeries ->
@@ -62,14 +79,5 @@ class SeriesRepositoryImpl(
             val series = genreWithSeries.series.map { it.toSeries() }
             genreTitle to series
         }
-    }
-
-    override suspend fun getTopRatedSeries(page: Int): List<Series> {
-        val res = remoteDataSource.getTopRatedSeries(
-            page = page
-        ).seriesResults?.map {
-            it.toSeries()
-        } ?: listOf()
-        return res
     }
 }

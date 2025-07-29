@@ -119,4 +119,16 @@ class RemoteDataSourceImpl(
     override suspend fun getArtistMovies(artistId: Int): List<KnownForMoviesNetwork> {
         return api.getArtistKnownForById(artistId).movies ?: emptyList()
     }
+
+    override suspend fun getOnAirSeries(page: Int): OnAirTvShowsResponse {
+        return api.getOnTheAirTvShows(page = page)
+    }
+
+    override suspend fun getAiringTodaySeries(page: Int): AiringTodayTvShowsResponse {
+        return api.getAiringTvShowsToday(page = page)
+    }
+
+    override suspend fun getRecommendedSeries(page: Int): RecommendedSeriesResponse {
+        return api.getPopularTvShows(page = page)
+    }
 }

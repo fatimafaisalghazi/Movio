@@ -45,45 +45,46 @@ class SeriesDetailsViewModel(
                         productionDate = series.airDate,
                         description = series.description,
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
-                        selectedSeasonUiState = series.seasons[args.seasonNumber - 1].mapToUiState()
+                        selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber  else args.seasonNumber -1].mapToUiState()
                     )
                 }
                 loadAllSeasonsEpisodes()
                 loadCastData()
                 loadReviews()
                 loadSimilarSeries()
+                loadSeasonEpisodes(if (series.seasons.first().seasonNumber == 0) args.seasonNumber  else args.seasonNumber)
             },
             onError = {},
         )
-        loadSeasonEpisodes(args.seasonNumber)
     }
 
     private fun loadAllSeasonsEpisodes() {
         viewModelScope.launch {
-            val seasonCount = state.first().numberOfSeasons
+            val seasonCount = state.first().currentSeasonsUiStates.size
             Log.d("TAG lol", "loadAllSeasonsEpisodes: ${state.first().numberOfSeasons}")
-            for (i in 0..seasonCount) {
+            state.first().currentSeasonsUiStates.forEachIndexed { index, season ->
                 tryToExecute(
                     function = {
-                        getEpisodesForSeasonUseCase(args.seriesId.toInt(), i + 1)
+                        seriesDetailsUseCase.getEpisodesBySeriesId(
+                            args.seriesId,
+                            season.seasonNumber
+                        )
                     },
                     onSuccess = { episodes ->
                         updateState { currentState ->
                             currentState.copy(
-                                currentSeasonsUiStates = currentState.currentSeasonsUiStates.mapIndexed { index, season ->
-                                    if (index == i) {
-                                        season.copy(
+                                currentSeasonsUiStates = currentState.currentSeasonsUiStates.mapIndexed { seasonIndex, currentSeason ->
+                                    if (season.seasonNumber == currentSeason.seasonNumber)
+                                        currentSeason.copy(
                                             numberOfEpisodes = episodes.size,
-                                            episodesUiStates = episodes.map { episode -> episode.toUiState() }
-                                        )
-                                    } else {
-                                        season
-                                    }
+                                            episodesUiStates = episodes.map { episode -> episode.toUiState() })
+                                    else
+                                        currentSeason
                                 }
                             )
                         }
                     },
-                    onError = {}
+                    onError = { },
                 )
             }
         }
@@ -105,7 +106,7 @@ class SeriesDetailsViewModel(
                             },
                             numberOfEpisodes = episodes.size,
                             seasonNumber = seasonNumber,
-                            imageUrl = state.currentSeasonsUiStates[seasonNumber - 1].imageUrl
+                            imageUrl = state.currentSeasonsUiStates[if (state.currentSeasonsUiStates.first().seasonNumber == 0) seasonNumber else seasonNumber - 1].imageUrl
                         )
                     )
                 }

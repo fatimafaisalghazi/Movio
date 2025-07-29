@@ -123,7 +123,22 @@ interface MovieApi {
     @GET("tv/top_rated")
     suspend fun getTopRatedSeries(
         @Query("page") page: Int
-    ): SearchSeriesResponse
+    ): TopRatedSeriesResponse
+
+    @GET("tv/airing_today")
+    suspend fun getAiringTvShowsToday(
+        @Query("page") page: Int
+    ): AiringTodayTvShowsResponse
+
+    @GET("tv/on_the_air")
+    suspend fun getOnTheAirTvShows(
+        @Query("page") page: Int
+    ): OnAirTvShowsResponse
+
+    @GET("tv/popular")
+    suspend fun getPopularTvShows(
+        @Query("page") page: Int
+    ): RecommendedSeriesResponse
 
     @GET("genre/tv/list")
     suspend fun getSeriesGenres(): GenresResponse
@@ -146,6 +161,5 @@ interface MovieApi {
     suspend fun getArtistKnownForById(
         @Path("person_id") artistId: Int
     ): ArtistKnownForResponse
-
     // endregion
 }
