@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -75,7 +76,10 @@ fun ShareViaBottomSheetContent(
             R.drawable.outline_link_minimalistic,
             "Copy link"
         ) { onShareOptionClick("Copy link") },
-        ShareOptionData(R.drawable.facebook, "Facebook") { onShareOptionClick("Facebook") },
+        ShareOptionData(
+            R.drawable.facebook,
+            "Facebook"
+        ) { onShareOptionClick("Facebook") },
         ShareOptionData(
             R.drawable.social_icon,
             "X"
@@ -85,15 +89,27 @@ fun ShareViaBottomSheetContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 32.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+            .background(Theme.color.surfaces.surface)
+            .padding(start = 16.dp, end = 16.dp, top = 24.dp, bottom = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Drag handle
+        Box(
+            modifier = Modifier
+                .width(32.dp)
+                .height(4.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(Theme.color.surfaces.onSurfaceContainer.copy(alpha = 0.3f))
+        )
+
         MovioText(
             text = "Share via",
             textStyle = MaterialTheme.typography.titleMedium,
             color = Theme.color.surfaces.onSurface
         )
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround,
@@ -105,10 +121,11 @@ fun ShareViaBottomSheetContent(
         }
     }
 }
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ShareViaBottomSheetContentPreview(){
+fun ShareViaBottomSheetContentPreview() {
     ShareViaBottomSheetContent(
-        onShareOptionClick = {}
+        onShareOptionClick = { option -> println("Selected: $option") }
     )
 }
