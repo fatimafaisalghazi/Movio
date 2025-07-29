@@ -8,8 +8,10 @@ import com.madrid.data.dataSource.remote.response.genre.GenresResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieReviewResponse
+import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SimilarMoviesResponse
+import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonEpisodesResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesCreditResponse
@@ -151,6 +153,19 @@ interface MovieApi {
         @Path("time_window") timeWindow: String = "day",
         @Query("page") page: Int
     ): AllTrendingResponse
+
+    // endregion
+
+    // region Home Movies
+    @GET("movie/now_playing")
+    suspend fun getNowPlayingMovies(
+        @Query("page") page: Int
+    ): NowPlayingMovieResponse
+
+    @GET("movie/upcoming")
+    suspend fun getUpcomingMovies(
+        @Query("page") page: Int
+    ): UpcomingMoviesResponse
 
     // endregion
 }

@@ -6,6 +6,7 @@ import com.madrid.data.dataSource.remote.mapper.toReviewResult
 import com.madrid.data.dataSource.remote.mapper.toSimilarMovie
 import com.madrid.data.dataSource.remote.mapper.toTrailer
 import com.madrid.data.dataSource.local.mappers.toMovieGenreEntity
+import com.madrid.data.dataSource.remote.mapper.toMovies
 import com.madrid.data.repositories.local.LocalDataSource
 import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.Cast
@@ -13,13 +14,13 @@ import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.SimilarMovie
 import com.madrid.domain.entity.Trailer
-import com.madrid.domain.repository.MovieDetailsRepository
+import com.madrid.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 
-class MovieDetailsRepositoryImpl(
+class MovieRepositoryImpl(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
-) : MovieDetailsRepository {
+) : MovieRepository {
 
     override suspend fun getMovieDetailsById(movieId: Int): Movie {
         val movieResponse = remoteDataSource.getMovieDetailsById(movieId)
@@ -65,5 +66,13 @@ class MovieDetailsRepositoryImpl(
 
     override suspend fun addMovieToList(movieId: Int, listName: String): Boolean {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun getNowPlayingMovie(): List<Movie> {
+        return remoteDataSource.getNowPlayingMovie().toMovies()
+    }
+
+    override suspend fun getUpcomingMovie(): List<Movie> {
+        return remoteDataSource.getUpcomingMovie().toMovies()
     }
 }

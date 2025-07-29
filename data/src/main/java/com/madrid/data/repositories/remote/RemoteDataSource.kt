@@ -8,8 +8,10 @@ import com.madrid.data.dataSource.remote.response.genre.GenresResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieReviewResponse
+import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SimilarMoviesResponse
+import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.SeasonEpisodesResponse
 import com.madrid.data.dataSource.remote.response.series.SeriesCreditResponse
@@ -60,4 +62,10 @@ interface RemoteDataSource {
     // region Trending
     suspend fun getAllTrending(page: Int): AllTrendingResponse
     // endregion
+
+    //Home Movie
+    suspend fun getUpcomingMovie(page: Int = 1): UpcomingMoviesResponse
+    suspend fun getNowPlayingMovie(page: Int = 1): NowPlayingMovieResponse
+    // endregion
+
 }

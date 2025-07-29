@@ -8,9 +8,14 @@ import com.madrid.data.dataSource.remote.response.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieResult
 import com.madrid.data.dataSource.remote.response.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.response.movie.MovieReviewResult
+import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
+import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResult
 import com.madrid.data.dataSource.remote.response.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.SimilarMovieNetwork
 import com.madrid.data.dataSource.remote.response.movie.SimilarMoviesResponse
+import com.madrid.data.dataSource.remote.response.movie.UpcomingMovieResult
+import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
+import com.madrid.data.dataSource.remote.utils.getDefaultMovie
 import com.madrid.domain.entity.Cast
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
@@ -136,6 +141,45 @@ fun TrailerResponse.toTrailer(): Trailer {
     return Trailer(
         key = this.results.firstOrNull()?.key ?: "",
         id = this.results.firstOrNull()?.id ?: ""
+    )
+}
+// endregion
+
+// region Home Movies
+
+fun NowPlayingMovieResponse.toMovies(): List<Movie> {
+    return this.nowPlayingMovieResults?.map {
+        it?.toMovie() ?: getDefaultMovie()
+    } ?: emptyList()
+}
+
+fun NowPlayingMovieResult.toMovie(): Movie{
+    return Movie(
+        id = this.id ?: 0,
+        title = this.title ?: "",
+        imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
+        rate = this.voteAverage ?: 0.0,
+        yearOfRelease = this.releaseDate?: "",
+        description = this.overview ?: "",
+        genre = listOf(),
+    )
+}
+
+fun UpcomingMoviesResponse.toMovies(): List<Movie> {
+    return this.upcomingMovieResult?.map {
+        it?.toMovie() ?: getDefaultMovie()
+    } ?: emptyList()
+}
+
+fun UpcomingMovieResult.toMovie(): Movie{
+    return Movie(
+        id = this.id ?: 0,
+        title = this.title ?: "",
+        imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
+        rate = this.voteAverage ?: 0.0,
+        yearOfRelease = this.releaseDate?: "",
+        description = this.overview ?: "",
+        genre = listOf(),
     )
 }
 // endregion
