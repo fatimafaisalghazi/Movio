@@ -27,7 +27,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitel
-import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
@@ -80,28 +79,6 @@ fun LazyGridScope.forYouAndExploreScreen(
                     }
                 }
             }
-
-            forYouMovies.isEmpty()-> {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Column (
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 64.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id =  com.madrid.presentation.R.drawable.img_no_sesrch_found),
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .size(128.dp)
-                                .align(CenterHorizontally),
-                            contentScale = ContentScale.Fit
-                        )
-                    }
-                }
-            }
-
             forYouMovies.isNotEmpty() -> {
                 item(
                     span = { GridItemSpan(maxLineSpan) }
