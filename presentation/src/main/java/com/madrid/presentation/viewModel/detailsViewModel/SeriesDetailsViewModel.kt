@@ -141,6 +141,7 @@ class SeriesDetailsViewModel(
                         review.toUiState()
                     })
                 }
+                Log.d("loadReviews", "loadReviews: ${state.value.reviews}")
             },
             onError = { e ->
                 Log.d("TAG lol", "loadCastData: ${e.message}")
@@ -180,7 +181,7 @@ fun Series.toUiState(): SeriesUiState {
 fun Review.toUiState(): ReviewUiState {
     return ReviewUiState(
         reviewerName = this.reviewerName,
-        reviewerImageUrl = "",
+        reviewerImageUrl = this.reviewerPhotoUrl,
         rating = this.rate.toFloat(),
         date = this.date,
         content = this.comment

@@ -38,7 +38,7 @@ fun ReviewScreen(
             onSeeAllClick = { onSeeAllReviews() },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         if (uiState.reviews.isEmpty()) {
             EmptyReviewsMessage()

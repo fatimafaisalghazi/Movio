@@ -156,7 +156,10 @@ fun SeriesDetailsScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(32.dp))
+            Log.d("in series details screen", "SeriesDetailsScreen: reviews ${uiState.reviews}")
             if (uiState.reviews.isNotEmpty()) {
+                Log.d("in series details screen", "SeriesDetailsScreen: reviews ${uiState.reviews}")
                 ReviewScreen(
                     onSeeAllReviews = {
                         navController.navigate(
@@ -171,6 +174,7 @@ fun SeriesDetailsScreen(
                 Spacer(modifier = Modifier.height(32.dp))
             }
             if (uiState.similarSeries.isNotEmpty()) {
+                Log.d("in series details screen", "SeriesDetailsScreen: ${uiState.similarSeries}")
                 SimilarSeriesSection(
                     similarSeries = uiState.similarSeries.map { series ->
                         SimilarSeries(
