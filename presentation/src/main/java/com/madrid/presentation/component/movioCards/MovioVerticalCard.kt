@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,7 +29,7 @@ fun MovioVerticalCard(
     description: String,
     movieImage: String,
     rate: String,
-    width: Dp? = null, // Make width optional
+    width: Dp? = null,
     height: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -62,7 +61,6 @@ fun MovioVerticalCard(
                     .clip(RoundedCornerShape(8.dp))
             )
         }
-
         MovioText(
             text = description,
             textStyle = Theme.textStyle.title.mediumMedium14,
@@ -79,7 +77,7 @@ fun MovioVerticalCard(
 private fun VerticalCardPreview() {
     MovioTheme {
         MovioVerticalCard(
-            description = "Spider-Man",
+            description = "Spider-Man hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ",
             movieImage = "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
             width = 200.dp,
             height = 150.dp,

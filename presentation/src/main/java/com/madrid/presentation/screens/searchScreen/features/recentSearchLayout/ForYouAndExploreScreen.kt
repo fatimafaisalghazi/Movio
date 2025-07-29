@@ -64,8 +64,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 ) {
                     Column (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 64.dp),
+                            .fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -85,8 +84,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Column (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 64.dp),
+                            .fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
@@ -117,8 +115,9 @@ fun LazyGridScope.forYouAndExploreScreen(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
                     LazyRow(
+                        modifier = Modifier
+                            .padding(bottom = 32.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.height(200.dp)
                     ) {
                         items(forYouMovies) { movie ->
                             MovioVerticalCard(
@@ -127,7 +126,6 @@ fun LazyGridScope.forYouAndExploreScreen(
                                 rate = movie.rating,
                                 width = 124.dp,
                                 height = 160.dp,
-                                paddingValue = 8.dp,
                                 onClick = { onMovieClick(movie) }
                             )
                         }
@@ -159,8 +157,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 ) {
                     Column (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 64.dp),
+                            .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -190,8 +187,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     Column (
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 64.dp),
+                            .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
