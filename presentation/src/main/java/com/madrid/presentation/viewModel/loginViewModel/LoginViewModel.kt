@@ -1,6 +1,5 @@
 package com.madrid.presentation.viewModel.loginViewModel
 
-import LoginUiState
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.madrid.domain.entity.LoginResult

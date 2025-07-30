@@ -25,6 +25,7 @@ import com.madrid.domain.usecase.series.GetSeriesDetailsUseCase
 import com.madrid.domain.usecase.series.GetSeriesReviewsUseCase
 import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.domain.usecase.series.GetSeriesTrailersUseCase
+import com.madrid.domain.usecase.movie.GetTrendingMoviesUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -54,6 +55,9 @@ val domainModule = module {
     singleOf(::GetMovieTrailersUseCase)
     singleOf(::GetSimilarMoviesUseCase)
     singleOf(::GetMovieTrailersUseCase)
+    singleOf(::GetTrendingMoviesUseCase)
+
+
     // series
     singleOf(::GetSeriesByGenresUseCase)
     singleOf(::GetEpisodesForSeasonUseCase)
