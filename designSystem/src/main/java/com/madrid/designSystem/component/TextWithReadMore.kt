@@ -44,7 +44,7 @@ fun TextWithReadMore(
         if (isTextOverflow || description.length > 150) {
             MovioText(
                 text = if (isExpanded) "Read Less" else "Read More",
-                color = Theme.color.brand.primary,
+                color = Theme.color.surfaces.onSurface,
                 textStyle = Theme.textStyle.label.mediumMedium14,
                 modifier = Modifier
                     .padding(top = 4.dp)

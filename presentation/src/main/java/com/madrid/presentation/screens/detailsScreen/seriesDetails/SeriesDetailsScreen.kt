@@ -36,7 +36,7 @@ import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailS
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.designSystem.component.ExpandableDescription
+import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeries
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeriesSection
@@ -91,7 +91,7 @@ fun SeriesDetailsScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            ExpandableDescription(
+            TextWithReadMore(
                 description = uiState.description,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )

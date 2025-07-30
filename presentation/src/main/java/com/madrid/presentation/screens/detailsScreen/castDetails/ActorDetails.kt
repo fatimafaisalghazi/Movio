@@ -124,7 +124,7 @@ fun ActorDetailsContent(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
-                    .height(333.dp),
+                    .height(235.dp),
             ) {
                 items(actor.knownFor.size) { index ->
                     val movie = actor.knownFor[index]
@@ -137,7 +137,6 @@ fun ActorDetailsContent(
                         onClick = { /* Handle movie click */ },
                         modifier = Modifier
                             .navigationBarsPadding()
-                            .padding(vertical = 12.dp)
                     )
                 }
             }
