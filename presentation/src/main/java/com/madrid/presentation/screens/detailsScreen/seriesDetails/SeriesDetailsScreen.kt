@@ -22,8 +22,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.component.CustomTextTitel
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
@@ -36,7 +38,8 @@ import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailS
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.screens.detailsScreen.componant.ExpandableDescription
+import com.madrid.designSystem.component.TextWithReadMore
+import com.madrid.presentation.component.header.SeriesDetailsHeader
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeries
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeriesSection
@@ -53,7 +56,6 @@ fun SeriesDetailsScreen(
     val navController = LocalNavController.current
     val seasons = uiState.currentSeasonsUiStates
     val artists = uiState.topCast
-    Log.d("TAG lol", "SeriesDetailsScreen: sizeeeeeeeeeeeeee: ${artists.size}")
 
     Box(
         modifier = Modifier
@@ -67,8 +69,8 @@ fun SeriesDetailsScreen(
         )
         TopAppBar(
             text = null,
-            modifier = Modifier.padding(start = 16.dp, top = 36.dp),
-            onFirstIconClick = { navController.navigate(Destinations.SearchScreen) }
+            modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
+            onFirstIconClick = { navController.popBackStack() }
         )
         Column(
             modifier = Modifier
@@ -76,9 +78,9 @@ fun SeriesDetailsScreen(
                 .padding(bottom = 32.dp)
         ) {
             Spacer(modifier = Modifier.height(360.dp))
-            MovieDetailsHeader(
+            SeriesDetailsHeader(
                 movieName = uiState.seriesName,
-                movieCategory = uiState.seriesGenre,
+                seriesCategory = uiState.seriesGenre,
                 date = uiState.productionDate,
                 time = "${uiState.numberOfSeasons} Seasons",
                 rate = uiState.rate.take(3),
@@ -88,13 +90,16 @@ fun SeriesDetailsScreen(
                 onRateClick = {},
                 onPlayClick = {},
                 onAddToListClick = {},
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            ExpandableDescription(
+            TextWithReadMore(
                 description = uiState.description,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp),
+                maxLines = 5
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -114,37 +119,28 @@ fun SeriesDetailsScreen(
                         )
                     )
                 },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            Spacer(Modifier.height(12.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                MovioText(
-                    text = "Current Seasons",
-                    color = Theme.color.surfaces.onSurface,
-                    textStyle = Theme.textStyle.headline.mediumMedium18
-                )
-
-                MovioText(
-                    text = "${stringResource(id = R.string.see_all)} >",
-                    color = Theme.color.surfaces.onSurfaceVariant,
-                    textStyle = Theme.textStyle.label.smallRegular14,
-                    modifier = Modifier.clickable {
-                        navController.navigate(
-                            Destinations.SeasonsScreen(
-                                uiState.seriesId,
-                                1
-                            )
+                onCastMemberClick = { castId ->
+                    navController.navigate(
+                        Destinations.ActorDetails(
+                            artistId = castId
                         )
-                    }
-                )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
+                    )
+                },
+            )
+            CustomTextTitel(
+                primaryText = stringResource(R.string.current_seasons),
+                secondaryText = stringResource(R.string.see_all),
+                endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_alt_arrow_left),
+                onSeeAllClick = {
+                    navController.navigate(
+                        Destinations.SeasonsScreen(
+                            uiState.seriesId,
+                            1
+                        )
+                    )
+                },
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+            )
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -184,34 +180,36 @@ fun SeriesDetailsScreen(
                 )
                 Spacer(modifier = Modifier.height(32.dp))
             }
-            SimilarSeriesSection(
-                onSeeAllClick = {
-                    navController.navigate(
-                        Destinations.SimilarMediaScreen(
-                            mediaId = uiState.seriesId,
-                            isMovie = false
+            if (uiState.similarSeries.isNotEmpty()) {
+                Log.d("in series details screen", "SeriesDetailsScreen: ${uiState.similarSeries}")
+                SimilarSeriesSection(
+                    similarSeries = uiState.similarSeries.map { series ->
+                        SimilarSeries(
+                            id = series.id,
+                            title = series.name,
+                            imageUrl = series.imageUrl,
+                            rating = (series.rate.take(3)).toDouble()
                         )
-                    )
-                },
-                onSeriesClick = { series ->
-                    navController.navigate(
-                        Destinations.SeriesDetailsScreen(
-                            seriesId = series.id,
-                            1
+                    },
+                    onSeeAllClick = {
+                        navController.navigate(
+                            Destinations.SimilarMediaScreen(
+                                mediaId = uiState.seriesId,
+                                isMovie = false
+                            )
                         )
-                    )
-                },
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                similarSeries = uiState.similarSeries.map { series ->
-                    SimilarSeries(
-                        id = series.id,
-                        title = series.name,
-                        imageUrl = series.imageUrl,
-                        rating = (series.rate.take(3)).toDouble()
-                    )
-
-                }
-            )
+                    },
+                    onSeriesClick = { series ->
+                        navController.navigate(
+                            Destinations.SeriesDetailsScreen(
+                                seriesId = series.id,
+                                1
+                            )
+                        )
+                    },
+                    modifier = Modifier.padding(vertical = 8.dp),
+                )
+            }
         }
     }
 }

@@ -12,12 +12,16 @@ import com.madrid.domain.usecase.series.GetSeriesReviewsUseCase
 import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.shared.formatDuration
+import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
+import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SeriesDetailsViewModel(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getSeriesDetailsUseCase: GetSeriesDetailsUseCase,
     private val getSeriesTopCastUseCase: GetSeriesTopCastUseCase,
     private val getSeriesReviewsUseCase: GetSeriesReviewsUseCase,
@@ -33,17 +37,17 @@ class SeriesDetailsViewModel(
 
     private fun loadData() {
         tryToExecute(
-            function = { getSeriesDetailsUseCase(args.seriesId.toInt()) },
+            function = { getSeriesDetailsUseCase(args.seriesId) },
             onSuccess = { series ->
                 updateState {
                     it.copy(
                         seriesId = series.id,
                         topImageUrl = series.imageUrl,
                         seriesName = series.title,
-                        rate = series.rate.toString(),
+                        rate = RateFormatter.formatRate(series.rate), // Format rate here
                         numberOfSeasons = series.seasons.size,
-                        productionDate = series.airDate,
-                        description = series.description,
+                        productionDate = formatDateKotlinx(series.airDate),
+                        description =formatDuration( series.description),
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
                         selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState()
                     )
@@ -172,7 +176,7 @@ fun Series.toUiState(): SeriesUiState {
         id = this.id,
         name = this.title,
         imageUrl = this.imageUrl,
-        rate = this.rate.toString()
+        rate = RateFormatter.formatRate(this.rate)
     )
 }
 
@@ -180,9 +184,9 @@ fun Series.toUiState(): SeriesUiState {
 fun Review.toUiState(): ReviewUiState {
     return ReviewUiState(
         reviewerName = this.reviewerName,
-        reviewerImageUrl = "",
+        reviewerImageUrl = this.reviewerPhotoUrl,
         rating = this.rate.toFloat(),
-        date = this.date,
+        date = formatDateOfBirth(this.date),
         content = this.comment
     )
 }

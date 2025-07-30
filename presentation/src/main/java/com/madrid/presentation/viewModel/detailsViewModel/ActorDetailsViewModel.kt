@@ -5,12 +5,14 @@ import androidx.navigation.toRoute
 import com.madrid.domain.usecase.artist.GetArtistDetailsUseCase
 import com.madrid.domain.usecase.artist.GetArtistMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
 
 class ActorDetailsViewModel(
     private val getArtistDetailsUseCase: GetArtistDetailsUseCase,
     private val getArtistMoviesUseCase: GetArtistMoviesUseCase,
-    private val saveStateHandle: SavedStateHandle
+    saveStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, Nothing>(
     MovieDetailsUiState()
 ) {
@@ -28,12 +30,12 @@ class ActorDetailsViewModel(
                 Pair(actor, knownForList)
             },
             onSuccess = { (actor, knownForList) ->
-                val mappedActor = actor?.let {
+                val mappedActor = actor.let {
                     MovieDetailsUiState.CastUiState(
                         actorImageUrl = actor.imageUrl,
                         actorName = actor.name,
                         actorRole = actor.role,
-                        dateOfBirth = actor.dateOfBirth,
+                        dateOfBirth = formatDateOfBirth(actor.dateOfBirth),
                         location = actor.country,
                         id = actor.id.toString(),
                         description = actor.overview,
@@ -41,7 +43,7 @@ class ActorDetailsViewModel(
                             MovieDetailsUiState.KnownMovieUiState(
                                 title = known.title,
                                 imageUrl = known.imageUrl,
-                                rating = known.rate.toString(),
+                                rating = RateFormatter.formatRate(known.rate),
                                 mediaId = known.id,
                             )
                         }
@@ -52,7 +54,6 @@ class ActorDetailsViewModel(
                         selectedActor = mappedActor,
                         isLoading = false,
                         errorMessage = null,
-//                        movieId = args.
                     )
                 }
             },
