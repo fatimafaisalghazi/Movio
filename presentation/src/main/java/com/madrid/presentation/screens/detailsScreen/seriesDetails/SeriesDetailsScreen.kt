@@ -53,7 +53,6 @@ fun SeriesDetailsScreen(
     val navController = LocalNavController.current
     val seasons = uiState.currentSeasonsUiStates
     val artists = uiState.topCast
-    Log.d("TAG lol", "SeriesDetailsScreen: sizeeeeeeeeeeeeee: ${artists.size}")
 
     Box(
         modifier = Modifier

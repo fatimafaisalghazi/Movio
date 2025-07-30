@@ -18,7 +18,6 @@ import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R.string
-import java.text.DecimalFormat
 
 @Composable
 fun RateIcon(
@@ -26,15 +25,6 @@ fun RateIcon(
     modifier: Modifier = Modifier,
     icon: Painter = painterResource(R.drawable.bold_star),
 ) {
-    // Format the rate to show only one decimal place (truncate, don't round)
-    val formattedRate = try {
-        val rateValue = rate.toDouble()
-        val truncated = Math.floor(rateValue * 10) / 10
-        DecimalFormat("#.#").format(truncated)
-    } catch (e: NumberFormatException) {
-        rate // Return original string if parsing fails
-    }
-
     Box(
         modifier = modifier
             .height(16.dp),
@@ -53,7 +43,7 @@ fun RateIcon(
                 modifier = Modifier.size(16.dp)
             )
             MovioText(
-                text = formattedRate,
+                text = rate,
                 color = Theme.color.system.onWarning,
                 textStyle = Theme.textStyle.label.smallRegular12,
                 maxLines = 1,
@@ -67,6 +57,6 @@ fun RateIcon(
 private fun RateIconPreview() {
     RateIcon(
         icon = painterResource(id = R.drawable.bold_star),
-        rate = "5.992",
+        rate = "10",
     )
 }

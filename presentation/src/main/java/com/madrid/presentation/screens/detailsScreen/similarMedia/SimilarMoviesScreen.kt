@@ -23,11 +23,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
-import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 import com.madrid.detectImageContent.FilteredImage
 import com.madrid.presentation.R
@@ -37,17 +35,8 @@ data class SimilarMovie(
     val id: Int,
     val title: String,
     val imageUrl: String,
-    val rating: Double
+    val rating: String
 )
-
-fun Double.toOneDecimalPlace(): String {
-    return try {
-        val truncated = Math.floor(this * 10) / 10
-        DecimalFormat("#.#").format(truncated)
-    } catch (e: Exception) {
-        this.toString()
-    }
-}
 
 @Composable
 fun SimilarMoviesSection(
@@ -136,7 +125,7 @@ private fun MovieCard(
                         tint = Theme.color.system.warning
                     )
                     MovioText(
-                        text = movie.rating.toOneDecimalPlace(),
+                        text = movie.rating,
                         color = Theme.color.surfaces.onSurface,
                         textStyle = Theme.textStyle.label.smallRegular12
                     )
