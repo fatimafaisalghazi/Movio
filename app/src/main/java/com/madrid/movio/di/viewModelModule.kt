@@ -31,14 +31,6 @@ val presentationModule = module {
     viewModelOf(::SeriesDetailsViewModel)
     viewModel<SeeAllTVShowsViewModel> { (type: SeeAllTvShowType) ->
         val strategy = SeeAllTVShowsFactory()
-        SeeAllTVShowsViewModel(
-            seriesByGenresUseCase = get(),
-            getGenresUseCase = get(),
-            seeAllTVShowsStrategy = strategy.create(type),
-            seeAllTopRatingTVShows = get(),
-            seeAllOnTvShow = get(),
-            seeAllAiringTodayTvShow = get(),
-            seeAllRecommendedTVShow = get()
-        )
+        SeeAllTVShowsViewModel(strategy = strategy.create(type))
     }
 }

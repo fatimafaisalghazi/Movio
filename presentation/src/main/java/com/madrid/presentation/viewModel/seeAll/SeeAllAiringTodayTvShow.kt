@@ -1,7 +1,8 @@
 package com.madrid.presentation.viewModel.seeAll
 
+import com.madrid.domain.entity.Genre
 import com.madrid.domain.entity.Series
-import com.madrid.domain.usecase.homeUseCase.GetAiringTodaySeriesUseCase
+import com.madrid.domain.usecase.series.GetAiringTodaySeriesUseCase
 
 class SeeAllAiringTodayTvShow(
     private val getAiringTodaySeriesUseCase: GetAiringTodaySeriesUseCase
@@ -10,11 +11,20 @@ class SeeAllAiringTodayTvShow(
         return "Airing Today"
     }
 
-    override suspend fun getTVShows(page: Int): List<Series> {
-        return getAiringTodaySeriesUseCase.invoke()
+    override suspend fun getAllTvShows(page: Int): List<Series> {
+        return getAiringTodaySeriesUseCase(1)
     }
 
-    override fun showTVShowsCategory(): Boolean {
+    override suspend fun getAllTvShowsCategories(): List<Genre> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getTvShowsBasedOnCategory(category: String): List<Series> {
+        TODO("Not yet implemented")
+    }
+
+    override fun showTvShowsCategory(): Boolean {
         return false
     }
+
 }

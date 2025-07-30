@@ -4,4 +4,5 @@ interface SeeAllTVShowsInteractionListener {
     fun onSeriesClick(seriesId:Int)
     fun onGenreSelect(genre:String)
     fun onBackClick()
+    fun onClickAllChip()
 }
