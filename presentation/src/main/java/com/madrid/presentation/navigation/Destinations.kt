@@ -20,9 +20,13 @@ sealed interface Destinations {
     data object HomeScreen : Destinations
 
     @Serializable
+    data object LibraryScreen : Destinations
+
+    @Serializable
+    data object MoreScreen : Destinations
+
+    @Serializable
     data object SearchScreen : Destinations
-
-
 
     @Serializable
     data class MovieDetailsScreen(
@@ -36,13 +40,19 @@ sealed interface Destinations {
     ) : Destinations
 
     @Serializable
-    data class TopCastScreen(
+    data class TopCast(
         val mediaId: Int,
         val isMovie: Boolean
     ) : Destinations
 
     @Serializable
     data class ReviewsScreen(
+        val mediaId: Int,
+        val isMovie: Boolean
+    ) : Destinations
+
+    @Serializable
+    data class SimilarMediaScreen(
         val mediaId: Int,
         val isMovie: Boolean
     ) : Destinations
@@ -59,8 +69,6 @@ sealed interface Destinations {
         val seasonNumber: Int
     ) : Destinations
 
-    @Serializable
-    data object LibraryScreen : Destinations
 
     @Serializable
     data object MoreScreen : Destinations
@@ -72,4 +80,7 @@ sealed interface Destinations {
 
     @Serializable
     data class ForgotPassword(val url: String): Destinations
+    data class ActorDetails(
+        val artistId: Int,
+    ) : Destinations
 }
