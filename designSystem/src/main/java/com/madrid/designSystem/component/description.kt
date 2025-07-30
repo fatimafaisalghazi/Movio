@@ -1,9 +1,9 @@
-package com.madrid.presentation.screens.detailsScreen.componant
+package com.madrid.designSystem.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.TextButton
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +12,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 
 
@@ -51,5 +50,5 @@ fun ExpandableDescription(
 
 private fun shouldShowReadMore(text: String, maxLines: Int): Boolean {
     val lineCount = text.lines().size
-    return lineCount > maxLines || text.length > 200 // Also consider long single-line text
+    return lineCount > maxLines || text.length > 200
 }

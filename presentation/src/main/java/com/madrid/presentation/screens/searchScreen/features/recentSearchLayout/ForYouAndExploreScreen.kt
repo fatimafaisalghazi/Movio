@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitel
 import com.madrid.designSystem.component.LoadingSearchCard
+import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
@@ -139,17 +139,17 @@ fun LazyGridScope.forYouAndExploreScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
+                        MovioText(
                             text = "Internet is not available",
-                            style = Theme.textStyle.title.mediumMedium16,
+                            textStyle = Theme.textStyle.title.mediumMedium16,
                             color = Theme.color.surfaces.onSurface,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(
+                        MovioText(
                             text = "Please make sure you are connected to the internet and try again.",
-                            style = Theme.textStyle.label.smallRegular12,
+                            textStyle = Theme.textStyle.label.smallRegular12,
                             color = Theme.color.surfaces.onSurfaceContainer,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -169,17 +169,17 @@ fun LazyGridScope.forYouAndExploreScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
+                        MovioText(
                             text = "No results found",
-                            style = Theme.textStyle.title.mediumMedium16,
+                            textStyle = Theme.textStyle.title.mediumMedium16,
                             color = Theme.color.surfaces.onSurface,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(
+                        MovioText(
                             text = stringResource(com.madrid.presentation.R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                            style = Theme.textStyle.label.smallRegular12,
+                            textStyle = Theme.textStyle.label.smallRegular12,
                             color = Theme.color.surfaces.onSurfaceContainer,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
