@@ -41,10 +41,10 @@ fun AuthenticationScreen(
                 onGuestLogin()
             } else {
                 onLoginSuccess()
-                navController.navigate(
-                    Destinations.HomeScreen
-                )
             }
+            navController.navigate(
+                Destinations.HomeScreen
+            )
         }
     }
 
