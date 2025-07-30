@@ -28,6 +28,7 @@ class SeeAllTVShowsViewModel(
         tryToExecute(
             function = { getSeriesGenresUseCase() },
             onSuccess = { genres ->
+                Log.d("TAG zoz", "in view model init")
                 updateState { it.copy(genre = genres.map { genre -> genre.toCategoryUiState() }) }
             },
             onError = { /* Handle if needed */ }

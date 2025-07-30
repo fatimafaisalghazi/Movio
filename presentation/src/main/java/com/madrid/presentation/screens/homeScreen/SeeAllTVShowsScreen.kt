@@ -53,7 +53,7 @@ fun SeeAllTVShowsScreen(
             if (firstGenre != null) {
                 selectedItem = firstGenre
             }
-            if(selectedItem.isNotEmpty())
+            if (selectedItem.isNotEmpty())
                 viewModel.onGenreSelect(uiState.genre.find { it.name == selectedItem }!!)
         }
     }
@@ -74,17 +74,17 @@ fun SeeAllTVShowsScreen(
             TopAppBar(uiState.title, secondIcon = null, thirdIcon = null)
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
-            if (items != null) {
-                FilterBar(
-                    items = items.map { it.name },
-                    selectedItem = selectedItem,
-                    onItemClick = { genre ->
-                        selectedItem = genre
-                        viewModel.onGenreSelect(items.find { it.name == genre }!!)
-                    },
-                    scrollable = true
-                )
-            }
+
+            FilterBar(
+                items = items.map { it.name },
+                selectedItem = selectedItem,
+                onItemClick = { genre ->
+                    selectedItem = genre
+                    viewModel.onGenreSelect(items.find { it.name == genre }!!)
+                },
+                scrollable = true
+            )
+
         }
 
         items(uiState.filteredSeries.size) { index ->

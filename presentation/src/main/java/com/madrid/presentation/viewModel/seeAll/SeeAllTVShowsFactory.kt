@@ -5,7 +5,6 @@ import com.madrid.domain.usecase.series.GetAiringTodaySeriesUseCase
 import com.madrid.domain.usecase.series.GetOnAirSeriesUseCase
 import com.madrid.domain.usecase.series.GetRecommendedSeriesUseCase
 import com.madrid.domain.usecase.series.GetTopRatedSeriesUseCase
-import org.koin.java.KoinJavaComponent
 
 class SeeAllTVShowsFactory(
     private val getTopRateSeriesUseCase: GetTopRatedSeriesUseCase,
@@ -16,16 +15,16 @@ class SeeAllTVShowsFactory(
 ) {
     fun create(type: SeeAllTvShowType): SeeAllTVShowsStrategy {
         return when (type) {
-            SeeAllTvShowType.Top_Rating -> SeeAllTopRatingTVShows(
+            SeeAllTvShowType.TOP_RATING -> SeeAllTopRatingTVShows(
                 getTopRateSeriesUseCase, filterSeriesByCategoryUseCase
             )
-            SeeAllTvShowType.On_TV -> SeeAllOnTvShow(
+            SeeAllTvShowType.ON_TV -> SeeAllOnTvShow(
                 getOnAirSeriesUseCase, filterSeriesByCategoryUseCase
             )
-            SeeAllTvShowType.Airing_Today -> SeeAllAiringTodayTvShow(
+            SeeAllTvShowType.AIRING_TODAY -> SeeAllAiringTodayTvShow(
                 getAiringTodaySeriesUseCase, filterSeriesByCategoryUseCase
             )
-            SeeAllTvShowType.More_Recommended -> SeeAllRecommendedTVShow(
+            SeeAllTvShowType.MORE_RECOMMENDED -> SeeAllRecommendedTVShow(
                 getRecommendedSeriesUseCase, filterSeriesByCategoryUseCase
             )
         }
