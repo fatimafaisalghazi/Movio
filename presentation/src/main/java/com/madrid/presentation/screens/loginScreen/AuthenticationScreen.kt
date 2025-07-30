@@ -41,6 +41,9 @@ fun AuthenticationScreen(
                 onGuestLogin()
             } else {
                 onLoginSuccess()
+                navController.navigate(
+                    Destinations.HomeScreen
+                )
             }
         }
     }
@@ -69,9 +72,6 @@ fun AuthenticationScreen(
 }
 
 
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewFullMovieLoginScreen() {
@@ -91,7 +91,7 @@ fun PreviewFullMovieLoginScreen() {
         loginSuccess = loginSuccess,
         isGuest = isGuest,
         isLoading = isLoading,
-       // canLogin = username.isNotBlank() && password.isNotBlank()
+        // canLogin = username.isNotBlank() && password.isNotBlank()
     )
 
     val scope = rememberCoroutineScope()
