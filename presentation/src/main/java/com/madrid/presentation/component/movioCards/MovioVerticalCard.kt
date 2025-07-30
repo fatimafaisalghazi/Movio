@@ -28,6 +28,7 @@ import com.madrid.designSystem.theme.Theme
 fun MovioVerticalCard(
     description: String,
     movieImage: String,
+    paddingValue: Dp = 0.dp,
     rate: String,
     width: Dp? = null,
     height: Dp,
@@ -43,8 +44,8 @@ fun MovioVerticalCard(
             Row(
                 modifier = Modifier
                     .zIndex(1f)
-                    .then(if (width != null) Modifier.width(width) else Modifier.fillMaxWidth()),
-                verticalAlignment = Alignment.CenterVertically,
+                    .then(if (width != null) Modifier.width(width) else Modifier.fillMaxWidth())
+                    .padding(top = paddingValue, end = paddingValue),                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
                 RateIcon(rate)
@@ -79,6 +80,7 @@ private fun VerticalCardPreview() {
             movieImage = "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
             width = 200.dp,
             height = 150.dp,
+            paddingValue = 8.dp,
             onClick = {},
             rate = "4.0",
         )
