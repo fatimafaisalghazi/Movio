@@ -11,8 +11,6 @@ import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.shared.barser.formatDateKotlinx
-import com.madrid.presentation.viewModel.shared.barser.formatDateOfBirth
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.annotation.KoinViewModel
 
@@ -48,7 +46,7 @@ class DetailsMovieViewModel(
                         dataMovie = formatDateKotlinx(movie.releaseDate),
                         movieName = movie.title,
                         rate = movie.rate.toString(),
-                        movieDuration = movie.movieDuration,
+                        movieDuration =formatDuration( movie.movieDuration),
                         description = movie.description,
                         genreMovie = movie.genre,
                     )

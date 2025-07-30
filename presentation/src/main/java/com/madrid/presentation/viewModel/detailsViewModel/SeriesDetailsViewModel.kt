@@ -13,7 +13,7 @@ import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.shared.barser.formatDateKotlinx
+import com.madrid.presentation.viewModel.shared.formatDuration
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -28,6 +28,7 @@ class SeriesDetailsViewModel(
     private val args = savedStateHandle.toRoute<Destinations.SeriesDetailsScreen>()
 
     init {
+        Log.d("loool", ": ")
         loadData()
     }
 
@@ -43,7 +44,7 @@ class SeriesDetailsViewModel(
                         rate = series.rate.toString(),
                         numberOfSeasons = series.seasons.size,
                         productionDate = series.airDate,
-                        description = series.description,
+                        description =formatDuration( series.description),
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
                         selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState()
                     )
@@ -180,7 +181,7 @@ fun Series.toUiState(): SeriesUiState {
 fun Review.toUiState(): ReviewUiState {
     return ReviewUiState(
         reviewerName = this.reviewerName,
-        reviewerImageUrl = "",
+        reviewerImageUrl = this.reviewerPhotoUrl,
         rating = this.rate.toFloat(),
         date = formatDateKotlinx(this.date),
         content = this.comment
