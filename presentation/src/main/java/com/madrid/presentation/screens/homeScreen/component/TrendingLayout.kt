@@ -40,7 +40,7 @@ fun TrendingLayout(
             .background(Theme.color.surfaces.surface)
     ) {
         CustomTextTitel(
-            primaryText = "Trending",
+            primaryText = stringResource(com.madrid.presentation.R.string.trending),
             secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
             endIcon = painterResource(R.drawable.outline_alt_arrow_left),
             modifier = headerModifier,
