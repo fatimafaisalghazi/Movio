@@ -4,10 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -17,6 +17,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,7 @@ import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.viewModel.detailsViewModel.ActorDetailsViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.MovieDetailsUiState
 import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun ActorDetails(
@@ -80,14 +83,33 @@ fun ActorDetailsContent(
         columns = GridCells.Adaptive(minSize = 101.dp),
         modifier = Modifier
             .fillMaxSize()
-            .background(Theme.color.surfaces.surface)
-            .statusBarsPadding(),
+            .background(Theme.color.surfaces.surface),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) }
         ) {
             Box(contentAlignment = Alignment.Center) {
+                MoviePosterDetailScreen(
+                    imageUrl = actor.actorImageUrl,
+                    isActor = true
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Black.copy(alpha = 0.3f),
+                                    Color.Transparent
+                                ),
+                                startY = 0f,
+                                endY = 400f
+                            )
+                        )
+                        .align(Alignment.TopCenter)
+                )
                 TopAppBar(
                     null,
                     secondIcon = null,
@@ -95,13 +117,9 @@ fun ActorDetailsContent(
                     modifier = Modifier
                         .padding(top = 6.dp)
                         .padding(16.dp)
-                        .align(Alignment.TopCenter),
+                        .align(Alignment.TopCenter)
+                        .background(Color.Transparent),
                     onFirstIconClick = { onBackClick() }
-
-                )
-                MoviePosterDetailScreen(
-                    imageUrl = actor.actorImageUrl,
-                    isActor = true
                 )
             }
         }
@@ -141,7 +159,7 @@ fun ActorDetailsContent(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
                     .padding(bottom = 16.dp)
-                    .height(333.dp),
+                    .height(235.dp),
             ) {
                 items(actor.knownFor.size) { index ->
                     val movie = actor.knownFor[index]
@@ -154,7 +172,6 @@ fun ActorDetailsContent(
                         onClick = { onKnownForClick(movie.mediaId) },
                         modifier = Modifier
                             .navigationBarsPadding()
-                            .padding(vertical = 12.dp)
                     )
                 }
             }
