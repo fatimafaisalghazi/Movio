@@ -11,6 +11,7 @@ import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.uiStateMapper.barser.formatDateKotlinx
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.annotation.KoinViewModel
 
@@ -43,7 +44,7 @@ class DetailsMovieViewModel(
                     it.copy(
                         movieId = movie.id,
                         topImageUrl = movie.imageUrl,
-                        dataMovie = movie.releaseDate,
+                        dataMovie = formatDateKotlinx( movie.releaseDate),
                         movieName = movie.title,
                         rate = movie.rate.toString(),
                         movieDuration = movie.movieDuration,
@@ -122,7 +123,7 @@ class DetailsMovieViewModel(
                         reviewerName = review.reviewerName,
                         reviewerImageUrl = "",
                         rating = review.rate.toFloat(),
-                        date = review.date,
+                        date = formatDateKotlinx(review.date),
                         content = review.comment,
                     )
                 }

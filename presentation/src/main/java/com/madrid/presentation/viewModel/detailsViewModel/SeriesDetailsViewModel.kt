@@ -13,8 +13,10 @@ import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.uiStateMapper.barser.formatDateKotlinx
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import okhttp3.internal.concurrent.formatDuration
 
 class SeriesDetailsViewModel(
     private val savedStateHandle: SavedStateHandle,
@@ -182,7 +184,7 @@ fun Review.toUiState(): ReviewUiState {
         reviewerName = this.reviewerName,
         reviewerImageUrl = "",
         rating = this.rate.toFloat(),
-        date = this.date,
+        date = formatDateKotlinx(this.date),
         content = this.comment
     )
 }

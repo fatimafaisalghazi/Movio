@@ -6,6 +6,7 @@ import com.madrid.domain.usecase.artist.GetArtistDetailsUseCase
 import com.madrid.domain.usecase.artist.GetArtistMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.uiStateMapper.barser.formatDateKotlinx
 
 class ActorDetailsViewModel(
     private val getArtistDetailsUseCase: GetArtistDetailsUseCase,
@@ -33,7 +34,7 @@ class ActorDetailsViewModel(
                         actorImageUrl = actor.imageUrl,
                         actorName = actor.name,
                         actorRole = actor.role,
-                        dateOfBirth = actor.dateOfBirth,
+                        dateOfBirth = formatDateKotlinx(actor.dateOfBirth),
                         location = actor.country,
                         id = actor.id.toString(),
                         description = actor.overview,
