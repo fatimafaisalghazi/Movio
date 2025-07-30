@@ -5,6 +5,7 @@ import com.madrid.data.dataSource.local.mappers.toSeries
 import com.madrid.data.dataSource.mapper.toSeriesGenreTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toEpisode
+import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toReview
 import com.madrid.data.dataSource.remote.mapper.toSeries
 import com.madrid.data.dataSource.remote.mapper.toSimilarSeries

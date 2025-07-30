@@ -21,4 +21,5 @@ interface SeriesRepository {
     suspend fun getOnAirSeries(page: Int): List<Series>
     suspend fun getAiringTodaySeries(page: Int): List<Series>
     suspend fun getRecommendedSeries(page: Int): List<Series>
+    suspend fun getSeriesGenres(): List<Genre>
 }
