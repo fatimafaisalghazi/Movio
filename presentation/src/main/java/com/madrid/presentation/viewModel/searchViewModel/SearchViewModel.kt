@@ -25,6 +25,7 @@ import com.madrid.presentation.screens.searchScreen.paging.SearchArtistPagingSou
 import com.madrid.presentation.screens.searchScreen.paging.SearchMoviePagingSource
 import com.madrid.presentation.screens.searchScreen.paging.SearchSeriesPagingSource
 import com.madrid.presentation.screens.searchScreen.utils.FilterPagesItem
+import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.uiStateMapper.toArtistUiState
 import com.madrid.presentation.viewModel.uiStateMapper.toMovieUiState

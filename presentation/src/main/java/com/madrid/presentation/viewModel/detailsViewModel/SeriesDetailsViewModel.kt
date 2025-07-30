@@ -12,6 +12,7 @@ import com.madrid.domain.usecase.series.GetSeriesReviewsUseCase
 import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
@@ -43,7 +44,7 @@ class SeriesDetailsViewModel(
                         seriesId = series.id,
                         topImageUrl = series.imageUrl,
                         seriesName = series.title,
-                        rate = series.rate.toString(),
+                        rate = RateFormatter.formatRate(series.rate), // Format rate here
                         numberOfSeasons = series.seasons.size,
                         productionDate = formatDateKotlinx(series.airDate),
                         description =formatDuration( series.description),
@@ -175,7 +176,7 @@ fun Series.toUiState(): SeriesUiState {
         id = this.id,
         name = this.title,
         imageUrl = this.imageUrl,
-        rate = this.rate.toString(),
+        rate = RateFormatter.formatRate(this.rate)
     )
 }
 
