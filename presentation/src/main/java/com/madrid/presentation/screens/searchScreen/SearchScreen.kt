@@ -186,6 +186,7 @@ fun ContentSearchScreen(
     val showSearchResults = searchQuery.isNotBlank()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var showRecentSearch by remember { mutableIntStateOf(0) }
+    var previousSelectedTabIndex by remember { mutableIntStateOf(-1) }
 
     LaunchedEffect(searchQuery) {
         snapshotFlow { searchQuery }
@@ -254,26 +255,21 @@ fun ContentSearchScreen(
                 series = series,
                 artist = artist,
                 selectedTabIndex = selectedTabIndex,
-                onChangeSelectedTabIndex = { selectedTabIndex = it },
-                onChangeTypeFilterSearch = {
-                    when (selectedTabIndex) {
-                        0 -> {
-                            onClickTopRated()
-                        }
 
-                        1 -> {
-                            onClickMovies()
-                        }
+                onChangeSelectedTabIndex = { newIndex ->
+                    if (newIndex != selectedTabIndex) {
+                        previousSelectedTabIndex = selectedTabIndex
+                        selectedTabIndex = newIndex
 
-                        2 -> {
-                            onClickSeries()
-                        }
-
-                        else -> {
-                            onClickArtist()
+                        when (newIndex) {
+                            0 -> onClickTopRated()
+                            1 -> onClickMovies()
+                            2 -> onClickSeries()
+                            3 -> onClickArtist()
                         }
                     }
                 },
+                onChangeTypeFilterSearch = {},
                 onSeriesClick = { seriesId ->
                     onSeriesClick(seriesId)
                 },
@@ -287,6 +283,7 @@ fun ContentSearchScreen(
                     onTopResultClick(movieId)
                 }
             )
+
         }
 
         if (showRecentSearch == 1 && searchHistory.isNotEmpty()) {
