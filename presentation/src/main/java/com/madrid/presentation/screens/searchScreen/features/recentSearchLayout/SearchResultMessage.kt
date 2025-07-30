@@ -19,14 +19,14 @@ fun SearchResultMessage(items: String, modifier: Modifier = Modifier) {
     ) {
         MovioText(
             stringResource(id = R.string.search_result_count),
-            Theme.color.surfaces.onSurfaceContainer,
-            Theme.textStyle.headline.mediumMedium16,
+            color = Theme.color.surfaces.onSurfaceContainer,
+            textStyle = Theme.textStyle.headline.mediumMedium16,
             modifier = modifier
         )
         MovioText(
             text = stringResource(R.string.items_count, items),
-            Theme.color.surfaces.onSurfaceVariant,
-            Theme.textStyle.label.smallRegular14,
+            color = Theme.color.surfaces.onSurfaceVariant,
+            textStyle = Theme.textStyle.label.smallRegular14,
             modifier = modifier
         )
     }
