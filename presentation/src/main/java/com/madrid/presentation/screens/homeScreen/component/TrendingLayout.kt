@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitel
 import com.madrid.designSystem.component.LoadingSearchCard
+import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.TrendingMovieCard
 import com.madrid.presentation.viewModel.homeViewModel.HomeViewModel
@@ -71,9 +71,11 @@ fun TrendingLayout(
                 }
 
                 trendingUiState.errorMessage.isNotEmpty() -> {
-                    Text(
+                    MovioText(
                         text = trendingUiState.errorMessage,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Theme.color.surfaces.onSurface,
+                        textStyle = Theme.textStyle.title.mediumMedium16
                     )
                 }
 
