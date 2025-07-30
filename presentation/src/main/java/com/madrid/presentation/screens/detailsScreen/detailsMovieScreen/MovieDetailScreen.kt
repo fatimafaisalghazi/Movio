@@ -73,6 +73,7 @@ fun MovieDetailsScreen(
                 onAddToListClick = {},
             )
             Spacer(modifier = Modifier.height(16.dp))
+
             TextWithReadMore(
                 description = uiState.description,
                 modifier = Modifier

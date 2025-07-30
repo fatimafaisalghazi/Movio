@@ -5,6 +5,7 @@ import androidx.navigation.toRoute
 import com.madrid.domain.usecase.artist.GetArtistDetailsUseCase
 import com.madrid.domain.usecase.artist.GetArtistMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 
 class ActorDetailsViewModel(
@@ -41,7 +42,7 @@ class ActorDetailsViewModel(
                             MovieDetailsUiState.KnownMovieUiState(
                                 title = known.title,
                                 imageUrl = known.imageUrl,
-                                rating = known.rate.toString(),
+                                rating = RateFormatter.formatRate(known.rate),
                                 mediaId = known.id,
                             )
                         }
@@ -52,7 +53,6 @@ class ActorDetailsViewModel(
                         selectedActor = mappedActor,
                         isLoading = false,
                         errorMessage = null,
-//                        movieId = args
                     )
                 }
             },
