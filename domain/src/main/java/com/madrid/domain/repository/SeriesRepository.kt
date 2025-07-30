@@ -2,8 +2,10 @@ package com.madrid.domain.repository
 
 import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Episode
+import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
+import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 
 interface SeriesRepository {
@@ -18,4 +20,5 @@ interface SeriesRepository {
     suspend fun getOnAirSeries(page: Int): List<Series>
     suspend fun getAiringTodaySeries(page: Int): List<Series>
     suspend fun getRecommendedSeries(page: Int): List<Series>
+    suspend fun getSeriesByGenreId(page: Int, genreId: Int, sortBy: SortType): List<Series>
 }

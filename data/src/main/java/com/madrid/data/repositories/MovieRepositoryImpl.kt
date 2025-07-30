@@ -14,6 +14,7 @@ import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
+import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.MovieRepository
 
@@ -99,5 +100,18 @@ class MovieRepositoryImpl(
             }
         }
         return movies?.map { it.toMovie() } ?: emptyList()
+    }
+
+    override suspend fun getMoviesByGenreId(
+        page: Int,
+        genreId: Int,
+        sortBy: SortType
+    ): List<Movie> {
+        val sortType = getSortType(sortBy)
+        return remoteDataSource.getMoviesByGenreId(
+            page,
+            genreId,
+            sortType
+        ).movieResults?.map { it.toMovie() } ?: emptyList()
     }
 }

@@ -14,6 +14,7 @@ import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Episode
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
+import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.SeriesRepository
 
@@ -70,6 +71,19 @@ class SeriesRepositoryImpl(
 
     override suspend fun getRecommendedSeries(page: Int): List<Series> {
         return remoteDataSource.getRecommendedSeries().toTvShows()
+    }
+
+    override suspend fun getSeriesByGenreId(
+        page: Int,
+        genreId: Int,
+        sortBy: SortType
+    ): List<Series> {
+        val sortType = getSortType(sortBy)
+        return remoteDataSource.getSeriesByGenreId(
+            page,
+            genreId,
+            sortType
+        ).seriesResults?.map { it.toSeries() } ?: emptyList()
     }
 
     override suspend fun getSeriesByGenres(): Map<String, List<Series>> {
