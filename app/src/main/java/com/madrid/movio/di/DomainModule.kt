@@ -1,6 +1,6 @@
 package com.madrid.movio.di
 
-import com.madrid.domain.usecase.LoginUseCase
+import com.madrid.domain.usecase.authentication.LoginUseCase
 import com.madrid.domain.usecase.artist.GetArtistDetailsUseCase
 import com.madrid.domain.usecase.artist.GetArtistMoviesUseCase
 import com.madrid.domain.usecase.movie.GetMovieDetailsUseCase

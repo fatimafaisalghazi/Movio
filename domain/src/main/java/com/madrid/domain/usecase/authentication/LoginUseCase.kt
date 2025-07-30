@@ -1,8 +1,10 @@
-package com.madrid.domain.usecase
-
+package com.madrid.domain.usecase.authentication
 
 import com.madrid.domain.entity.LoginResult
-import com.madrid.domain.exceptions.*
+import com.madrid.domain.exceptions.EmptyPasswordException
+import com.madrid.domain.exceptions.EmptyUsernameException
+import com.madrid.domain.exceptions.UsernameTooShortException
+import com.madrid.domain.exceptions.WeakPasswordException
 import com.madrid.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

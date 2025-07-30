@@ -14,14 +14,13 @@ import com.madrid.presentation.screens.detailsScreen.detailsMovieScreen.MovieDet
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.ReviewsScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.EpisodesScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.SeasonsScreen
-import com.madrid.presentation.screens.loginScreen.AuthenticationScreen
-import com.madrid.presentation.screens.loginScreen.component.ForgotPassword
-import com.madrid.presentation.screens.loginScreen.component.WebViewScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.SeriesDetailsScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SeeAllSimilarMediaScreen
 import com.madrid.presentation.screens.homeScreen.HomeScreen
-import com.madrid.presentation.screens.homeScreen.component.FakeHomeScreen
 import com.madrid.presentation.screens.libraryScreen.LibraryScreen
+import com.madrid.presentation.screens.loginScreen.AuthenticationScreen
+import com.madrid.presentation.screens.loginScreen.component.ForgotPassword
+import com.madrid.presentation.screens.loginScreen.component.WebViewScreen
 import com.madrid.presentation.screens.moreScreen.MoreScreen
 import com.madrid.presentation.screens.searchScreen.SearchScreen
 import com.madrid.presentation.screens.searchScreen.SeeAllForYou.SeeAllForYouScreen
