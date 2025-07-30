@@ -18,7 +18,6 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 
-
 @Composable
 fun TextWithReadMore(
     description: String,
@@ -80,7 +79,6 @@ fun TextWithReadMore(
         }
     )
 }
-
 
 @Preview(showBackground = true)
 @Composable

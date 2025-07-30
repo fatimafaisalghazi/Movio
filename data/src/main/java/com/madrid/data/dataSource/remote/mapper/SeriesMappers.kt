@@ -182,13 +182,6 @@ fun SeasonsNetwork.toSeason(): Season {
 
 }
 
-fun SeriesGenres.toMediaGenre(): MediaGenre {
-    return MediaGenre(
-        id = this.id ?: 0,
-        title = this.name ?: ""
-    )
-}
-
 fun EpisodeDto.toEpisode(): Episode {
     return Episode(
         id = this.id ?: 0,
