@@ -54,7 +54,7 @@ fun TopCastDetailsContent(
     onBackClick: () -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 101.dp),
+        columns = GridCells.Fixed(3),
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)

@@ -28,6 +28,7 @@ fun RateIcon(
 ) {
     Box(
         modifier = modifier
+            .padding(top = 4.dp, end= 4.dp)
             .height(16.dp),
         contentAlignment = Alignment.Center
 

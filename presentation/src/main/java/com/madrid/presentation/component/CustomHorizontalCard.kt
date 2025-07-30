@@ -48,7 +48,6 @@ fun CustomHorizontalCard(
                 MovioVerticalCard(
                     description = media.title,
                     movieImage = media.imageUrl,
-                    paddingValue = 8.dp,
                     rate = media.rating,
                     width = 124.dp,
                     height = 160.dp,
