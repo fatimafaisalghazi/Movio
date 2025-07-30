@@ -10,6 +10,7 @@ import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
 import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
+import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
@@ -47,7 +48,7 @@ class DetailsMovieViewModel(
                         topImageUrl = movie.imageUrl,
                         dataMovie = formatDateKotlinx(movie.releaseDate),
                         movieName = movie.title,
-                        rate = movie.rate.toString(),
+                        rate = RateFormatter.formatRate(movie.rate),
                         movieDuration =formatDuration( movie.movieDuration),
                         description = movie.description,
                         genreMovie = movie.genre,
@@ -96,7 +97,7 @@ class DetailsMovieViewModel(
                         id = movie.id,
                         title = movie.title,
                         imageUrl = movie.imageUrl,
-                        rating = movie.rate
+                        rating = RateFormatter.formatRate(movie.rate) // Format rate here too
                     )
                 }
                 updateState { currentState ->
