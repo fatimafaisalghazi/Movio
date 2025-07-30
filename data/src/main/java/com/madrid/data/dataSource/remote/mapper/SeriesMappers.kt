@@ -128,7 +128,7 @@ fun SeriesDetailsResponse.toSeries(): Series {
         airDate = this.firstAirDate ?: "",
         seasons = this.seasons?.map { it.toSeason() } ?: emptyList(),
         description = this.overview ?: "",
-        genre = this.genres?.map { it.toMediaGenre().title } ?: emptyList(),
+        genre = this.genres?.map { it.name ?: "" } ?: emptyList(),
     )
 }
 
@@ -146,7 +146,7 @@ fun SeriesCastNetwork.toArtist(): Artist {
 
 fun SeriesReviewResult.toReview(): Review {
     return Review(
-        reviewId = this.id?.toInt() ?: 0,
+        reviewId = this.id ?: "",
         reviewerName = this.author ?: "",
         reviewerPhotoUrl = "https://image.tmdb.org/t/p/original${this.authorDetails?.avatarPath}",
         rate = this.authorDetails?.rating ?: 0.0,
@@ -179,13 +179,6 @@ fun SeasonsNetwork.toSeason(): Season {
         episodeCount = this.episodeCount ?: 0,
     )
 
-}
-
-fun SeriesGenres.toMediaGenre(): MediaGenre {
-    return MediaGenre(
-        id = this.id ?: 0,
-        title = this.name ?: ""
-    )
 }
 
 fun EpisodeDto.toEpisode(): Episode {

@@ -62,7 +62,7 @@ fun SearchScreen(
 
     RefreshScreenHolder(
         refreshState = uiState.searchUiState.refreshState,
-        onRefresh = {viewModel.onRefresh(searchQuery , typeOfFilterSearch)}
+        onRefresh = { viewModel.onRefresh(searchQuery, typeOfFilterSearch) }
     ) {
         ContentSearchScreen(
             isError = uiState.searchUiState.isError,
@@ -118,8 +118,16 @@ fun SearchScreen(
             onClickSeeAll = {
                 navController.navigate(Destinations.SeeAllForYouScreen)
             },
-            highlightrecentSearch = viewModel::highlightCharactersInText
-
+            highlightrecentSearch = viewModel::highlightCharactersInText,
+            onTopResultClick = { movieId ->
+                navController.navigate(Destinations.MovieDetailsScreen(movieId))
+            },
+            onSearchedClick = { movieId ->
+                navController.navigate(Destinations.MovieDetailsScreen(movieId))
+            },
+            onArtistClick = { actorId ->
+                navController.navigate(Destinations.ActorDetails(actorId))
+            }
         )
         uiState.searchUiState.errorMessage?.let { errorMsg ->
             LaunchedEffect(errorMsg) {
@@ -169,7 +177,10 @@ fun ContentSearchScreen(
     onClearAll: () -> Unit,
     isLoading: Boolean = false,
     onClickSeeAll: () -> Unit,
-    onSeriesClick: (Int) -> Unit = {},
+    onSeriesClick: (Int) -> Unit,
+    onTopResultClick: (Int) -> Unit,
+    onSearchedClick: (Int) -> Unit,
+    onArtistClick: (Int) -> Unit,
     highlightrecentSearch: (String, String, Color, Color, TextStyle) -> AnnotatedString,
 ) {
     val showSearchResults = searchQuery.isNotBlank()
@@ -261,6 +272,15 @@ fun ContentSearchScreen(
                 onChangeTypeFilterSearch = {},
                 onSeriesClick = { seriesId ->
                     onSeriesClick(seriesId)
+                },
+                onMovieClick = { moviesId ->
+                    onSearchedClick(moviesId)
+                },
+                onActorClick = { actorId ->
+                    onArtistClick(actorId)
+                },
+                onTopResultClick = { movieId ->
+                    onTopResultClick(movieId)
                 }
             )
 
