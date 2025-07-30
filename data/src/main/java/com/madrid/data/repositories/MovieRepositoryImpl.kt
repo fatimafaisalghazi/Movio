@@ -5,13 +5,16 @@ import com.madrid.data.dataSource.local.mappers.toMovieGenreTable
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
+import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
+import com.madrid.data.dataSource.remote.mapper.toMovies
 import com.madrid.data.dataSource.remote.mapper.toReview
 import com.madrid.data.dataSource.remote.mapper.toSimilarMovie
 import com.madrid.data.dataSource.remote.mapper.toTrailer
 import com.madrid.data.repositories.local.LocalDataSource
 import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.Artist
+import com.madrid.domain.entity.Genre
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Trailer
@@ -24,7 +27,7 @@ class MovieRepositoryImpl(
 
     override suspend fun getMovieDetailsById(movieId: Int): Movie {
         val movieResponse = remoteDataSource.getMovieDetailsById(movieId)
-        movieResponse.movieGenres.map { genre ->
+        movieResponse.remoteGenreDtos.map { genre ->
             val genreEntity = genre.toMovieGenreTable()
             localDataSource.increaseMovieGenreSeenCount(genreEntity.genreTitle)
         }
@@ -99,5 +102,17 @@ class MovieRepositoryImpl(
             }
         }
         return movies?.map { it.toMovie() } ?: emptyList()
+    }
+
+    override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
+        return remoteDataSource.getNowPlayingMovie().toMovies()
+    }
+
+    override suspend fun getUpcomingMovie(page: Int): List<Movie> {
+        return remoteDataSource.getUpcomingMovie().toMovies()
+    }
+
+    override suspend fun getMovieGenres(): List<Genre> {
+        return remoteDataSource.getMovieGenres().map { it.toGenre() }
     }
 }
