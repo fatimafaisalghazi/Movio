@@ -11,7 +11,8 @@ import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.uiStateMapper.barser.formatDateKotlinx
+import com.madrid.presentation.viewModel.shared.barser.formatDateKotlinx
+import com.madrid.presentation.viewModel.shared.barser.formatDateOfBirth
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.annotation.KoinViewModel
 
@@ -44,7 +45,7 @@ class DetailsMovieViewModel(
                     it.copy(
                         movieId = movie.id,
                         topImageUrl = movie.imageUrl,
-                        dataMovie = formatDateKotlinx( movie.releaseDate),
+                        dataMovie = formatDateKotlinx(movie.releaseDate),
                         movieName = movie.title,
                         rate = movie.rate.toString(),
                         movieDuration = movie.movieDuration,
@@ -70,9 +71,12 @@ class DetailsMovieViewModel(
         tryToExecute(
             function = { getMovieTopCastUseCase(args.movieId) },
             onSuccess = { result ->
-                Log.d("TAG lol", "Cast loaded: ${result.size}")
+                val formattedResult = result.map { artist ->
+                    artist.copy(dateOfBirth = formatDateOfBirth(artist.dateOfBirth))
+                }
+                Log.d("TAG lol", "Cast loaded: ${formattedResult.size}")
                 updateState {
-                    it.copy(casts = result)
+                    it.copy(casts = formattedResult)
                 }
             },
             onError = { error ->

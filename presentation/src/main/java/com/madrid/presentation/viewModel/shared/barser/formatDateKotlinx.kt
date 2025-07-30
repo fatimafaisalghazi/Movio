@@ -1,4 +1,4 @@
-package com.madrid.presentation.viewModel.uiStateMapper.barser
+package com.madrid.presentation.viewModel.shared.barser
 
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
