@@ -4,7 +4,7 @@ import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
-import com.madrid.data.dataSource.remote.dto.genre.GenresResponse
+import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
@@ -16,6 +16,8 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
+import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
@@ -58,8 +60,8 @@ class RemoteDataSourceImpl(
         return api.getSimilarMoviesById(movieId)
     }
 
-    override suspend fun getMovieGenres(): GenresResponse {
-        return api.getMovieGenres()
+    override suspend fun getMovieGenres(): List<RemoteGenreDto> {
+        return api.getMovieGenres().genres?.filterNotNull().orEmpty()
     }
 
     override suspend fun getTrendingMovies(page: Int): SearchMovieResponse {
@@ -107,8 +109,8 @@ class RemoteDataSourceImpl(
         return api.getEpisodesBySeasonId(seriesId, seasonNumber)
     }
 
-    override suspend fun getSeriesGenres(): GenresResponse {
-        return api.getSeriesGenres()
+    override suspend fun getSeriesGenres(): List<RemoteGenreDto> {
+        return api.getSeriesGenres().genres?.filterNotNull().orEmpty()
     }
 
     override suspend fun getTrendingSeries(page: Int): SearchSeriesResponse {
@@ -142,6 +144,14 @@ class RemoteDataSourceImpl(
 
     override suspend fun getRecommendedSeries(page: Int): RecommendedSeriesResponse {
         return api.getPopularTvShows(page = page)
+    }
+
+    override suspend fun getUpcomingMovie(page: Int): UpcomingMoviesResponse {
+        return api.getUpcomingMovies(page)
+    }
+
+    override suspend fun getNowPlayingMovie(page: Int): NowPlayingMovieResponse {
+        return api.getNowPlayingMovies(page)
     }
 
     override suspend fun getSeriesByGenreId(

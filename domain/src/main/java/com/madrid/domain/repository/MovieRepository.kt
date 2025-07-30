@@ -1,6 +1,7 @@
 package com.madrid.domain.repository
 
 import com.madrid.domain.entity.Artist
+import com.madrid.domain.entity.Genre
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.SortType
@@ -19,4 +20,7 @@ interface MovieRepository {
     suspend fun getTopRatedMovies(page: Int): List<Movie>
     suspend fun getPopularMovies(page: Int): List<Movie>
     suspend fun getMoviesByGenreId(page: Int, genreId: Int, sortBy: SortType): List<Movie>
+    suspend fun getNowPlayingMovie(page: Int): List<Movie>
+    suspend fun getUpcomingMovie(page: Int): List<Movie>
+    suspend fun getMovieGenres(): List<Genre>
 }
