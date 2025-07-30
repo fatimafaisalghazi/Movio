@@ -92,12 +92,6 @@ fun SimilarMovieNetwork.toSimilarMovie(): Movie {
     )
 }
 
-fun RemoteGenreDto.toMediaGenre(): MediaGenre {
-    return MediaGenre(
-        id = this.id ?: 0,
-        title = this.name ?: ""
-    )
-}
 
 fun TrailerResult.toTrailer(): Trailer {
     return Trailer(

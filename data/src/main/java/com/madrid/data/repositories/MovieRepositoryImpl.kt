@@ -67,7 +67,7 @@ class MovieRepositoryImpl(
 
     override suspend fun getMoviesGenres(): List<Genre> {
         return localDataSource.getAllMovieGenres().ifEmpty {
-            remoteDataSource.getMovieGenres().genres?.forEach {
+            remoteDataSource.getMovieGenres().forEach {
                 localDataSource.insertMovieGenre(it.toMovieGenreTable())
             }
             localDataSource.getAllMovieGenres()

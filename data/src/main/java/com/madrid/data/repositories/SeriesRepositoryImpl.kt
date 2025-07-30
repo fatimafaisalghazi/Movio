@@ -78,7 +78,7 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesGenres(): List<Genre> {
         return localDataSource.getAllSeriesGenres().ifEmpty {
-            remoteDataSource.getSeriesGenres().genres?.forEach {
+            remoteDataSource.getSeriesGenres().forEach {
                 localDataSource.insertSeriesGenre(it.toSeriesGenreTable())
             }
             localDataSource.getAllSeriesGenres()
