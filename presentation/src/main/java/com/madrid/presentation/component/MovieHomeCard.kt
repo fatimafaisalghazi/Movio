@@ -1,9 +1,9 @@
-package com.madrid.designSystem.component
+package com.madrid.presentation.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,44 +19,44 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.madrid.designSystem.R
+import com.madrid.designSystem.component.MovioIcon
+import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
-
+import com.madrid.detectImageContent.FilteredImage
 
 @Composable
 fun MovieHomeCard(
     name: String,
-    movieId: Int,
-    imageRes: String = "https://example.com/poster.jpg",
+    movieId: String,
     genres: List<String>,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-
-        ) {
-        Image(
-            painter = painterResource(R.drawable.film_photo_sample), // Replace with actual image loading
+        modifier = modifier
+            .fillMaxSize()
+            .clip(
+                RoundedCornerShape(8.dp)
+            ),
+    ) {
+        FilteredImage(
+            imageUrl = movieId, // Replace with actual image loading
             contentDescription = name,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .clip(
-                    RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
-                )
+                .fillMaxSize()
                 .height(200.dp)
         )
         MovioIcon(
             painter = painterResource(R.drawable.bold_video_circle),
-            contentDescription = "",
-            tint = Theme.color.brand.onPrimary,
+            contentDescription = "bold video circle",
+            tint = Theme.color.surfaces.onSurface,
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(48.dp)
@@ -70,21 +70,12 @@ fun MovieHomeCard(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .height(51.dp)
-
         ) {
             Box(
-                Modifier
+                modifier = Modifier
                     .matchParentSize()
-                    .blur(100.dp)
-                    .drawBehind {
-                        drawRect(
-                            color = Color(0x1F000000),
-                            topLeft = Offset(0f, 12f),
-                            size = size,
-
-                            )
-                    }
-                    .background(Color(0x66000000))
+                    .background(Color.Black)
+                    .blur(300.dp)
             )
             Column(
                 Modifier
@@ -98,7 +89,9 @@ fun MovieHomeCard(
                     textStyle = Theme.textStyle.label.mediumMedium12,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Row {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     genres.forEach {
                         MovioText(
                             text = it,
