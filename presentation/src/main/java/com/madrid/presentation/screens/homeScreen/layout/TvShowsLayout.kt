@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitel
 import com.madrid.presentation.component.CustomHorizontalCard
+import com.madrid.presentation.component.MovioPager
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
@@ -36,6 +37,11 @@ fun TvShowsLayout(){
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
+        item(span = { GridItemSpan(2) }) {
+            MovioPager(
+                movies = fakeMediaList,
+            )
+        }
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
                 primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.top_rating),
