@@ -21,11 +21,15 @@ import com.madrid.designSystem.component.CustomTextTitel
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.MovioPager
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
+import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.homeScreen.component.TrendingLayout
+import com.madrid.presentation.viewModel.seeAll.movies.SeeAllMoviesType
 
 @Composable
 fun MoviesLayout() {
     val fakeMediaList = getFakeMedia()
+    val navController = LocalNavController.current
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -46,7 +50,7 @@ fun MoviesLayout() {
                 secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
-                onSeeAllClick = {},
+                onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.TOP_RATING))},
                 onMediaClick = {},
                 headerModifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -60,7 +64,7 @@ fun MoviesLayout() {
                 secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
-                onSeeAllClick = {},
+                onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.NOW_PLAYING))},
                 onMediaClick = {},
                 headerModifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -74,7 +78,7 @@ fun MoviesLayout() {
                 secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
-                onSeeAllClick = {},
+                onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.UPCOMING))},
                 onMediaClick = {},
                 headerModifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -87,7 +91,7 @@ fun MoviesLayout() {
                 primaryText = stringResource(com.madrid.presentation.R.string.more_recommended),
                 secondaryText = "See all",
                 endIcon = painterResource(R.drawable.outline_alt_arrow_left),
-                onSeeAllClick = { },
+                onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.MORE_RECOMMENDED))},
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
