@@ -32,8 +32,8 @@ fun ReviewScreen(
         modifier = Modifier.fillMaxWidth()
     ) {
         CustomTextTitle(
-            primaryText = stringResource(com.madrid.presentation.R.string.reviews),
-            secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
+            primaryText = stringResource(R.string.reviews),
+            secondaryText = stringResource(R.string.see_all),
             endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_alt_arrow_left),
             onSeeAllClick = { onSeeAllReviews() },
             modifier = Modifier.padding(horizontal = 16.dp)
