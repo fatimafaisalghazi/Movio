@@ -52,6 +52,7 @@ class DetailsMovieViewModel(
                         movieDuration =formatDuration( movie.movieDuration),
                         description = movie.description,
                         genreMovie = movie.genre,
+                        isLoading = false
                     )
                 }
 
@@ -59,7 +60,7 @@ class DetailsMovieViewModel(
                 loadSimilarMovies()
                 loadReviews()
             },
-            onError = { error -> },
+            onError = { error -> updateState { it.copy(isLoading = true) }},
             scope = viewModelScope,
             dispatcher = Dispatchers.IO
         )
