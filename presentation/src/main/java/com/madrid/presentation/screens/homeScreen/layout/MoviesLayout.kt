@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,10 +16,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
-import com.madrid.presentation.screens.homeScreen.component.TrendingLayout
 
 @Composable
 fun MoviesLayout() {
@@ -77,7 +75,7 @@ fun MoviesLayout() {
         item(span = { GridItemSpan(2) }) { Spacer(Modifier.height(4.dp)) }
 
         item(span = { GridItemSpan(2) }) {
-            CustomTextTitel(
+            CustomTextTitle(
                 primaryText = stringResource(com.madrid.presentation.R.string.more_recommended),
                 secondaryText = "See all",
                 endIcon = painterResource(R.drawable.outline_alt_arrow_left),

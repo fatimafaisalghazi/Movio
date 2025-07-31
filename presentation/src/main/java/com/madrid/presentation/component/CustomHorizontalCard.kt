@@ -5,16 +5,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.shared.MediaType
@@ -32,7 +32,7 @@ fun CustomHorizontalCard(
     onMediaClick: (MediaUiState) -> Unit = {},
 ) {
     Column(modifier = modifier) {
-        CustomTextTitel(
+        CustomTextTitle(
             primaryText = primaryTextForCustomTextTitel,
             secondaryText = secondaryTextForCustomTextTitel,
             endIcon = endIconForCustomTextTitel,

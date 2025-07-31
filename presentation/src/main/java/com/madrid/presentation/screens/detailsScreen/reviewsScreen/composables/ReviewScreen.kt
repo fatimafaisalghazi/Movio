@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -31,7 +31,7 @@ fun ReviewScreen(
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        CustomTextTitel(
+        CustomTextTitle(
             primaryText = stringResource(com.madrid.presentation.R.string.reviews),
             secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
             endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_alt_arrow_left),

@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.component.movioCards.MovioArtistsCard
 
@@ -36,7 +36,7 @@ fun TopCastSection(
         modifier = modifier
             .fillMaxWidth()
     ) {
-        CustomTextTitel(
+        CustomTextTitle(
             primaryText = stringResource(com.madrid.presentation.R.string.top_cast),
             secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
             endIcon = painterResource(R.drawable.outline_alt_arrow_left),

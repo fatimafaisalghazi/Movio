@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
@@ -79,7 +79,7 @@ fun TvShowsLayout(){
         item(span = { GridItemSpan(2) }) { Spacer(Modifier.height(4.dp)) }
 
         item(span = { GridItemSpan(2) }) {
-            CustomTextTitel(
+            CustomTextTitle(
                 primaryText = stringResource(com.madrid.presentation.R.string.more_recommended),
                 secondaryText = "See all",
                 endIcon = painterResource(R.drawable.outline_alt_arrow_left),
