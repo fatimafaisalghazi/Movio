@@ -20,7 +20,7 @@ import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
-import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -81,7 +81,7 @@ interface MovieApi {
         @Query("page") page: Int
     ): SearchMovieResponse
 
-    @GET()
+    @GET(DISCOVER_MOVIE)
     suspend fun getMoviesByGenreId(
         @Query(PAGE) page: Int,
         @Query(WITH_GENRES) genreId: Int,
@@ -156,7 +156,7 @@ interface MovieApi {
     @GET("genre/tv/list")
     suspend fun getSeriesGenres(): GenresResponse
 
-    @GET()
+    @GET(DISCOVER_MOVIE)
     suspend fun getSeriesByGenreId(
         @Query(PAGE) page: Int,
         @Query(WITH_GENRES) genreId: Int,
@@ -195,6 +195,7 @@ interface MovieApi {
     ): UpcomingMoviesResponse
 
     companion object {
+        private const val DISCOVER_MOVIE = "discover/movie"
         private const val PAGE = "page"
 
         private const val WITH_GENRES = "with_genres"
