@@ -96,7 +96,7 @@ fun SeeAllTVShowsScreen(
             MovioVerticalCard(
                 description = movie.name,
                 movieImage = movie.imageUrl,
-                rate = movie.rate,
+                rate = movie.rate.take(3),
                 width = 130.dp,
                 height = 200.dp,
                 onClick = {
