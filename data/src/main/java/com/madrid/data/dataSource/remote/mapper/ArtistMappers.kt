@@ -12,9 +12,9 @@ fun ArtistDetailsResponse.toArtist(): Artist {
         name = this.name ?: "",
         role = this.role ?: "",
         dateOfBirth = this.birthDay ?: "",
-        country = this.placeOfBirth!!.split(",")
-            .last()
-            .trim()
+        country = this.placeOfBirth?.split(",")
+            ?.last()
+            ?.trim()
             ?: "",
         overview = this.biography ?: "",
         imageUrl = "https://image.tmdb.org/t/p/original${this.profilePath}",
