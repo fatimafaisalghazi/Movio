@@ -74,8 +74,6 @@ fun HomeScreenContent(
     ) {
         LayoutContent(
             HomeTab.entries[selectedTabIndex],
-            state = state,
-            interactionListener = interactionListener
         )
         Column {
             HomeAppBar(modifier = Modifier.padding(horizontal = 16.dp))
@@ -92,6 +90,20 @@ fun HomeScreenContent(
                 },
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
+            if (HomeTab.CATEGORIES == HomeTab.entries[selectedTabIndex])
+            CategoriesLayout(
+                categories = state.categoryTabUiState.categories,
+                selectedCategory = state.categoryTabUiState.selectedCategory,
+                onCategorySelected = { category -> interactionListener.onSelectCategory(category) },
+                mediaItems = state.categoryTabUiState.media.collectAsLazyPagingItems(),
+                sortingType = state.categoryTabUiState.sortingType,
+                onSortingTypeSelected = { sortingType ->
+                    interactionListener.onSelectSortingType(
+                        sortingType
+                    )
+                },
+                onMediaItemClicked = interactionListener::onMediaSelected,
+            )
         }
     }
 }
@@ -99,26 +111,12 @@ fun HomeScreenContent(
 @Composable
 private fun LayoutContent(
     selectedTab: HomeTab,
-    state: HomeScreenState,
-    interactionListener: HomeInteractionListener
 ) {
     when (selectedTab) {
         HomeTab.ALL -> AllMediaLayout()
         HomeTab.MOVIES -> MoviesLayout()
         HomeTab.TV_SHOWS -> TvShowsLayout()
-        HomeTab.CATEGORIES -> CategoriesLayout(
-            categories = state.categoryTabUiState.categories,
-            selectedCategory = state.categoryTabUiState.selectedCategory,
-            onCategorySelected = { category -> interactionListener.onSelectCategory(category) },
-            mediaItems = state.categoryTabUiState.media.collectAsLazyPagingItems(),
-            sortingType = state.categoryTabUiState.sortingType,
-            onSortingTypeSelected = { sortingType ->
-                interactionListener.onSelectSortingType(
-                    sortingType
-                )
-            },
-            onMediaItemClicked = interactionListener::onMediaSelected,
-        )
+        else -> {}
     }
 }
 
