@@ -160,7 +160,7 @@ fun MovieDetailsScreen(
                             )
                         )
                     },
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier
                         .navigationBarsPadding(),
                     similarMovies = uiState.similarMovies.map { movie ->
                         SimilarMovie(
