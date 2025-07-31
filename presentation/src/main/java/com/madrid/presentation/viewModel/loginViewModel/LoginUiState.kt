@@ -1,4 +1,4 @@
-package com.madrid.presentation.viewModel
+package com.madrid.presentation.viewModel.loginViewModel
 
 data class LoginUiState(
     val username: String = "",

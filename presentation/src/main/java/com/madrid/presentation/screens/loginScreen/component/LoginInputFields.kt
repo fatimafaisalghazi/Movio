@@ -11,8 +11,8 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.textInputField.BasicTextInputField
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.viewModel.LoginError
-import com.madrid.presentation.viewModel.LoginUiState
+import com.madrid.presentation.viewModel.loginViewModel.LoginError
+import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
 
 @Composable
  fun  LoginInputFields(modifier: Modifier = Modifier,

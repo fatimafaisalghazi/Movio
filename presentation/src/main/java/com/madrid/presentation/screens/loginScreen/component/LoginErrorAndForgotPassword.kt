@@ -17,8 +17,8 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.viewModel.LoginError
-import com.madrid.presentation.viewModel.LoginUiState
+import com.madrid.presentation.viewModel.loginViewModel.LoginError
+import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
 
 @Composable
 fun  LoginErrorAndForgotPassword(

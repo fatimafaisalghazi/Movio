@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioButton
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.viewModel.LoginUiState
+import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
 
 @Composable
 fun MovieLoginContent(

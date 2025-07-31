@@ -6,8 +6,6 @@ import com.madrid.domain.exceptions.AccountLockedException
 import com.madrid.domain.exceptions.InvalidCredentialsException
 import com.madrid.domain.exceptions.NetworkException
 import com.madrid.domain.usecase.authentication.LoginUseCase
-import com.madrid.presentation.viewModel.LoginError
-import com.madrid.presentation.viewModel.LoginUiState
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

@@ -11,13 +11,13 @@ import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.madrid.domain.usecase.search.GetExploreMoreMovieUseCase
-import com.madrid.domain.usecase.search.GetRecommendedMovieUseCase
 import com.madrid.domain.usecase.search.AddRecentSearchUseCase
 import com.madrid.domain.usecase.search.ClearAllRecentSearchesUseCase
 import com.madrid.domain.usecase.search.GetArtistsByQueryUseCase
+import com.madrid.domain.usecase.search.GetExploreMoreMovieUseCase
 import com.madrid.domain.usecase.search.GetMoviesByQueryUseCase
 import com.madrid.domain.usecase.search.GetRecentSearchesUseCase
+import com.madrid.domain.usecase.search.GetRecommendedMovieUseCase
 import com.madrid.domain.usecase.search.GetSeriesByQueryUseCase
 import com.madrid.domain.usecase.search.RemoveRecentSearchUseCase
 import com.madrid.presentation.screens.searchScreen.paging.ExplorePagingSource
@@ -25,7 +25,6 @@ import com.madrid.presentation.screens.searchScreen.paging.SearchArtistPagingSou
 import com.madrid.presentation.screens.searchScreen.paging.SearchMoviePagingSource
 import com.madrid.presentation.screens.searchScreen.paging.SearchSeriesPagingSource
 import com.madrid.presentation.screens.searchScreen.utils.FilterPagesItem
-import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.uiStateMapper.toArtistUiState
 import com.madrid.presentation.viewModel.uiStateMapper.toMovieUiState
@@ -200,7 +199,7 @@ class SearchViewModel(
                 val result = pagingFlow.map { pagingData ->
                     pagingData.map { it.toMovieUiState() }
                 }
-                Log.d("SearchViewModel", "topResult OO: ${result.toString()}")
+                Log.d("SearchViewModel", "topResult OO: $result")
 
                 updateState { current ->
                     current.copy(

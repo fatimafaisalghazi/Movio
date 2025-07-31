@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.loginScreen.component.MovieLoginContent
-import com.madrid.presentation.viewModel.LoginError
-import com.madrid.presentation.viewModel.LoginUiState
+import com.madrid.presentation.viewModel.loginViewModel.LoginError
+import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
 import com.madrid.presentation.viewModel.loginViewModel.LoginViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
