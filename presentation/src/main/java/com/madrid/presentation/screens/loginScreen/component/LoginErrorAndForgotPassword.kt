@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
@@ -37,13 +38,14 @@ fun  LoginErrorAndForgotPassword(
         val errorMessage = buildString {
             when (val error = state.errorState) {
                 is LoginError.EmptyFields -> {
-                    if (error.usernameEmpty) append("Username is required")
+                    if (error.usernameEmpty) append(stringResource(com.madrid.presentation.R.string.username_is_required))
                     if (error.usernameEmpty && error.passwordEmpty) append(", ")
-                    if (error.passwordEmpty) append("Password is required")
+                    if (error.passwordEmpty) append(stringResource(com.madrid.presentation.R.string.password_is_required))
                 }
-                is LoginError.InvalidCredentials -> append("Invalid username or password")
-                is LoginError.AccountLocked -> append("Account locked. Contact support.")
-                is LoginError.NetworkError -> append("Network error. Try again.")
+
+                is LoginError.InvalidCredentials -> append(stringResource(com.madrid.presentation.R.string.invalid_username_or_password))
+                is LoginError.AccountLocked -> append(stringResource(com.madrid.presentation.R.string.account_locked_contact_support))
+                is LoginError.NetworkError -> append(stringResource(com.madrid.presentation.R.string.network_error_try_again))
                 is LoginError.GenericError -> append(error.message)
                 else -> {}
             }
@@ -71,7 +73,7 @@ fun  LoginErrorAndForgotPassword(
         }
 
         MovioText(
-            text = "Forgot Password?",
+            text = stringResource(com.madrid.presentation.R.string.forgot_password),
             textStyle = Theme.textStyle.label.mediumMedium12,
             color = Theme.color.surfaces.onSurfaceVariant,
             modifier = Modifier.clickable(

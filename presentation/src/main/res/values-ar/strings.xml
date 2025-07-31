@@ -9,7 +9,6 @@
     <string name="loading_actor_details">جار تحميل تفاصيل الممثل...</string>
     <string name="current_seasons">الموسم الحالي </string>
     <string name="similar_series">مسلسلات مشابهة</string>
-    <string name="continue_as_a_guest">الإستمرار كزائر</string>
     <string name="current_episode">حلقة %1$s</string>
     <string name="moive_image">صورة الحلقة</string>
     <string name="bold_video_circle">ايقونة بدء الفلم</string>
@@ -71,4 +70,18 @@
     <string name="actioniconcolor">لون الأيقونة</string>
     <string name="play">تشغيل</string>
     <string name="rate_it">قيمّ</string>
+    <string name="username_is_required">اسم المستخدم مطلوب</string>
+    <string name="password_is_required">كلمة المرور مطلوبة</string>
+    <string name="invalid_username_or_password">اسم المستخدم أو كلمة المرور غير صحيحة</string>
+    <string name="account_locked_contact_support">الحساب مغلق تواصل مع الدعم</string>
+    <string name="network_error_try_again">خطأ في الشبكة حاول مرة أخرى</string>
+    <string name="welcome_back">أهلا بعودتك</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="password">كلمة المرور</string>
+    <string name="or">أو</string>
+    <string name="don_t_have_an_account">ليس لدي حساب ؟</string>
+    <string name="sign_up">إنشاء حساب</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="forgot_password">نسيت كملة المرور ؟</string>
+    <string name="continue_as_a_guest">الإستمرار كزائر</string>
 </resources>
