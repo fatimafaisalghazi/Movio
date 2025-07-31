@@ -9,8 +9,8 @@ class GetMovieDetailsUseCase(
     suspend operator fun invoke(movieId: Int): Movie {
         return movieRepository.getMovieDetailsById(movieId)
             .also { movie ->
-                movie.genre.forEach { genreTitle ->
-                    movieRepository.increaseMovieGenreInterestPoints(genreTitle.name)
+                movie.genre.forEach { genre ->
+                    movieRepository.increaseMovieGenreInterestPoints(genre.name)
                 }
             }
     }

@@ -20,7 +20,7 @@ import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
-import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 
 interface RemoteDataSource {
@@ -43,6 +43,7 @@ interface RemoteDataSource {
     suspend fun getTrendingMovies(page: Int): SearchMovieResponse
     suspend fun getUpcomingMovie(page: Int = 1): UpcomingMoviesResponse
     suspend fun getNowPlayingMovie(page: Int = 1): NowPlayingMovieResponse
+    suspend fun getMoviesByGenreId(page: Int, genreId: Int?, sortBy: String): SearchMovieResponse
     // endregion
 
     // region Series
@@ -58,6 +59,7 @@ interface RemoteDataSource {
     suspend fun getOnAirSeries(page: Int = 1): OnAirTvShowsResponse
     suspend fun getAiringTodaySeries(page: Int = 1): AiringTodayTvShowsResponse
     suspend fun getRecommendedSeries(page: Int = 1): RecommendedSeriesResponse
+    suspend fun getSeriesByGenreId(page: Int, genreId: Int?, sortBy: String): SearchSeriesResponse
     // endregion
 
     // region Artist

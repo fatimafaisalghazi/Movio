@@ -22,7 +22,7 @@ import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
-import com.madrid.data.dataSource.remote.response.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.repositories.remote.RemoteDataSource
 
@@ -68,6 +68,14 @@ class RemoteDataSourceImpl(
 
     override suspend fun getTrendingMovies(page: Int): SearchMovieResponse {
         return api.getTrendingMovies(page = page)
+    }
+
+    override suspend fun getMoviesByGenreId(
+        page: Int,
+        genreId: Int?,
+        sortBy: String
+    ): SearchMovieResponse {
+        return api.getMoviesByGenreId(page, genreId, sortBy)
     }
     // endregion
 
@@ -156,6 +164,14 @@ class RemoteDataSourceImpl(
 
     override suspend fun getNowPlayingMovie(page: Int): NowPlayingMovieResponse {
         return api.getNowPlayingMovies(page)
+    }
+
+    override suspend fun getSeriesByGenreId(
+        page: Int,
+        genreId: Int?,
+        sortBy: String
+    ): SearchSeriesResponse {
+        return api.getSeriesByGenreId(page, genreId, sortBy)
     }
 
     override suspend fun login(username: String, password: String): String {
