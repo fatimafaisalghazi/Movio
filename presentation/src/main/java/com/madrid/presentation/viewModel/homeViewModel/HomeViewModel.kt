@@ -10,6 +10,7 @@ import com.madrid.domain.usecase.movie.GetMoviesByGenreIdUseCase
 import com.madrid.domain.usecase.series.GetSeriesByGenreIdUseCase
 import com.madrid.domain.usecase.series.GetSeriesGenresUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.shared.MediaType
 import com.madrid.presentation.viewModel.shared.toMediaUiState
 import kotlinx.coroutines.flow.map
 import org.koin.android.annotation.KoinViewModel
@@ -25,7 +26,6 @@ class HomeViewModel(
 ), HomeInteractionListener {
     init {
         loadGenres()
-
     }
 
     fun loadGenres() {
@@ -112,8 +112,8 @@ class HomeViewModel(
         fetchMediaByCategory(id, sortType)
     }
 
-    override fun onMediaSelected(mediaId: Int) {
-        emitNewEffect(HomeScreenEffect.NavigateToMediaDetails(mediaId))
+    override fun onMediaSelected(mediaId: Int, mediaType: MediaType) {
+        emitNewEffect(HomeScreenEffect.NavigateToMediaDetails(mediaId, mediaType))
     }
 
     private fun startLoading() {

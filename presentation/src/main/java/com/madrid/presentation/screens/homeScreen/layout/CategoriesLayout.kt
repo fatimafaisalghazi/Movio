@@ -18,6 +18,7 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
 import com.madrid.presentation.viewModel.homeViewModel.SortingType
+import com.madrid.presentation.viewModel.shared.MediaType
 import com.madrid.presentation.viewModel.shared.MediaUiState
 
 @Composable
@@ -29,6 +30,7 @@ fun CategoriesLayout(
     onSortingTypeSelected: (SortingType) -> Unit,
     onCategorySelected: (CategoryUiState) -> Unit,
     mediaItems: LazyPagingItems<MediaUiState>,
+    onMediaItemClicked: (Int, MediaType) -> Unit
 ) {
     Column(
         modifier
@@ -69,7 +71,12 @@ fun CategoriesLayout(
                     rate = mediaItems[index]?.rating?.take(3) ?: "",
                     width = 100.dp,
                     height = 136.dp,
-                    onClick = {}
+                    onClick = {
+                        onMediaItemClicked(
+                            mediaItems[index]?.id?.toIntOrNull() ?: 0,
+                            mediaItems[index]?.mediaType ?: MediaType.MOVIE
+                        )
+                    }
                 )
             }
         }

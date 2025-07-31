@@ -20,6 +20,8 @@ import com.madrid.designSystem.component.HeaderSectionBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.header.HomeAppBar
+import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.homeScreen.layout.AllMediaLayout
 import com.madrid.presentation.screens.homeScreen.layout.CategoriesLayout
 import com.madrid.presentation.screens.homeScreen.layout.MoviesLayout
@@ -28,6 +30,7 @@ import com.madrid.presentation.viewModel.homeViewModel.HomeInteractionListener
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenEffect
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenState
 import com.madrid.presentation.viewModel.homeViewModel.HomeViewModel
+import com.madrid.presentation.viewModel.shared.MediaType
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -35,12 +38,17 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = koinViewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
+    val navController = LocalNavController.current
 
     LaunchedEffect(Unit) {
         homeViewModel.effect.collect { effect ->
             when (effect) {
                 is HomeScreenEffect.NavigateToMediaDetails -> {
-                    //TODO()
+                    if (effect.mediaType == MediaType.MOVIE) {
+                        navController.navigate(Destinations.MovieDetailsScreen(effect.mediaId))
+                    } else {
+                        navController.navigate(Destinations.SeriesDetailsScreen(effect.mediaId, 1))
+                    }
                 }
 
                 is HomeScreenEffect.NavigateToProfile -> TODO()
@@ -109,6 +117,7 @@ private fun LayoutContent(
                     sortingType
                 )
             },
+            onMediaItemClicked = interactionListener::onMediaSelected,
         )
     }
 }
