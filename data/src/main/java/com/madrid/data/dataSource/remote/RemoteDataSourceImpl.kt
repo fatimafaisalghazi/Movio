@@ -1,8 +1,10 @@
 package com.madrid.data.dataSource.remote
 
+import android.util.Log
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
+import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
@@ -71,7 +73,9 @@ class RemoteDataSourceImpl(
 
     // region Series
     override suspend fun getTopRatedSeries(page: Int): TopRatedSeriesResponse {
-        return api.getTopRatedSeries(page)
+        val x = api.getTopRatedSeries(page)
+        Log.d("getTopRatedSeries", "getTopRatedSeries: in data source: ${x.results}")
+        return x
     }
 
     override suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse {
@@ -135,6 +139,14 @@ class RemoteDataSourceImpl(
     }
 
     override suspend fun getRecommendedSeries(page: Int): RecommendedSeriesResponse {
+        Log.d("getRecommendedSeries", "in getRecommendedSeries: ")
+        try {
+            api.getPopularTvShows(page = page)
+        }catch (e: Exception){
+            Log.d("getRecommendedSeries", "catched getRecommendedSeries: ${e.message} ")
+        }
+//        val x = api.getPopularTvShows(page = page)
+//        Log.d("getRecommendedSeries", "getRecommendedSeries: ${x.recommendedSeriesResults} ")
         return api.getPopularTvShows(page = page)
     }
 
@@ -145,4 +157,22 @@ class RemoteDataSourceImpl(
     override suspend fun getNowPlayingMovie(page: Int): NowPlayingMovieResponse {
         return api.getNowPlayingMovies(page)
     }
+
+    override suspend fun login(username: String, password: String): String {
+        val requestTokenResponse = api.getRequestToken()
+        val requestToken = requestTokenResponse.requestToken
+        val sessionResponse = api.postCreateSession(
+            CreateSessionBody(
+                username = username,
+                password = password,
+                requestToken = requestToken
+            )
+        )
+        return sessionResponse.requestToken
+    }
+
+    override suspend fun loginAsGuest(): String {
+        return api.getCreateGuestSession().requestToken
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.madrid.presentation.navigation
 
+import com.madrid.presentation.viewModel.seeAll.SeeAllTvShowType
 import kotlinx.serialization.Serializable
 
 sealed interface Destinations {
@@ -27,6 +28,13 @@ sealed interface Destinations {
 
     @Serializable
     data object SearchScreen : Destinations
+
+
+
+    @Serializable
+    data class SeeAllTvShowsScreen(
+        val type: SeeAllTvShowType
+    ) : Destinations
 
     @Serializable
     data class MovieDetailsScreen(
@@ -69,6 +77,14 @@ sealed interface Destinations {
         val seasonNumber: Int
     ) : Destinations
 
+
+    @Serializable
+    data class WebViewScreen(
+        val url: String
+    ) : Destinations
+
+    @Serializable
+    data class ForgotPassword(val url: String): Destinations
 
     @Serializable
     data class ActorDetails(
