@@ -34,11 +34,12 @@ class DetailsMovieViewModel(
         loadData()
     }
 
-    internal fun loadData() {
+     private fun loadData() {
         Log.d("TAG lol", "=== LOADING MOVIE DETAILS ===")
         tryToExecute(
             function = {
-                getMovieDetailsUseCase(args.movieId)
+                getMovieDetailsUseCase.invoke(args.movieId)
+
             },
             onSuccess = { movie ->
 
@@ -126,7 +127,7 @@ class DetailsMovieViewModel(
                         reviewerName = review.reviewerName,
                         reviewerImageUrl = "",
                         rating = review.rate.toFloat(),
-                        date = formatDateKotlinx(review.date),
+                        date = review.date,
                         content = review.comment,
                     )
                 }
