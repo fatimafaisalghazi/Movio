@@ -50,7 +50,6 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.foundation)
     implementation(libs.androidx.material3.window)
-    implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -60,6 +59,4 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.core.ktx.v160)
     implementation(libs.androidx.activity.ktx)
-    implementation(libs.accompanist.pager) // Use the latest
-    implementation(libs.accompanist.pager.indicators)
 }
