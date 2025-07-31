@@ -64,7 +64,11 @@ fun HomeScreenContent(
             .background(Theme.color.surfaces.surface)
             .padding(top = 32.dp),
     ) {
-        LayoutContent(HomeTab.entries[selectedTabIndex])
+        LayoutContent(
+            HomeTab.entries[selectedTabIndex],
+            state = state,
+            interactionListener = interactionListener
+        )
         Column {
             HomeAppBar(modifier = Modifier.padding(horizontal = 16.dp))
             HeaderSectionBar(

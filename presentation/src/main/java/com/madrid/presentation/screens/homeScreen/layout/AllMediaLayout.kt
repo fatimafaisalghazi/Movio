@@ -21,6 +21,7 @@ import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.MovioPager
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.screens.homeScreen.component.TrendingLayout
+import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
 import com.madrid.presentation.viewModel.shared.MediaType
 import com.madrid.presentation.viewModel.shared.MediaUiState
 
@@ -128,7 +129,9 @@ fun getFakeMedia(): List<MediaUiState> {
             title = "Inception",
             imageUrl = "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg\n",
             rating = "8.8",
-            category = listOf("Sci-Fi")
+            category = listOf(
+                CategoryUiState(name = "Sci-Fi")
+            ),
         ),
         MediaUiState(
             id = "2",
@@ -136,7 +139,9 @@ fun getFakeMedia(): List<MediaUiState> {
             title = "Breaking Bad",
             imageUrl = "https://image.tmdb.org/t/p/w500/53dsJ3oEnBhTBVMigWJ9tkA5bzJ.jpg",
             rating = "9.5",
-            category = listOf("Drama")
+            category = listOf(
+                CategoryUiState(name = "Drama")
+            ),
         ),
         MediaUiState(
             id = "3",
@@ -144,7 +149,9 @@ fun getFakeMedia(): List<MediaUiState> {
             title = "The Dark Knight",
             imageUrl = "https://image.tmdb.org/t/p/w500/x9HeaagUAyyGl1fQ6exQcpELBxP.jpg",
             rating = "9.0",
-            category = listOf("Action")
+            category = listOf(
+                CategoryUiState(name = "Action")
+            ),
         ),
         MediaUiState(
             id = "4",
@@ -152,7 +159,9 @@ fun getFakeMedia(): List<MediaUiState> {
             title = "The Dark Knight",
             imageUrl = "https://image.tmdb.org/t/p/w500/aFRDH3P7TX61FVGpaLhKr6QiOC1.jpg",
             rating = "9.0",
-            category = listOf("Action")
+            category = listOf(
+                CategoryUiState(name = "Action")
+            ),
         )
     )
 }

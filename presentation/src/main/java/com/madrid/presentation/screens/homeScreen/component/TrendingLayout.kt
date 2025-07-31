@@ -94,7 +94,7 @@ fun TrendingLayout(
                             TrendingMovieCard(
                                 imgUrl = item.imageUrl,
                                 movieTitle = item.title,
-                                movieCategory = item.category.first(),
+                                movieCategory = item.category.first().name,
                                 rating = item.rating,
                             )
                         }
