@@ -35,10 +35,12 @@ class HomeViewModel(
                 updateState {
                     it.copy(
                         categoryTabUiState = it.categoryTabUiState.copy(
-                            categories = genres
+                            categories = genres,
+                            selectedCategory = genres.first()
                         )
                     )
                 }
+                fetchMediaByCategory(null, state.value.categoryTabUiState.sortingType)
             },
             onError = { onError() },
         )
@@ -48,10 +50,13 @@ class HomeViewModel(
         val moviesGenres = getMovieGenresUseCase()
         val seriesGenres = getSeriesGenresUseCase()
         val genres = (moviesGenres + seriesGenres).distinctBy { it.id }
-        return genres.map { it.toCategoryUiState() }
+        val allCategory = listOf(
+            CategoryUiState(id = -1, name = "All")
+        )
+        return allCategory + genres.map { it.toCategoryUiState() }
     }
 
-    private fun fetchMediaByCategory(genreId: Int, sortingType: SortingType) {
+    private fun fetchMediaByCategory(genreId: Int?, sortingType: SortingType) {
         startLoading()
         val result = Pager(
             config = PagingConfig(pageSize = 20, prefetchDistance = 5),
@@ -93,6 +98,10 @@ class HomeViewModel(
                     selectedCategory = category
                 )
             )
+        }
+        if (category.id == -1) {
+            fetchMediaByCategory(null, state.value.categoryTabUiState.sortingType)
+            return
         }
         fetchMediaByCategory(
             state.value.categoryTabUiState.selectedCategory.id,

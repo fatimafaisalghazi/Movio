@@ -89,7 +89,7 @@ class SeriesRepositoryImpl(
 
     override suspend fun getSeriesByGenreId(
         page: Int,
-        genreId: Int,
+        genreId: Int?,
         sortBy: SortType
     ): List<Series> {
         val sortType = getSortType(sortBy)

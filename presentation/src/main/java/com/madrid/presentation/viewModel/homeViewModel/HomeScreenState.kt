@@ -50,8 +50,8 @@ data class SectionUiState(
 )
 
 data class CategoryUiState(
-    val id: Int = 0,
-    val name: String = "",
+    val id: Int = -1,
+    val name: String = "All",
 )
 
 enum class SortingType(val value: String) {

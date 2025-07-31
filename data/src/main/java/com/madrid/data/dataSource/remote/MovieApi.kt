@@ -88,7 +88,7 @@ interface MovieApi {
     @GET(DISCOVER_MOVIE)
     suspend fun getMoviesByGenreId(
         @Query(PAGE) page: Int,
-        @Query(WITH_GENRES) genreId: Int,
+        @Query(WITH_GENRES) genreId: Int?,
         @Query(SORT_BY) sortBy: String
     ): SearchMovieResponse
     // endregion
@@ -163,7 +163,7 @@ interface MovieApi {
     @GET(DISCOVER_MOVIE)
     suspend fun getSeriesByGenreId(
         @Query(PAGE) page: Int,
-        @Query(WITH_GENRES) genreId: Int,
+        @Query(WITH_GENRES) genreId: Int?,
         @Query(SORT_BY) sortBy: String
     ): SearchSeriesResponse
     // endregion

@@ -129,7 +129,7 @@ class MovieRepositoryImpl(
 
     override suspend fun getMoviesByGenreId(
         page: Int,
-        genreId: Int,
+        genreId: Int?,
         sortBy: SortType
     ): List<Movie> {
         val sortType = getSortType(sortBy)

@@ -72,7 +72,7 @@ class RemoteDataSourceImpl(
 
     override suspend fun getMoviesByGenreId(
         page: Int,
-        genreId: Int,
+        genreId: Int?,
         sortBy: String
     ): SearchMovieResponse {
         return api.getMoviesByGenreId(page, genreId, sortBy)
@@ -168,7 +168,7 @@ class RemoteDataSourceImpl(
 
     override suspend fun getSeriesByGenreId(
         page: Int,
-        genreId: Int,
+        genreId: Int?,
         sortBy: String
     ): SearchSeriesResponse {
         return api.getSeriesByGenreId(page, genreId, sortBy)

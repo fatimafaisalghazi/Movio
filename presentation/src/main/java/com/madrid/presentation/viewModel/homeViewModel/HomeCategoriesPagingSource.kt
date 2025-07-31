@@ -11,7 +11,7 @@ import com.madrid.presentation.viewModel.homeViewModel.HomeCategoriesPagingSourc
 class HomeCategoriesPagingSource(
     private val getMoviesByGenreIdUseCase: GetMoviesByGenreIdUseCase,
     private val getSeriesByGenreIdUseCase: GetSeriesByGenreIdUseCase,
-    private val genreId: Int,
+    private val genreId: Int?,
     private val sortBy: SortType
 ) : BasePagingSource<MixedData>() {
 
