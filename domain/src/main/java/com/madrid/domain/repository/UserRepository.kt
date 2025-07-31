@@ -1,16 +1,16 @@
 package com.madrid.domain.repository
 
 import com.madrid.domain.entity.User
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun login(username: String, password: String): User
+    suspend fun login(username: String, password: String): Boolean
     suspend fun register(email: String, password: String, username: String): User
     suspend fun logout()
 
     suspend fun getCurrentUser(): User?
-    suspend fun isUserLoggedIn(): Boolean
+    fun isUserLoggedIn(): Flow<Boolean>
     suspend fun refreshToken(): Boolean
-
 
     suspend fun sendPasswordResetEmail(email: String): Boolean
 
@@ -18,6 +18,5 @@ interface UserRepository {
     suspend fun deleteAccount(): Boolean
     suspend fun isTokenExpired(token: String?): Boolean
 
-
-    suspend fun loginAsGuest(): User
+    suspend fun loginAsGuest(): Boolean
 }

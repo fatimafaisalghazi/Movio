@@ -1,10 +1,6 @@
 package com.madrid.movio.di
 
-
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import com.madrid.data.dataSource.encrypted.AuthenticationDatastore
+import com.madrid.data.dataSource.encrypted.AuthenticationDatastoreImpl
 import com.madrid.data.dataSource.local.LocalDataSourceImpl
 import com.madrid.data.dataSource.local.database.MovioDatabase
 import com.madrid.data.repositories.ArtistRepositoryImpl
@@ -12,6 +8,7 @@ import com.madrid.data.repositories.MovieRepositoryImpl
 import com.madrid.data.repositories.SearchRepositoryImpl
 import com.madrid.data.repositories.SeriesRepositoryImpl
 import com.madrid.data.repositories.UserRepositoryImpl
+import com.madrid.data.repositories.datasource.AuthenticationDataSource
 import com.madrid.data.repositories.local.LocalDataSource
 import com.madrid.detectImageContent.GetImageBitmap
 import com.madrid.detectImageContent.SensitiveContentDetection
@@ -33,11 +30,11 @@ val dataModule = module {
     single { get<MovioDatabase>().seriesGenreDao() }
     single { get<MovioDatabase>().recentSearchDao() }
     single<LocalDataSource> { LocalDataSourceImpl(get(), get(), get(), get(), get(), get()) }
+    single <AuthenticationDataSource>{ AuthenticationDatastoreImpl(androidContext()) }
     single<MovieRepository> { MovieRepositoryImpl(get(), get()) }
     single<SeriesRepository> { SeriesRepositoryImpl(get(), get()) }
     single { GetImageBitmap(get()) }
     single { SensitiveContentDetection(get()) }
     single<ArtistRepository> { ArtistRepositoryImpl(get()) }
-    single { AuthenticationDatastore(androidContext()) }
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
 }

@@ -1,39 +1,23 @@
 package com.madrid.domain.usecase.authentication
 
-import com.madrid.domain.entity.LoginResult
 import com.madrid.domain.exceptions.EmptyPasswordException
 import com.madrid.domain.exceptions.EmptyUsernameException
 import com.madrid.domain.exceptions.UsernameTooShortException
 import com.madrid.domain.exceptions.WeakPasswordException
 import com.madrid.domain.repository.UserRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
 
 class LoginUseCase(
     private val userRepository: UserRepository
 ) {
 
-    suspend fun execute(username: String, password: String): LoginResult {
-        return withContext(Dispatchers.IO) {
-            try {
-                validateCredentials(username, password)
-                val user = userRepository.login(username, password)
-                LoginResult.Success(user)
-            } catch (e: Exception) {
-                LoginResult.Error(e)
-            }
-        }
+    suspend fun execute(username: String, password: String): Boolean {
+        validateCredentials(username, password)
+        return userRepository.login(username, password)
     }
 
-    suspend fun loginAsGuest(): LoginResult {
-        return withContext(Dispatchers.IO) {
-            try {
-                val user = userRepository.loginAsGuest()
-                LoginResult.Success(user)
-            } catch (e: Exception) {
-                LoginResult.Error(e)
-            }
-        }
+    suspend fun loginAsGuest(): Boolean {
+        return userRepository.loginAsGuest()
     }
 
     private fun validateCredentials(username: String, password: String) {
@@ -45,9 +29,7 @@ class LoginUseCase(
         }
     }
 
-    suspend fun checkActiveSession(): Boolean {
-        return userRepository.getCurrentUser()?.let { user ->
-            user.authToken != null && !userRepository.isTokenExpired(user.authToken)
-        } ?: false
+    fun checkActiveSession(): Flow<Boolean> {
+        return userRepository.isUserLoggedIn()
     }
 }

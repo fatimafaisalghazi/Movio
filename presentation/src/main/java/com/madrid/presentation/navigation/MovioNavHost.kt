@@ -26,10 +26,13 @@ import com.madrid.presentation.screens.searchScreen.SearchScreen
 import com.madrid.presentation.screens.searchScreen.SeeAllForYou.SeeAllForYouScreen
 
 @Composable
-fun MovioNavHost(navController: NavHostController) {
+fun MovioNavHost(
+    navController: NavHostController,
+    isLoggedIn: Boolean
+) {
     NavHost(
         navController = navController,
-        startDestination = Destinations.AuthenticationScreen,
+        startDestination = if (isLoggedIn.not()) Destinations.AuthenticationScreen else Destinations.HomeScreen,
         enterTransition = {
             fadeIn(tween(0))
         },

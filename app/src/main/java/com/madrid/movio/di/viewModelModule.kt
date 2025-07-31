@@ -2,6 +2,7 @@ package com.madrid.movio.di
 
 
 import com.madrid.presentation.screens.searchScreen.SeeAllForYou.SeeAllForYouViewModel
+import com.madrid.presentation.viewModel.authentication.MainViewModel
 import com.madrid.presentation.viewModel.loginViewModel.LoginViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.ActorDetailsViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.DetailsMovieViewModel
@@ -28,4 +29,5 @@ val presentationModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::ReviewsScreenViewModel)
     viewModelOf(::SimilarMediaViewModel)
+    viewModelOf(::MainViewModel)
 }

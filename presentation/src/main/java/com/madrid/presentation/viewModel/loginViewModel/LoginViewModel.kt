@@ -50,7 +50,7 @@ class LoginViewModel(
             updateState { it.copy(isLoading = true, errorState = null) }
 
             when (val result = loginUseCase.execute(currentState.username, currentState.password)) {
-                is LoginResult.Success -> {
+                true -> {
                     updateState {
                         it.copy(
                             isLoading = false,
@@ -61,11 +61,11 @@ class LoginViewModel(
                     onSuccess()
                 }
 
-                is LoginResult.Error -> {
+                false -> {
                     updateState {
                         it.copy(
                             isLoading = false,
-                            errorState = result.toLoginError()
+                            // TODO errorState =
                         )
                     }
                 }
@@ -78,7 +78,7 @@ class LoginViewModel(
             updateState { it.copy(isLoading = true, errorState = null) }
 
             when (val result = loginUseCase.loginAsGuest()) {
-                is LoginResult.Success -> {
+                true -> {
                     updateState {
                         it.copy(
                             isLoading = false,
@@ -89,11 +89,11 @@ class LoginViewModel(
                     onSuccess()
                 }
 
-                is LoginResult.Error -> {
+                false -> {
                     updateState {
                         it.copy(
                             isLoading = false,
-                            errorState = result.toLoginError()
+                            // TODO errorState = result.toLoginError()
                         )
                     }
                 }
