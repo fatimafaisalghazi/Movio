@@ -53,7 +53,6 @@ fun MovieDetailsScreen(
             text = null,
             modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
             onFirstIconClick = {
-                Log.d("on navigation", "MovieDetailsScreen: ")
                 navController.popBackStack() }
         )
         Column(

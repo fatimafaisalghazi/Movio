@@ -39,13 +39,7 @@ fun SeeAllTVShowsScreen(
     val navController = LocalNavController.current
     val items = uiState.genre
 
-    Log.d("log items", "TopRatingScreen: $items")
-    Log.d("log items", "GenreMovie: ${uiState.genre}")
-    Log.d("log items", "Filtered: ${uiState.filteredSeries}")
-
     var selectedItem by remember { mutableStateOf("All") }
-
-    Log.d("log items", "TopRatingScreen: $selectedItem")
 
     LaunchedEffect(Unit) {
         if (uiState.genre.isNotEmpty()) {
@@ -72,7 +66,6 @@ fun SeeAllTVShowsScreen(
             span = { GridItemSpan(maxLineSpan) }
         ) {
             TopAppBar(uiState.title, secondIcon = null, thirdIcon = null , onFirstIconClick = {
-                Log.d("in all tv shows screen", "SeeAllTVShowsScreen: ")
                 navController.popBackStack()})
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
