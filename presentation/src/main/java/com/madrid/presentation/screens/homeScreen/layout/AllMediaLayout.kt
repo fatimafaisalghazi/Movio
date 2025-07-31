@@ -35,7 +35,7 @@ fun AllMediaLayout() {
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(bottom = 16.dp)
+        contentPadding = PaddingValues(bottom = 12.dp)
     ) {
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
@@ -108,7 +108,6 @@ fun AllMediaLayout() {
                 movieImage = media.imageUrl,
                 rate = media.rating,
                 height = 220.dp,
-                paddingValue = 8.dp,
                 onClick = {},
                 modifier = Modifier.padding(start = startPaddingValue.dp, end = endPaddingValue.dp)
             )

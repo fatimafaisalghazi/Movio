@@ -14,23 +14,27 @@ import com.madrid.presentation.screens.detailsScreen.detailsMovieScreen.MovieDet
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.ReviewsScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.EpisodesScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.SeasonsScreen
-import com.madrid.presentation.screens.loginScreen.AuthenticationScreen
-import com.madrid.presentation.screens.loginScreen.component.ForgotPassword
-import com.madrid.presentation.screens.loginScreen.component.WebViewScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.SeriesDetailsScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SeeAllSimilarMediaScreen
 import com.madrid.presentation.screens.homeScreen.HomeScreen
+import com.madrid.presentation.screens.homeScreen.SeeAllTVShowsScreen
 import com.madrid.presentation.screens.homeScreen.component.FakeHomeScreen
 import com.madrid.presentation.screens.libraryScreen.LibraryScreen
+import com.madrid.presentation.screens.loginScreen.AuthenticationScreen
+import com.madrid.presentation.screens.loginScreen.component.ForgotPassword
+import com.madrid.presentation.screens.loginScreen.component.WebViewScreen
 import com.madrid.presentation.screens.moreScreen.MoreScreen
 import com.madrid.presentation.screens.searchScreen.SearchScreen
 import com.madrid.presentation.screens.searchScreen.SeeAllForYou.SeeAllForYouScreen
 
 @Composable
-fun MovioNavHost(navController: NavHostController) {
+fun MovioNavHost(
+    navController: NavHostController,
+    isLoggedIn: Boolean
+) {
     NavHost(
         navController = navController,
-        startDestination = Destinations.AuthenticationScreen,
+        startDestination = if (isLoggedIn.not()) Destinations.AuthenticationScreen else Destinations.HomeScreen,
         enterTransition = {
             fadeIn(tween(0))
         },
@@ -96,7 +100,11 @@ fun MovioNavHost(navController: NavHostController) {
         composable<Destinations.WebViewScreen> {
             val url = it.toRoute<Destinations.WebViewScreen>().url
             WebViewScreen(url = url)
-        }
+            composable<Destinations.SeeAllTvShowsScreen> { backStackEntry ->
+                val destination = backStackEntry.toRoute<Destinations.SeeAllTvShowsScreen>()
+                SeeAllTVShowsScreen(type = destination.type)
+            }
 
+        }
     }
 }

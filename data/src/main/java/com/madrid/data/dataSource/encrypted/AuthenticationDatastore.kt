@@ -6,30 +6,38 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.madrid.data.repositories.datasource.AuthenticationDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class AuthenticationDatastore(
+class AuthenticationDatastoreImpl(
     private val context: Context
-) {
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+) : AuthenticationDataSource {
+    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings") //TODO: Move to secrets
 
-    val TOKEN = stringPreferencesKey("token")
+    val TOKEN = stringPreferencesKey("token") //TODO: Move to secrets
 
-    fun getAuthToken(): Flow<String> {
+    override fun getAuthToken(): Flow<String> {
         return context.dataStore.data
             .map { preferences ->
                 preferences[TOKEN] ?: ""
             }
     }
 
-    suspend fun setAuthToken(token: String) {
+    override fun isUserLoggedIn(): Flow<Boolean> {
+        return context.dataStore.data
+            .map { preferences ->
+                preferences[TOKEN]?.isNotEmpty() ?: false
+            }
+    }
+
+    override suspend fun setAuthToken(token: String) {
         context.dataStore.edit { settings ->
             settings[TOKEN] = token
         }
     }
 
-    suspend fun clearAuthToken() {
+    override suspend fun clearAuthToken() {
         context.dataStore.edit { settings ->
             settings[TOKEN] = ""
         }

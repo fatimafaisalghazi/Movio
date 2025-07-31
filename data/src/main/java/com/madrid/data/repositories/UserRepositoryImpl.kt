@@ -1,31 +1,25 @@
 package com.madrid.data.repositories
 
-import com.madrid.data.dataSource.encrypted.AuthenticationDatastore
+import com.madrid.data.repositories.datasource.AuthenticationDataSource
 import com.madrid.data.repositories.local.LocalDataSource
 import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.User
 import com.madrid.domain.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
 
 class UserRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
-    private val authenticationDatastore: AuthenticationDatastore
+    private val authenticationDatasource: AuthenticationDataSource
 ) : UserRepository {
 
     override suspend fun login(
         username: String,
         password: String
-    ): User {
+    ): Boolean {
         val userToken = remoteDataSource.login(username, password)
-        authenticationDatastore.setAuthToken(userToken)
-        return User(
-            id = "12345",
-            username = username,
-            email = null,
-            profilePicUrl = null,
-            authToken = userToken,
-            isGuest = false
-        )
+        authenticationDatasource.setAuthToken(userToken)
+        return true
     }
 
     override suspend fun register(
@@ -37,15 +31,15 @@ class UserRepositoryImpl(
     }
 
     override suspend fun logout() {
-        authenticationDatastore.clearAuthToken()
+        authenticationDatasource.clearAuthToken()
     }
 
     override suspend fun getCurrentUser(): User? {
         TODO("Not yet implemented")
     }
 
-    override suspend fun isUserLoggedIn(): Boolean {
-        TODO("Not yet implemented")
+    override fun isUserLoggedIn(): Flow<Boolean> {
+        return authenticationDatasource.isUserLoggedIn()
     }
 
     override suspend fun refreshToken(): Boolean {
@@ -69,16 +63,9 @@ class UserRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun loginAsGuest(): User {
+    override suspend fun loginAsGuest(): Boolean {
         val guest = remoteDataSource.loginAsGuest()
-        authenticationDatastore.setAuthToken(guest)
-        return User(
-            id = "guest",
-            username = "Guest",
-            email = null,
-            profilePicUrl = null,
-            authToken = guest,
-            isGuest = true
-        )
+        authenticationDatasource.setAuthToken(guest)
+        return true
     }
 }
