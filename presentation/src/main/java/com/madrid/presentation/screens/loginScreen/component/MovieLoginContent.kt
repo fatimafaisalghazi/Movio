@@ -31,7 +31,7 @@ fun MovieLoginContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background( Theme.color.surfaces.surface)
+            .background(Theme.color.surfaces.surface)
 
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
@@ -81,6 +81,6 @@ fun MovieLoginContent(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        SignUpRow(onSignUpClick = onSignUpClick,)
+        SignUpRow(onSignUpClick = onSignUpClick)
     }
 }

@@ -30,7 +30,7 @@ import com.madrid.presentation.viewModel.LoginUiState
             onValueChange = onUsernameChange,
             modifier = Modifier.padding(bottom = 12.dp),
             isError = state.errorState is LoginError.EmptyFields &&
-                    (state.errorState as LoginError.EmptyFields).usernameEmpty,
+                    state.errorState.usernameEmpty,
             endIconPainter = null,
 
             errorBorderBrush = Theme.color.gradients.errorBorderGradient
@@ -49,7 +49,7 @@ import com.madrid.presentation.viewModel.LoginUiState
             onClickEndIcon = onTogglePassword,
             modifier = Modifier.padding(bottom = 12.dp),
             isError = (state.errorState is LoginError.EmptyFields &&
-                    (state.errorState as LoginError.EmptyFields).passwordEmpty) ||
+                    state.errorState.passwordEmpty) ||
                     state.errorState is LoginError.InvalidCredentials,
             errorBorderBrush = Theme.color.gradients.errorBorderGradient
         )
