@@ -30,7 +30,6 @@ val presentationModule = module {
     viewModelOf(::ActorDetailsViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SeriesDetailsViewModel)
-    viewModel { LoginViewModel(get(), get()) }
     viewModelOf(::LoginViewModel)
     viewModelOf(::ReviewsScreenViewModel)
     viewModelOf(::SimilarMediaViewModel)
