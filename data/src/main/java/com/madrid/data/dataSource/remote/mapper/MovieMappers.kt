@@ -26,7 +26,7 @@ fun MovieDetailsResponse.toMovie(): Movie {
         releaseDate = this.releaseDate ?: "",
         movieDuration = this.runtime?.toString() ?: "",
         description = this.overview ?: "",
-        genre = this.remoteGenreDtos.map { it.name ?: "" },
+        genre = this.remoteGenreDtos.map { it.toGenre() },
     )
 }
 

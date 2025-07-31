@@ -1,6 +1,5 @@
 package com.madrid.domain.usecase.search
 
-import com.madrid.domain.entity.Genre
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.repository.MovieRepository
 import com.madrid.domain.repository.SearchRepository
@@ -17,7 +16,7 @@ class GetMoviesByQueryUseCase(
         return searchRepository.getMoviesByQuery(query = query, page = page)
             .sortedByDescending { movie ->
                 movie.genre.sumOf { genre ->
-                    genresMap[genre]?.interestPoints ?: 0
+                    genresMap[genre.name]?.interestPoints ?: 0
                 }
             }
     }

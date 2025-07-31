@@ -39,7 +39,7 @@ fun MovieWithGenres.toMovie(): Movie {
         releaseDate = this.movie.yearOfRelease,
         movieDuration = this.movie.movieDuration,
         description = this.movie.description,
-        genre = this.genres.map { it.genreTitle }
+        genre = this.genres.map { it.toGenre() }
     )
 }
 

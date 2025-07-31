@@ -3,7 +3,6 @@ package com.madrid.domain.repository
 import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Episode
 import com.madrid.domain.entity.Genre
-import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
 import com.madrid.domain.entity.SortType
@@ -16,7 +15,6 @@ interface SeriesRepository {
     suspend fun getSeriesReviewsById(seriesId: Int): List<Review>
     suspend fun getSimilarSeriesById(seriesId: Int): List<Series>
     suspend fun getEpisodesBySeriesId(seriesId: Int, seasonNumber: Int): List<Episode>
-    suspend fun getSeriesGenres(): List<Genre>
     suspend fun increaseSeriesGenreInterestPoints(genreTitle: String)
     suspend fun getSeriesByGenres(): Map<String, List<Series>>
     suspend fun getTopRatedSeries(page: Int): List<Series>
