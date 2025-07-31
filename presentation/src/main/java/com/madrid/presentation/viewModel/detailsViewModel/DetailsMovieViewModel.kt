@@ -115,6 +115,7 @@ class DetailsMovieViewModel(
     }
 
     private fun loadReviews() {
+        Log.d("REVIEW_DEBUG", ">>> loadReviews started <<<")
         tryToExecute(
             function = {
                 getMovieReviewsUseCase(args.movieId)
@@ -125,7 +126,7 @@ class DetailsMovieViewModel(
                         reviewerName = review.reviewerName,
                         reviewerImageUrl = "",
                         rating = review.rate.toFloat(),
-                        date = formatDateKotlinx(review.date),
+                        date = review.date,
                         content = review.comment,
                     )
                 }
@@ -142,4 +143,5 @@ class DetailsMovieViewModel(
             dispatcher = Dispatchers.IO
         )
     }
+
 }

@@ -97,9 +97,11 @@ fun ReviewCard(
         )
     }
 }
+
+
 @Preview(showBackground = true , showSystemUi = true)
 @Composable
-fun kj(){
+private fun ReviewCardPreview(){
     ReviewCard(
         reviewerName = "Awkwafina",
         reviewerImageUrl = "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
