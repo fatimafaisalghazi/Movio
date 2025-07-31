@@ -15,31 +15,31 @@ class AuthenticationDatastoreImpl(
 ) : AuthenticationDataSource {
     val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings") //TODO: Move to secrets
 
-    val TOKEN = stringPreferencesKey("token") //TODO: Move to secrets
+    val token = stringPreferencesKey("token") //TODO: Move to secrets
 
     override fun getAuthToken(): Flow<String> {
         return context.dataStore.data
             .map { preferences ->
-                preferences[TOKEN] ?: ""
+                preferences[token] ?: ""
             }
     }
 
     override fun isUserLoggedIn(): Flow<Boolean> {
         return context.dataStore.data
             .map { preferences ->
-                preferences[TOKEN]?.isNotEmpty() ?: false
+                preferences[token]?.isNotEmpty() ?: false
             }
     }
 
     override suspend fun setAuthToken(token: String) {
         context.dataStore.edit { settings ->
-            settings[TOKEN] = token
+            settings[this@AuthenticationDatastoreImpl.token] = token
         }
     }
 
     override suspend fun clearAuthToken() {
         context.dataStore.edit { settings ->
-            settings[TOKEN] = ""
+            settings[token] = ""
         }
     }
 }
