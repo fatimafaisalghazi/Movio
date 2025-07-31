@@ -7,7 +7,7 @@ import com.madrid.domain.exceptions.UnauthorizedException
 import com.madrid.domain.exceptions.UnknownException
 import okhttp3.Response
 
-inline fun responseWrapper(
+fun responseWrapper(
     response: Response,
 ): Response {
     val redirectRange = 300..399

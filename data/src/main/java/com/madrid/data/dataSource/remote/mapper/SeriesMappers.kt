@@ -114,7 +114,7 @@ fun RecommendedSeriesResult.toSeries(): Series {
         rate = this.voteAverage ?: 0.0,
         airDate = this.firstAirDate ?: "",
         description = this.overview ?: "",
-        genre = this.genreIds?.map { Genre(id = it?:0,name = "") } ?: listOf(),
+        genre = this.genreIds.map { Genre(id = it?:0,name = "") },
         seasons = emptyList(),
     )
 }
