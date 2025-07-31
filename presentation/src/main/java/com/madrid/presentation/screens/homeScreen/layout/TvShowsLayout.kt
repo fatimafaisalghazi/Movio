@@ -38,9 +38,9 @@ fun TvShowsLayout(){
     ) {
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
-                primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.top_rating),
-                secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-                endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+                primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
+                secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllTvShowsScreen(SeeAllTvShowType.TOP_RATING))},
                 onMediaClick = {},
@@ -52,9 +52,9 @@ fun TvShowsLayout(){
 
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
-                primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.airing_today),
-                secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-                endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+                primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.airing_today),
+                secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllTvShowsScreen(SeeAllTvShowType.AIRING_TODAY))},
                 onMediaClick = {},
@@ -66,9 +66,9 @@ fun TvShowsLayout(){
 
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
-                primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.on_tv),
-                secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-                endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+                primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.on_tv),
+                secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllTvShowsScreen(SeeAllTvShowType.ON_TV))},
                 onMediaClick = {},

@@ -34,9 +34,9 @@ fun MoviesLayout() {
     ) {
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
-                primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.top_rating),
-                secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-                endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+                primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
+                secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
                 onSeeAllClick = {},
                 onMediaClick = {},
@@ -48,9 +48,9 @@ fun MoviesLayout() {
 
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
-                primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.now_playing),
-                secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-                endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+                primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.now_playing),
+                secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
                 onSeeAllClick = {},
                 onMediaClick = {},
@@ -62,9 +62,9 @@ fun MoviesLayout() {
 
         item(span = { GridItemSpan(2) }) {
             CustomHorizontalCard(
-                primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.upcoming),
-                secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-                endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+                primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.upcoming),
+                secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
                 listOfMedia = fakeMediaList,
                 onSeeAllClick = {},
                 onMediaClick = {},

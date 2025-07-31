@@ -22,20 +22,20 @@ import com.madrid.presentation.viewModel.shared.MediaUiState
 
 @Composable
 fun CustomHorizontalCard(
-    primaryTextForCustomTextTitel: String,
+    primaryTextForCustomTextTitle: String,
     listOfMedia: List<MediaUiState>,
     modifier: Modifier = Modifier,
     headerModifier: Modifier  = Modifier,
-    secondaryTextForCustomTextTitel: String? = null,
-    endIconForCustomTextTitel: Painter? = null,
+    secondaryTextForCustomTextTitle: String? = null,
+    endIconForCustomTextTitle: Painter? = null,
     onSeeAllClick: (() -> Unit)? = null,
     onMediaClick: (MediaUiState) -> Unit = {},
 ) {
     Column(modifier = modifier) {
         CustomTextTitle(
-            primaryText = primaryTextForCustomTextTitel,
-            secondaryText = secondaryTextForCustomTextTitel,
-            endIcon = endIconForCustomTextTitel,
+            primaryText = primaryTextForCustomTextTitle,
+            secondaryText = secondaryTextForCustomTextTitle,
+            endIcon = endIconForCustomTextTitle,
             onSeeAllClick = onSeeAllClick,
             modifier = headerModifier
         )
@@ -90,9 +90,9 @@ fun CustomHorizontalCardPreview() {
 
     MovioTheme {
         CustomHorizontalCard(
-            primaryTextForCustomTextTitel = "Trending Now",
-            secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-            endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+            primaryTextForCustomTextTitle = "Trending Now",
+            secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+            endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
             listOfMedia = fakeMediaList,
             onSeeAllClick = {},
             onMediaClick = {}
