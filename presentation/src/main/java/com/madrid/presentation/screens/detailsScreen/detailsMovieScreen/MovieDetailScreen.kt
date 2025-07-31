@@ -54,7 +54,7 @@ fun MovieDetailsScreen(
         )
         TopAppBar(
             text = null,
-            modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
+            modifier = Modifier.padding(start = 16.dp, top = 36.dp),
             onFirstIconClick = {
                 navController.popBackStack() } ,
             onThirdIconClick = viewModel::onClickLoveIcon,
