@@ -64,7 +64,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                     Column (
                         modifier = Modifier
                             .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        horizontalAlignment = CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Image(
@@ -137,7 +137,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         modifier = Modifier
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = CenterHorizontally
                     ) {
                         MovioText(
                             text = "Internet is not available",
@@ -167,7 +167,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         modifier = Modifier
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = CenterHorizontally
                     ) {
                         MovioText(
                             text = "No results found",

@@ -93,7 +93,7 @@ fun LazyGridScope.filterSearchScreen(
                                     EmptySearchLayout(
                                         title = stringResource(R.string.no_results_found),
                                         description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                        image = com.madrid.presentation.R.drawable.img_no_sesrch_found // Use a "no results" image
+                                        image = R.drawable.img_no_sesrch_found // Use a "no results" image
                                     )
                                 }
                             }
@@ -113,7 +113,7 @@ fun LazyGridScope.filterSearchScreen(
                                     EmptySearchLayout(
                                         title = stringResource(R.string.no_results_found),
                                         description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                        image = com.madrid.presentation.R.drawable.img_no_sesrch_found // Use a "no results" image
+                                        image = R.drawable.img_no_sesrch_found // Use a "no results" image
                                     )
                                 }
                             }
@@ -170,7 +170,7 @@ fun LazyGridScope.filterSearchScreen(
                                     EmptySearchLayout(
                                         title = stringResource(R.string.no_results_found),
                                         description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                                        image = com.madrid.presentation.R.drawable.img_no_internet
+                                        image = R.drawable.img_no_internet
                                     )
                                 }
                             }
@@ -191,7 +191,7 @@ fun LazyGridScope.filterSearchScreen(
                                     EmptySearchLayout(
                                         title = stringResource(R.string.no_results_found),
                                         description =  stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                        image = com.madrid.presentation.R.drawable.img_no_sesrch_found // Use a "no results" image
+                                        image = R.drawable.img_no_sesrch_found // Use a "no results" image
                                     )
                                 }
                             }
@@ -250,7 +250,7 @@ fun LazyGridScope.filterSearchScreen(
                                         title = stringResource(R.string.internet_is_not_available),
                                         description =
                                             stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                                        image = com.madrid.presentation.R.drawable.img_no_internet
+                                        image = R.drawable.img_no_internet
                                     )
                                 }
                             }
@@ -271,7 +271,7 @@ fun LazyGridScope.filterSearchScreen(
                                     EmptySearchLayout(
                                         title = stringResource(R.string.no_results_found),
                                         description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                        image = com.madrid.presentation.R.drawable.img_no_sesrch_found // Use a "no results" image
+                                        image = R.drawable.img_no_sesrch_found // Use a "no results" image
                                     )
                                 }
                             }
@@ -331,7 +331,7 @@ fun LazyGridScope.filterSearchScreen(
                                     EmptySearchLayout(
                                         title = stringResource(R.string.internet_is_not_available),
                                         description = "Please make sure you are connected to the internet and try again.",
-                                        image = com.madrid.presentation.R.drawable.img_no_internet
+                                        image = R.drawable.img_no_internet
                                     )
                                 }
                             }
@@ -351,7 +351,7 @@ fun LazyGridScope.filterSearchScreen(
                                     EmptySearchLayout(
                                         title = stringResource(R.string.internet_is_not_available),
                                         description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                        image = com.madrid.presentation.R.drawable.img_no_sesrch_found // Use a "no results" image
+                                        image = R.drawable.img_no_sesrch_found // Use a "no results" image
                                     )
                                 }
                             }
