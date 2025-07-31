@@ -62,7 +62,7 @@ fun CustomTextTitle(
 
 @Preview(showBackground = true)
 @Composable
-private fun CustomTextTitelPreview() {
+private fun CustomTextTitlePreview() {
     MovioTheme {
         CustomTextTitle(
             primaryText = "Top Rating",
