@@ -63,7 +63,7 @@ class RemoteDataSourceImpl(
     }
 
     override suspend fun getMovieGenres(): List<RemoteGenreDto> {
-        return api.getMovieGenres().genres?.filterNotNull().orEmpty()
+        return api.getMovieGenres().genres.orEmpty()
     }
 
     override suspend fun getTrendingMovies(page: Int): SearchMovieResponse {
@@ -106,7 +106,7 @@ class RemoteDataSourceImpl(
     }
 
     override suspend fun getSeriesGenres(): List<RemoteGenreDto> {
-        return api.getSeriesGenres().genres?.filterNotNull().orEmpty()
+        return api.getSeriesGenres().genres.orEmpty()
     }
 
     override suspend fun getTrendingSeries(page: Int): SearchSeriesResponse {
@@ -143,7 +143,7 @@ class RemoteDataSourceImpl(
         try {
             api.getPopularTvShows(page = page)
         }catch (e: Exception){
-            Log.d("getRecommendedSeries", "catched getRecommendedSeries: ${e.message} ")
+            Log.d("getRecommendedSeries", "cached getRecommendedSeries: ${e.message} ")
         }
 //        val x = api.getPopularTvShows(page = page)
 //        Log.d("getRecommendedSeries", "getRecommendedSeries: ${x.recommendedSeriesResults} ")
