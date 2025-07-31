@@ -83,7 +83,7 @@ private fun FrameEpisodeCard(
 ) {
     Column(
         modifier = modifier
-            .padding(start = 8.dp, end = 8.dp),
+            .padding(horizontal = 8.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row {
