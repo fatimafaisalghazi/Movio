@@ -40,7 +40,7 @@ fun ReviewCard(
     Column(
         modifier = modifier
             .width(258.dp)
-            .wrapContentHeight()
+            .fillMaxHeight()
             .background(
                 color = Theme.color.surfaces.surfaceContainer,
                 shape = RoundedCornerShape(12.dp)
