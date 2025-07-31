@@ -46,19 +46,23 @@ class SeeAllTVShowsViewModel(
     }
 
 
-    override fun onGenreSelect(genre: CategoryUiState) {
-        Log.d("onGenreSelect", "onGenreSelect: genre: $genre")
-        tryToExecute(
-            function = {
-                val x = strategy.getTvShowsBasedOnCategory(genre.id)
-                Log.d("onGenreSelect", "onGenreSelect: series genres : $x")
-                x
-            },
-            onSuccess = { allSeries ->
-                updateState { it.copy(filteredSeries = allSeries.map { series -> series.toUiState() }) }
-            },
-            onError = { /* Handle if needed */ }
-        )
+    override fun onGenreSelect(genre: CategoryUiState?) {
+        if (genre == null)
+            loadAllSeries()
+        else {
+            Log.d("onGenreSelect", "onGenreSelect: genre: $genre")
+            tryToExecute(
+                function = {
+                    val x = strategy.getTvShowsBasedOnCategory(genre.id)
+                    Log.d("onGenreSelect", "onGenreSelect: series genres : $x")
+                    x
+                },
+                onSuccess = { allSeries ->
+                    updateState { it.copy(filteredSeries = allSeries.map { series -> series.toUiState() }) }
+                },
+                onError = { /* Handle if needed */ }
+            )
+        }
     }
 
     override fun onSeriesClick(seriesId: Int) {

@@ -43,7 +43,7 @@ fun SeeAllTVShowsScreen(
     Log.d("log items", "GenreMovie: ${uiState.genre}")
     Log.d("log items", "Filtered: ${uiState.filteredSeries}")
 
-    var selectedItem by remember { mutableStateOf("") }
+    var selectedItem by remember { mutableStateOf("All") }
 
     Log.d("log items", "TopRatingScreen: $selectedItem")
 
@@ -75,12 +75,16 @@ fun SeeAllTVShowsScreen(
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
 
+            val updatedItems: MutableList<String> = items.map { it.name }.toMutableList()
+            updatedItems.add(0, "All")
             FilterBar(
-                items = items.map { it.name },
+                items = updatedItems,
                 selectedItem = selectedItem,
                 onItemClick = { genre ->
                     selectedItem = genre
-                    viewModel.onGenreSelect(items.find { it.name == genre }!!)
+                    viewModel.onGenreSelect(
+                        if (selectedItem != "All") items.find { it.name == genre } else null
+                    )
                 },
                 scrollable = true
             )
@@ -93,8 +97,8 @@ fun SeeAllTVShowsScreen(
                 description = movie.name,
                 movieImage = movie.imageUrl,
                 rate = movie.rate,
-                width = 101.dp,
-                height = 136.dp,
+                width = 130.dp,
+                height = 200.dp,
                 onClick = {
                     navController.navigate(
                         Destinations.SeriesDetailsScreen(
