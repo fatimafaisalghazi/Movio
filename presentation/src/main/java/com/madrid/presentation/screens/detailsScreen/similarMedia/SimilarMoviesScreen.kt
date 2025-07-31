@@ -57,7 +57,7 @@ fun SimilarMoviesSection(
                 MovioVerticalCard(
                     description = movie.title,
                     movieImage = movie.imageUrl,
-                    rate = movie.rating.toString(),
+                    rate = movie.rating,
                     width = 124.dp,
                     height = 160.dp,
                     onClick = { onMovieClick(movie) },

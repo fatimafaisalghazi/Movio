@@ -25,7 +25,6 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.CustomDropdown
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioEpisodesCard
-import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.viewModel.detailsViewModel.EpisodeUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
@@ -50,7 +49,7 @@ fun EpisodesScreenContent(
 ) {
     val episodes: List<EpisodeUiState> = uiState.selectedSeasonUiState.episodesUiStates
     Column {
-        Box() {
+        Box {
             MoviePosterDetailScreen(
                 imageUrl = uiState.selectedSeasonUiState.imageUrl,
                 modifier = Modifier
