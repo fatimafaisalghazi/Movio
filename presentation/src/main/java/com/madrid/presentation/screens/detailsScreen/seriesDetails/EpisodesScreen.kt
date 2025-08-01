@@ -19,10 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
+import com.madrid.presentation.R
 import com.madrid.presentation.component.CustomDropdown
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioEpisodesCard
@@ -52,7 +54,7 @@ fun EpisodesScreenContent(
     val episodes: List<EpisodeUiState> = uiState.selectedSeasonUiState.episodesUiStates
     LazyColumn() {
         item {
-            Box(){
+            Box() {
                 TopAppBar(
                     text = null,
                     secondIcon = null,
@@ -74,10 +76,15 @@ fun EpisodesScreenContent(
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 MovioText(
-                    text = "Episodes ${uiState.selectedSeasonUiState.numberOfEpisodes}",
+                    text = stringResource(
+                        id = R.string.episodes_count,
+                        uiState.selectedSeasonUiState.numberOfEpisodes
+                    ),
                     textStyle = Theme.textStyle.headline.mediumMedium18,
                     color = Theme.color.surfaces.onSurface,
-                    modifier = Modifier.padding(vertical = 5.dp).align(Alignment.CenterVertically)
+                    modifier = Modifier
+                        .padding(vertical = 5.dp)
+                        .align(Alignment.CenterVertically)
                 )
                 Spacer(Modifier.weight(1f))
                 var selectedItem by remember { mutableStateOf("Season ${uiState.selectedSeasonUiState.seasonNumber}") }
@@ -99,8 +106,14 @@ fun EpisodesScreenContent(
             MovioEpisodesCard(
                 movieTitle = episode.episodeName,
                 movieRate = (episode.rate.toFloat() / 2).toString().take(3),
-                currentMovieEpisode = "Episode ${episode.episodeNumber}",
-                movieTime = "${episode.episodeDuration} m",
+                currentMovieEpisode = stringResource(
+                    id = R.string.episode_number,
+                    episode.episodeNumber
+                ),
+                movieTime = stringResource(
+                    id = R.string.episode_duration,
+                    episode.episodeDuration
+                ),
                 movieImageUrl = episode.imageUrl,
                 onClick = {
                 },

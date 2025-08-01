@@ -94,7 +94,7 @@ fun AllMediaLayout() {
         item(span = { GridItemSpan(2) }) {
             CustomTextTitel(
                 primaryText = stringResource(com.madrid.presentation.R.string.more_recommended),
-                secondaryText = "See all",
+                secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
                 endIcon = painterResource(R.drawable.outline_alt_arrow_left),
                 onSeeAllClick = { },
                 modifier = Modifier.padding(horizontal = 16.dp)

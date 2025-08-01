@@ -13,4 +13,20 @@
     <string name="actioniconcolor">ActionIconColor</string>
     <string name="play">Play</string>
     <string name="rate_it">Rate it</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="or">or</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="more_screen">More Screen</string>
+    <string name="episodes_count">Episodes %1$d</string>
+    <string name="episode_number">Episode %1$d</string>
+    <string name="episode_duration">%1$d m</string>
+
+    <string name="season_count">%1$d Seasons</string>
+    <string name="library_screen">Library Screen</string>
+
 </resources>
