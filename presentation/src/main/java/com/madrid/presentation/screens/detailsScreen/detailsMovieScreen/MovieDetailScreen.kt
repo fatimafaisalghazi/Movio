@@ -63,7 +63,7 @@ fun MovieDetailsScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .background(Theme.color.surfaces.surfaceContainer)
+                .background(Theme.color.surfaces.surface)
         ) {
             MoviePosterDetailScreen(
                 imageUrl = uiState.topImageUrl,
