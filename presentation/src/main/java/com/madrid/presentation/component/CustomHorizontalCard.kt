@@ -49,7 +49,7 @@ fun CustomHorizontalCard(
                 MovioVerticalCard(
                     description = media.title,
                     movieImage = media.imageUrl,
-                    rate = media.rating,
+                    rate = media.rating.take(3),
                     width = 124.dp,
                     height = 160.dp,
                     onClick = { onMediaClick(media) }

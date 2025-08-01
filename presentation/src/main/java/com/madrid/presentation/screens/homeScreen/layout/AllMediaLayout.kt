@@ -39,7 +39,7 @@ fun AllMediaLayout() {
     ) {
         item(span = { GridItemSpan(2) }) {
             MovioPager(
-                movies = fakeMediaList,
+                medias = fakeMediaList,
             )
         }
         item(span = { GridItemSpan(2) }) {
