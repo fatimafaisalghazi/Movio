@@ -163,6 +163,7 @@ fun CreateNewListItem(
 @Composable
 fun AddToListBottomSheetContent(
     modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
     onListCreated: () -> Unit,
     initialUserLists: List<UserList>,
     onSelectionChanged: ((UserList, Boolean) -> Unit)? = null

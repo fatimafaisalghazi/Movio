@@ -2,17 +2,13 @@ package com.madrid.presentation.screens.detailsScreen.seriesDetails
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -21,6 +17,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,27 +27,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.CustomTextTitel
 import com.madrid.designSystem.component.EmptySearchLayout
-import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastSection
-import com.madrid.presentation.component.header.MovieDetailsHeader
+import com.madrid.presentation.component.header.SeriesDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.designSystem.component.TextWithReadMore
-import com.madrid.presentation.component.header.SeriesDetailsHeader
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeries
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeriesSection
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewsScreenUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsViewModel
 import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun SeriesDetailsScreen(
@@ -57,7 +56,12 @@ fun SeriesDetailsScreen(
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
     val seasons = uiState.currentSeasonsUiStates
-    val artists = uiState.topCast
+
+    var showRatingBottomSheet by remember { mutableStateOf(false) }
+    var showAddToListBottomSheet by remember { mutableStateOf(false) }
+    var showShareBottomSheet by remember { mutableStateOf(false) }
+    var showAuthRequiredBottomSheet by remember { mutableStateOf(false) }
+
     if (uiState.isLoading) {
         Box(
             modifier = Modifier
@@ -67,8 +71,7 @@ fun SeriesDetailsScreen(
         ) {
             EmptySearchLayout(
                 title = stringResource(R.string.internet_is_not_available),
-                description =
-                    stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
                 image = com.madrid.presentation.R.drawable.img_no_internet
             )
         }
@@ -86,7 +89,11 @@ fun SeriesDetailsScreen(
             TopAppBar(
                 text = null,
                 modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
-                onFirstIconClick = { navController.popBackStack() }
+                onFirstIconClick = { navController.popBackStack() },
+
+                onSecondIconClick = {
+                    showShareBottomSheet = true
+                }
             )
             Column(
                 modifier = Modifier
@@ -102,12 +109,21 @@ fun SeriesDetailsScreen(
                     rate = uiState.rate.take(3),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
+
+                // Simplified BottomMediaActions
                 BottomMediaActions(
-                    onRateClick = {},
-                    onPlayClick = {},
-                    onAddToListClick = {},
-                    modifier = Modifier.padding(vertical = 16.dp)
+                    onRateClick = {
+                            showAuthRequiredBottomSheet = true
+
+                    },
+                    onPlayClick = {
+                    },
+                    onAddToListClick = {
+                            showAuthRequiredBottomSheet = true
+
+                    },
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 TextWithReadMore(
@@ -119,6 +135,7 @@ fun SeriesDetailsScreen(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
+
                 TopCastSection(
                     castMembers = uiState.topCast.map { cast ->
                         CastMember(
@@ -141,8 +158,9 @@ fun SeriesDetailsScreen(
                                 artistId = castId
                             )
                         )
-                    },
+                    }
                 )
+
                 CustomTextTitel(
                     primaryText = stringResource(R.string.current_seasons),
                     secondaryText = stringResource(R.string.see_all),
@@ -157,6 +175,7 @@ fun SeriesDetailsScreen(
                     },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 )
+
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -181,7 +200,9 @@ fun SeriesDetailsScreen(
                         )
                     }
                 }
+
                 Spacer(modifier = Modifier.height(32.dp))
+
                 if (uiState.reviews.isNotEmpty()) {
                     ReviewScreen(
                         onSeeAllReviews = {
@@ -196,6 +217,7 @@ fun SeriesDetailsScreen(
                     )
                     Spacer(modifier = Modifier.height(32.dp))
                 }
+
                 if (uiState.similarSeries.isNotEmpty()) {
                     Log.d(
                         "in series details screen",

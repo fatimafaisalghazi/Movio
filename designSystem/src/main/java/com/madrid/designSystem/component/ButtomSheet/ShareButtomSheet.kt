@@ -69,6 +69,7 @@ fun ShareOption(
 @Composable
 fun ShareViaBottomSheetContent(
     modifier: Modifier = Modifier,
+    onDismiss: () -> Unit = {},
     onShareOptionClick: (String) -> Unit
 ) {
     val shareOptions = listOf(

@@ -29,7 +29,8 @@ fun AuthRequiredBottomSheetContent(
     description: String,
     buttonText: String,
     onLoginClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onDismiss:  () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -95,6 +96,8 @@ fun AuthRequiredBottomSheetContentPreview(){
         title = "You don't have an account",
         description = "Please log in or create an account to save items to your favorites and access them later.",
         buttonText = "Login",
-        onLoginClick = {}
+        onLoginClick = {},
+        modifier = Modifier,
+        onDismiss = {} ,
     )
 }

@@ -77,6 +77,7 @@ fun RatingBottomSheetContent(
     moviePosterResId: Int,
     initialRating: Int = 0,
     onRatingSubmitted: (Int) -> Unit,
+    onDismiss: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var selectedRating by remember { mutableIntStateOf(initialRating) }
