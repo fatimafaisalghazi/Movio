@@ -23,10 +23,16 @@ import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.viewModel.seeAll.tvShows.SeeAllTvShowType
+import com.madrid.presentation.viewModel.shared.MediaUiState
 
 @Composable
-fun TvShowsLayout(){
-    val fakeMediaList = getFakeMedia()
+fun TvShowsLayout(
+    trendingSeries: List<MediaUiState>,
+    topRatingSeries: List<MediaUiState>,
+    airingTodaySeries: List<MediaUiState>,
+    onAirSeries: List<MediaUiState>,
+    recommendedSeries: List<MediaUiState>,
+) {
     val navController = LocalNavController.current
 
     LazyVerticalGrid(
@@ -39,7 +45,7 @@ fun TvShowsLayout(){
     ) {
         item(span = { GridItemSpan(2) }) {
             MovioPager(
-                movies = fakeMediaList,
+                medias = trendingSeries.shuffled().take(7),
             )
         }
         item(span = { GridItemSpan(2) }) {
@@ -47,10 +53,22 @@ fun TvShowsLayout(){
                 primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.top_rating),
                 secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = fakeMediaList,
-                onSeeAllClick = { navController.navigate(Destinations.SeeAllTvShowsScreen(
-                    SeeAllTvShowType.TOP_RATING))},
-                onMediaClick = {},
+                listOfMedia = topRatingSeries,
+                onSeeAllClick = {
+                    navController.navigate(
+                        Destinations.SeeAllTvShowsScreen(
+                            SeeAllTvShowType.TOP_RATING
+                        )
+                    )
+                },
+                onMediaClick = { mediaUiState ->
+                    navController.navigate(
+                        Destinations.SeriesDetailsScreen(
+                            mediaUiState.id.toInt(),
+                            1
+                        )
+                    )
+                },
                 headerModifier = Modifier.padding(horizontal = 16.dp)
             )
         }
@@ -62,10 +80,22 @@ fun TvShowsLayout(){
                 primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.airing_today),
                 secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = fakeMediaList,
-                onSeeAllClick = { navController.navigate(Destinations.SeeAllTvShowsScreen(
-                    SeeAllTvShowType.AIRING_TODAY))},
-                onMediaClick = {},
+                listOfMedia = airingTodaySeries,
+                onSeeAllClick = {
+                    navController.navigate(
+                        Destinations.SeeAllTvShowsScreen(
+                            SeeAllTvShowType.AIRING_TODAY
+                        )
+                    )
+                },
+                onMediaClick = { mediaUiState ->
+                    navController.navigate(
+                        Destinations.SeriesDetailsScreen(
+                            mediaUiState.id.toInt(),
+                            1
+                        )
+                    )
+                },
                 headerModifier = Modifier.padding(horizontal = 16.dp)
             )
         }
@@ -77,10 +107,22 @@ fun TvShowsLayout(){
                 primaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.on_tv),
                 secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = fakeMediaList,
-                onSeeAllClick = { navController.navigate(Destinations.SeeAllTvShowsScreen(
-                    SeeAllTvShowType.ON_TV))},
-                onMediaClick = {},
+                listOfMedia = onAirSeries,
+                onSeeAllClick = {
+                    navController.navigate(
+                        Destinations.SeeAllTvShowsScreen(
+                            SeeAllTvShowType.ON_TV
+                        )
+                    )
+                },
+                onMediaClick = { mediaUiState ->
+                    navController.navigate(
+                        Destinations.SeriesDetailsScreen(
+                            mediaUiState.id.toInt(),
+                            1
+                        )
+                    )
+                },
                 headerModifier = Modifier.padding(horizontal = 16.dp)
             )
         }
@@ -92,26 +134,38 @@ fun TvShowsLayout(){
                 primaryText = stringResource(com.madrid.presentation.R.string.more_recommended),
                 secondaryText = "See all",
                 endIcon = painterResource(R.drawable.outline_alt_arrow_left),
-                onSeeAllClick = { navController.navigate(Destinations.SeeAllTvShowsScreen(
-                    SeeAllTvShowType.MORE_RECOMMENDED))},
+                onSeeAllClick = {
+                    navController.navigate(
+                        Destinations.SeeAllTvShowsScreen(
+                            SeeAllTvShowType.MORE_RECOMMENDED
+                        )
+                    )
+                },
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
 
-        itemsIndexed(fakeMediaList) { index , media ->
+        itemsIndexed(recommendedSeries) { index, media ->
             var endPaddingValue = 0
             var startPaddingValue = 0
 
-            if(index % 2 ==0)
+            if (index % 2 == 0)
                 startPaddingValue = 16
             else
                 endPaddingValue = 16
             MovioVerticalCard(
                 description = media.title,
                 movieImage = media.imageUrl,
-                rate = media.rating,
+                rate = media.rating.take(3),
                 height = 220.dp,
-                onClick = {},
+                onClick = {
+                    navController.navigate(
+                        Destinations.SeriesDetailsScreen(
+                            media.id.toInt(),
+                            1
+                        )
+                    )
+                },
                 modifier = Modifier.padding(start = startPaddingValue.dp, end = endPaddingValue.dp)
             )
         }

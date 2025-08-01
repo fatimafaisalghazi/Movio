@@ -23,6 +23,7 @@ data class AllTabUiState(
 )
 
 data class MovieTabUiState(
+    val trending: SectionUiState = SectionUiState(),
     val topRated: SectionUiState = SectionUiState(),
     val nowPlaying: SectionUiState = SectionUiState(),
     val upcoming: SectionUiState = SectionUiState(),
@@ -30,6 +31,7 @@ data class MovieTabUiState(
 )
 
 data class TvShowTabUiState(
+    val trending: SectionUiState = SectionUiState(),
     val topRated: SectionUiState = SectionUiState(),
     val airingToday: SectionUiState = SectionUiState(),
     val onTv: SectionUiState = SectionUiState(),

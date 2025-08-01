@@ -73,7 +73,10 @@ fun HomeScreenContent(
             .padding(top = 32.dp),
     ) {
         LayoutContent(
-            HomeTab.entries[selectedTabIndex],
+            uiState = state,
+            selectedTab = HomeTab.entries[selectedTabIndex],
+            onClickMoviesTab = interactionListener::loadMoviesLayoutData,
+            onClickSeriesTab = interactionListener::loadSeriesLayoutData
         )
         Column {
             HomeAppBar(modifier = Modifier.padding(horizontal = 16.dp))
@@ -91,19 +94,19 @@ fun HomeScreenContent(
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             if (HomeTab.CATEGORIES == HomeTab.entries[selectedTabIndex])
-            CategoriesLayout(
-                categories = state.categoryTabUiState.categories,
-                selectedCategory = state.categoryTabUiState.selectedCategory,
-                onCategorySelected = { category -> interactionListener.onSelectCategory(category) },
-                mediaItems = state.categoryTabUiState.media.collectAsLazyPagingItems(),
-                sortingType = state.categoryTabUiState.sortingType,
-                onSortingTypeSelected = { sortingType ->
-                    interactionListener.onSelectSortingType(
-                        sortingType
-                    )
-                },
-                onMediaItemClicked = interactionListener::onMediaSelected,
-            )
+                CategoriesLayout(
+                    categories = state.categoryTabUiState.categories,
+                    selectedCategory = state.categoryTabUiState.selectedCategory,
+                    onCategorySelected = { category -> interactionListener.onSelectCategory(category) },
+                    mediaItems = state.categoryTabUiState.media.collectAsLazyPagingItems(),
+                    sortingType = state.categoryTabUiState.sortingType,
+                    onSortingTypeSelected = { sortingType ->
+                        interactionListener.onSelectSortingType(
+                            sortingType
+                        )
+                    },
+                    onMediaItemClicked = interactionListener::onMediaSelected,
+                )
         }
     }
 }
@@ -111,11 +114,34 @@ fun HomeScreenContent(
 @Composable
 private fun LayoutContent(
     selectedTab: HomeTab,
+    uiState: HomeScreenState,
+    onClickMoviesTab: () -> Unit,
+    onClickSeriesTab: () -> Unit
 ) {
     when (selectedTab) {
         HomeTab.ALL -> AllMediaLayout()
-        HomeTab.MOVIES -> MoviesLayout()
-        HomeTab.TV_SHOWS -> TvShowsLayout()
+        HomeTab.MOVIES -> {
+            onClickMoviesTab()
+            MoviesLayout(
+                trendingMovies = uiState.movieTabUiState.trending.media,
+                topRatingMovies = uiState.movieTabUiState.topRated.media,
+                nowPlayingMovies = uiState.movieTabUiState.nowPlaying.media,
+                upComingMovies = uiState.movieTabUiState.upcoming.media,
+                recommendedMovies = uiState.movieTabUiState.moreRecommended.media
+            )
+        }
+
+        HomeTab.TV_SHOWS -> {
+            onClickSeriesTab()
+            TvShowsLayout(
+                trendingSeries = uiState.tvShowTabUiState.trending.media,
+                topRatingSeries = uiState.tvShowTabUiState.topRated.media,
+                airingTodaySeries = uiState.tvShowTabUiState.airingToday.media,
+                onAirSeries = uiState.tvShowTabUiState.onTv.media,
+                recommendedSeries = uiState.tvShowTabUiState.moreRecommended.media
+            )
+        }
+
         else -> {}
     }
 }
