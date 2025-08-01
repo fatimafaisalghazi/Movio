@@ -38,9 +38,9 @@ fun MovieLoginContent(
 
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(74.dp))
         LoginHeader()
-
+    
         LoginInputFields(
             state = state,
             onUsernameChange = onUsernameChange,

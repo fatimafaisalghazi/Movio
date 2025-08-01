@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -26,10 +27,13 @@ import com.madrid.designSystem.theme.Theme
 fun LoginHeader() {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
 
+
         LogoWithBackground()
+        Spacer(modifier = Modifier.height(12.dp))
         MovioText(
             text = stringResource(com.madrid.presentation.R.string.welcome_back),
             textStyle = Theme.textStyle.headline.largeBold18,
@@ -37,7 +41,7 @@ fun LoginHeader() {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(48.dp))
+
     }
 }
 
