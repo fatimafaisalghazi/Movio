@@ -1,7 +1,6 @@
 package com.madrid.movio.di
 
 
-import LoginViewModel
 import com.madrid.presentation.screens.searchScreen.SeeAllForYou.SeeAllForYouViewModel
 import com.madrid.presentation.viewModel.authentication.MainViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.ActorDetailsViewModel

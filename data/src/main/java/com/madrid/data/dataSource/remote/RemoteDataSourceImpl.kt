@@ -25,6 +25,15 @@ import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.repositories.remote.RemoteDataSource
+import retrofit2.HttpException
+import com.madrid.domain.exceptions.NetworkException
+import com.madrid.domain.exceptions.UnknownException
+import com.madrid.domain.exceptions.InvalidCredentialsException
+import com.madrid.domain.exceptions.AccountLockedException
+import com.madrid.domain.exceptions.SessionExpiredException
+import com.madrid.domain.exceptions.AuthorizationException
+import java.io.IOException
+
 
 class RemoteDataSourceImpl(
     private val api: MovieApi
@@ -174,7 +183,8 @@ class RemoteDataSourceImpl(
         return api.getSeriesByGenreId(page, genreId, sortBy)
     }
 
-    override suspend fun login(username: String, password: String): String {
+override suspend fun login(username: String, password: String): String {
+    try {
         val requestTokenResponse = api.getRequestToken()
         val requestToken = requestTokenResponse.requestToken
         val sessionResponse = api.postCreateSession(
@@ -185,7 +195,37 @@ class RemoteDataSourceImpl(
             )
         )
         return sessionResponse.requestToken
+    } catch (e: HttpException) {
+        val code = e.code()
+        val errorBody = e.response()?.errorBody()?.string()?.lowercase()
+
+        if (code == 401) {
+            when {
+                errorBody?.contains("invalid username") == true ||
+                        errorBody?.contains("invalid password") == true ||
+                        errorBody?.contains("unauthorized") == true -> {
+                    throw InvalidCredentialsException()
+                }
+                errorBody?.contains("suspended") == true -> {
+                    throw AccountLockedException()
+                }
+                errorBody?.contains("expired") == true -> {
+                    throw SessionExpiredException()
+                }
+                else -> {
+                    throw AuthorizationException("Unauthorized access: $errorBody")
+                }
+            }
+        } else {
+            throw UnknownException("HTTP error $code: $errorBody")
+        }
+    } catch (e: IOException) {
+        throw NetworkException("Network error: ${e.message}")
+    } catch (e: Exception) {
+        throw UnknownException("Unknown error during login: ${e.message}")
     }
+}
+
 
     override suspend fun loginAsGuest(): String {
         return api.getCreateGuestSession().requestToken

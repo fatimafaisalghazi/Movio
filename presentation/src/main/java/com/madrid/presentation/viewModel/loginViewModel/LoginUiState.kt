@@ -10,5 +10,8 @@ data class LoginUiState(
     val isLoading: Boolean = false
 ) {
     val canLogin: Boolean
-        get() = username.isNotBlank() && password.isNotBlank()
+        get() = username.isNotBlank() &&
+                password.isNotBlank() &&
+                !isLoading &&
+                !isGuest
 }

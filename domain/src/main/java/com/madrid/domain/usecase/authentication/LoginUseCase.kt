@@ -23,7 +23,7 @@ class LoginUseCase(
             throw e
         } catch (e: Exception) {
             throw when (e) {
-                else -> UnknownException("Wrong username or password")
+                else -> UnknownException("error during login: ${e.message ?: "Unknown error"}")
             }
         }
     }

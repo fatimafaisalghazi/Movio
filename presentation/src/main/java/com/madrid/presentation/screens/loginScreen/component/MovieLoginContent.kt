@@ -59,30 +59,22 @@ fun MovieLoginContent(
         AnimatedLoginButton(
             isLoading = state.isLoading,
             onClick = onLoginClick,
-            enabled = state.canLogin
+            text = stringResource(R.string.login),
+
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
         OrDivider()
+        AnimatedLoginButton(
+            isLoading = state.isGuest,
+            onClick = onGuestLogin,
+            buttonColor = Theme.color.surfaces.onSurfaceAt3,
+            textColor = Theme.color.surfaces.onSurface,
+            text = stringResource(R.string.continue_as_a_guest),
 
-        MovioButton(
-            onClick = {
-                onGuestLogin()
-            },
-            color = Theme.color.surfaces.onSurfaceAt3,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-        ) {
-            MovioText(
-                text = stringResource(R.string.continue_as_a_guest),
-                textStyle = Theme.textStyle.label.smallRegular14,
-                color = Theme.color.surfaces.onSurface,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
             )
-        }
+
 
         Spacer(modifier = Modifier.weight(1f))
 
