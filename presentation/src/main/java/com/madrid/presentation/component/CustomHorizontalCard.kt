@@ -4,19 +4,21 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitel
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
+import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
 import com.madrid.presentation.viewModel.shared.MediaType
 import com.madrid.presentation.viewModel.shared.MediaUiState
 
@@ -25,7 +27,7 @@ fun CustomHorizontalCard(
     primaryTextForCustomTextTitel: String,
     listOfMedia: List<MediaUiState>,
     modifier: Modifier = Modifier,
-    headerModifier: Modifier  = Modifier,
+    headerModifier: Modifier = Modifier,
     secondaryTextForCustomTextTitel: String? = null,
     endIconForCustomTextTitel: Painter? = null,
     onSeeAllClick: (() -> Unit)? = null,
@@ -33,11 +35,11 @@ fun CustomHorizontalCard(
 ) {
     Column(modifier = modifier) {
         CustomTextTitel(
+            modifier = headerModifier.padding(bottom = 12.dp),
             primaryText = primaryTextForCustomTextTitel,
             secondaryText = secondaryTextForCustomTextTitel,
             endIcon = endIconForCustomTextTitel,
             onSeeAllClick = onSeeAllClick,
-            modifier = headerModifier
         )
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -48,7 +50,7 @@ fun CustomHorizontalCard(
                 MovioVerticalCard(
                     description = media.title,
                     movieImage = media.imageUrl,
-                    rate = media.rating,
+                    rate = media.rating.take(3),
                     width = 124.dp,
                     height = 160.dp,
                     onClick = { onMediaClick(media) }
@@ -68,15 +70,19 @@ fun CustomHorizontalCardPreview() {
             title = "Inception",
             imageUrl = "https://via.placeholder.com/150",
             rating = "8.8",
-            category = "Sci-Fi"
+            category = listOf(
+                CategoryUiState(name = "Sci-Fi")
+            ),
         ),
         MediaUiState(
             id = "2",
-            mediaType = MediaType.TV_SERIES,
+            mediaType = MediaType.TV_SHOW,
             title = "Breaking Bad",
             imageUrl = "https://via.placeholder.com/150",
             rating = "9.5",
-            category = "Drama"
+            category = listOf(
+                CategoryUiState(name = "Drama")
+            ),
         ),
         MediaUiState(
             id = "3",
@@ -84,7 +90,9 @@ fun CustomHorizontalCardPreview() {
             title = "The Dark Knight",
             imageUrl = "https://via.placeholder.com/150",
             rating = "9.0",
-            category = "Action"
+            category = listOf(
+                CategoryUiState(name = "Action")
+            ),
         )
     )
 

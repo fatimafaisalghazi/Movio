@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,27 +27,26 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.TrendingMovieCard
 import com.madrid.presentation.viewModel.homeViewModel.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
+import kotlin.collections.first
 
 @Composable
 fun TrendingLayout(
     modifier: Modifier = Modifier,
-    headerModifier: Modifier  = Modifier,
+    headerModifier: Modifier = Modifier,
     trendingViewModel: HomeViewModel = koinViewModel()
 ) {
-    val trendingUiState by trendingViewModel.state.collectAsState()
+    val homeState by trendingViewModel.state.collectAsState()
     Column(
         modifier = modifier
             .fillMaxWidth()
             .background(Theme.color.surfaces.surface)
     ) {
         CustomTextTitel(
+            modifier = headerModifier.padding(bottom = 12.dp),
             primaryText = stringResource(com.madrid.presentation.R.string.trending),
             secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
             endIcon = painterResource(R.drawable.outline_alt_arrow_left),
-            modifier = headerModifier,
-            onSeeAllClick = {
-
-            }
+            onSeeAllClick = {}
         )
         Box(
             modifier = modifier
@@ -55,7 +55,7 @@ fun TrendingLayout(
                 .background(Theme.color.surfaces.surface)
         ) {
             when {
-                trendingUiState.isLoading -> {
+                homeState.isLoading -> {
                     LazyHorizontalGrid(
                         rows = GridCells.Fixed(3),
                         modifier = Modifier
@@ -70,9 +70,9 @@ fun TrendingLayout(
                     }
                 }
 
-                trendingUiState.errorMessage.isNotEmpty() -> {
+                homeState.errorMessage.isNotEmpty() -> {
                     MovioText(
-                        text = trendingUiState.errorMessage,
+                        text = homeState.errorMessage,
                         modifier = Modifier.align(Alignment.Center),
                         color = Theme.color.surfaces.onSurface,
                         textStyle = Theme.textStyle.title.mediumMedium16
@@ -89,12 +89,12 @@ fun TrendingLayout(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(horizontal = 16.dp)
                     ) {
-                        items(trendingUiState.trending.take(9)) { item ->
+                        items(homeState.allTabUiState.trending.media) { item ->
                             TrendingMovieCard(
-                                imgUrl = item.posterPath,
+                                imgUrl = item.imageUrl,
                                 movieTitle = item.title,
-                                movieCategory = item.mediaType,
-                                rating = item.voteAverage.toString(),
+                                movieCategory = item.category.first().name,
+                                rating = item.rating,
                             )
                         }
                     }

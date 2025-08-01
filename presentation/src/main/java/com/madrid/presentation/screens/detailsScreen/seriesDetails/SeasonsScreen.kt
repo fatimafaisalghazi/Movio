@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.TopAppBar
+import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
@@ -52,7 +54,7 @@ fun SeasonsScreenContent(
             .padding(horizontal = 16.dp),
     ) {
         TopAppBar(
-            text = "Current Seasons",
+            text = stringResource(R.string.current_seasons),
             secondIcon = null,
             thirdIcon = null,
             onFirstIconClick = { onClickBack() },

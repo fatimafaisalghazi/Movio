@@ -16,7 +16,8 @@ data class SearchScreenState(
         val forYouMovies: List<MovieUiState> = emptyList(),
         val exploreMoreMovies: Flow<PagingData<MovieUiState>> = flow {},
         val searchResults: Flow<PagingData<MovieUiState>> = flow {},
-        val isError: Boolean = false,
+        val searchQuery : String = "",
+        val isError: Boolean = false ,
         val isLoading: Boolean = false,
         val refreshState: Boolean = false,
         val errorMessage: String? = null
@@ -43,7 +44,7 @@ data class SearchScreenState(
 
     data class SeriesUiState(
         val id: String = "",
-        val mediaType: MediaType = MediaType.TV_SERIES,
+        val mediaType: MediaType = MediaType.TV_SHOW,
         val title: String = "",
         val imageUrl: String = "",
         val rating: String = "",

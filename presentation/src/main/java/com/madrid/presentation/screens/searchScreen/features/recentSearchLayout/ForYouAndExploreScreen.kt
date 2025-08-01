@@ -83,6 +83,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
                     CustomTextTitel(
+                        modifier = Modifier.padding(top = 24.dp),
                         primaryText = stringResource(com.madrid.presentation.R.string.for_u),
                         secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
                         endIcon = painterResource(R.drawable.outline_alt_arrow_left),
@@ -140,7 +141,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         MovioText(
-                            text = "Internet is not available",
+                            text = stringResource(com.madrid.presentation.R.string.internet_is_not_available),
                             textStyle = Theme.textStyle.title.mediumMedium16,
                             color = Theme.color.surfaces.onSurface,
                             textAlign = TextAlign.Center,
@@ -148,7 +149,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         MovioText(
-                            text = "Please make sure you are connected to the internet and try again.",
+                            text = stringResource(com.madrid.presentation.R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
                             textStyle = Theme.textStyle.label.smallRegular12,
                             color = Theme.color.surfaces.onSurfaceContainer,
                             textAlign = TextAlign.Center,
