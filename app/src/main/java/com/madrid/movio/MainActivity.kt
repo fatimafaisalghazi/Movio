@@ -4,22 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.navigation.MovioNavGraph
 import com.madrid.presentation.viewModel.authentication.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import javax.inject.Inject
 
-class MainActivity : ComponentActivity(), KoinComponent {
+@AndroidEntryPoint
+class MainActivity() : ComponentActivity(), KoinComponent {
 
-    val mainViewModel: MainViewModel by inject()
+    val mainViewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -39,6 +44,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {
+
     val navController = rememberNavController()
     val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
 
