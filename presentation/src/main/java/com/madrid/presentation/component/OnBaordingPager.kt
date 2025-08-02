@@ -28,10 +28,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.madrid.designSystem.component.MovioText
@@ -47,6 +50,8 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
 
     val context = LocalContext.current
     var swipeProgress by remember { mutableFloatStateOf(0f) }
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
 
     val navController = LocalNavController.current
 
@@ -100,12 +105,17 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
                         val sensitivity = 0.002f
-                        swipeProgress = (swipeProgress + delta * sensitivity).coerceIn(0f, 1f)
+                        val direction = if (isRtl) -1 else 1
+                        swipeProgress =
+                            (swipeProgress + direction * delta * sensitivity).coerceIn(0f, 1f)
                     },
                     onDragStopped = { velocity ->
+                        val forward = if (isRtl) velocity < -1000f else velocity > 1000f
+                        val backward = if (isRtl) velocity > 1000f else velocity < -1000f
+
                         swipeProgress = when {
-                            velocity > 1000f -> 1f
-                            velocity < -1000f -> 0f
+                            forward -> 1f
+                            backward -> 0f
                             swipeProgress >= 0.5f -> 1f
                             else -> 0f
                         }
@@ -116,7 +126,11 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
             Image(
                 painter = painterResource(R.drawable.pop_corn),
                 contentDescription = "onboarding",
-                modifier = Modifier.padding(start = popCornIconOffset, top = 12.dp)
+                modifier = Modifier
+                    .padding(start = popCornIconOffset, top = 12.dp)
+                    .graphicsLayer {
+                        rotationY = if (isRtl) 180f else 0f
+                    }
             )
         }
 
@@ -130,24 +144,35 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(R.drawable.onboarding_single_arrow),
             contentDescription = "onboarding",
-            modifier = Modifier.padding(top = 16.5.dp, start = 280.25.dp),
+            modifier = Modifier
+                .padding(top = 16.5.dp, start = 280.25.dp)
+                .graphicsLayer {
+                    rotationY = if (isRtl) 180f else 0f
+                },
             colorFilter = ColorFilter.tint(Theme.color.surfaces.onSurfaceAt3)
         )
         Image(
             painter = painterResource(R.drawable.onboarding_single_arrow),
             contentDescription = "onboarding",
-            modifier = Modifier.padding(top = 16.5.dp, start = 292.25.dp),
+            modifier = Modifier
+                .padding(top = 16.5.dp, start = 292.25.dp)
+                .graphicsLayer {
+                    rotationY = if (isRtl) 180f else 0f
+                },
             colorFilter = ColorFilter.tint(Theme.color.surfaces.onSurfaceAt2)
         )
         Image(
             painter = painterResource(R.drawable.onboarding_single_arrow),
             contentDescription = "onboarding",
-            modifier = Modifier.padding(top = 16.5.dp, start = 304.25.dp),
+            modifier = Modifier
+                .padding(top = 16.5.dp, start = 304.25.dp)
+                .graphicsLayer {
+                    rotationY = if (isRtl) 180f else 0f
+                },
             colorFilter = ColorFilter.tint(Theme.color.surfaces.onSurfaceAt1)
         )
     }
 }
-
 
 
 @Preview(showBackground = true, showSystemUi = true)
