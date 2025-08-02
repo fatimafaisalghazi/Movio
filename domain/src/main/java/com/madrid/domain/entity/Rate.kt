@@ -1,6 +1,12 @@
 package com.madrid.domain.entity
 
-data class Rate(
-    val rate :Double? ,
-    val id : Int
+
+data class RatedMovie(
+    val rate :Double,
+    val movie: Movie
+)
+
+data class RatedSeries(
+    val rate :Double,
+    val series: Series
 )

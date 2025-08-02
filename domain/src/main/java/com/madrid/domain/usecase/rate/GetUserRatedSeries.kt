@@ -1,11 +1,11 @@
 package com.madrid.domain.usecase.rate
 
-import com.madrid.domain.entity.Rate
+import com.madrid.domain.entity.RatedSeries
 import com.madrid.domain.repository.SeriesRateRepository
 
 class GetUserRatedSeries(
     private val seriesRateRepository: SeriesRateRepository
 ) {
-    suspend operator fun invoke(accountId:Int):List<Rate> =
+    suspend operator fun invoke(accountId:Int):List<RatedSeries> =
     seriesRateRepository.getUserSeriesRate(accountId)
 }

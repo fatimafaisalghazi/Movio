@@ -7,24 +7,20 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RatingMovieResponse(
-    @SerializedName("series_id")
-    val id: Int,
     @SerializedName("results")
     val ratedMovie: List<MovieResult>,
     @SerializedName("total_pages")
-    val totalPages: Int? = 0,
+    val totalPages: Int? = null,
     @SerializedName("total_results")
-    val totalResults: Int? = 0
+    val totalResults: Int? = null
 )
 
 @Serializable
 data class RatingSeriesResponse(
-    @SerializedName("series_id")
-    val id: Int,
     @SerializedName("results")
     val ratedSeries: List<SeriesResult>,
     @SerializedName("total_pages")
-    val totalPages: Int? = 0,
+    val totalPages: Int? = null,
     @SerializedName("total_results")
-    val totalResults: Int? = 0
+    val totalResults: Int? = null
 )

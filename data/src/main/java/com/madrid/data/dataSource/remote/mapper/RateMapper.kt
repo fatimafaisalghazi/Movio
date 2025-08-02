@@ -1,27 +1,21 @@
 package com.madrid.data.dataSource.remote.mapper
 
-import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
-import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
-import com.madrid.domain.entity.Rate
+import com.madrid.data.dataSource.remote.dto.movie.MovieResult
+import com.madrid.data.dataSource.remote.dto.series.SeriesResult
+import com.madrid.domain.entity.RatedMovie
+import com.madrid.domain.entity.RatedSeries
 
-fun RatingMovieResponse.toMovieRated(): List<Rate> {
-    return ratedMovie.mapNotNull { movie ->
-        movie.id?.let {
-            Rate(
-                id = it,
-                rate = movie.rating
-            )
-        }
-    }
+fun MovieResult.toRatedMovie(): RatedMovie {
+    return RatedMovie(
+        rate = this.rating ?: 0.0 ,
+        movie = this.toMovie()
+    )
 }
 
-fun RatingSeriesResponse.toSeriesRated():List<Rate>{
-    return ratedSeries.mapNotNull { series ->
-        series.id?.let {
-            Rate(id = it,
-                rate = series.rating
-            )
-        }
-    }
+fun SeriesResult.toRatedSeries():RatedSeries{
+    return RatedSeries(
+        rate = this.rating?: 0.0,
+        series = this.toSeries()
+    )
 }
 
