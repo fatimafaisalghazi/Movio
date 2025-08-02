@@ -34,7 +34,7 @@ val presentationModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::ReviewsScreenViewModel)
     viewModelOf(::SimilarMediaViewModel)
-    viewModelOf(::MainViewModel)
+//    viewModelOf(::MainViewModel)
     viewModel { (type: SeeAllTvShowType) ->
         val factory: SeeAllTVShowsFactory = get()
         val strategy = factory.create(type)

@@ -6,19 +6,23 @@ import com.madrid.data.repositories.remote.RemoteDataSource
 import com.madrid.domain.entity.User
 import com.madrid.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class UserRepositoryImpl(
-    private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource,
-    private val authenticationDatasource: AuthenticationDataSource
-) : UserRepository {
+class UserRepositoryImpl()
+//@Inject constructor(
+////    private val remoteDataSource: RemoteDataSource,
+////    private val localDataSource: LocalDataSource,
+////    private val authenticationDatasource: AuthenticationDataSource
+//)
+    : UserRepository {
 
     override suspend fun login(
         username: String,
         password: String
     ): Boolean {
-        val userToken = remoteDataSource.login(username, password)
-        authenticationDatasource.setAuthToken(userToken)
+//        val userToken = remoteDataSource.login(username, password)
+//        authenticationDatasource.setAuthToken(userToken)
         return true
     }
 
@@ -31,7 +35,7 @@ class UserRepositoryImpl(
     }
 
     override suspend fun logout() {
-        authenticationDatasource.clearAuthToken()
+//        authenticationDatasource.clearAuthToken()
     }
 
     override suspend fun getCurrentUser(): User? {
@@ -39,7 +43,10 @@ class UserRepositoryImpl(
     }
 
     override fun isUserLoggedIn(): Flow<Boolean> {
-        return authenticationDatasource.isUserLoggedIn()
+//        return authenticationDatasource.isUserLoggedIn()
+        return flow {
+            emit(false)
+        }
     }
 
     override suspend fun refreshToken(): Boolean {
@@ -64,8 +71,8 @@ class UserRepositoryImpl(
     }
 
     override suspend fun loginAsGuest(): Boolean {
-        val guest = remoteDataSource.loginAsGuest()
-        authenticationDatasource.setAuthToken(guest)
+//        val guest = remoteDataSource.loginAsGuest()
+//        authenticationDatasource.setAuthToken(guest)
         return true
     }
 }

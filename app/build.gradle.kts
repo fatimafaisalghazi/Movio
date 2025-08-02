@@ -15,6 +15,8 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
     jacoco
 }
 
@@ -146,5 +148,8 @@ dependencies {
 
 
     implementation(libs.androidx.datasource.preferences)
+
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
 
 }

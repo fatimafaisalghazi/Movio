@@ -20,8 +20,9 @@ import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
 import com.madrid.data.dataSource.local.table.relationship.SeriesWithGenres
 import com.madrid.data.dataSource.local.util.calculateOffset
 import com.madrid.data.repositories.local.LocalDataSource
+import javax.inject.Inject
 
-class LocalDataSourceImpl(
+class LocalDataSourceImpl@Inject constructor(
     private val movieDao: MovieDao,
     private val seriesDao: SeriesDao,
     private val artistDao: ArtistDao,

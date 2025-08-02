@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.ksp) apply false
+    id("com.google.dagger.hilt.android") version "2.51.1" apply false
 }
 
 // Custom clean task to handle file system issues
