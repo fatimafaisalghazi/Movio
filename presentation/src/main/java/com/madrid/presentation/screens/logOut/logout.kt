@@ -4,12 +4,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -58,7 +62,6 @@ private fun LogoutConfirmationContent(
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, bottom = 32.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Box(
             modifier = Modifier
@@ -67,8 +70,8 @@ private fun LogoutConfirmationContent(
         ) {
             MovioIcon(
                 painter = painterResource(R.drawable.library_main_icon),
-                contentDescription = "Logout",
-                modifier = Modifier.size(24.dp)
+                contentDescription = "App Icon",
+                modifier = Modifier.size(60.dp , 66.dp)
             )
         }
 
@@ -79,12 +82,12 @@ private fun LogoutConfirmationContent(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             MovioText(
+                modifier = Modifier.height(19.dp),
                 text = "Confirm Logout",
                 textStyle = Theme.textStyle.title.mediumMedium16,
                 color = Theme.color.surfaces.onSurface,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(8.dp))
             MovioText(
                 text = "You'll lose access to your library, favorites, and history until you sign back in.",
                 textStyle = Theme.textStyle.label.smallRegular12,
@@ -93,22 +96,28 @@ private fun LogoutConfirmationContent(
                 modifier = Modifier.height(30.dp)
             )
         }
-
         Spacer(modifier = Modifier.height(40.dp))
 
         MovioButton(
             onClick = onLogoutConfirm,
             modifier = Modifier
-                .background(Theme.color.brand.primary)
-                .fillMaxWidth()
+                .width(328.dp)
                 .height(48.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(Theme.color.brand.primary),
         ) {
-            MovioText(
-                text = "Logout",
-                textStyle = Theme.textStyle.body.mediumMedium12,
-                color = Color.White
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                MovioText(
+                    text = "Logout",
+                    textStyle = Theme.textStyle.label.mediumMedium14,
+                    color = Color.White
+                )
+            }
         }
+
     }
 }
 
