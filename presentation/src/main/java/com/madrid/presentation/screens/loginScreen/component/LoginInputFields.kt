@@ -12,17 +12,16 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.textInputField.BasicTextInputField
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.viewModel.loginViewModel.LoginError
 import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
 
 @Composable
- fun  LoginInputFields(modifier: Modifier = Modifier,
-                              state: LoginUiState,
-                              onUsernameChange: (String) -> Unit,
-                              onPasswordChange: (String) -> Unit,
-                              onTogglePassword: () -> Unit,
-
-                              ) {
+fun LoginInputFields(
+    modifier: Modifier = Modifier,
+    state: LoginUiState,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onTogglePassword: () -> Unit,
+) {
     Column(modifier = modifier) {
         BasicTextInputField(
             startIconPainter = painterResource(R.drawable.profile_circle),
@@ -30,11 +29,10 @@ import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
             value = state.username,
             onValueChange = onUsernameChange,
             modifier = Modifier.padding(bottom = 12.dp),
-            isError = state.errorState is LoginError.EmptyFields &&
-                    state.errorState.usernameEmpty,
-            endIconPainter = null,
-
-            errorBorderBrush = Theme.color.gradients.errorBorderGradient
+            isError = state.errorMessage != null &&
+                    (state.errorMessage.contains("Username")),
+            errorBorderBrush = Theme.color.gradients.errorBorderGradient,
+            endIconPainter = null
         )
 
         BasicTextInputField(
@@ -49,9 +47,9 @@ import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
             ),
             onClickEndIcon = onTogglePassword,
             modifier = Modifier.padding(bottom = 12.dp),
-            isError = (state.errorState is LoginError.EmptyFields &&
-                    state.errorState.passwordEmpty) ||
-                    state.errorState is LoginError.InvalidCredentials,
+            isError = state.errorMessage != null &&
+                    (state.errorMessage.contains("Password") ||
+                            state.errorMessage.contains("Invalid")),
             errorBorderBrush = Theme.color.gradients.errorBorderGradient
         )
     }

@@ -83,6 +83,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
                     CustomTextTitle(
+                        modifier = Modifier.padding(top = 24.dp),
                         primaryText = stringResource(com.madrid.presentation.R.string.for_u),
                         secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
                         endIcon = painterResource(R.drawable.outline_alt_arrow_left),
@@ -94,7 +95,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 ) {
                     LazyRow(
                         modifier = Modifier
-                            .padding(12.dp,bottom = 10.dp),
+                            .padding(bottom = 32.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         items(forYouMovies) { movie ->
@@ -140,7 +141,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         horizontalAlignment = CenterHorizontally
                     ) {
                         MovioText(
-                            text = "Internet is not available",
+                            text = stringResource(com.madrid.presentation.R.string.internet_is_not_available),
                             textStyle = Theme.textStyle.title.mediumMedium16,
                             color = Theme.color.surfaces.onSurface,
                             textAlign = TextAlign.Center,
@@ -148,7 +149,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         MovioText(
-                            text = "Please make sure you are connected to the internet and try again.",
+                            text = stringResource(com.madrid.presentation.R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
                             textStyle = Theme.textStyle.label.smallRegular12,
                             color = Theme.color.surfaces.onSurfaceContainer,
                             textAlign = TextAlign.Center,
@@ -202,6 +203,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 items(
                     count = exploreMoreMovies.itemCount,
                 ) { index ->
+
                     MovioVerticalCard(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -209,6 +211,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         movieImage = exploreMoreMovies[index]!!.imageUrl,
                         rate = exploreMoreMovies[index]!!.rating,
                         height = 222.dp,
+                        gap = 12.dp,
                         onClick = {
                             onMovieClick(exploreMoreMovies[index]!!)
                         }

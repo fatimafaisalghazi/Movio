@@ -10,7 +10,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.cachedIn
-import androidx.paging.map
+import androidx.paging.flatMap
 import com.madrid.domain.usecase.search.AddRecentSearchUseCase
 import com.madrid.domain.usecase.search.ClearAllRecentSearchesUseCase
 import com.madrid.domain.usecase.search.GetArtistsByQueryUseCase
@@ -61,6 +61,17 @@ class SearchViewModel(
         )
     }
 
+    fun updateSearchQuery(
+        newSearchQuery : String ,
+    ){
+        updateState {searchScreenState->
+            searchScreenState.copy(
+                searchUiState = searchScreenState.searchUiState.copy(
+                    searchQuery = newSearchQuery
+                )
+            )
+        }
+    }
     fun addRecentSearch(recentSearch: String) {
         tryToExecute(
             function = {
@@ -135,7 +146,7 @@ class SearchViewModel(
             },
             onSuccess = { pagingFlow ->
                 val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toMovieUiState() }
+                    pagingData.flatMap { it.map { it.toMovieUiState() } }
                 }
 
                 updateState {
@@ -157,7 +168,7 @@ class SearchViewModel(
             },
             onSuccess = { pagingFlow ->
                 val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toMovieUiState() }
+                    pagingData.flatMap { it.map { it.toMovieUiState() } }
                 }
 
                 updateState { current ->
@@ -180,7 +191,7 @@ class SearchViewModel(
             },
             onSuccess = { pagingFlow ->
                 val result = pagingFlow.map { pagingData ->
-                    pagingData.map { series -> series.toSeriesUiState() }
+                    pagingData.flatMap { it.map { it.toSeriesUiState() } }
                 }
                 (::onUpdateSeriesSearch)(result)
             }
@@ -197,9 +208,10 @@ class SearchViewModel(
             },
             onSuccess = { pagingFlow ->
                 val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toMovieUiState() }
+                    pagingData.flatMap { it.map { it.toMovieUiState() } }
                 }
-                Log.d("SearchViewModel", "topResult OO: $result")
+
+                Log.d("SearchViewModel", "topResult OO: ${result.toString()}")
 
                 updateState { current ->
                     current.copy(
@@ -208,12 +220,12 @@ class SearchViewModel(
                             isLoading = false
                         ),
                         searchUiState = current.searchUiState.copy(isLoading = false)
-
                     )
                 }
             }
         )
     }
+
 
     fun artists(query: String) {
         launchPagingRequest(
@@ -222,9 +234,7 @@ class SearchViewModel(
             },
             onSuccess = { pagingFlow ->
                 val result = pagingFlow.map { pagingData ->
-                    pagingData.map { artist ->
-                        artist.toArtistUiState()
-                    }
+                    pagingData.flatMap { it.map { it.toArtistUiState() } }
                 }
 
                 updateState { current ->
@@ -234,7 +244,6 @@ class SearchViewModel(
                             isLoading = false
                         ),
                         searchUiState = current.searchUiState.copy(isLoading = false)
-
                     )
                 }
             }
@@ -305,8 +314,7 @@ class SearchViewModel(
     }
 
     fun onRefresh(
-        searchQuery: String,
-        typeOfFilterSearch: FilterPagesItem
+        typeOfFilterSearch : FilterPagesItem
     ) {
         updateState { current ->
             current.copy(
@@ -317,7 +325,7 @@ class SearchViewModel(
                 )
             )
         }
-        if (searchQuery.isEmpty()) {
+        if(state.value.searchUiState.searchQuery.isEmpty() ){
             tryToExecute(
                 function = {
                     getRecommendedMovieUseCase(page = 1)
@@ -352,7 +360,7 @@ class SearchViewModel(
                 },
                 onSuccess = { pagingFlow ->
                     val result = pagingFlow.map { pagingData ->
-                        pagingData.map { it.toMovieUiState() }
+                        pagingData.flatMap { it.map { it.toMovieUiState() } }
                     }
 
                     updateState {
@@ -366,12 +374,13 @@ class SearchViewModel(
                     }
                 }
             )
-        } else {
-            when (typeOfFilterSearch) {
-                FilterPagesItem.TOP_RATED -> topResult(searchQuery)
-                FilterPagesItem.MOVIES -> searchFilteredMovies(searchQuery)
-                FilterPagesItem.SERIES -> searchSeries(searchQuery)
-                FilterPagesItem.ARTISTS -> artists(searchQuery)
+        }
+        else{
+            when(typeOfFilterSearch){
+                FilterPagesItem.TOP_RATED -> topResult(state.value.searchUiState.searchQuery)
+                FilterPagesItem.MOVIES -> searchFilteredMovies(state.value.searchUiState.searchQuery)
+                FilterPagesItem.SERIES -> searchSeries(state.value.searchUiState.searchQuery)
+                FilterPagesItem.ARTISTS -> artists(state.value.searchUiState.searchQuery)
             }
             updateState { current ->
                 current.copy(

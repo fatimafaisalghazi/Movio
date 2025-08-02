@@ -130,7 +130,7 @@ fun BasicTextInputField(
                             iconColorNotFocus
                         },
                         modifier = Modifier
-                            .padding(start = 8.dp)
+                            .padding(start = 12.dp)
                             .size(20.dp)
                             .clickable { onClickEndIcon() }
                     )

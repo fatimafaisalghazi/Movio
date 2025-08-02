@@ -16,7 +16,6 @@ import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
-import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -41,6 +40,7 @@ class SeriesDetailsViewModel(
                 updateState {
                     it.copy(
                         seriesId = series.id,
+                        isLoading = false,
                         topImageUrl = series.imageUrl,
                         seriesName = series.title,
                         rate = RateFormatter.formatRate(series.rate), // Format rate here
@@ -57,7 +57,9 @@ class SeriesDetailsViewModel(
                 loadSimilarSeries()
                 loadSeasonEpisodes(if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber)
             },
-            onError = {},
+            onError = {
+                updateState { it.copy(isLoading = true) }
+            },
         )
     }
 
@@ -84,7 +86,9 @@ class SeriesDetailsViewModel(
                             )
                         }
                     },
-                    onError = { },
+                    onError = {
+                        updateState { it.copy(isLoading = true) }
+                    },
                 )
             }
         }
@@ -111,7 +115,9 @@ class SeriesDetailsViewModel(
                     )
                 }
             },
-            onError = { },
+            onError = {
+                updateState { it.copy(isLoading = true) }
+            },
         )
     }
 
@@ -147,6 +153,7 @@ class SeriesDetailsViewModel(
             },
             onError = { e ->
                 Log.d("TAG lol", "loadCastData: ${e.message}")
+                updateState { it.copy(isLoading = true) }
             },
         )
     }
@@ -165,6 +172,7 @@ class SeriesDetailsViewModel(
             },
             onError = { e ->
                 Log.d("TAG lol", "loadCastData: ${e.message}")
+                updateState { it.copy(isLoading = true) }
             },
         )
     }
@@ -185,7 +193,7 @@ fun Review.toUiState(): ReviewUiState {
         reviewerName = this.reviewerName,
         reviewerImageUrl = this.reviewerPhotoUrl,
         rating = this.rate.toFloat(),
-        date = formatDateOfBirth(this.date),
+        date = (this.date),
         content = this.comment
     )
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="similar_movies">similar movies</string>
+    <string name="similar_movies">الأفلام المشابهة</string>
     <string name="internet_is_not_available">لا يوجد انترنت</string>
     <string name="no_results_found">لا توجد نتائج</string>//لم نعثر على أي شيء يطابق بحثك. حاول التحقق من التهجئة أو استكشف شيئًا آخر!
     <string name="we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else">لم نعثر على أي شيء يطابق بحثك. حاول التحقق من التهجئة أو استكشف شيئًا آخر!</string>
@@ -9,6 +9,25 @@
     <string name="loading_actor_details">جار تحميل تفاصيل الممثل...</string>
     <string name="current_seasons">الموسم الحالي </string>
     <string name="similar_series">مسلسلات مشابهة</string>
+    <string name="add_to_list">الإضافة الى مجموعة</string>
+    <string name="actioniconcolor">لون ايقونة </string>
+    <string name="play">تشغيل</string>
+    <string name="rate_it">قيم</string>
+    <string name="login">سجل الدخول</string>
+    <string name="forgot_password">ناسي الباسوورد ؟</string>
+    <string name="welcome_back">أهلا بعودتك</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="password">كلمة السر</string>
+    <string name="or">أو</string>
+    <string name="don_t_have_an_account">ألا تملك حساب ؟</string>
+    <string name="sign_up">انشاء حساب</string>
+    <string name="more_screen">المزيد</string>
+    <string name="episodes_count">الحلقات %1$d</string>
+    <string name="season_count">%1$d المواسم</string>
+    <string name="library_screen">المكتبة</string>
+    <string name="episode_number">الحلقة %1$d</string>
+    <string name="episode_duration">%1$d د</string>
+
     <string name="current_episode">حلقة %1$s</string>
     <string name="moive_image">صورة الحلقة</string>
     <string name="bold_video_circle">ايقونة بدء الفلم</string>

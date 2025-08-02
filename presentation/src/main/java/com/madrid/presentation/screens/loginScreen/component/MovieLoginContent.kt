@@ -1,5 +1,6 @@
 package com.madrid.presentation.screens.loginScreen.component
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,12 +29,11 @@ fun MovieLoginContent(
     onForgotPasswordClick: () -> Unit,
     onSignUpClick: () -> Unit,
     onGuestLogin: () -> Unit,
-    onNavigateToLogin:() -> Unit = {},
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Theme.color.surfaces.surface)
+            .background( Theme.color.surfaces.surface)
 
             .padding(horizontal = 16.dp, vertical = 32.dp)
     ) {
@@ -66,7 +66,9 @@ fun MovieLoginContent(
         OrDivider()
 
         MovioButton(
-            onClick = onGuestLogin,
+            onClick = {
+                onGuestLogin()
+            },
             color = Theme.color.surfaces.onSurfaceAt3,
             modifier = Modifier
                 .fillMaxWidth()

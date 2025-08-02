@@ -8,12 +8,12 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesResult
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResult
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesNetwork
-import com.madrid.data.dataSource.remote.dto.series.AiringTodaySeriesResult
-import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResult
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResult
+import com.madrid.data.dataSource.remote.dto.series.AiringTodaySeriesResult
+import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResults
 import com.madrid.domain.entity.Artist

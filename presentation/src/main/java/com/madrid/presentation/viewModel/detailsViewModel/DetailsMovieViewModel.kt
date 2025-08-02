@@ -12,9 +12,9 @@ import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
-import com.madrid.presentation.viewModel.shared.formatDuration
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.annotation.KoinViewModel
 
@@ -52,7 +52,8 @@ class DetailsMovieViewModel(
                         rate = RateFormatter.formatRate(movie.rate),
                         movieDuration = formatDuration(movie.movieDuration),
                         description = movie.description,
-                        genreMovie = movie.genre.map { it.toString() },
+                        genreMovie = movie.genre.map { it.name },
+                        isLoading = false
                     )
                 }
 
@@ -60,7 +61,7 @@ class DetailsMovieViewModel(
                 loadSimilarMovies()
                 loadReviews()
             },
-            onError = { error -> },
+            onError = { error -> updateState { it.copy(isLoading = true) }},
             scope = viewModelScope,
             dispatcher = Dispatchers.IO
         )
@@ -116,6 +117,7 @@ class DetailsMovieViewModel(
     }
 
     private fun loadReviews() {
+        Log.d("REVIEW_DEBUG", ">>> loadReviews started <<<")
         tryToExecute(
             function = {
                 getMovieReviewsUseCase(args.movieId)
@@ -126,7 +128,7 @@ class DetailsMovieViewModel(
                         reviewerName = review.reviewerName,
                         reviewerImageUrl = "",
                         rating = review.rate.toFloat(),
-                        date = formatDateKotlinx(review.date),
+                        date = review.date,
                         content = review.comment,
                     )
                 }
@@ -142,5 +144,15 @@ class DetailsMovieViewModel(
             scope = viewModelScope,
             dispatcher = Dispatchers.IO
         )
+    }
+
+    fun onClickLoveIcon(
+
+    ){
+        updateState {
+            it.copy(
+                isLoved = !it.isLoved
+            )
+        }
     }
 }

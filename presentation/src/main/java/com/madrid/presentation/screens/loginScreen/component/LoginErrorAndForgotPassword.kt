@@ -18,11 +18,11 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.viewModel.loginViewModel.LoginError
 import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
 
+
 @Composable
-fun  LoginErrorAndForgotPassword(
+fun LoginErrorAndForgotPassword(
     modifier: Modifier = Modifier,
     state: LoginUiState,
     onForgotPasswordClick: () -> Unit,
@@ -34,24 +34,7 @@ fun  LoginErrorAndForgotPassword(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-
-        val errorMessage = buildString {
-            when (val error = state.errorState) {
-                is LoginError.EmptyFields -> {
-                    if (error.usernameEmpty) append(stringResource(com.madrid.presentation.R.string.username_is_required))
-                    if (error.usernameEmpty && error.passwordEmpty) append(", ")
-                    if (error.passwordEmpty) append(stringResource(com.madrid.presentation.R.string.password_is_required))
-                }
-
-                is LoginError.InvalidCredentials -> append(stringResource(com.madrid.presentation.R.string.invalid_username_or_password))
-                is LoginError.AccountLocked -> append(stringResource(com.madrid.presentation.R.string.account_locked_contact_support))
-                is LoginError.NetworkError -> append(stringResource(com.madrid.presentation.R.string.network_error_try_again))
-                is LoginError.GenericError -> append(error.message)
-                else -> {}
-            }
-        }
-
-        if (errorMessage.isNotEmpty()) {
+        if (state.errorMessage != null) {
             MovioIcon(
                 painterResource(R.drawable.info_circle),
                 tint = Theme.color.system.onError,
@@ -60,7 +43,7 @@ fun  LoginErrorAndForgotPassword(
             )
 
             MovioText(
-                text = errorMessage,
+                text = state.errorMessage,
                 textStyle = Theme.textStyle.label.mediumMedium12,
                 color = Theme.color.system.onError,
                 maxLines = 2,
@@ -83,5 +66,4 @@ fun  LoginErrorAndForgotPassword(
             )
         )
     }
-
 }
