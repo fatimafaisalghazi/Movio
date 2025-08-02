@@ -3,8 +3,8 @@ package com.madrid.presentation.viewModel.moreViewModel
 interface MoreInteractionListener {
     fun onThemeClick(isEnabled: Boolean)
     fun setDarkMode(isEnabled: Boolean)
-    fun onLanguageClick()
+    fun onLanguageBtnClick()
     fun setLanguage(language: String)
-    fun onLogoutClick()
+    fun onLogoutBtnClick()
     fun logout()
 }

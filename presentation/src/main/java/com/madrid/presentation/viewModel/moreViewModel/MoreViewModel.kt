@@ -43,7 +43,7 @@ class MoreViewModel() :
         TODO("Not yet implemented")
     }
 
-    override fun onLanguageClick() {
+    override fun onLanguageBtnClick() {
         TODO("Not yet implemented")
     }
 
@@ -55,7 +55,7 @@ class MoreViewModel() :
         TODO("Not yet implemented")
     }
 
-    override fun onLogoutClick() {
+    override fun onLogoutBtnClick() {
         TODO("Not yet implemented")
     }
 
