@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioText
@@ -40,12 +41,12 @@ fun OnBoardingScreen() {
         Column(Modifier.padding(horizontal = 16.dp)) {
             Row() {
                 MovioText(
-                    text = "Open ",
+                    text = stringResource(R.string.open),
                     textStyle = Theme.textStyle.display.mediumMedium20,
                     color = Theme.color.surfaces.onSurface
                 )
                 MovioText(
-                    text = "Movio",
+                    text = stringResource(R.string.movio),
                     textStyle = Theme.textStyle.headline.largeBold18,
                     brush = Brush.verticalGradient(
                         colors = listOf( Color(0xFFEBE6FE),Color(0xFF7C5DF6))
@@ -53,20 +54,22 @@ fun OnBoardingScreen() {
                 )
             }
             MovioText(
-                text = "and let the noise fade away",
+                text = stringResource(R.string.and_let_the_noise_fade_away),
                 textStyle = Theme.textStyle.display.mediumMedium20,
                 color = Theme.color.surfaces.onSurface
             )
             Spacer(Modifier.height(12.dp))
             MovioText(
-                text = "Swipe, pick, dive in… and be the star of the scene.",
+                text = stringResource(R.string.swipe_pick_dive_in_and_be_the_star_of_the_scene),
                 textStyle = Theme.textStyle.label.smallRegular12,
                 color = Theme.color.surfaces.onSurfaceContainer
             )
 
             Spacer(Modifier.weight(1f))
             Column(Modifier.fillMaxWidth()) {
-                OnBoardingPager(modifier = Modifier.padding(bottom = 80.dp).align(Alignment.CenterHorizontally))
+                OnBoardingPager(modifier = Modifier
+                    .padding(bottom = 80.dp)
+                    .align(Alignment.CenterHorizontally))
 
             }
 
