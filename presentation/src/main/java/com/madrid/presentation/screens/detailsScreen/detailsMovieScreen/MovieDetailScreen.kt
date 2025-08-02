@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.component.BottomSheet.AddToListBottomSheetContent
 import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
@@ -33,6 +34,7 @@ import com.madrid.presentation.screens.detailsScreen.seriesDetails.toReviewScree
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
 import com.madrid.presentation.viewModel.detailsViewModel.DetailsMovieViewModel
+import kotlinx.serialization.json.JsonNull.content
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -91,7 +93,9 @@ fun MovieDetailsScreen(
                 BottomMediaActions(
                     onRateClick = {},
                     onPlayClick = {},
-                    onAddToListClick = {},
+                    onAddToListClick = {
+                        viewModel.showAddToListBottomSheet()
+                    },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 

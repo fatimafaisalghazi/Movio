@@ -1,6 +1,5 @@
 package com.madrid.designSystem.component.BottomSheet
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,10 +16,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +34,7 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 data class UserList(
@@ -64,7 +66,7 @@ fun UserListItem(
         MovioText(
             text = userList.name,
             textStyle = MaterialTheme.typography.bodyLarge,
-            color = Color.White, 
+            color = Color.White,
             modifier = Modifier.weight(1f)
         )
 
@@ -74,11 +76,10 @@ fun UserListItem(
         ) {
             when {
                 userList.isLoading -> {
-                    MovioIcon(
-                        painter = painterResource(id = R.drawable.loading),
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
                     )
                 }
 
@@ -91,7 +92,7 @@ fun UserListItem(
                     ) {
                         MovioIcon(
                             painter = painterResource(id = R.drawable.bold_check_circle),
-                            contentDescription = null,
+                            contentDescription = "Selected",
                             tint = Color(0xFF8B5CF6),
                             modifier = Modifier.size(40.dp)
                         )
@@ -113,8 +114,8 @@ fun UserListItem(
                         MovioIcon(
                             painter = painterResource(id = R.drawable.add),
                             tint = Theme.color.surfaces.onSurfaceContainer,
-                            contentDescription = null,
-                            modifier = Modifier.size(40.dp)
+                            contentDescription = "Add to list",
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                 }
@@ -144,13 +145,14 @@ fun CreateNewListItem(
             modifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape),
+            contentAlignment = Alignment.Center
         ) {
             MovioIcon(
                 painter = painterResource(id = R.drawable.add),
-            contentDescription = null,
-            tint = Color.White,
-                modifier = Modifier.size(40.dp)
-        )
+                contentDescription = "Create new list",
+                tint = Color.White,
+                modifier = Modifier.size(24.dp)
+            )
         }
         MovioText(
             text = "Create a new list",
@@ -165,10 +167,11 @@ fun AddToListBottomSheetContent(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit = {},
     onListCreated: () -> Unit,
-    initialUserLists: List<UserList>,
+    initialUserLists: List<Any>,
     onSelectionChanged: ((UserList, Boolean) -> Unit)? = null
 ) {
     val userLists = remember { mutableStateListOf(*initialUserLists.toTypedArray()) }
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = modifier
@@ -183,6 +186,7 @@ fun AddToListBottomSheetContent(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
+
         if (userLists.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
@@ -190,22 +194,39 @@ fun AddToListBottomSheetContent(
             ) {
                 items(userLists) { userList ->
                     UserListItem(
-                        userList = userList,
+                        userList = if (userList is UserList) userList else UserList(
+                            id = "unknown",
+                            name = "Unknown List",
+                            isSelected = false,
+                            isLoading = false
+                        ),
                         onToggleSelection = { toggledList ->
                             val index = userLists.indexOf(toggledList)
                             if (index != -1 && !toggledList.isLoading) {
+                                // Set loading state
                                 userLists[index] = toggledList.copy(isLoading = true)
-                                kotlinx.coroutines.GlobalScope.launch {
-                                    kotlinx.coroutines.delay(1500)
-                                    val newSelectionState = !toggledList.isSelected
-                                    userLists[index] = toggledList.copy(
-                                        isSelected = newSelectionState,
-                                        isLoading = false
-                                    )
 
-                                    onSelectionChanged?.invoke(toggledList, newSelectionState)
+                                // Use proper coroutine scope instead of GlobalScope
+                                coroutineScope.launch {
+                                    try {
+                                        // Simulate network call
+                                        delay(1500)
 
-                                    println("${toggledList.name} is now ${if (newSelectionState) "selected" else "deselected"}")
+                                        val newSelectionState = !toggledList.isSelected
+                                        userLists[index] = toggledList.copy(
+                                            isSelected = newSelectionState,
+                                            isLoading = false
+                                        )
+
+                                        // Notify parent about selection change
+                                        onSelectionChanged?.invoke(toggledList, newSelectionState)
+
+                                        println("${toggledList.name} is now ${if (newSelectionState) "selected" else "deselected"}")
+                                    } catch (e: Exception) {
+                                        // Handle error case
+                                        userLists[index] = toggledList.copy(isLoading = false)
+                                        println("Error updating list: ${e.message}")
+                                    }
                                 }
                             }
                         }
@@ -216,7 +237,7 @@ fun AddToListBottomSheetContent(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true, showSystemUi = true , backgroundColor = 0xFF1A1B23)
 @Composable
 fun PreviewAddToListBottomSheetContent() {
     Box(
