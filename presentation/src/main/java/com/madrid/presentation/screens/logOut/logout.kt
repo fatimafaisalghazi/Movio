@@ -4,11 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -56,83 +55,58 @@ private fun LogoutConfirmationContent(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
+            .padding(start = 16.dp, end = 16.dp, bottom = 32.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(80.dp)
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            Color(0xFF8B5CF6).copy(alpha = 0.2f),
-                            Color(0xFF8B5CF6).copy(alpha = 0.1f),
-                            Color.Transparent
-                        ),
-                        radius = 80f
-                    ),
-                    shape = CircleShape
-                ),
+                .size(60.dp, 66.dp),
             contentAlignment = Alignment.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .background(
-                        brush = Brush.linearGradient(
-                            colors = listOf(
-                                Color(0xFF8B5CF6),
-                                Color(0xFF7C3AED)
-                            )
-                        ),
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                MovioIcon(
-                    painter = painterResource(R.drawable.library_main_icon),
-                    contentDescription = "Logout",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            MovioText(
-                text = "Confirm Logout",
-                textStyle = Theme.textStyle.title.mediumMedium16,
-                color = Theme.color.surfaces.onSurface,
-                textAlign = TextAlign.Center
-            )
-
-            MovioText(
-                text = "You'll lose access to your library, favorites, and history until you sign back in.",
-                textStyle = Theme.textStyle.title.mediumMedium16,
-                color = Theme.color.surfaces.onSurfaceContainer,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-        }
-
-        MovioButton(
-            onClick = onLogoutConfirm,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-        ) {
-            MovioText(
-                text = "Logout",
-                textStyle = Theme.textStyle.body.mediumMedium12,
-                color = Color.White
+            MovioIcon(
+                painter = painterResource(R.drawable.library_main_icon),
+                contentDescription = "Logout",
+                modifier = Modifier.size(24.dp)
             )
         }
     }
+    Spacer(modifier = Modifier.height(16.dp))
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        MovioText(
+            text = "Confirm Logout",
+            textStyle = Theme.textStyle.title.mediumMedium16,
+            color = Theme.color.surfaces.onSurface,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        MovioText(
+            text = "You'll lose access to your library, favorites, and history until you sign back in.",
+            textStyle = Theme.textStyle.label.smallRegular12,
+            color = Theme.color.surfaces.onSurfaceContainer,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.height(30.dp)
+        )
+    }
+    Spacer(modifier = Modifier.height(40.dp))
+    MovioButton(
+        onClick = onLogoutConfirm,
+        modifier = Modifier
+            .background(Theme.color.brand.primary)
+            .fillMaxWidth()
+            .height(48.dp)
+    ) {
+        MovioText(
+            text = "Logout",
+            textStyle = Theme.textStyle.body.mediumMedium12,
+            color = Color.White
+        )
+    }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -142,8 +116,8 @@ fun LogoutConfirmationBottomSheetPreview() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(600.dp)
-            .background(Color(0xFF1A1B23))
+            .height(291.dp)
+            .background(Theme.color.surfaces.surface)
     ) {
         LogoutConfirmationBottomSheet(
             isVisible = showBottomSheet,
