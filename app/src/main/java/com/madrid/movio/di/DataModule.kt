@@ -3,6 +3,7 @@ package com.madrid.movio.di
 import com.madrid.data.dataSource.encrypted.AuthenticationDatastoreImpl
 import com.madrid.data.dataSource.local.LocalDataSourceImpl
 import com.madrid.data.dataSource.local.database.MovioDatabase
+import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.repositories.ArtistRepositoryImpl
 import com.madrid.data.repositories.MovieRepositoryImpl
 import com.madrid.data.repositories.SearchRepositoryImpl
@@ -10,9 +11,11 @@ import com.madrid.data.repositories.SeriesRepositoryImpl
 import com.madrid.data.repositories.UserRepositoryImpl
 import com.madrid.data.repositories.datasource.AuthenticationDataSource
 import com.madrid.data.repositories.local.LocalDataSource
+import com.madrid.data.repositories.remote.rateRepositoryImpl.MovieRateRepositoryImpl
 import com.madrid.detectImageContent.GetImageBitmap
 import com.madrid.detectImageContent.SensitiveContentDetection
 import com.madrid.domain.repository.ArtistRepository
+import com.madrid.domain.repository.MovieRateRepository
 import com.madrid.domain.repository.MovieRepository
 import com.madrid.domain.repository.SearchRepository
 import com.madrid.domain.repository.SeriesRepository
@@ -37,4 +40,6 @@ val dataModule = module {
     single { SensitiveContentDetection(get()) }
     single<ArtistRepository> { ArtistRepositoryImpl(get()) }
     single<UserRepository> { UserRepositoryImpl(get(), get(), get()) }
+    single<MovieRateRepository> { MovieRateRepositoryImpl(get(), get()) }
+    single<SeriesRepository> { SeriesRepositoryImpl(get(), get()) }
 }

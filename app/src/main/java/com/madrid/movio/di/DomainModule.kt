@@ -40,6 +40,8 @@ import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.domain.usecase.series.GetSeriesTrailersUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.domain.usecase.series.GetTopRatedSeriesUseCase
+import com.madrid.domain.usecase.rate.GetUserRatedMovie
+import com.madrid.domain.usecase.rate.GetUserRatedSeries
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.dsl.singleOf
@@ -99,6 +101,10 @@ val domainModule = module {
     singleOf(::GetRecommendedSeriesUseCase)
     singleOf(::GetAiringTodaySeriesUseCase)
     singleOf(::GetOnAirSeriesUseCase)
+
+    singleOf(::GetUserRatedMovie)
+    singleOf(::GetUserRatedSeries)
+
 
     // user
     singleOf(::LoginUseCase)
