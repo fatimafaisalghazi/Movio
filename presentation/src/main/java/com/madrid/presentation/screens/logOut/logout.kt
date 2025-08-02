@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -70,55 +71,80 @@ private fun LogoutConfirmationContent(
                 modifier = Modifier.size(24.dp)
             )
         }
-    }
-    Spacer(modifier = Modifier.height(16.dp))
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        MovioText(
-            text = "Confirm Logout",
-            textStyle = Theme.textStyle.title.mediumMedium16,
-            color = Theme.color.surfaces.onSurface,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        MovioText(
-            text = "You'll lose access to your library, favorites, and history until you sign back in.",
-            textStyle = Theme.textStyle.label.smallRegular12,
-            color = Theme.color.surfaces.onSurfaceContainer,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.height(30.dp)
-        )
-    }
-    Spacer(modifier = Modifier.height(40.dp))
-    MovioButton(
-        onClick = onLogoutConfirm,
-        modifier = Modifier
-            .background(Theme.color.brand.primary)
-            .fillMaxWidth()
-            .height(48.dp)
-    ) {
-        MovioText(
-            text = "Logout",
-            textStyle = Theme.textStyle.body.mediumMedium12,
-            color = Color.White
-        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            MovioText(
+                text = "Confirm Logout",
+                textStyle = Theme.textStyle.title.mediumMedium16,
+                color = Theme.color.surfaces.onSurface,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            MovioText(
+                text = "You'll lose access to your library, favorites, and history until you sign back in.",
+                textStyle = Theme.textStyle.label.smallRegular12,
+                color = Theme.color.surfaces.onSurfaceContainer,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.height(30.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        MovioButton(
+            onClick = onLogoutConfirm,
+            modifier = Modifier
+                .background(Theme.color.brand.primary)
+                .fillMaxWidth()
+                .height(48.dp)
+        ) {
+            MovioText(
+                text = "Logout",
+                textStyle = Theme.textStyle.body.mediumMedium12,
+                color = Color.White
+            )
+        }
     }
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LogoutConfirmationBottomSheetPreview() {
-    var showBottomSheet by remember { mutableStateOf(true) }
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(291.dp)
+            .fillMaxSize()
             .background(Theme.color.surfaces.surface)
     ) {
+        // Test button to open the bottom sheet
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            MovioButton(
+                onClick = { showBottomSheet = true },
+                modifier = Modifier
+                    .background(Theme.color.brand.primary)
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                MovioText(
+                    text = "Open Logout Bottom Sheet",
+                    textStyle = Theme.textStyle.body.mediumMedium12,
+                    color = Color.White
+                )
+            }
+        }
+
         LogoutConfirmationBottomSheet(
             isVisible = showBottomSheet,
             onDismiss = { showBottomSheet = false },
