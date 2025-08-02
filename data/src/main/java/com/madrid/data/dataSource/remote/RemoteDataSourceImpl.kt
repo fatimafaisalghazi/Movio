@@ -12,6 +12,8 @@ import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
@@ -189,6 +191,14 @@ class RemoteDataSourceImpl(
 
     override suspend fun loginAsGuest(): String {
         return api.getCreateGuestSession().requestToken
+    }
+
+    override suspend fun getUserRatingForMovie(acountId: Int): RatingMovieResponse {
+        return api.getUserRatingForMovie(acountId)
+    }
+
+    override suspend fun getUserRatingForSeries(acountId: Int): RatingSeriesResponse {
+        return api.getUserRatingForSeries(acountId)
     }
 
 }

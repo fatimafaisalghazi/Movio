@@ -10,6 +10,8 @@ import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
@@ -71,4 +73,6 @@ interface RemoteDataSource {
     suspend fun loginAsGuest(): String
     // endregion
 
+    suspend fun getUserRatingForMovie(acountId:Int):RatingMovieResponse
+    suspend fun getUserRatingForSeries(acountId:Int):RatingSeriesResponse
 }
