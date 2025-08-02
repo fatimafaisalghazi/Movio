@@ -24,7 +24,7 @@ class MoreViewModel() :
 //        }
     }
 
-    override fun onThemeClick(isEnabled: Boolean) {
+    override fun onThemeClick() {
         TODO("Not yet implemented")
     }
 
