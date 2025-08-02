@@ -7,6 +7,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.annotation.RequiresPermission
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -59,7 +60,11 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
         if (swipeProgress == 1f) {
             delay(200)
             context.vibrateDevice()
-            navController.navigate(Destinations.AuthenticationScreen)
+            navController.navigate(Destinations.AuthenticationScreen) {
+                popUpTo(Destinations.OnBoarding) {
+                    inclusive = true
+                }
+            }
         }
     }
 
@@ -67,6 +72,7 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
     val animatedProgress by animateFloatAsState(
         targetValue = swipeProgress,
     )
+
 
     val popCornBoxWidth = lerp(
         start = 48.dp,
@@ -84,6 +90,10 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
         start = 132.dp,
         stop = 145.dp,
         fraction = animatedProgress
+    )
+
+    val textColor by animateColorAsState(
+        if (swipeProgress >= 0.5) Theme.color.brand.onPrimary else Theme.color.surfaces.onSurface
     )
 
 
@@ -138,7 +148,7 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
         MovioText(
             text = stringResource(R.string.start_now),
             textStyle = Theme.textStyle.body.mediumMedium14,
-            color = Theme.color.surfaces.onSurface,
+            color = textColor,
             modifier = Modifier.padding(top = 15.5.dp, start = textOffset),
         )
         Image(

@@ -28,6 +28,7 @@ fun MovioNavGraph(
     navController: NavHostController,
     isLoggedIn : Boolean,
     isFirstLaunch: Boolean,
+    setOnBoardingComplete: (Boolean) -> Unit = {}
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -52,7 +53,7 @@ fun MovioNavGraph(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            MovioNavHost(navController = navController, isLoggedIn = isLoggedIn, isFirstLaunch = isFirstLaunch)
+            MovioNavHost(navController = navController, isLoggedIn = isLoggedIn, isFirstLaunch = isFirstLaunch, setOnBoardingComplete = setOnBoardingComplete)
         }
 
         AnimatedVisibility(

@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.authentication
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.madrid.domain.usecase.authentication.LoginUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -21,7 +23,7 @@ class MainViewModel(
     var isLoading = mutableStateOf(true)
         private set
 
-    var isFirstLaunch = MutableStateFlow(true)
+    var isFirstLaunch = MutableStateFlow(false)
         private set
 
     init {
@@ -45,14 +47,16 @@ class MainViewModel(
     private fun isFirstLaunch() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                checkFirstLaunchUseCase().collectLatest { result ->
-                    isFirstLaunch.value = result
-                }
+                isFirstLaunch.value = checkFirstLaunchUseCase.isFirstLaunch().first()
             }
         } catch (e: Exception) {
-            isFirstLaunch.value = false
-            isFirstLaunch.value = false
+            isFirstLaunch.value = true
         }
     }
 
+    fun setOnBoardingCompleted(isCompleted: Boolean){
+        viewModelScope.launch {
+            checkFirstLaunchUseCase.setOnBoardingDone(isCompleted = isCompleted)
+        }
+    }
 }

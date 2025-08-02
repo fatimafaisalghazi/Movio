@@ -2,14 +2,18 @@ package com.madrid.presentation.screens.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,9 +31,12 @@ import com.madrid.presentation.component.OnBoardingPager
 
 @Composable
 fun OnBoardingScreen() {
-    Column(Modifier
-        .fillMaxSize()
-        .background(Theme.color.surfaces.surface)) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(Theme.color.surfaces.surface)
+            .verticalScroll(rememberScrollState())
+    ) {
         Image(
             painter = painterResource(R.drawable.onboarding),
             contentDescription = "onboarding",
@@ -51,7 +58,7 @@ fun OnBoardingScreen() {
                     text = stringResource(R.string.movio),
                     textStyle = Theme.textStyle.headline.largeBold18,
                     brush = Brush.verticalGradient(
-                        colors = listOf( Color(0xFFEBE6FE),Color(0xFF7C5DF6))
+                        colors = listOf(Color(0xFFEBE6FE), Color(0xFF7C5DF6))
                     )
                 )
             }
@@ -67,22 +74,21 @@ fun OnBoardingScreen() {
                 color = Theme.color.surfaces.onSurfaceContainer
             )
 
-            Spacer(Modifier.weight(1f))
-            Column(Modifier.fillMaxWidth()) {
-                OnBoardingPager(modifier = Modifier
-                    .padding(bottom = 80.dp)
-                    .align(Alignment.CenterHorizontally))
-
-            }
-
         }
+
+        Spacer(Modifier.weight(1f))
+        OnBoardingPager(
+            modifier = Modifier
+                .navigationBarsPadding()
+                .align(Alignment.CenterHorizontally)
+        )
 
     }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewOnBoardingScreen(){
+fun PreviewOnBoardingScreen() {
     MovioTheme {
         OnBoardingScreen()
     }
