@@ -69,4 +69,12 @@ class UserRepositoryImpl @Inject constructor(
       authenticationDatasource.setAuthToken(guest)
         return true
     }
+
+    override fun isFirstLaunch(): Flow<Boolean> {
+        return authenticationDatasource.isFirstLaunch()
+    }
+
+    override suspend fun setOnboardingCompleted(isCompleted: Boolean) {
+        return authenticationDatasource.setOnBoardingCompleted(isCompleted = isCompleted)
+    }
 }

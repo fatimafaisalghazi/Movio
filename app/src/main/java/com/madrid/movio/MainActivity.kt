@@ -1,6 +1,7 @@
 package com.madrid.movio
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +17,9 @@ import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.navigation.MovioNavGraph
 import com.madrid.presentation.viewModel.authentication.MainViewModel
+import kotlinx.coroutines.flow.first
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -32,7 +36,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             MovioTheme {
                 MainScreen(mainViewModel)
-                // AuthenticationScreen()
             }
         }
     }
@@ -42,8 +45,10 @@ fun MainScreen(
     mainViewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     val isLoggedIn by mainViewModel.isLoggedIn.collectAsStateWithLifecycle()
+    val isFirstLaunch by mainViewModel.isFirstLaunch.collectAsStateWithLifecycle()
+
     CompositionLocalProvider(LocalNavController provides navController) {
-        MovioNavGraph(navController = navController, isLoggedIn = isLoggedIn)
+        MovioNavGraph(navController = navController, isLoggedIn = isLoggedIn, isFirstLaunch = isFirstLaunch, setOnBoardingComplete = viewModel::setOnBoardingCompleted)
     }
 }
 

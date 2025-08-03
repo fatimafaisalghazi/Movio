@@ -7,4 +7,6 @@ interface UserPreferences {
     fun isUserLoggedIn(): Flow<Boolean>
     suspend fun setAuthToken(token: String)
     suspend fun clearAuthToken()
+    fun isFirstLaunch(): Flow<Boolean>
+    suspend fun setOnBoardingCompleted(isCompleted: Boolean)
 }

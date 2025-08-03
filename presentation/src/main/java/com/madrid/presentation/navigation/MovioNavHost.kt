@@ -1,5 +1,6 @@
 package com.madrid.presentation.navigation
 
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,6 +26,7 @@ import com.madrid.presentation.screens.loginScreen.AuthenticationScreen
 import com.madrid.presentation.screens.loginScreen.component.ForgotPassword
 import com.madrid.presentation.screens.loginScreen.component.WebViewScreen
 import com.madrid.presentation.screens.moreScreen.MoreScreen
+import com.madrid.presentation.screens.onboarding.OnBoardingScreen
 import com.madrid.presentation.screens.searchScreen.SearchScreen
 import com.madrid.presentation.screens.searchScreen.SeeAllForYou.SeeAllForYouScreen
 import com.madrid.presentation.viewModel.seeAll.movies.SeeAllMoviesFactory
@@ -42,15 +44,24 @@ interface StrategyFactoryEntryPoint {
     fun moviesFactory(): SeeAllMoviesFactory
     fun tvShowsFactory(): SeeAllTVShowsFactory
 }
+import kotlin.math.log
 
 @Composable
 fun MovioNavHost(
     navController: NavHostController,
-    isLoggedIn: Boolean
+    isLoggedIn: Boolean,
+    isFirstLaunch: Boolean,
+    setOnBoardingComplete: (Boolean) -> Unit = {}
 ) {
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn.not()) Destinations.AuthenticationScreen else Destinations.HomeScreen,
+        startDestination =
+            if (isFirstLaunch) {
+                setOnBoardingComplete(true)
+                Destinations.OnBoarding
+            }
+            else if (isLoggedIn.not()) Destinations.AuthenticationScreen
+            else Destinations.HomeScreen,
         enterTransition = {
             fadeIn(tween(0))
         },
@@ -65,7 +76,7 @@ fun MovioNavHost(
             //call SplashScreen()
         }
         composable<Destinations.OnBoarding> {
-            //call OnBoarding()
+            OnBoardingScreen()
         }
 
         composable<Destinations.SearchScreen> {
