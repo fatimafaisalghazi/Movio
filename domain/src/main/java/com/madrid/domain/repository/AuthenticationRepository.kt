@@ -19,4 +19,7 @@ interface AuthenticationRepository {
     suspend fun isTokenExpired(token: String?): Boolean
 
     suspend fun loginAsGuest(): Boolean
+
+    fun isFirstLaunch(): Flow<Boolean>
+    suspend fun setOnboardingCompleted(isCompleted: Boolean)
 }

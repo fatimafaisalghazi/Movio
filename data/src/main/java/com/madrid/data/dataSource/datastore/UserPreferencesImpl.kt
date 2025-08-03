@@ -8,8 +8,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.madrid.data.repositories.datasource.UserPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class UserPreferencesImpl(
+class UserPreferencesImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : UserPreferences {
 
@@ -39,6 +40,18 @@ class UserPreferencesImpl(
         }
     }
 
+    override fun isFirstLaunch(): Flow<Boolean> {
+        return dataStore.data.map { prefs ->
+            prefs[ONBOARDING_COMPLETED]?.not() ?: true
+        }
+    }
+
+    override suspend fun setOnBoardingCompleted(isCompleted: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[ONBOARDING_COMPLETED] = isCompleted
+        }
+    }
+
     override fun getAppDarkModeOn(): Flow<Boolean> {
         return dataStore.data.map { settings ->
             settings[DARK_MODE] == true
@@ -65,6 +78,7 @@ class UserPreferencesImpl(
 
     companion object {
         val TOKEN = stringPreferencesKey("token") //TODO: Move to secrets
+        val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         val DARK_MODE = booleanPreferencesKey("dark_mode")
         val LANGUAGE = stringPreferencesKey("language")
     }

@@ -1,17 +1,16 @@
 package com.madrid.domain.usecase.authentication
 
-
+import com.madrid.domain.exceptions.InvalidCredentialsException
+import com.madrid.domain.exceptions.MovioException
 import com.madrid.domain.exceptions.UnknownException
 import com.madrid.domain.exceptions.ValidationException
 import com.madrid.domain.repository.AuthenticationRepository
-import com.madrid.domain.exceptions.InvalidCredentialsException
-import com.madrid.domain.exceptions.MovioException
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class LoginUseCase(
+class LoginUseCase @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ) {
-
     suspend fun execute(username: String, password: String): Boolean {
         try {
             validateCredentials(username, password)

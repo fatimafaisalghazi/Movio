@@ -8,6 +8,9 @@ interface UserPreferences {
     suspend fun setAuthToken(token: String)
     suspend fun clearAuthToken()
 
+    fun isFirstLaunch(): Flow<Boolean>
+    suspend fun setOnBoardingCompleted(isCompleted: Boolean)
+
     fun getAppDarkModeOn(): Flow<Boolean>
     suspend fun setAppDarkModeOn(isDarkMode: Boolean)
 
