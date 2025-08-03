@@ -21,6 +21,6 @@ fun NoHistoryScreen() {
 
 @Preview(showBackground = true, showSystemUi = true, device = "id:pixel_5")
 @Composable
-fun NoHistoryScreenPreview() {
+private fun NoHistoryScreenPreview() {
     NoHistoryScreen()
 }
