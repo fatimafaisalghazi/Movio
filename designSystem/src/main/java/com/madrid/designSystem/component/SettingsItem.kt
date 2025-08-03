@@ -31,7 +31,7 @@ fun SettingsItem(
     title: String,
     text: String = "",
     clickable: Boolean = false,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
@@ -41,13 +41,13 @@ fun SettingsItem(
         Icon(
             painter = painterResource(id = icon),
             contentDescription = "$title Icon",
-            tint = Theme.color.surfaces.onSurface, //Color(0xFFF0F5FF),
+            tint = Theme.color.surfaces.onSurface,
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(5.dp))
         )
         Text(
             text = title,
-            color = Theme.color.surfaces.onSurface, // Color(0xFFF0F5FF)
+            color = Theme.color.surfaces.onSurface,
             style = Theme.textStyle.title.mediumMedium16,
             modifier = Modifier
                 .weight(1f)
