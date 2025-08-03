@@ -1,6 +1,6 @@
 package com.madrid.movio.di
 
-import com.madrid.data.dataSource.encrypted.AuthenticationDatastoreImpl
+import com.madrid.data.dataSource.datastore.AuthenticationDatastoreImpl
 import com.madrid.data.dataSource.local.LocalDataSourceImpl
 import com.madrid.data.dataSource.local.database.MovioDatabase
 import com.madrid.data.repositories.ArtistRepositoryImpl
