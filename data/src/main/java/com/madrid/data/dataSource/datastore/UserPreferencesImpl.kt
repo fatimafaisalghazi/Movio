@@ -49,6 +49,9 @@ class UserPreferencesImpl(
     override suspend fun setIsGuest(isGuest: Boolean) {
         dataStore.edit { settings ->
             settings[IS_GUEST] = isGuest
+        }
+    }
+
     override fun isFirstLaunch(): Flow<Boolean> {
         return dataStore.data.map { prefs ->
             prefs[ONBOARDING_COMPLETED]?.not() ?: true

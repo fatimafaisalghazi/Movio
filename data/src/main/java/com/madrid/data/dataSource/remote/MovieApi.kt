@@ -199,7 +199,7 @@ interface MovieApi {
     @GET("authentication/guest_session/new")
     suspend fun getCreateGuestSession(): AuthenticationResponse
 
-    @GET("account")  // This
+    @GET("account/{account_id}")  // This
     suspend fun getAccountDetails(
         @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String

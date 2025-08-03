@@ -78,6 +78,8 @@ class UserRepositoryImpl(
 
     override fun isGuest(): Flow<Boolean> {
         return authenticationDatasource.isGuest()
+    }
+
     override fun isFirstLaunch(): Flow<Boolean> {
         return authenticationDatasource.isFirstLaunch()
     }
