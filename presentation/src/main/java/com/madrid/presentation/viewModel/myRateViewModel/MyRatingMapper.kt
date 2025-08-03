@@ -1,20 +1,23 @@
 package com.madrid.presentation.viewModel.myRateViewModel
 
-import com.madrid.domain.entity.RatedMovie
-import com.madrid.domain.entity.RatedSeries
+import com.madrid.domain.usecase.movie.GetUserRatedMovie
+import com.madrid.domain.usecase.series.GetUserRatedSeries
+import com.madrid.presentation.viewModel.shared.MediaType
 
-fun RatedMovie.toRatedMovieUiState(): RatedMovieState {
-    return RatedMovieState(
+fun GetUserRatedMovie.RatedMovie.toRatedMovieUiState(): RatedMediaState {
+    return RatedMediaState(
         imageUrL = this.movie.imageUrl,
         mediaTitle = this.movie.title,
-        rate = this.rate.toString()
+        rate = this.rate.toString(),
+        mediaType = MediaType.MOVIE
     )
 }
 
-fun RatedSeries.toRatedSeriesUiState(): RatedSeriesState {
-    return RatedSeriesState(
+fun GetUserRatedSeries.RatedSeries.toRatedSeriesUiState(): RatedMediaState {
+    return RatedMediaState(
         imageUrL = this.series.imageUrl,
         mediaTitle = this.series.title,
-        rate = this.rate.toString()
+        rate = this.rate.toString(),
+        mediaType = MediaType.TV_SHOW
     )
 }

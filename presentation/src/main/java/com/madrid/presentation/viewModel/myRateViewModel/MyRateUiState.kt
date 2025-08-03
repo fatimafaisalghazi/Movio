@@ -1,19 +1,16 @@
 package com.madrid.presentation.viewModel.myRateViewModel
 
+import com.madrid.presentation.viewModel.shared.MediaType
+
 data class MyRateUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val ratedMovie: List<RatedMovieState> = emptyList(),
-    val ratedSeries: List<RatedSeriesState> = emptyList()
+    val ratedMedia: List<RatedMediaState> = emptyList(),
 )
 
-data class RatedMovieState(
+data class RatedMediaState(
     val imageUrL: String = "",
     val mediaTitle: String = "",
-    val rate: String = ""
-)
-data class RatedSeriesState (
-    val imageUrL: String = "",
-    val mediaTitle: String = "",
-    val rate: String = ""
+    val rate: String = "",
+    val mediaType: MediaType=MediaType.MOVIE
 )

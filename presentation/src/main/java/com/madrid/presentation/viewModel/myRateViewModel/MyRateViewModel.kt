@@ -1,7 +1,7 @@
 package com.madrid.presentation.viewModel.myRateViewModel
 
-import com.madrid.domain.usecase.rate.GetUserRatedMovie
-import com.madrid.domain.usecase.rate.GetUserRatedSeries
+import com.madrid.domain.usecase.movie.GetUserRatedMovie
+import com.madrid.domain.usecase.series.GetUserRatedSeries
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.MediaType
 
@@ -11,6 +11,14 @@ class MyRateViewModel(
     private val getUserRatedMovie: GetUserRatedMovie
 ) : BaseViewModel<MyRateUiState, MyRatingEffect>(MyRateUiState()),
     MyRatingInteractionListener {
+
+//    init {
+//        if () {
+//            loadRatedSeries()
+//        } else {loadRatedMovie()
+//        }
+//    }
+
     override fun onMediaClick(mediaId: Int, mediaType: MediaType) {
         emitNewEffect(effect = MyRatingEffect.NavigateToMediaDetails(mediaId, mediaType))
     }
@@ -25,7 +33,7 @@ class MyRateViewModel(
             onSuccess = { result ->
                 updateState {
                     it.copy(
-                        ratedSeries = result.map { it.toRatedSeriesUiState() },
+                        ratedMedia = result.map { it.toRatedSeriesUiState() },
                         isLoading = false
                     )
                 }
@@ -42,7 +50,7 @@ class MyRateViewModel(
             onSuccess = { result ->
                 updateState {
                     it.copy(
-                        ratedMovie = result.map { it.toRatedMovieUiState() },
+                        ratedMedia = result.map { it.toRatedMovieUiState() },
                         isLoading = false
                     )
                 }
