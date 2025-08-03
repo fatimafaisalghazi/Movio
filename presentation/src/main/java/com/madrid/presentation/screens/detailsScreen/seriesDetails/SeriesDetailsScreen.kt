@@ -34,6 +34,7 @@ import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.designSystem.component.TextWithReadMore
+import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.header.SeriesDetailsHeader
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeries
@@ -98,11 +99,11 @@ fun SeriesDetailsScreen(
                     rate = uiState.rate.take(3),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
-//                BottomMediaActions(
-//                    onRateClick = {},
-//                    onPlayClick = {},
-//                    onAddToListClick = {},
-//                    modifier = Modifier.padding(vertical = 16.dp)
+                BottomMediaActions(
+                   onRateClick = {},
+                    onPlayClick = {},
+                   onAddToListClick = {},
+                   modifier = Modifier.padding(vertical = 16.dp))
 
                 Spacer(modifier = Modifier.height(16.dp))
 
