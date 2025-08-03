@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
@@ -138,7 +138,7 @@ fun SeriesDetailsScreen(
                         )
                     },
                 )
-                CustomTextTitel(
+                CustomTextTitle(
                     primaryText = stringResource(R.string.current_seasons),
                     secondaryText = stringResource(R.string.see_all),
                     endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_alt_arrow_left),
