@@ -48,7 +48,7 @@ fun ProfilePicture(
 
 @Preview
 @Composable
-fun ProfilePicturePreview() {
+private fun ProfilePicturePreview() {
     ProfilePicture(
         image = R.drawable.library_main_icon,
         size = 48.dp,
