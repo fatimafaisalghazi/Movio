@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -67,8 +67,6 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.common.ktx)
 
-    // Koin
-
     //coil
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -81,16 +79,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core)
     implementation("androidx.webkit:webkit:1.9.0")
-
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.51.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-
-
-
-
-    implementation("androidx.webkit:webkit:1.9.0")
-
+    //Dagger- Hilt
+    ksp(libs.hilt.android.compiler.v2511)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     implementation (libs.dagger)

@@ -14,7 +14,6 @@ kotlin {
 }
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
-
-    implementation ("com.google.dagger:dagger:2.51.1")
-    ksp("com.google.dagger:dagger-compiler:2.51.1")
+    implementation (libs.dagger)
+    ksp(libs.hilt.android.compiler.v2511)
 }

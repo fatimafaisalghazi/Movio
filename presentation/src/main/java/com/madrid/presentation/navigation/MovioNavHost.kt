@@ -1,6 +1,5 @@
 package com.madrid.presentation.navigation
 
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -44,7 +43,6 @@ interface StrategyFactoryEntryPoint {
     fun moviesFactory(): SeeAllMoviesFactory
     fun tvShowsFactory(): SeeAllTVShowsFactory
 }
-import kotlin.math.log
 
 @Composable
 fun MovioNavHost(

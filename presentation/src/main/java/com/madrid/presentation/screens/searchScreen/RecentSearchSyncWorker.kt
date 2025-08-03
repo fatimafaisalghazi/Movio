@@ -7,13 +7,11 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.madrid.domain.usecase.search.ClearAllRecentSearchesUseCase
-import dagger.hilt.android.qualifiers.ApplicationContext
-
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class RecentSearchSyncWorker @Inject constructor(
-    @ApplicationContext appContext: Context,
+     appContext: Context,
     params: WorkerParameters,
     private val clearAllRecentSearchesUseCase: ClearAllRecentSearchesUseCase,
 ) : CoroutineWorker(appContext, params) {

@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -28,7 +28,6 @@ android {
         debug {
             buildConfigField("String", "API_KEY", properties.getProperty("API_KEY"))
             buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
-            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -71,9 +70,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.room.paging)
-    
-    implementation(libs.koin.android)
-    implementation(libs.koin.annotations)
+
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10")
@@ -86,10 +83,7 @@ dependencies {
 
     implementation(libs.androidx.datasource.preferences)
 
-    implementation(libs.hilt.android.v2511)
     ksp(libs.hilt.android.compiler.v2511)
-
-
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     implementation (libs.dagger)

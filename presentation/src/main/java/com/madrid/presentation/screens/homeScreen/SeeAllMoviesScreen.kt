@@ -28,10 +28,7 @@ import com.madrid.presentation.viewModel.seeAll.movies.SeeAllMoviesViewModel
 @Composable
 fun SeeAllMoviesScreen(
     viewModel: SeeAllMoviesViewModel
-
 ) {
-
-
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val navController = LocalNavController.current
     val items = uiState.genre
