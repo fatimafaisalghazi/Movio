@@ -7,4 +7,10 @@ interface UserPreferences {
     fun isUserLoggedIn(): Flow<Boolean>
     suspend fun setAuthToken(token: String)
     suspend fun clearAuthToken()
+
+    fun getAppDarkModeOn(): Flow<Boolean>
+    suspend fun setAppDarkModeOn(isDarkMode: Boolean)
+
+    fun getAppLanguage(): Flow<String>
+    suspend fun setAppLanguage(language: String)
 }

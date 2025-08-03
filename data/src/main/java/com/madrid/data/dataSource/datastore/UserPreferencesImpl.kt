@@ -2,6 +2,7 @@ package com.madrid.data.dataSource.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.madrid.data.repositories.datasource.UserPreferences
@@ -38,7 +39,33 @@ class UserPreferencesImpl(
         }
     }
 
+    override fun getAppDarkModeOn(): Flow<Boolean> {
+        return dataStore.data.map { settings ->
+            settings[DARK_MODE] == true
+        }
+    }
+
+    override suspend fun setAppDarkModeOn(isDarkMode: Boolean) {
+        dataStore.edit { settings ->
+            settings[DARK_MODE] = isDarkMode
+        }
+    }
+
+    override fun getAppLanguage(): Flow<String> {
+        return dataStore.data.map { settings ->
+            settings[LANGUAGE] ?: ""
+        }
+    }
+
+    override suspend fun setAppLanguage(language: String) {
+        dataStore.edit { settings ->
+            settings[LANGUAGE] = language
+        }
+    }
+
     companion object {
         val TOKEN = stringPreferencesKey("token") //TODO: Move to secrets
+        val DARK_MODE = booleanPreferencesKey("dark_mode")
+        val LANGUAGE = stringPreferencesKey("language")
     }
 }
