@@ -15,26 +15,26 @@ class UserPreferencesImpl(
     override fun getAuthToken(): Flow<String> {
         return dataStore.data
             .map { preferences ->
-                preferences[token] ?: ""
+                preferences[TOKEN] ?: ""
             }
     }
 
     override fun isUserLoggedIn(): Flow<Boolean> {
         return dataStore.data
             .map { preferences ->
-                preferences[token]?.isNotEmpty() ?: false
+                preferences[TOKEN]?.isNotEmpty() ?: false
             }
     }
 
     override suspend fun setAuthToken(token: String) {
         dataStore.edit { settings ->
-            settings[this@AuthenticationDatastoreImpl.token] = token
+            settings[TOKEN] = token
         }
     }
 
     override suspend fun clearAuthToken() {
         dataStore.edit { settings ->
-            settings[token] = ""
+            settings[TOKEN] = ""
         }
     }
 
