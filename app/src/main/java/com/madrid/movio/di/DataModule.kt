@@ -1,5 +1,9 @@
 package com.madrid.movio.di
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStoreFile
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import com.madrid.data.dataSource.datastore.UserPreferencesImpl
 import com.madrid.data.dataSource.local.LocalDataSourceImpl
 import com.madrid.data.dataSource.local.database.MovioDatabase
@@ -17,6 +21,7 @@ import com.madrid.domain.repository.MovieRepository
 import com.madrid.domain.repository.SearchRepository
 import com.madrid.domain.repository.SeriesRepository
 import com.madrid.domain.repository.UserRepository
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -30,7 +35,12 @@ val dataModule = module {
     single { get<MovioDatabase>().seriesGenreDao() }
     single { get<MovioDatabase>().recentSearchDao() }
     single<LocalDataSource> { LocalDataSourceImpl(get(), get(), get(), get(), get(), get()) }
-    single <UserPreferences>{ UserPreferencesImpl(androidContext()) }
+    single<DataStore<Preferences>> {
+        PreferenceDataStoreFactory.create(
+            produceFile = { androidApplication().dataStoreFile("user_preferences.preferences_pb") }
+        )
+    }
+    single<UserPreferences> { UserPreferencesImpl(get()) }
     single<MovieRepository> { MovieRepositoryImpl(get(), get()) }
     single<SeriesRepository> { SeriesRepositoryImpl(get(), get()) }
     single { GetImageBitmap(get()) }
