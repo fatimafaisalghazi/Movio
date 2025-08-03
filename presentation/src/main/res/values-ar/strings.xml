@@ -32,4 +32,7 @@
     <string name="language">اللغة</string>
     <string name="app_version">نسخة التطبيق</string>
     <string name="logout">تسجيل الخروج</string>
+    <string name="unlock_your_personal_library">سجل الدخول للحصول علي مكتبتك الخاصة</string>
+    <string name="access_your_watch_history_favorites_and_watchlist_all_in_one_place">صل إلي تاريخ مشاهدتك, المفضلة, و قائمة المشاهدة. كله في مكان واحد.</string>
+
 </resources>

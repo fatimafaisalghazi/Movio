@@ -29,6 +29,7 @@ fun EmptySearchLayout(
     title: String,
     description: String,
     @DrawableRes image: Int,
+    imageSize: Int = 128,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -42,10 +43,11 @@ fun EmptySearchLayout(
             painter = painterResource(id = image),
             contentDescription = "Search Icon",
             modifier = Modifier
-                .size(128.dp)
+                .size(imageSize.dp)
                 .align(CenterHorizontally),
             contentScale = ContentScale.Fit
         )
+        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = title,
             style = Theme.textStyle.title.mediumMedium16,
