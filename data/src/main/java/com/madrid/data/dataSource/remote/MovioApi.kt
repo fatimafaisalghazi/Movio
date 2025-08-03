@@ -25,8 +25,6 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
-import com.madrid.data.dataSource.remote.dto.authentication.AuthenticationResponse
-import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.authentication.SessionIdResponse
 import retrofit2.http.Body
