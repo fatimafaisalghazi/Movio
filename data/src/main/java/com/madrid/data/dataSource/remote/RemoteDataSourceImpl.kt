@@ -14,6 +14,8 @@ import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
 import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
