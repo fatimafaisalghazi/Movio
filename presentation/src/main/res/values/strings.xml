@@ -28,5 +28,6 @@
 
     <string name="season_count">%1$d Seasons</string>
     <string name="library_screen">Library Screen</string>
+    <string name="my_ratings">My Ratings</string>
 
 </resources>
