@@ -66,7 +66,7 @@ private fun MoreScreenContent(
             description = stringResource(presentationR.string.access_your_watch_history_favorites_and_watchlist_all_in_one_place),
             image = R.drawable.library_main_icon,
             buttonText = stringResource(presentationR.string.login),
-            onClick = {}
+            onClick = { interactionListener.onLoginBtnClick() },
         )
     } else {
         Column(
@@ -108,20 +108,19 @@ private fun MoreScreenContent(
                     title = stringResource(presentationR.string.language),
                     text = state.language,
                     clickable = true,
-                    onClick = { interactionListener.onThemeClick() }
+                    onClick = { interactionListener.onLanguageBtnClick() }
                 )
                 SettingsItem(
                     icon = R.drawable.outline_smartphone,
                     title = stringResource(presentationR.string.app_version),
                     text = state.appVersion,
                     clickable = false,
-                    onClick = { interactionListener.onThemeClick() }
                 )
                 SettingsItem(
                     icon = R.drawable.outline_arrows_logout,
                     title = stringResource(presentationR.string.logout),
                     clickable = true,
-                    onClick = { interactionListener.onThemeClick() }
+                    onClick = { interactionListener.onLogoutBtnClick() }
                 )
             }
         }
