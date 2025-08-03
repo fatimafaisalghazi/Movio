@@ -1,8 +1,6 @@
 package com.madrid.presentation.viewModel.loginViewModel
 
 import androidx.lifecycle.viewModelScope
-import com.madrid.domain.exceptions.AccountLockedException
-import com.madrid.domain.exceptions.InvalidCredentialsException
 import com.madrid.domain.exceptions.MovioException
 import com.madrid.domain.exceptions.ValidationException
 import com.madrid.domain.usecase.authentication.LoginUseCase
@@ -11,7 +9,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import com.madrid.domain.exceptions.NetworkException
 
 @KoinViewModel
 class LoginViewModel(
@@ -41,19 +38,30 @@ class LoginViewModel(
         updateState { it.copy(showPassword = !it.showPassword) }
     }
 
+
+
     fun login(onSuccess: () -> Unit) {
         val currentState = state.value
-        if (!currentState.canLogin) return
+
+        try {
+            ValidationException.validateField("Username", currentState.username)
+            ValidationException.validateField("Password", currentState.password)
+        } catch (ex: ValidationException) {
+            updateState { it.copy(errorMessage = ex.message) }
+            return
+        }
+
+        if (currentState.isLoading || currentState.isGuestLoading) return
 
         viewModelScope.launch(dispatcher) {
-            updateState { it.copy(isLoading = true, errorMessage = null) }
-
+            updateState { it.copy(isLoading = true, isGuestLoading = false, errorMessage = null) }
             try {
                 val success = loginUseCase.execute(currentState.username, currentState.password)
                 if (success) {
                     updateState {
                         it.copy(
                             isLoading = false,
+                            isGuestLoading = false,
                             loginSuccess = true,
                             isGuest = false
                         )
@@ -64,7 +72,8 @@ class LoginViewModel(
                 updateState {
                     it.copy(
                         isLoading = false,
-                        errorMessage = getErrorMessage(ex)
+                        isGuestLoading = false,
+                        errorMessage = ex.message ?: "Unknown error occurred"
                     )
                 }
             }
@@ -72,15 +81,18 @@ class LoginViewModel(
     }
 
     fun loginAsGuest(onSuccess: () -> Unit) {
-        viewModelScope.launch(dispatcher) {
-            updateState { it.copy(isLoading = true, errorMessage = null) }
+        val currentState = state.value
+        if (currentState.isLoading || currentState.isGuestLoading) return
 
+        viewModelScope.launch(dispatcher) {
+            updateState { it.copy(isLoading = false, isGuestLoading = true, errorMessage = null) }
             try {
                 val success = loginUseCase.loginAsGuest()
                 if (success) {
                     updateState {
                         it.copy(
                             isLoading = false,
+                            isGuestLoading = false,
                             loginSuccess = true,
                             isGuest = true
                         )
@@ -91,23 +103,14 @@ class LoginViewModel(
                 updateState {
                     it.copy(
                         isLoading = false,
-                        errorMessage = getErrorMessage(ex)
+                        isGuestLoading = false,
+                        errorMessage = ex.message ?: "Unknown error occurred"
                     )
                 }
             }
         }
     }
-
-    private fun getErrorMessage(exception: MovioException): String {
-        return when (exception) {
-            is InvalidCredentialsException -> "Invalid username or password"
-            is AccountLockedException -> "Account locked. Contact support."
-            is NetworkException -> "Network error. Try again."
-            is ValidationException.EmptyField.Username -> "Username cannot be empty"
-            is ValidationException.EmptyField.Password -> "Password cannot be empty"
-            is ValidationException.MinimumLength.Username -> "Username must be at least 3 characters"
-            is ValidationException.MinimumLength.Password -> "Password must be at least 6 characters"
-            else -> exception.message ?: "Unknown error occurred"
-        }
-    }
 }
+
+
+

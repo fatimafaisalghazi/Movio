@@ -213,14 +213,14 @@ override suspend fun login(username: String, password: String): String {
                     throw SessionExpiredException()
                 }
                 else -> {
-                    throw AuthorizationException("Unauthorized access: $errorBody")
+                    throw AuthorizationException("Unauthorized access")
                 }
             }
         } else {
             throw UnknownException("HTTP error $code: $errorBody")
         }
     } catch (e: IOException) {
-        throw NetworkException("Network error: ${e.message}")
+        throw NetworkException("No internet connection  ")
     } catch (e: Exception) {
         throw UnknownException("Unknown error during login: ${e.message}")
     }
@@ -228,7 +228,18 @@ override suspend fun login(username: String, password: String): String {
 
 
     override suspend fun loginAsGuest(): String {
-        return api.getCreateGuestSession().requestToken
-    }
+        try {
+            val guestSessionResponse = api.getCreateGuestSession()
+            return guestSessionResponse.requestToken
 
-}
+        } catch (e: HttpException) {
+            throw AuthorizationException("Function…")
+        } catch (e: IOException) {
+            throw NetworkException("No internet connection")
+        } catch (e: Exception) {
+            throw UnknownException("Unknown error}")
+
+
+        }
+
+    }}

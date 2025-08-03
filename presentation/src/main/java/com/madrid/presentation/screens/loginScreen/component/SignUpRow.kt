@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -19,8 +20,7 @@ import com.madrid.presentation.R
 
 @Composable
  fun SignUpRow(onSignUpClick: () -> Unit,
-                      navController: NavController? = null,
-                      onNavigateToLogin:() -> Unit = {},
+
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -28,13 +28,13 @@ import com.madrid.presentation.R
     ) {
         MovioText(
             text = stringResource(R.string.don_t_have_an_account),
-            textStyle = Theme.textStyle.label.smallRegular14,
+            textStyle = Theme.textStyle.title.mediumMedium14,
             color = Theme.color.surfaces.onSurfaceVariant
         )
         Spacer(modifier = Modifier.width(4.dp))
         MovioText(
             text = stringResource(R.string.sign_up),
-            textStyle = Theme.textStyle.label.mediumMedium14,
+            textStyle = Theme.textStyle.title.mediumMedium14,
             color = Theme.color.brand.primary,
             modifier = Modifier.clickable(
                 interactionSource = remember { MutableInteractionSource() },

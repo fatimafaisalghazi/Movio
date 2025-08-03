@@ -7,20 +7,17 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioButton
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.R
 
 @Composable
 fun AnimatedLoginButton
 (
     isLoading: Boolean,
-
     onClick: () -> Unit,
     enabled: Boolean = true,
     text: String,
@@ -35,7 +32,7 @@ fun AnimatedLoginButton
     MovioButton(
         onClick = onClick,
         modifier = modifier,
-        enabled = !isLoading && enabled,
+        enabled = enabled,
         color = buttonColor
     ) {
         if (isLoading) {
