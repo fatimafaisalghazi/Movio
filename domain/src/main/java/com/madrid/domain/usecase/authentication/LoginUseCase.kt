@@ -37,9 +37,12 @@ class LoginUseCase @Inject constructor(
         }
     }
 
-
     fun checkActiveSession(): Flow<Boolean> {
         return authenticationRepository.isUserLoggedIn()
+    }
+
+    fun isGuest(): Flow<Boolean> {
+        return userRepository.isGuest()
     }
 }
 

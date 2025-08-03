@@ -7,9 +7,11 @@ interface UserPreferences {
     fun isUserLoggedIn(): Flow<Boolean>
     suspend fun setAuthToken(token: String)
     suspend fun clearAuthToken()
-
     fun isFirstLaunch(): Flow<Boolean>
     suspend fun setOnBoardingCompleted(isCompleted: Boolean)
+
+    fun isGuest(): Flow<Boolean>
+    suspend fun setIsGuest(isGuest: Boolean)
 
     fun getAppDarkModeOn(): Flow<Boolean>
     suspend fun setAppDarkModeOn(isDarkMode: Boolean)
