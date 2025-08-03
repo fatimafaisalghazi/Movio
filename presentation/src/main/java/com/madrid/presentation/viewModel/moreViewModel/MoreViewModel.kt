@@ -1,30 +1,36 @@
 package com.madrid.presentation.viewModel.moreViewModel
 
+import androidx.lifecycle.viewModelScope
+import com.madrid.domain.usecase.authentication.LoginUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-class MoreViewModel() :
+class MoreViewModel(
+    private val isGuestUseCase: LoginUseCase
+) :
     BaseViewModel<MoreUiState, MoreEffect>(MoreUiState()),
     MoreInteractionListener {
 
     init {
-//        updateState {
-//            MoreUiState(
-//                isLoading = false,
-//                errorMessage = null,
-//                profilePictureUrl = getProfilePicture(),
-//                username = getUsername(),
-//                isThemeSheetVisible = false,
-//                isDarkModeEnabled = getDarkModeState(),
-//                isLanguageSheetVisible = false,
-//                language = getLanguage(),
-//                appVersion = getAppVersion(),
-//                isGuest = isGuest(),
-//                isLogoutSheetVisible = false
-//            )
-//        }
+        fetchIsGuest()
+//        getProfilePicture()
+//        getUsername()
+//        getDarkModeState()
+//        getLanguage()
+//        getAppVersion()
     }
 
-    override fun onThemeClick(isEnabled: Boolean) {
+    override fun onLoginBtnClick() {
+        emitNewEffect(MoreEffect.navigateToLogin)
+    }
+
+    override fun onMyRatingsBtnClick() {
+        emitNewEffect(MoreEffect.navigateToMyRatings)
+    }
+
+    override fun onThemeClick() {
         TODO("Not yet implemented")
     }
 
@@ -36,9 +42,18 @@ class MoreViewModel() :
         TODO("Not yet implemented")
     }
 
-    private fun isGuest(): Boolean {
-        TODO("Not yet implemented")
+    private fun fetchIsGuest() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isGuestUseCase.isGuest().collectLatest { result ->
+                    updateState { it.copy(isGuest = result) }
+                }
+            } catch (e: Exception) {
+                updateState { it.copy(isGuest = true) }
+            }
+        }
     }
+
     override fun setDarkMode(isEnabled: Boolean) {
         TODO("Not yet implemented")
     }
