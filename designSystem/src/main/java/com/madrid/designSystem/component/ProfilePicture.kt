@@ -1,5 +1,6 @@
 package com.madrid.designSystem.component
 
+
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -7,9 +8,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -19,7 +24,7 @@ import com.madrid.designSystem.R
 @Composable
 fun ProfilePicture(
     modifier: Modifier = Modifier,
-    @DrawableRes image: Int,
+    image: String? =null,
     size: Dp,
 ) {
     Box(
@@ -35,13 +40,18 @@ fun ProfilePicture(
                 )
             )
     ) {
-        Image(
-            painter = painterResource(id = image),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .align(Alignment.Center),
-            contentScale = androidx.compose.ui.layout.ContentScale.Crop
-        )
+        if (image == null) {
+            Image(
+                painter = painterResource(R.drawable.bold_profile_circle),
+                contentDescription = "Profile Picture",
+                modifier = Modifier
+                    .align(Alignment.Center),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop
+            )
+
+        } else {
+            TODO()
+        }
 
     }
 }
@@ -50,7 +60,7 @@ fun ProfilePicture(
 @Composable
 private fun ProfilePicturePreview() {
     ProfilePicture(
-        image = R.drawable.library_main_icon,
+        image = null,
         size = 48.dp,
         modifier = Modifier.background(androidx.compose.ui.graphics.Color.LightGray)
     )

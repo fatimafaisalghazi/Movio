@@ -76,7 +76,7 @@ private fun MoreScreenContent(
         ) {
             ProfileSection(
                 username = state.username,
-                profilePicture = R.drawable.profile_pic_holder,
+                profilePicture = state.profilePictureUrl,
                 onProfileClick = { }
             )
 

@@ -11,6 +11,6 @@ class GetCurrentUserDetailsUseCase(private val userRepository: UserRepository) {
         // This should be replaced with the actual logic to retrieve the account ID
         val sessionId: String = userRepository.getSessionId().first()
 
-        return userRepository.getCurrentUser(accountId, sessionId)
+        return userRepository.getCurrentUser(sessionId = sessionId)
     }
 }
