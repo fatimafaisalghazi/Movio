@@ -21,7 +21,7 @@ class PreferencesRepositoryImpl(
         userPreferences.setAppDarkModeOn(appTheme.toBoolean())
     }
 
-    override suspend fun getAppLanguage(): Flow<AppLanguage> {
+    override fun getAppLanguage(): Flow<AppLanguage> {
         return userPreferences.getAppLanguage().toLanguage()
     }
 

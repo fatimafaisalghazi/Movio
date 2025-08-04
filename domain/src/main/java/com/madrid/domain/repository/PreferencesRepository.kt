@@ -8,6 +8,6 @@ interface PreferencesRepository {
     fun getAppDarkModeOn(): Flow<AppTheme>
     suspend fun setAppDarkModeOn(appTheme: AppTheme)
 
-    suspend fun getAppLanguage():  Flow<AppLanguage>
+    fun getAppLanguage():  Flow<AppLanguage>
     suspend fun setAppLanguage(language: AppLanguage)
 }
