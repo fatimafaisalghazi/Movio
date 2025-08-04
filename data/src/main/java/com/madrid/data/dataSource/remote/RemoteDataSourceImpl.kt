@@ -184,7 +184,7 @@ class RemoteDataSourceImpl @Inject constructor(
         return sessionResponse.requestToken
     }
 
-    override suspend fun getSessionId(username: String, password: String): String{
+    override suspend fun getSessionId(username: String, password: String): String {
         val requestTokenResponse = api.getRequestToken()
         val requestToken = requestTokenResponse.requestToken
         val sessionResponse = api.postCreateSession(
@@ -219,25 +219,10 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse {
-        val accountId=api.getAccountDetails(sessionId).id
-        val x =api.getUserRatingForMovie(accountId)
-        Log.d("tag getUserRatingForMovie", "getUserRatingForMovie: $x")
-        return x
+        return api.getUserRatingForMovie(sessionId)
     }
 
     override suspend fun getUserRatingForSeries(sessionId: String): RatingSeriesResponse {
-
-       return try {
-        val accountId=api.getAccountDetails(sessionId).id
-        val x = api.getUserRatingForSeries(accountId)
-        Log.d("tag getUserRatingForMovie", "getUserRatingForSeries: $x")
-         x}catch (e:Exception){
-            Log.d("tag getUserRatingForMovie", "getUserRatingForSeries: ${e.message}")
-           RatingSeriesResponse(
-               ratedSeries = emptyList(),
-               totalPages = 0,
-               totalResults =0
-           )
-        }
+        return api.getUserRatingForSeries(sessionId)
     }
 }

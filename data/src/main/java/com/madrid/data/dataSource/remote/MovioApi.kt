@@ -17,6 +17,8 @@ import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
 import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
@@ -27,8 +29,6 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
-import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
-import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -228,14 +228,14 @@ interface MovioApi {
 
     // region EpisodeRating
 
-    @GET("account/{account_id}/rated/movies")
+    @GET("account/null/rated/movies")
     suspend fun getUserRatingForMovie(
-        @Path("account_id") accountId: Int
+        @Query("session_id") sessionId: String
     ): RatingMovieResponse
 
-    @GET("account/{account_id}/rated/tv")
+    @GET("account/null/rated/tv")
     suspend fun getUserRatingForSeries(
-        @Path("account_id") accountId: Int
+        @Query("session_id") sessionId: String
     ): RatingSeriesResponse
 
     // endregion
