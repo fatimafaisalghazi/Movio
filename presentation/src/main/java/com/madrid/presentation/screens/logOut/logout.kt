@@ -92,8 +92,6 @@ private fun LogoutConfirmationContent(
         // App Icon Section
         LogoutIconSection()
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         // Text Content Section
         LogoutTextSection()
 
