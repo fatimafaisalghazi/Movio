@@ -6,10 +6,25 @@ data class MoreUiState(
     val profilePictureUrl: String? = null,
     val username: String = "Guest",
     val isThemeSheetVisible: Boolean = false,
-    val isDarkModeEnabled: Boolean = false,
+    val selectedTheme: ThemeType = ThemeType.DARK,
     val isLanguageSheetVisible: Boolean = false,
-    val language: String = "English",
+    val selectedLanguage: LanguageType = LanguageType.ENGLISH,
+    val settingType: SettingType = SettingType.THEME,
     val appVersion: String = "1.1.0v",
     val isGuest: Boolean = true,
-    val isLogoutSheetVisible: Boolean = false
+    val isLogoutSheetVisible: Boolean = false,
 )
+
+enum class SettingType {
+    THEME, LANGUAGE
+}
+
+enum class ThemeType(val value: String) {
+    LIGHT("Light"),
+    DARK("Dark")
+}
+
+enum class LanguageType(val value: String) {
+    ENGLISH("English"),
+    ARABIC("Arabic")
+}

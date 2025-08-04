@@ -1,6 +1,7 @@
 package com.madrid.presentation.screens.moreScreen
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,10 +23,13 @@ import com.madrid.designSystem.component.SettingsItem
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.moreScreen.component.ProfileSection
+import com.madrid.presentation.screens.moreScreen.component.ThemeLanguageSelectionBottomSheet
 import com.madrid.presentation.viewModel.moreViewModel.MoreEffect
 import com.madrid.presentation.viewModel.moreViewModel.MoreInteractionListener
 import com.madrid.presentation.viewModel.moreViewModel.MoreUiState
 import com.madrid.presentation.viewModel.moreViewModel.MoreViewModel
+import com.madrid.presentation.viewModel.moreViewModel.SettingType
+import com.madrid.presentation.viewModel.moreViewModel.ThemeType
 import com.madrid.presentation.R as presentationR
 
 @Composable
@@ -100,19 +104,19 @@ private fun MoreScreenContent(
                 SettingsItem(
                     icon = R.drawable.outline_pallete2,
                     title = stringResource(presentationR.string.theme),
-                    text = if (state.isDarkModeEnabled) stringResource(presentationR.string.dark)
+                    text = if (state.selectedTheme == ThemeType.DARK) stringResource(presentationR.string.dark)
                     else stringResource(
                         presentationR.string.light
                     ),
                     clickable = true,
-                    onClick = { interactionListener.onThemeClick() }
+                    onClick = { interactionListener.onClickTheme() }
                 )
                 SettingsItem(
                     icon = R.drawable.outline_earth,
                     title = stringResource(presentationR.string.language),
-                    text = state.language,
+                    text = state.selectedLanguage.value,
                     clickable = true,
-                    onClick = { interactionListener.onLanguageBtnClick() }
+                    onClick = { interactionListener.onClickLanguage() }
                 )
                 SettingsItem(
                     icon = R.drawable.outline_smartphone,
@@ -125,6 +129,22 @@ private fun MoreScreenContent(
                     title = stringResource(presentationR.string.logout),
                     clickable = true,
                     onClick = { interactionListener.onLogoutBtnClick() }
+                )
+            }
+            AnimatedVisibility(state.isThemeSheetVisible) {
+                ThemeLanguageSelectionBottomSheet(
+                    state = state,
+                    interaction = interactionListener,
+                    title = stringResource(R.string.choose_theme),
+                    settingType = SettingType.THEME,
+                )
+            }
+            AnimatedVisibility(state.isLanguageSheetVisible) {
+                ThemeLanguageSelectionBottomSheet(
+                    state = state,
+                    interaction = interactionListener,
+                    title = stringResource(R.string.choose_language),
+                    settingType = SettingType.LANGUAGE,
                 )
             }
         }
