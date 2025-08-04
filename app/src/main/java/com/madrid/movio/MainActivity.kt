@@ -36,6 +36,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
 @Composable
 fun MainScreen(
     mainViewModel: MainViewModel = hiltViewModel()) {

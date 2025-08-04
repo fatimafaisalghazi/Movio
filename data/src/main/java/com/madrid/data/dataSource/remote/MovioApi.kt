@@ -6,6 +6,8 @@ import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AccountDetailsResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AuthenticationResponse
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
+import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
+import com.madrid.data.dataSource.remote.dto.authentication.SessionIdResponse
 import com.madrid.data.dataSource.remote.dto.common.TrailerResponse
 import com.madrid.data.dataSource.remote.dto.genre.GenresResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
@@ -24,14 +26,9 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
-import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
-import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
-import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
-import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
-import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
-import com.madrid.data.dataSource.remote.dto.authentication.AuthenticationResponse
-import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
+import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
