@@ -1,3 +1,5 @@
+package com.madrid.presentation.screens.loginScreen.component
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,15 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
-import com.madrid.presentation.screens.loginScreen.component.AnimatedLoginButton
-import com.madrid.presentation.screens.loginScreen.component.LoginErrorAndForgotPassword
-import com.madrid.presentation.screens.loginScreen.component.LoginHeader
-import com.madrid.presentation.screens.loginScreen.component.LoginInputFields
-import com.madrid.presentation.screens.loginScreen.component.OrDivider
-import com.madrid.presentation.screens.loginScreen.component.SignUpRow
 import com.madrid.presentation.viewModel.loginViewModel.LoginUiState
 
 @Composable
@@ -46,7 +44,7 @@ fun MovieLoginContent(
                 onUsernameChange = onUsernameChange,
                 onPasswordChange = onPasswordChange,
                 onTogglePassword = onTogglePassword,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 24.dp)
             )
             LoginErrorAndForgotPassword(
                 state = state,
@@ -57,18 +55,35 @@ fun MovieLoginContent(
                 isLoading = state.isLoading,
                 onClick = onLoginClick,
                 text = stringResource(R.string.login),
+                modifier = Modifier.padding(bottom = 40.dp)
             )
-            Spacer(modifier = Modifier.height(40.dp))
             OrDivider()
-            Spacer(modifier = Modifier.height(20.dp))
             AnimatedLoginButton(
                 isLoading = state.isGuestLoading,
                 onClick = onGuestLogin,
                 buttonColor = Theme.color.surfaces.onSurfaceAt3.copy(alpha = 0.12f),
                 textColor = Theme.color.surfaces.onSurface,
                 text = stringResource(R.string.continue_as_a_guest),
+                modifier = Modifier.padding(top = 20.dp)
             )
         }
         SignUpRow(onSignUpClick = onSignUpClick)
+    }
+}
+
+@Preview
+@Composable
+private fun MovieLoginContentPreview() {
+    MovioTheme {
+        MovieLoginContent(
+            state = LoginUiState(),
+            onUsernameChange = { },
+            onPasswordChange = { },
+            onLoginClick = { },
+            onTogglePassword = { },
+            onForgotPasswordClick = { },
+            onSignUpClick = { },
+            onGuestLogin = { }
+        )
     }
 }
