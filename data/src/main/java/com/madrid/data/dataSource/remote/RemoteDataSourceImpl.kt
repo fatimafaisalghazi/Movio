@@ -14,8 +14,6 @@ import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
 import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
-import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
-import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
@@ -28,8 +26,8 @@ import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
 import com.madrid.data.repositories.remote.RemoteDataSource
 
-class RemoteDataSourceImpl(
-    private val api: MovieApi
+class RemoteDataSourceImpl @Inject constructor(
+    private val api: MovioApi
 ) : RemoteDataSource {
     //  region Movies
     override suspend fun searchMoviesByQuery(name: String, page: Int): SearchMovieResponse {
@@ -149,14 +147,6 @@ class RemoteDataSourceImpl(
     }
 
     override suspend fun getRecommendedSeries(page: Int): RecommendedSeriesResponse {
-        Log.d("getRecommendedSeries", "in getRecommendedSeries: ")
-        try {
-            api.getPopularTvShows(page = page)
-        }catch (e: Exception){
-            Log.d("getRecommendedSeries", "catched getRecommendedSeries: ${e.message} ")
-        }
-//        val x = api.getPopularTvShows(page = page)
-//        Log.d("getRecommendedSeries", "getRecommendedSeries: ${x.recommendedSeriesResults} ")
         return api.getPopularTvShows(page = page)
     }
 
@@ -189,8 +179,38 @@ class RemoteDataSourceImpl(
         return sessionResponse.requestToken
     }
 
+    override suspend fun getSessionId(username: String, password: String): String{
+        val requestTokenResponse = api.getRequestToken()
+        val requestToken = requestTokenResponse.requestToken
+        val sessionResponse = api.postCreateSession(
+            CreateSessionBody(
+                username = username,
+                password = password,
+                requestToken = requestToken
+            )
+        )
+        val sessionId = api.createSession(
+            CreateSessionRawBody(sessionResponse.requestToken)
+        )
+        return sessionId.sessionId
+    }
+
     override suspend fun loginAsGuest(): String {
         return api.getCreateGuestSession().requestToken
+    }
+
+    override suspend fun getCurrentUserDetails(sessionId : String): AccountDetailsResponse {
+        Log.d("TAG getCurrentUserDetails", "in dataaaaaa getCurrentUserDetails 1: ")
+
+        try {
+            api.getAccountDetails(sessionId)
+        }catch (e: Exception){
+            Log.d("TAG getCurrentUserDetails", "in dataaaaaa  excpetioooooon getCurrentUserDetails ${e.message}: ")
+
+        }
+        val x = api.getAccountDetails(sessionId)
+        Log.d("TAG getCurrentUserDetails", "in dataaaaaa getCurrentUserDetails: 2 $x")
+        return x
     }
 
     override suspend fun getUserRatingForMovie(acountId: Int): RatingMovieResponse {

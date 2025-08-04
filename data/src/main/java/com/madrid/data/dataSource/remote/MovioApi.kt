@@ -3,13 +3,21 @@ package com.madrid.data.dataSource.remote
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.ArtistKnownForResponse
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
+import com.madrid.data.dataSource.remote.dto.authentication.AccountDetailsResponse
+import com.madrid.data.dataSource.remote.dto.authentication.AuthenticationResponse
+import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
 import com.madrid.data.dataSource.remote.dto.common.TrailerResponse
 import com.madrid.data.dataSource.remote.dto.genre.GenresResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
+import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
+import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
+import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
+import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
+import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
@@ -24,15 +32,13 @@ import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AuthenticationResponse
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
-import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
-import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MovieApi {
+interface MovioApi {
 
     // region Movies
     @GET("search/movie")
@@ -190,15 +196,27 @@ interface MovieApi {
 
     // region authentication
     @GET("authentication/token/new")
-    suspend fun getRequestToken(): AuthenticationResponse
+    suspend fun getRequestToken(): AuthenticationResponse       // first
 
-    @POST("authentication/token/validate_with_login")
+    @POST("authentication/token/validate_with_login")       // second
     suspend fun postCreateSession(
         @Body body: CreateSessionBody
     ): AuthenticationResponse
 
+    @POST("authentication/session/new")                     // third
+    suspend fun createSession(
+        @Body body: CreateSessionRawBody
+    ): SessionIdResponse
+
+
+
     @GET("authentication/guest_session/new")
     suspend fun getCreateGuestSession(): AuthenticationResponse
+
+    @GET("account")
+    suspend fun getAccountDetails(
+        @Query("session_id") sessionId: String          // fourth
+    ): AccountDetailsResponse
     // endregion
 
 

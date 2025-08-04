@@ -22,9 +22,10 @@ import com.madrid.domain.entity.Series
 import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.SeriesRepository
+import javax.inject.Inject
 import com.madrid.domain.usecase.series.GetUserRatedSeries
 
-class SeriesRepositoryImpl(
+class SeriesRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
 ) : SeriesRepository {
