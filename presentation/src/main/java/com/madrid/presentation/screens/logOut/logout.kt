@@ -1,4 +1,4 @@
-package com.madrid.designSystem.component.BottomSheet
+package com.madrid.presentation.screens.logOut
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -117,7 +117,9 @@ private fun LogoutConfirmationContent(
 @Composable
 private fun LogoutIconSection() {
     Box(
-        modifier = Modifier.size(60.dp, 66.dp),
+        modifier = Modifier
+            .padding(bottom = 16.dp)
+            .size(60.dp, 66.dp),
         contentAlignment = Alignment.Center
     ) {
         MovioIcon(
@@ -243,7 +245,7 @@ fun LogoutConfirmationBottomSheetPreview() {
 
         if (showBottomSheet) {
             MovioBottomSheet(
-                show = showBottomSheet,
+                show = true,
                 onDismiss = { showBottomSheet = false },
                 containerColor = Theme.color.surfaces.surface
             ) {
