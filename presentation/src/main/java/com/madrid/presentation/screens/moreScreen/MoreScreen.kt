@@ -47,7 +47,9 @@ fun MoreScreen(
                     navController.navigate(Destinations.AuthenticationScreen)
                 }
 
-                is MoreEffect.navigateToMyRatings -> TODO()
+                is MoreEffect.navigateToMyRatings -> {
+                    navController.navigate(Destinations.MyRatingScreen)
+                }
             }
         }
     }

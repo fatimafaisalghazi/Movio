@@ -1,10 +1,12 @@
 package com.madrid.data.repositories
 
+import android.util.Log
 import com.madrid.data.dataSource.local.mappers.toGenre
 import com.madrid.data.dataSource.local.mappers.toSeries
 import com.madrid.data.dataSource.mapper.toSeriesGenreTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toEpisode
+import com.madrid.data.dataSource.remote.mapper.toRatedSeries
 import com.madrid.data.dataSource.remote.mapper.toReview
 import com.madrid.data.dataSource.remote.mapper.toSeries
 import com.madrid.data.dataSource.remote.mapper.toSimilarSeries
@@ -21,6 +23,7 @@ import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.SeriesRepository
 import javax.inject.Inject
+import com.madrid.domain.usecase.series.GetUserRatedSeriesUseCase
 
 class SeriesRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
@@ -106,5 +109,11 @@ class SeriesRepositoryImpl @Inject constructor(
             val series = genreWithSeries.series.map { it.toSeries() }
             genreTitle to series
         }
+    }
+
+    override suspend fun getUserSeriesRate(sessionId: String): List<GetUserRatedSeriesUseCase.RatedSeries> {
+        val result =
+            remoteDataSource.getUserRatingForSeries(sessionId)
+        return result.ratedSeries.map { it.toRatedSeries() }
     }
 }
