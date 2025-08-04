@@ -29,7 +29,7 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
 import com.madrid.data.repositories.remote.RemoteDataSource
-import jakarta.inject.Inject
+import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
     private val api: MovioApi
