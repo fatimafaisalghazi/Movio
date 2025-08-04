@@ -8,9 +8,10 @@ import com.madrid.data.repositories.mapper.toTheme
 import com.madrid.domain.repository.PreferencesRepository
 import com.madrid.domain.utils.AppLanguage
 import com.madrid.domain.utils.AppTheme
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class PreferencesRepositoryImpl(
+class PreferencesRepositoryImpl@Inject constructor(
     private val userPreferences: UserPreferences
 ) : PreferencesRepository {
     override fun getAppDarkModeOn(): Flow<AppTheme> {
