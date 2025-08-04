@@ -74,7 +74,7 @@ fun LogoWithBackground() {
 
 @Preview(showBackground = true)
 @Composable
-fun LoginHeaderPreview() {
+private fun LoginHeaderPreview() {
     MovioTheme {
         LoginHeader()
     }
