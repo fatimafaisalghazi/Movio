@@ -1,10 +1,10 @@
 package com.madrid.presentation.viewModel.myRateViewModel
 
-import com.madrid.domain.usecase.movie.GetUserRatedMovie
-import com.madrid.domain.usecase.series.GetUserRatedSeries
+import com.madrid.domain.usecase.movie.GetUserRatedMovieUseCase
+import com.madrid.domain.usecase.series.GetUserRatedSeriesUseCase
 import com.madrid.presentation.viewModel.shared.MediaType
 
-fun GetUserRatedMovie.RatedMovie.toRatedMediaUiState(): RatedMediaState {
+fun GetUserRatedMovieUseCase.RatedMovie.toRatedMediaUiState(): RatedMediaState {
     return RatedMediaState(
         imageUrL = this.movie.imageUrl,
         mediaTitle = this.movie.title,
@@ -14,7 +14,7 @@ fun GetUserRatedMovie.RatedMovie.toRatedMediaUiState(): RatedMediaState {
     )
 }
 
-fun GetUserRatedSeries.RatedSeries.toRatedMediaUiState(): RatedMediaState {
+fun GetUserRatedSeriesUseCase.RatedSeries.toRatedMediaUiState(): RatedMediaState {
     return RatedMediaState(
         imageUrL = this.series.imageUrl,
         mediaTitle = this.series.title,

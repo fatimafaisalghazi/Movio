@@ -7,7 +7,7 @@ import com.madrid.domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class GetUserRatedMovie@Inject constructor(
+class GetUserRatedMovieUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
     private val userRepository: UserRepository
 ) {

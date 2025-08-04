@@ -24,7 +24,7 @@ import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.MovieRepository
 import javax.inject.Inject
-import com.madrid.domain.usecase.movie.GetUserRatedMovie
+import com.madrid.domain.usecase.movie.GetUserRatedMovieUseCase
 import kotlin.collections.ifEmpty
 
 class MovieRepositoryImpl @Inject constructor(
@@ -143,7 +143,7 @@ class MovieRepositoryImpl @Inject constructor(
             sortType
         ).movieResults?.map { it.toMovie() } ?: emptyList()
     }
-    override suspend fun getUserMovieRate( sessionId :String): List<GetUserRatedMovie.RatedMovie> {
+    override suspend fun getUserMovieRate( sessionId :String): List<GetUserRatedMovieUseCase.RatedMovie> {
         val result = remoteDataSource.getUserRatingForMovie(
             sessionId = sessionId
         )

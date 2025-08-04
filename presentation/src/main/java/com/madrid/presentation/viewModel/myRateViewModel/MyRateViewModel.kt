@@ -1,7 +1,7 @@
 package com.madrid.presentation.viewModel.myRateViewModel
 
-import com.madrid.domain.usecase.movie.GetUserRatedMovie
-import com.madrid.domain.usecase.series.GetUserRatedSeries
+import com.madrid.domain.usecase.movie.GetUserRatedMovieUseCase
+import com.madrid.domain.usecase.series.GetUserRatedSeriesUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.MediaType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyRateViewModel @Inject constructor(
-    private val getUserRatedSeries: GetUserRatedSeries,
-    private val getUserRatedMovie: GetUserRatedMovie
+    private val getUserRatedSeriesUseCase: GetUserRatedSeriesUseCase,
+    private val getUserRatedMovieUseCase: GetUserRatedMovieUseCase
 ) : BaseViewModel<MyRateUiState, MyRatingEffect>(MyRateUiState()),
     MyRatingInteractionListener {
 
@@ -44,8 +44,8 @@ class MyRateViewModel @Inject constructor(
     }
 
     private suspend fun loadData(): List<RatedMediaState> {
-        val movie = getUserRatedMovie().map { it.toRatedMediaUiState() }
-        val series = getUserRatedSeries().map { it.toRatedMediaUiState() }
+        val movie = getUserRatedMovieUseCase().map { it.toRatedMediaUiState() }
+        val series = getUserRatedSeriesUseCase().map { it.toRatedMediaUiState() }
         return movie + series
     }
 

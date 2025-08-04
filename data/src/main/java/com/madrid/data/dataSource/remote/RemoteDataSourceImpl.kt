@@ -219,10 +219,12 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse {
-        return api.getUserRatingForMovie(sessionId)
+        val accountId = api.getAccountDetails(sessionId).id
+        return api.getUserRatingForMovie(accountId, sessionId)
     }
 
     override suspend fun getUserRatingForSeries(sessionId: String): RatingSeriesResponse {
-        return api.getUserRatingForSeries(sessionId)
+        val accountId = api.getAccountDetails(sessionId).id
+        return api.getUserRatingForSeries(accountId, sessionId)
     }
 }

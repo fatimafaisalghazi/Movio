@@ -23,7 +23,7 @@ import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.SeriesRepository
 import javax.inject.Inject
-import com.madrid.domain.usecase.series.GetUserRatedSeries
+import com.madrid.domain.usecase.series.GetUserRatedSeriesUseCase
 
 class SeriesRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
@@ -111,7 +111,7 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserSeriesRate(sessionId:String): List<GetUserRatedSeries.RatedSeries> {
+    override suspend fun getUserSeriesRate(sessionId:String): List<GetUserRatedSeriesUseCase.RatedSeries> {
         val result =
             remoteDataSource.getUserRatingForSeries(sessionId)
         Log.d("Rated result", "getUserSeriesRate: ${result.ratedSeries.map { it.toRatedSeries() }}")

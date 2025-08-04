@@ -6,7 +6,7 @@ import com.madrid.domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class GetUserRatedSeries @Inject constructor(
+class GetUserRatedSeriesUseCase @Inject constructor(
     private val seriesRepository: SeriesRepository,
     private val userRepository: UserRepository
 ) {
