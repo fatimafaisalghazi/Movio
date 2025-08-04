@@ -1,6 +1,6 @@
 package com.madrid.domain.utils
 
-enum class Theme {
+enum class AppTheme {
     LIGHT,
     DARK
 }

@@ -2,28 +2,30 @@ package com.madrid.data.repositories
 
 import com.madrid.data.repositories.datasource.UserPreferences
 import com.madrid.data.repositories.mapper.toBoolean
+import com.madrid.data.repositories.mapper.toLanguage
+import com.madrid.data.repositories.mapper.toStringLanguage
 import com.madrid.data.repositories.mapper.toTheme
 import com.madrid.domain.repository.PreferencesRepository
-import com.madrid.domain.utils.Theme
+import com.madrid.domain.utils.AppLanguage
+import com.madrid.domain.utils.AppTheme
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 class PreferencesRepositoryImpl(
     private val userPreferences: UserPreferences
 ) : PreferencesRepository {
-    override fun getAppDarkModeOn(): Flow<Theme> {
+    override fun getAppDarkModeOn(): Flow<AppTheme> {
         return userPreferences.getAppDarkModeOn().toTheme()
     }
 
-    override suspend fun setAppDarkModeOn(theme: Theme) {
-        userPreferences.setAppDarkModeOn(theme.toBoolean())
+    override suspend fun setAppDarkModeOn(appTheme: AppTheme) {
+        userPreferences.setAppDarkModeOn(appTheme.toBoolean())
     }
 
-    override suspend fun getAppLanguage(): String {
-        return userPreferences.getAppLanguage().first().toString()
+    override suspend fun getAppLanguage(): Flow<AppLanguage> {
+        return userPreferences.getAppLanguage().toLanguage()
     }
 
-    override suspend fun setAppLanguage(language: String) {
-        userPreferences.setAppLanguage(language)
+    override suspend fun setAppLanguage(language: AppLanguage) {
+        userPreferences.setAppLanguage(language.toStringLanguage())
     }
 }

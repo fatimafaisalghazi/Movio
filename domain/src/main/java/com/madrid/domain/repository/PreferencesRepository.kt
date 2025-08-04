@@ -1,12 +1,13 @@
 package com.madrid.domain.repository
 
-import com.madrid.domain.utils.Theme
+import com.madrid.domain.utils.AppLanguage
+import com.madrid.domain.utils.AppTheme
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {
-    fun getAppDarkModeOn(): Flow<Theme>
-    suspend fun setAppDarkModeOn(theme: Theme)
+    fun getAppDarkModeOn(): Flow<AppTheme>
+    suspend fun setAppDarkModeOn(appTheme: AppTheme)
 
-    suspend fun getAppLanguage(): String
-    suspend fun setAppLanguage(language: String)
+    suspend fun getAppLanguage():  Flow<AppLanguage>
+    suspend fun setAppLanguage(language: AppLanguage)
 }
