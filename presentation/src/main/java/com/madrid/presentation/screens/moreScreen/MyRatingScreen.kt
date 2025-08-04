@@ -11,32 +11,76 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
+import com.madrid.presentation.component.movioCards.MovioRatingCard
+import com.madrid.presentation.component.movioCards.MovioVerticalCard
+import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.navigation.LocalNavController
+import com.madrid.presentation.viewModel.moreViewModel.MoreEffect
+import com.madrid.presentation.viewModel.moreViewModel.MoreInteractionListener
 import com.madrid.presentation.viewModel.myRateViewModel.MyRateUiState
 import com.madrid.presentation.viewModel.myRateViewModel.MyRateViewModel
+import com.madrid.presentation.viewModel.myRateViewModel.MyRatingEffect
+import com.madrid.presentation.viewModel.myRateViewModel.MyRatingInteractionListener
+import com.madrid.presentation.viewModel.shared.MediaType
 
 
 @Composable
 fun MyRatingScreen(
-    viewModel: MyRateViewModel
+    viewModel: MyRateViewModel = hiltViewModel()
 ) {
+    val navController = LocalNavController.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is MyRatingEffect.NavigateBack -> {
+                    navController.popBackStack()
+                }
+
+                is MyRatingEffect.NavigateToMediaDetails -> {
+                    when (effect.mediaType) {
+                        MediaType.MOVIE -> navController.navigate(
+                            Destinations.MovieDetailsScreen(
+                                movieId = effect.mediaId
+                            )
+                        )
+
+                        MediaType.TV_SHOW -> navController.navigate(
+                            Destinations.SeriesDetailsScreen(
+                                seriesId = effect.mediaId,
+                                seasonNumber = 1
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
     MyRatingScreenContent(
         state = state,
-        onBackClick={}
+        interaction = viewModel as MyRatingInteractionListener,
+        onBackClick = { viewModel.onBackClick() }
     )
 }
 
 @Composable
-private fun MyRatingScreenContent(state: MyRateUiState, onBackClick: () -> Unit) {
-    Column(Modifier.padding( 16.dp)) {
+private fun MyRatingScreenContent(
+    state: MyRateUiState,
+    onBackClick: () -> Unit,
+    interaction: MyRatingInteractionListener,
+) {
+    Column(Modifier.padding(16.dp)) {
         TopAppBar(
             text = stringResource(R.string.my_ratings),
             secondIcon = null,
@@ -51,10 +95,22 @@ private fun MyRatingScreenContent(state: MyRateUiState, onBackClick: () -> Unit)
                 .statusBarsPadding(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item(
-                span = { GridItemSpan(maxLineSpan) }
-            ) {
-                //TODO --> MovioRatingCard
+            items(
+                count = state.ratedMedia.size
+            ) { index ->
+                val Media = state.ratedMedia[index]
+                MovioRatingCard(
+                    movieTitle = Media.mediaTitle,
+                    movieImageUrl = Media.imageUrL,
+                    height = 100.dp,
+                    rate = Media.rate,
+                    onClick = {
+                        interaction.onMediaClick(
+                            mediaType = state.ratedMedia[index].mediaType,
+                            mediaId = state.ratedMedia[index].mediaId
+                        )
+                    },
+                )
             }
         }
     }

@@ -9,7 +9,8 @@ fun GetUserRatedMovie.RatedMovie.toRatedMediaUiState(): RatedMediaState {
         imageUrL = this.movie.imageUrl,
         mediaTitle = this.movie.title,
         rate = this.rate.toString(),
-        mediaType = MediaType.MOVIE
+        mediaType = MediaType.MOVIE,
+        mediaId = this.movie.id
     )
 }
 
@@ -18,6 +19,7 @@ fun GetUserRatedSeries.RatedSeries.toRatedMediaUiState(): RatedMediaState {
         imageUrL = this.series.imageUrl,
         mediaTitle = this.series.title,
         rate = this.rate.toString(),
-        mediaType = MediaType.TV_SHOW
+        mediaType = MediaType.TV_SHOW,
+        mediaId = this.series.id
     )
 }

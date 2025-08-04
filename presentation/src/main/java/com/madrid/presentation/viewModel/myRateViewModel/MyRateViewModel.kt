@@ -12,9 +12,9 @@ class MyRateViewModel(
 ) : BaseViewModel<MyRateUiState, MyRatingEffect>(MyRateUiState()),
     MyRatingInteractionListener {
 
-//    init {
-//          loadRatedMedia()
-//    }
+    init {
+        loadRatedMedia()
+    }
 
     override fun onMediaClick(mediaId: Int, mediaType: MediaType) {
         emitNewEffect(effect = MyRatingEffect.NavigateToMediaDetails(mediaId, mediaType))
@@ -24,9 +24,9 @@ class MyRateViewModel(
         emitNewEffect(effect = MyRatingEffect.NavigateBack)
     }
 
-    fun loadRatedMedia(accountId: Int) {
+    private fun loadRatedMedia() {
         tryToExecute(
-            function = { loadData(accountId) },
+            function = { loadData() },
             onSuccess = { result ->
                 updateState {
                     it.copy(
@@ -41,9 +41,9 @@ class MyRateViewModel(
         )
     }
 
-    private suspend fun loadData(accountId: Int): List<RatedMediaState> {
-        val movie = getUserRatedMovie(accountId).map { it.toRatedMediaUiState() }
-        val series = getUserRatedSeries(accountId).map { it.toRatedMediaUiState() }
+    private suspend fun loadData(): List<RatedMediaState> {
+        val movie = getUserRatedMovie().map { it.toRatedMediaUiState() }
+        val series = getUserRatedSeries().map { it.toRatedMediaUiState() }
         return movie + series
     }
 

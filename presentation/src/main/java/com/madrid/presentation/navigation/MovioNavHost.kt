@@ -25,6 +25,7 @@ import com.madrid.presentation.screens.loginScreen.AuthenticationScreen
 import com.madrid.presentation.screens.loginScreen.component.ForgotPassword
 import com.madrid.presentation.screens.loginScreen.component.WebViewScreen
 import com.madrid.presentation.screens.moreScreen.MoreScreen
+import com.madrid.presentation.screens.moreScreen.MyRatingScreen
 import com.madrid.presentation.screens.onboarding.OnBoardingScreen
 import com.madrid.presentation.screens.searchScreen.SearchScreen
 import com.madrid.presentation.screens.searchScreen.SeeAllForYou.SeeAllForYouScreen
@@ -57,8 +58,7 @@ fun MovioNavHost(
             if (isFirstLaunch) {
                 setOnBoardingComplete(true)
                 Destinations.OnBoarding
-            }
-            else if (isLoggedIn.not()) Destinations.AuthenticationScreen
+            } else if (isLoggedIn.not()) Destinations.AuthenticationScreen
             else Destinations.HomeScreen,
         enterTransition = {
             fadeIn(tween(0))
@@ -145,8 +145,11 @@ fun MovioNavHost(
             val strategy = entryPoint.tvShowsFactory().create(destination.type)
             SeeAllTVShowsScreen(
                 viewModel = hiltViewModel<SeeAllTVShowsViewModel, SeeAllTVShowsViewModel.Factory>(
-                key = destination.type.toString()
+                    key = destination.type.toString()
                 ) { factory -> factory.create(strategy) })
+        }
+        composable<Destinations.MyRatingScreen> {
+            MyRatingScreen()
         }
     }
 }
