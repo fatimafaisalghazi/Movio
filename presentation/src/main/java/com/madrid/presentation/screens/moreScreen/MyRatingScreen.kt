@@ -26,6 +26,7 @@ import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioRatingCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
+import com.madrid.presentation.screens.detailsScreen.castDetails.LoadingScreen
 import com.madrid.presentation.viewModel.myRateViewModel.MyRateUiState
 import com.madrid.presentation.viewModel.myRateViewModel.MyRateViewModel
 import com.madrid.presentation.viewModel.myRateViewModel.MyRatingEffect
@@ -75,12 +76,19 @@ fun MyRatingScreen(
         ) {
             EmptySearchLayout(
                 title = stringResource(R.string.internet_is_not_available),
-                description =
-                    stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
                 image = R.drawable.img_no_internet
             )
         }
+    } else if (state.ratedMedia.isNotEmpty()) {
+        MyRatingScreenContent(
+            state = state,
+            interaction = viewModel as MyRatingInteractionListener,
+            onBackClick = { viewModel.onBackClick() }
+        )
     } else if (state.ratedMedia.isEmpty()) {
+        LoadingScreen(message = stringResource(R.string.loading))
+    } else {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,12 +102,7 @@ fun MyRatingScreen(
                 image = R.drawable.img_empty_more
             )
         }
-    } else
-        MyRatingScreenContent(
-            state = state,
-            interaction = viewModel as MyRatingInteractionListener,
-            onBackClick = { viewModel.onBackClick() }
-        )
+    }
 }
 
 @Composable
