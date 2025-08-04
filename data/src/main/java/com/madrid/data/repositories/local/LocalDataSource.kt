@@ -47,4 +47,5 @@ interface LocalDataSource {
     suspend fun getSeriesByGenres(): List<GenreWithSeries>
 
     suspend fun getNowPlayingMovies(): List<MovieTable>
+    suspend fun getUpComingMovies(): List<MovieTable>
 }

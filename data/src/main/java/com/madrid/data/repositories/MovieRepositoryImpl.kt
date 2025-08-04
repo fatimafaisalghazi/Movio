@@ -141,7 +141,17 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUpcomingMovie(page: Int): List<Movie> {
-        return remoteDataSource.getUpcomingMovie().toMovies()
+        val localMovies = localDataSource.getUpComingMovies()
+        if (localMovies.isNotEmpty()){
+            return localMovies.map { it.toMovie() }
+        }
+        val remoteResult = remoteDataSource.getUpcomingMovie(page)
+        val remoteMovies = remoteResult.upcomingMovieResult?.map { it.toMovie() } ?: emptyList()
+        remoteMovies.forEach { movie ->
+            localDataSource.insertSectionMovie(movie.toSectionMovieTable().copy(movieSection = MovieSection.UPCOMING.value))
+        }
+
+        return remoteMovies
     }
 
     override suspend fun getMovieGenres(): List<Genre> {

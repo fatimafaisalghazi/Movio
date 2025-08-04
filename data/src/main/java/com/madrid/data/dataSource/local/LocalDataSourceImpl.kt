@@ -144,4 +144,8 @@ class LocalDataSourceImpl @Inject constructor(
         return x
     }
 
+    override suspend fun getUpComingMovies(): List<MovieTable> {
+        return movieDao.getMoviesBySection(MovieSection.UPCOMING.value)
+    }
+
 }
