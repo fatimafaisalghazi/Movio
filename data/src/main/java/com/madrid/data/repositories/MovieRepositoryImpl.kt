@@ -1,7 +1,11 @@
 package com.madrid.data.repositories
 
+import android.util.Log
 import com.madrid.data.dataSource.local.mappers.toGenre
 import com.madrid.data.dataSource.local.mappers.toMovie
+import com.madrid.data.dataSource.local.mappers.toMovieTable
+import com.madrid.data.dataSource.local.mappers.toSectionMovieTable
+import com.madrid.data.dataSource.local.table.MovieSection
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
@@ -116,7 +120,24 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
-        return remoteDataSource.getNowPlayingMovie().toMovies()
+        Log.d("TAG in repo", "getNowPlayingMovie: 0 local movies 0th ")
+        val localMovies = localDataSource.getNowPlayingMovies()
+        Log.d("TAG in repo", "getNowPlayingMovie: 1 local movies first ${localMovies} ")
+        if (localMovies.isNotEmpty()) {
+            Log.d("TAG in repo", "getNowPlayingMovie: 2 local movies second ${localMovies} ")
+            return localMovies.map { it.toMovie() }
+        }
+        val remoteResult = remoteDataSource.getNowPlayingMovie(page)
+        val remoteMovies = remoteResult.nowPlayingMovieResults?.map { it.toMovie() } ?: emptyList()
+
+        Log.d("TAG in repo", "getNowPlayingMovie: 3 remote movies first ${remoteMovies} ")
+
+        remoteMovies.forEach { movie ->
+            localDataSource.insertSectionMovie(movie.toSectionMovieTable().copy(movieSection = MovieSection.NOW_PLAYING.value))
+        }
+        Log.d("TAG in repo", "getNowPlayingMovie: 4 remote movies second ${remoteMovies} ")
+
+        return remoteMovies
     }
 
     override suspend fun getUpcomingMovie(page: Int): List<Movie> {
