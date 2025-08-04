@@ -2,6 +2,7 @@ package com.madrid.presentation.screens.moreScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +14,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -67,6 +70,21 @@ fun MyRatingScreen(
             }
         }
     }
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 64.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            EmptySearchLayout(
+                title = stringResource(R.string.internet_is_not_available),
+                description =
+                    stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                image = R.drawable.img_no_internet
+            )
+        }
+    }else
     MyRatingScreenContent(
         state = state,
         interaction = viewModel as MyRatingInteractionListener,

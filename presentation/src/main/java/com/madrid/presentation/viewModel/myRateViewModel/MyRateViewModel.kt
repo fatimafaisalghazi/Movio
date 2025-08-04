@@ -36,7 +36,7 @@ class MyRateViewModel(
                 }
             },
             onError = {
-                //TODO
+               updateState { it.copy(isLoading = true) }
             },
         )
     }
