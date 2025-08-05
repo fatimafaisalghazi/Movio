@@ -42,6 +42,7 @@ fun MovioNavGraph(
     Column(
         Modifier
             .fillMaxSize()
+            .navigationBarsPadding()
             .background(
                 color = Theme.color.surfaces.surface
             )
@@ -49,7 +50,6 @@ fun MovioNavGraph(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
                 .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
