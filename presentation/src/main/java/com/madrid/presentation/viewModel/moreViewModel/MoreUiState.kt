@@ -7,6 +7,7 @@ data class MoreUiState(
     val username: String = "Guest",
     val isThemeSheetVisible: Boolean = false,
     val selectedTheme: ThemeType = ThemeType.DARK,
+    val currentTheme: ThemeType = ThemeType.DARK,
     val isLanguageSheetVisible: Boolean = false,
     val appVersion: String = "1.1.0v",
     val isGuest: Boolean = true,

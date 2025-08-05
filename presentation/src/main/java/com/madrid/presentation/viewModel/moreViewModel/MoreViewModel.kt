@@ -26,7 +26,7 @@ class MoreViewModel @Inject constructor(
     init {
         fetchIsGuest()
         fetchCurrentUserDetails()
-        initCurrentTheme()
+        initAppTheme()
 //        getAppVersion()
     }
 
@@ -79,12 +79,15 @@ class MoreViewModel @Inject constructor(
         }
     }
 
-    private fun initCurrentTheme() {
+    private fun initAppTheme() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 getAppThemeUseCase().collectLatest { appTheme ->
                     updateState {
-                        it.copy(selectedTheme = appTheme.toThemeType())
+                        it.copy(
+                            selectedTheme = appTheme.toThemeType(),
+                            currentTheme = appTheme.toThemeType()
+                        )
                     }
                 }
             } catch (e: Exception) {
@@ -104,7 +107,10 @@ class MoreViewModel @Inject constructor(
     override fun onConfirmTheme() {
         tryToExecute(
             function = { setAppThemeUseCase(state.value.selectedTheme.toAppTheme()) },
-            onSuccess = { onDismissBottomSheet() },
+            onSuccess = {
+                updateState { it.copy(currentTheme = state.value.selectedTheme) }
+                onDismissBottomSheet()
+            },
             onError = { onError() },
         )
     }

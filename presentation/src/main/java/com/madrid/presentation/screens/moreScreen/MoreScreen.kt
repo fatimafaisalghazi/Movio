@@ -138,7 +138,7 @@ private fun MoreScreenContent(
                 SettingsItem(
                     icon = R.drawable.outline_pallete2,
                     title = stringResource(presentationR.string.theme),
-                    text = if (state.selectedTheme == ThemeType.DARK) stringResource(presentationR.string.dark)
+                    text = if (state.currentTheme == ThemeType.DARK) stringResource(presentationR.string.dark)
                     else stringResource(
                         presentationR.string.light
                     ),
@@ -149,8 +149,8 @@ private fun MoreScreenContent(
                     icon = R.drawable.outline_earth,
                     title = stringResource(presentationR.string.language),
                     text = if (currentLanguage == Language.Arabic.code)
-                            stringResource(presentationR.string.arabic)
-                        else stringResource(presentationR.string.english),
+                        stringResource(presentationR.string.arabic)
+                    else stringResource(presentationR.string.english),
                     clickable = true,
                     onClick = { interactionListener.onClickLanguage() }
                 )
@@ -199,7 +199,7 @@ private fun MoreScreenContent(
                         currentLocale.value =
                             if (selectedLanguage == Language.Arabic.code) Language.Arabic else Language.English
                         Language.setLocale(context = context, localeCode = currentLocale.value.code)
-                        interactionListener::onDismissBottomSheet
+                        interactionListener.onDismissBottomSheet()
                     },
                     isShown = state.isLanguageSheetVisible,
                     onDismiss = interactionListener::onDismissBottomSheet,
