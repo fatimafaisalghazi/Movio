@@ -3,6 +3,7 @@ package com.madrid.movio.di
 import com.madrid.domain.usecase.artist.GetArtistDetailsUseCase
 import com.madrid.domain.usecase.artist.GetArtistMoviesUseCase
 import com.madrid.domain.usecase.authentication.LoginUseCase
+import com.madrid.domain.usecase.movie.AddRatingMoviesUseCase
 import com.madrid.domain.usecase.movie.FilterMoviesByCategoryUseCase
 import com.madrid.domain.usecase.movie.GetMovieDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieGenresUseCase
@@ -26,6 +27,7 @@ import com.madrid.domain.usecase.search.GetRecentSearchesUseCase
 import com.madrid.domain.usecase.search.GetRecommendedMovieUseCase
 import com.madrid.domain.usecase.search.GetSeriesByQueryUseCase
 import com.madrid.domain.usecase.search.RemoveRecentSearchUseCase
+import com.madrid.domain.usecase.series.AddRatingSeriesUseCase
 import com.madrid.domain.usecase.series.FilterSeriesByCategoryUseCase
 import com.madrid.domain.usecase.series.GetAiringTodaySeriesUseCase
 import com.madrid.domain.usecase.series.GetEpisodesForSeasonUseCase
@@ -81,6 +83,7 @@ val domainModule = module {
     singleOf(::GetMoviesByGenreIdUseCase)
     singleOf(::GetNowPlayingMovieUseCase)
     singleOf(::GetUpcomingMovieUseCase)
+    singleOf(::AddRatingMoviesUseCase)
     // series
     singleOf(::GetSeriesByGenresUseCase)
     singleOf(::GetEpisodesForSeasonUseCase)
@@ -99,6 +102,7 @@ val domainModule = module {
     singleOf(::GetRecommendedSeriesUseCase)
     singleOf(::GetAiringTodaySeriesUseCase)
     singleOf(::GetOnAirSeriesUseCase)
+    singleOf(::AddRatingSeriesUseCase)
 
     // user
     singleOf(::LoginUseCase)

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
+import com.madrid.domain.usecase.series.AddRatingSeriesUseCase
 import com.madrid.domain.usecase.series.GetEpisodesForSeasonUseCase
 import com.madrid.domain.usecase.series.GetSeriesDetailsUseCase
 import com.madrid.domain.usecase.series.GetSeriesReviewsUseCase
@@ -25,7 +26,8 @@ class SeriesDetailsViewModel(
     private val getSeriesTopCastUseCase: GetSeriesTopCastUseCase,
     private val getSeriesReviewsUseCase: GetSeriesReviewsUseCase,
     private val getSimilarSeriesUseCase: GetSimilarSeriesUseCase,
-    private val getEpisodesForSeasonUseCase: GetEpisodesForSeasonUseCase
+    private val getEpisodesForSeasonUseCase: GetEpisodesForSeasonUseCase,
+    private val addRatingSeriesUseCase: AddRatingSeriesUseCase
 ) : BaseViewModel<SeriesDetailsUiState, Nothing>(SeriesDetailsUiState()) {
     private val args = savedStateHandle.toRoute<Destinations.SeriesDetailsScreen>()
 
@@ -177,6 +179,27 @@ class SeriesDetailsViewModel(
             },
         )
     }
+
+    fun onPickRatingNumber(rating: Int) {
+        updateState {
+            it.copy(
+                userRating = rating
+            )
+        }
+    }
+
+    fun addRating() {
+        tryToExecute(
+            function = {
+                addRatingSeriesUseCase(
+                    state.value.seriesId,
+                    state.value.userRating.toDouble()
+                )
+            },
+            onSuccess = {},
+            onError = {},
+        )
+    }
 }
 
 fun Series.toUiState(): SeriesUiState {
@@ -198,4 +221,3 @@ fun Review.toUiState(): ReviewUiState {
         content = this.comment
     )
 }
-

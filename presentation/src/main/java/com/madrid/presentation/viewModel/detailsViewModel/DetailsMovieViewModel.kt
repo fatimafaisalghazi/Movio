@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.madrid.domain.usecase.movie.AddRatingMoviesUseCase
 import com.madrid.domain.usecase.movie.GetMovieDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieReviewsUseCase
 import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
 import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
-import com.madrid.domain.usecase.movie.GetTopRatedMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.utils.RateFormatter
@@ -26,7 +26,7 @@ class DetailsMovieViewModel(
     private val getMovieTopCastUseCase: GetMovieTopCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    private val getAddRatingMoviesUseCase: GetTopRatedMoviesUseCase
+    private val getAddRatingMoviesUseCase: AddRatingMoviesUseCase
 ) : BaseViewModel<DetailsMovieUiState, Nothing>(
     DetailsMovieUiState()
 ) {
@@ -164,11 +164,11 @@ class DetailsMovieViewModel(
             )
         }
     }
-
+//
     fun addRating() {
         tryToExecute(
             function = {
-                getAddRatingMoviesUseCase.movieRepository.addRatingMovie(
+                getAddRatingMoviesUseCase(
                     state.value.movieId,
                     state.value.userRating.toDouble()
                 )
