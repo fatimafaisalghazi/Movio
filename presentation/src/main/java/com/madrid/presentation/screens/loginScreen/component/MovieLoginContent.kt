@@ -2,7 +2,6 @@ package com.madrid.presentation.screens.loginScreen.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,31 +34,37 @@ fun MovieLoginContent(
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
             .padding(horizontal = 16.dp, vertical = 32.dp),
-        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+        ) {
             Spacer(modifier = Modifier.height(74.dp))
             LoginHeader()
             Spacer(modifier = Modifier.height(48.dp))
+
             LoginInputFields(
                 state = state,
                 onUsernameChange = onUsernameChange,
                 onPasswordChange = onPasswordChange,
-                onTogglePassword = onTogglePassword,
-                modifier = Modifier.padding(bottom = 24.dp)
+                onTogglePassword = onTogglePassword
             )
+
             LoginErrorAndForgotPassword(
                 state = state,
                 onForgotPasswordClick = onForgotPasswordClick,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 24.dp)
             )
+
             AnimatedLoginButton(
                 isLoading = state.isLoading,
                 onClick = onLoginClick,
                 text = stringResource(R.string.login),
                 modifier = Modifier.padding(bottom = 40.dp)
             )
+
             OrDivider()
+
             AnimatedLoginButton(
                 isLoading = state.isGuestLoading,
                 onClick = onGuestLogin,
@@ -74,10 +79,15 @@ fun MovieLoginContent(
                         shape = RoundedCornerShape(24.dp)
                     )
             )
+
         }
         SignUpRow(onSignUpClick = onSignUpClick)
+
+
     }
 }
+
+
 
 @Preview
 @Composable

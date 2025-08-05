@@ -27,22 +27,27 @@ fun AnimatedLoginButton
     loadingIndicatorColor: Color = Theme.color.brand.onPrimary,
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .height(48.dp)
+
 ) {
     MovioButton(
         onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
+        modifier = modifier.fillMaxWidth()
+            .height(48.dp),
+        enabled = enabled && !isLoading,
         color = buttonColor
+
     ) {
         if (isLoading) {
             CircularProgressIndicator(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(24.dp)
+
+                ,
                 color = loadingIndicatorColor,
                 strokeWidth = 2.dp
             )
         } else {
             MovioText(
+
                 text = text,
                 textStyle = textStyle,
                 color = textColor,

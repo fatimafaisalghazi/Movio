@@ -24,6 +24,7 @@ import com.madrid.presentation.R
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
+
     ) {
         MovioText(
             text = stringResource(R.string.don_t_have_an_account),

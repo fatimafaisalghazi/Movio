@@ -1,12 +1,17 @@
 package com.madrid.presentation.viewModel.loginViewModel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.madrid.designSystem.component.MovioToast
 import com.madrid.domain.exceptions.MovioException
 import com.madrid.domain.exceptions.ValidationException
 import com.madrid.domain.usecase.authentication.LoginUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -15,6 +20,8 @@ class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BaseViewModel<LoginUiState, Nothing>(LoginUiState()) {
+    private val _toastMessage = MutableStateFlow<String?>(null)
+    val toastMessage: StateFlow<String?> = _toastMessage.asStateFlow()
 
     fun updateUsername(username: String) {
         updateState {
@@ -36,6 +43,13 @@ class LoginViewModel(
 
     fun toggleShowPassword() {
         updateState { it.copy(showPassword = !it.showPassword) }
+    }
+    fun showToast(message: String) {
+        _toastMessage.value = message
+    }
+
+    fun dismissToast() {
+        _toastMessage.value = null
     }
 
 
@@ -100,11 +114,12 @@ class LoginViewModel(
                     onSuccess()
                 }
             } catch (ex: MovioException) {
+                showToast(ex.message ?: "Something went wrong")
                 updateState {
                     it.copy(
                         isLoading = false,
                         isGuestLoading = false,
-                        errorMessage = ex.message ?: "Unknown error occurred"
+                        errorMessage = null
                     )
                 }
             }
