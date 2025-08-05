@@ -75,7 +75,7 @@ fun SwipeToDeleteCard(
             contentAlignment = Alignment.CenterEnd
         ) {
             MovioIcon(
-                painter = painterResource(R.drawable.delete),
+                painter = painterResource(R.drawable.icon_delete),
                 contentDescription = stringResource(R.string.delete),
                 tint = Theme.color.brand.onPrimary,
                 modifier = Modifier.size(20.dp)
