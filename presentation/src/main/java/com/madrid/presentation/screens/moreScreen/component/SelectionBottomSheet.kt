@@ -1,10 +1,13 @@
 package com.madrid.presentation.screens.moreScreen.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -13,8 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,7 +46,9 @@ fun SelectionBottomSheet(
         containerColor = Theme.color.surfaces.surface,
     ) {
         LazyColumn(
-            modifier = modifier.padding(horizontal = 16.dp),
+            modifier = modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
@@ -55,21 +60,22 @@ fun SelectionBottomSheet(
 
             items(options) { option ->
                 Option(
+                    modifier = Modifier.padding(bottom = 12.dp),
                     option = option.title,
                     isSelected = option.id == selectedOption,
                     onClick = { onOptionSelected(option) },
                     leadingIcon = option.leadingIcon,
                     trailingIcon = option.trailingIcon
-
                 )
             }
+
             item {
                 MovioButton(
                     color = Theme.color.brand.primary,
                     onClick = onConfirmButtonClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .height(48.dp)
                 ) {
                     MovioText(
                         text = stringResource(com.madrid.presentation.R.string.confirm),
@@ -95,6 +101,7 @@ private fun Title(
     )
 }
 
+@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 private fun Option(
     option: String,
@@ -104,28 +111,33 @@ private fun Option(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val borderColors = listOf(
-        Color(0xff724CF8),
-        Theme.color.brand.primary
-    )
     val shape = RoundedCornerShape(8.dp)
+    val borderModifier = if (isSelected)
+        Modifier.border(
+            brush = Theme.color.gradients.borderGradient,
+            width = 1.dp,
+            shape = shape
+        ) else
+        Modifier.border(
+            brush = SolidColor(Color.Transparent),
+            width = 1.dp,
+            shape = shape
+        )
+
     Row(
         modifier = modifier
-            .padding(vertical = 12.dp)
+            .height(48.dp)
+
             .clip(shape)
             .then(
-                if (isSelected)
-                    Modifier.border(
-                        brush = Brush.linearGradient(borderColors),
-                        width = 1.dp,
-                        shape = shape
-                    )
-                else
-                    Modifier
+                borderModifier
             )
             .background(Theme.color.surfaces.surfaceContainer)
-            .clickable(onClick = onClick)
-            .padding(12.dp),
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,
+                onClick = onClick
+            ).padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (leadingIcon != null) {
@@ -144,7 +156,6 @@ private fun Option(
         )
         if (isSelected) {
             MovioIcon(
-                modifier = Modifier.padding(end = 8.dp),
                 painter = trailingIcon,
                 contentDescription = null,
                 tint = Theme.color.brand.primary
