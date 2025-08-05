@@ -17,4 +17,5 @@
     <string name="create_list_title">Create New List</string>
     <string name="create_list_button">Create</string>
     <string name="create_new_list">Create a new list</string>
+    <string name="create_list_hint">List name</string>
 </resources>

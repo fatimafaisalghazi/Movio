@@ -74,11 +74,10 @@ fun CreateListBottomSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Text Input Field
             BasicTextInputField(
                 value = listName,
                 onValueChange = { listName = it },
-                hintText = "List name",
+                hintText = stringResource(R.string.create_list_hint),
                 startIconPainter = painterResource(id = R.drawable.outline_minimalistic),
                 endIconPainter = null,
                 modifier = Modifier

@@ -1,42 +1,92 @@
-// ListManagementBottomSheet.kt
+// SuccessNotificationRow.kt
 package com.madrid.presentation.screens.addtolist
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.animation.*
+import androidx.compose.animation.core.*
+import androidx.compose.ui.text.TextStyle
 import com.madrid.designSystem.component.MovioBottomSheet
+import com.madrid.designSystem.component.MovioIcon
+import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.theme.Theme
 import kotlinx.coroutines.delay
 
-data class UserList(
-    val id: String,
-    val name: String,
-    var isSelected: Boolean = false,
-    var isLoading: Boolean = false
-)
+@Composable
+fun SuccessNotificationRow(
+    isVisible: Boolean,
+    message: String = "Successfully added to your collection.",
+    onDismiss: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    // Auto-dismiss after 3 seconds
+    LaunchedEffect(isVisible) {
+        if (isVisible) {
+            delay(3000)
+            onDismiss()
+        }
+    }
 
-enum class ListBottomSheetMode {
-    LIST_SELECTION,
-    CREATE_NEW_LIST
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically(
+            initialOffsetY = { it },
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        ) + fadeIn(animationSpec = tween(300)),
+        exit = slideOutVertically(
+            targetOffsetY = { it },
+            animationSpec = tween(200)
+        ) + fadeOut(animationSpec = tween(200)),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(
+                    Color(0xFF1A162F)
+                )
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+                MovioIcon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = com.madrid.designSystem.R.drawable.archive_tick),
+                    contentDescription = "Success",
+                )
+
+
+            // Success message
+            MovioText(
+                modifier = Modifier.weight(1f), // Modifier should be first
+                text = message,
+                color = Color.White,
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            )
+        }
+    }
 }
 
 @Composable
-fun ListManagementBottomSheet(
+fun ListManagementBottomSheetWithNotification(
     isVisible: Boolean,
     onDismiss: () -> Unit,
     initialUserLists: List<UserList>,
@@ -47,17 +97,7 @@ fun ListManagementBottomSheet(
     var currentMode by remember { mutableStateOf(ListBottomSheetMode.LIST_SELECTION) }
     var showSuccessNotification by remember { mutableStateOf(false) }
     var successMessage by remember { mutableStateOf("") }
-    var shouldCloseBottomSheet by remember { mutableStateOf(false) }
 
-    // Close bottom sheet when success notification should show
-    LaunchedEffect(shouldCloseBottomSheet) {
-        if (shouldCloseBottomSheet) {
-            onDismiss()
-            shouldCloseBottomSheet = false
-        }
-    }
-
-    // Handle showing success notification when lists are selected
     LaunchedEffect(initialUserLists) {
         val selectedLists = initialUserLists.filter { it.isSelected }
         if (selectedLists.isNotEmpty()) {
@@ -66,12 +106,17 @@ fun ListManagementBottomSheet(
                 else -> "Successfully added to ${selectedLists.size} lists."
             }
             showSuccessNotification = true
-            shouldCloseBottomSheet = true
         }
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
-        // Bottom Sheet
+    Column {
+        SuccessNotificationRow(
+            isVisible = showSuccessNotification,
+            message = successMessage,
+            onDismiss = { showSuccessNotification = false },
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+
         MovioBottomSheet(
             show = isVisible,
             onDismiss = {
@@ -79,7 +124,7 @@ fun ListManagementBottomSheet(
                 onDismiss()
             },
             containerColor = if (currentMode == ListBottomSheetMode.CREATE_NEW_LIST)
-                Color.Transparent else com.madrid.designSystem.theme.Theme.color.surfaces.surface,
+                Color.Transparent else Theme.color.surfaces.surface,
         ) {
             AnimatedContent(
                 targetState = currentMode,
@@ -101,7 +146,6 @@ fun ListManagementBottomSheet(
                                 if (isSelected) {
                                     successMessage = "Successfully added to ${userList.name}."
                                     showSuccessNotification = true
-                                    shouldCloseBottomSheet = true
                                 }
                             }
                         )
@@ -114,7 +158,6 @@ fun ListManagementBottomSheet(
                                 currentMode = ListBottomSheetMode.LIST_SELECTION
                                 successMessage = "Successfully created list: $listName"
                                 showSuccessNotification = true
-                                shouldCloseBottomSheet = true
                             },
                             onDismiss = {
                                 currentMode = ListBottomSheetMode.LIST_SELECTION
@@ -124,27 +167,29 @@ fun ListManagementBottomSheet(
                 }
             }
         }
-
-        // Success notification - positioned at bottom of screen
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 24.dp)
-        ) {
-            SuccessNotificationRow(
-                isVisible = showSuccessNotification,
-                message = successMessage,
-                onDismiss = { showSuccessNotification = false }
-            )
-        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewListManagementBottomSheet() {
-    ListManagementBottomSheet(
+fun PreviewSuccessNotificationRow() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Black)
+            .padding(16.dp)
+    ) {
+        SuccessNotificationRow(
+            isVisible = true,
+            message = "Successfully added to your collection."
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewListManagementBottomSheetWithNotification() {
+    ListManagementBottomSheetWithNotification(
         isVisible = true,
         onDismiss = { },
         initialUserLists = listOf(
