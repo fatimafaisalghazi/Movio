@@ -13,10 +13,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.navigation.MovioNavGraph
@@ -27,7 +25,7 @@ import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(){
     val mainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +43,12 @@ class MainActivity : ComponentActivity() {
         val uploadWorkRequest = PeriodicWorkRequestBuilder<WorkerClass>(15, TimeUnit.MINUTES).build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            uniqueWorkName = "clear home screen local data source",
+            uniqueWorkName = "clearHome",
             ExistingPeriodicWorkPolicy.KEEP,
             uploadWorkRequest,
         )
     }
+
 }
 @Composable
 fun MainScreen(

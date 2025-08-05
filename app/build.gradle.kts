@@ -121,6 +121,7 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.foundation.android)
     implementation(libs.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
