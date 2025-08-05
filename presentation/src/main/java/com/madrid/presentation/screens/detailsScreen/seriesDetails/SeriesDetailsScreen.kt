@@ -33,9 +33,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.R.drawable
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
@@ -44,6 +43,7 @@ import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
+import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastHorizontalScroll
 import com.madrid.presentation.component.header.SeriesDetailsHeader
@@ -52,9 +52,6 @@ import com.madrid.presentation.component.movioCards.MovioArtistsCard
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.designSystem.component.TextWithReadMore
-import com.madrid.presentation.component.BottomMediaActions
-import com.madrid.presentation.component.header.SeriesDetailsHeader
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeries
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeriesSection
@@ -119,7 +116,7 @@ fun SeriesDetailsScreen(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
                 BottomMediaActions(
-                   onRateClick = { showAddRatingBottomSheet = true },
+                    onRateClick = { showAddRatingBottomSheet = true },
                     onPlayClick = {},
                     onAddToListClick = {},
                     modifier = Modifier.padding(vertical = 16.dp)

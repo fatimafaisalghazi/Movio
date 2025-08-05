@@ -20,7 +20,6 @@ import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
-import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
@@ -28,18 +27,14 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
-import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
-import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
-import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
-import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
-import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
-import com.madrid.data.repositories.datasource.AuthenticationDataSource
+import com.madrid.data.repositories.datasource.UserPreferences
 import com.madrid.data.repositories.remote.RemoteDataSource
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
-    private val api: MovieApi,
-    private val authenticationDataSource: AuthenticationDataSource
+    private val api: MovioApi,
+    private val userPreferences: UserPreferences
 ) : RemoteDataSource {
     //  region Movies
     override suspend fun searchMoviesByQuery(name: String, page: Int): SearchMovieResponse {
@@ -173,7 +168,7 @@ class RemoteDataSourceImpl @Inject constructor(
     override suspend fun addRatingMovie(movieId: Int, value: Double) {
         return api.addRatingForMovie(
             movieId = movieId,
-            sessionId = authenticationDataSource.getAuthToken().first(),
+            sessionId = userPreferences.getAuthToken().first(),
             body = RateRequest(value)
         )
     }
@@ -181,7 +176,7 @@ class RemoteDataSourceImpl @Inject constructor(
     override suspend fun addRatingSeries(seriesId: Int, value: Double) {
         return api.addRatingForSeries(
             seriesId = seriesId,
-            sessionId = authenticationDataSource.getAuthToken().first(),
+            sessionId = userPreferences.getAuthToken().first(),
             body = RateRequest(value)
         )
     }
@@ -207,7 +202,7 @@ class RemoteDataSourceImpl @Inject constructor(
         return sessionResponse.requestToken
     }
 
-    override suspend fun getSessionId(username: String, password: String): String{
+    override suspend fun getSessionId(username: String, password: String): String {
         val requestTokenResponse = api.getRequestToken()
         val requestToken = requestTokenResponse.requestToken
         val sessionResponse = api.postCreateSession(
@@ -227,13 +222,16 @@ class RemoteDataSourceImpl @Inject constructor(
         return api.getCreateGuestSession().requestToken
     }
 
-    override suspend fun getCurrentUserDetails(sessionId : String): AccountDetailsResponse {
+    override suspend fun getCurrentUserDetails(sessionId: String): AccountDetailsResponse {
         Log.d("TAG getCurrentUserDetails", "in dataaaaaa getCurrentUserDetails 1: ")
 
         try {
             api.getAccountDetails(sessionId)
-        }catch (e: Exception){
-            Log.d("TAG getCurrentUserDetails", "in dataaaaaa  excpetioooooon getCurrentUserDetails ${e.message}: ")
+        } catch (e: Exception) {
+            Log.d(
+                "TAG getCurrentUserDetails",
+                "in dataaaaaa  excpetioooooon getCurrentUserDetails ${e.message}: "
+            )
 
         }
         val x = api.getAccountDetails(sessionId)
