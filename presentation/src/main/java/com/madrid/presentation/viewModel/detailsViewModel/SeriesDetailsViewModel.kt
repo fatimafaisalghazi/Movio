@@ -17,10 +17,13 @@ import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SeriesDetailsViewModel(
+@HiltViewModel
+class SeriesDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getSeriesDetailsUseCase: GetSeriesDetailsUseCase,
     private val getSeriesTopCastUseCase: GetSeriesTopCastUseCase,
@@ -32,7 +35,6 @@ class SeriesDetailsViewModel(
     private val args = savedStateHandle.toRoute<Destinations.SeriesDetailsScreen>()
 
     init {
-        Log.d("loool", ": ")
         loadData()
     }
 
@@ -102,7 +104,7 @@ class SeriesDetailsViewModel(
     private fun loadSeasonEpisodes(seasonNumber: Int = 1) {
         tryToExecute(
             function = {
-                getEpisodesForSeasonUseCase(args.seriesId.toInt(), seasonNumber)
+                getEpisodesForSeasonUseCase(args.seriesId, seasonNumber)
             },
             onSuccess = { episodes ->
                 updateState { state ->
@@ -127,11 +129,11 @@ class SeriesDetailsViewModel(
     private fun loadCastData() {
         tryToExecute(
             function = {
-                getSeriesTopCastUseCase(args.seriesId.toInt())
+                getSeriesTopCastUseCase(args.seriesId)
             },
-            onSuccess = { Artists ->
+            onSuccess = { artists ->
                 updateState {
-                    it.copy(topCast = Artists.map { artist ->
+                    it.copy(topCast = artists.map { artist ->
                         artist.mapToUiState()
                     })
                 }
@@ -145,7 +147,7 @@ class SeriesDetailsViewModel(
     private fun loadReviews() {
         tryToExecute(
             function = {
-                getSeriesReviewsUseCase(args.seriesId.toInt())
+                getSeriesReviewsUseCase(args.seriesId)
             },
             onSuccess = { reviews ->
                 updateState {
@@ -164,7 +166,7 @@ class SeriesDetailsViewModel(
     private fun loadSimilarSeries() {
         tryToExecute(
             function = {
-                getSimilarSeriesUseCase(args.seriesId.toInt())
+                getSimilarSeriesUseCase(args.seriesId)
             },
             onSuccess = { allSeries ->
                 updateState {

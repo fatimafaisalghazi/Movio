@@ -4,15 +4,22 @@ import android.util.Log
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
+import com.madrid.data.dataSource.remote.dto.authentication.AccountDetailsResponse
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
+import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
+import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
 import com.madrid.data.dataSource.remote.dto.rating.RateRequest
+import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
+import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
+import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
+import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
@@ -20,6 +27,7 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
+import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.response.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.response.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.response.series.AiringTodayTvShowsResponse
@@ -27,9 +35,9 @@ import com.madrid.data.dataSource.remote.response.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.response.series.TopRatedSeriesResponse
 import com.madrid.data.repositories.datasource.AuthenticationDataSource
 import com.madrid.data.repositories.remote.RemoteDataSource
-import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class RemoteDataSourceImpl(
+class RemoteDataSourceImpl @Inject constructor(
     private val api: MovieApi,
     private val authenticationDataSource: AuthenticationDataSource
 ) : RemoteDataSource {
@@ -67,7 +75,7 @@ class RemoteDataSourceImpl(
     }
 
     override suspend fun getMovieGenres(): List<RemoteGenreDto> {
-        return api.getMovieGenres().genres?.filterNotNull().orEmpty()
+        return api.getMovieGenres().genres.orEmpty()
     }
 
     override suspend fun getTrendingMovies(page: Int): SearchMovieResponse {
@@ -118,7 +126,7 @@ class RemoteDataSourceImpl(
     }
 
     override suspend fun getSeriesGenres(): List<RemoteGenreDto> {
-        return api.getSeriesGenres().genres?.filterNotNull().orEmpty()
+        return api.getSeriesGenres().genres.orEmpty()
     }
 
     override suspend fun getTrendingSeries(page: Int): SearchSeriesResponse {
@@ -151,14 +159,6 @@ class RemoteDataSourceImpl(
     }
 
     override suspend fun getRecommendedSeries(page: Int): RecommendedSeriesResponse {
-        Log.d("getRecommendedSeries", "in getRecommendedSeries: ")
-        try {
-            api.getPopularTvShows(page = page)
-        }catch (e: Exception){
-            Log.d("getRecommendedSeries", "catched getRecommendedSeries: ${e.message} ")
-        }
-//        val x = api.getPopularTvShows(page = page)
-//        Log.d("getRecommendedSeries", "getRecommendedSeries: ${x.recommendedSeriesResults} ")
         return api.getPopularTvShows(page = page)
     }
 
@@ -207,8 +207,38 @@ class RemoteDataSourceImpl(
         return sessionResponse.requestToken
     }
 
+    override suspend fun getSessionId(username: String, password: String): String{
+        val requestTokenResponse = api.getRequestToken()
+        val requestToken = requestTokenResponse.requestToken
+        val sessionResponse = api.postCreateSession(
+            CreateSessionBody(
+                username = username,
+                password = password,
+                requestToken = requestToken
+            )
+        )
+        val sessionId = api.createSession(
+            CreateSessionRawBody(sessionResponse.requestToken)
+        )
+        return sessionId.sessionId
+    }
+
     override suspend fun loginAsGuest(): String {
         return api.getCreateGuestSession().requestToken
+    }
+
+    override suspend fun getCurrentUserDetails(sessionId : String): AccountDetailsResponse {
+        Log.d("TAG getCurrentUserDetails", "in dataaaaaa getCurrentUserDetails 1: ")
+
+        try {
+            api.getAccountDetails(sessionId)
+        }catch (e: Exception){
+            Log.d("TAG getCurrentUserDetails", "in dataaaaaa  excpetioooooon getCurrentUserDetails ${e.message}: ")
+
+        }
+        val x = api.getAccountDetails(sessionId)
+        Log.d("TAG getCurrentUserDetails", "in dataaaaaa getCurrentUserDetails: 2 $x")
+        return x
     }
 
 }

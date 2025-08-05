@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.R.drawable
 import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.MovioBottomSheet
@@ -50,11 +51,10 @@ import com.madrid.presentation.screens.detailsScreen.seriesDetails.toReviewScree
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
 import com.madrid.presentation.viewModel.detailsViewModel.DetailsMovieViewModel
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MovieDetailsScreen(
-    viewModel: DetailsMovieViewModel = koinViewModel()
+    viewModel: DetailsMovieViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
@@ -72,7 +72,7 @@ fun MovieDetailsScreen(
                 title = stringResource(R.string.internet_is_not_available),
                 description =
                     stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                image = com.madrid.presentation.R.drawable.img_no_internet
+                image = R.drawable.img_no_internet
             )
         }
     } else {
