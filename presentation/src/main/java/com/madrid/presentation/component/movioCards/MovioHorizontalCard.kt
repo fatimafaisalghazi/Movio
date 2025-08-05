@@ -28,15 +28,16 @@ fun MovioHorizontalCard(
     movieRate: String,
     movieCategory: String,
     movieImageUrl: String,
+    modifier: Modifier = Modifier,
     height: Dp =100.dp,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-        .clickable { onClick() },
+            .background(Theme.color.surfaces.surface)
+            .clickable { onClick() },
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         BasicImageCard(
