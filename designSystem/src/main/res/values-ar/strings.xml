@@ -13,8 +13,8 @@
     <string name="log_out">ستفقد الوصول إلى مكتبتك والمفضلة وسجل المشاهدة حتى تسجل الدخول مرة أخرى.</string>
     <string name="logout">تسجيل خروج</string>
     <string name="conform_log_out">تاكيد تسجيل الخروج</string>
-    <string name="light_mode">الوضع النهاري</string>
-    <string name="dark_mode">الوضع الليلي</string>
+    <string name="light_mode">مظهر فاتح</string>
+    <string name="dark_mode">مظهر داكن</string>
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
     <string name="choose_theme">اختر المظهر</string>
