@@ -1,11 +1,9 @@
 package com.madrid.presentation.screens.moreScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -19,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -74,10 +72,13 @@ fun MyRatingScreen(
                 .padding(top = 64.dp),
             contentAlignment = Alignment.Center
         ) {
-            EmptySearchLayout(
+            DialogWithButtonLayout(
                 title = stringResource(R.string.internet_is_not_available),
                 description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                image = R.drawable.img_no_internet
+                image = R.drawable.img_no_internet,
+                topBarTitle = stringResource(R.string.my_ratings),
+                buttonText = stringResource(R.string.try_again),
+                onClick = {viewModel.onBackClick()}
             )
         }
     } else if (state.ratedMedia.isNotEmpty()) {
@@ -95,11 +96,13 @@ fun MyRatingScreen(
                 .padding(top = 64.dp),
             contentAlignment = Alignment.Center
         ) {
-            EmptySearchLayout(
-                stringResource(R.string.no_ratings_yet),
-                description =
-                    stringResource(R.string.you_haven_t_rated_anything_yet_start_exploring_and_share_your_thoughts),
-                image = R.drawable.img_empty_more
+            DialogWithButtonLayout(
+                title = stringResource(R.string.internet_is_not_available),
+                description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                image = R.drawable.img_no_internet,
+                topBarTitle = stringResource(R.string.my_ratings),
+                buttonText = stringResource(R.string.try_again),
+                onClick = {viewModel.onBackClick()}
             )
         }
     }
