@@ -12,11 +12,18 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.navigation.MovioNavGraph
 import com.madrid.presentation.viewModel.authentication.MainViewModel
+import com.madrid.presentation.workManager.WorkerClass
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -34,6 +41,14 @@ class MainActivity : ComponentActivity() {
                 MainScreen(mainViewModel)
             }
         }
+
+        val uploadWorkRequest = PeriodicWorkRequestBuilder<WorkerClass>(15, TimeUnit.MINUTES).build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            uniqueWorkName = "clear home screen local data source",
+            ExistingPeriodicWorkPolicy.KEEP,
+            uploadWorkRequest,
+        )
     }
 }
 @Composable
