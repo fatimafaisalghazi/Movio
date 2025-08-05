@@ -8,6 +8,7 @@ import com.madrid.domain.usecase.movie.GetMovieDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieReviewsUseCase
 import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
 import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
+import com.madrid.domain.usecase.movie.GetTopRatedMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.utils.RateFormatter
@@ -24,7 +25,8 @@ class DetailsMovieViewModel(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
     private val getMovieTopCastUseCase: GetMovieTopCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
-    private val getMovieReviewsUseCase: GetMovieReviewsUseCase
+    private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
+    private val getAddRatingMoviesUseCase: GetTopRatedMoviesUseCase
 ) : BaseViewModel<DetailsMovieUiState, Nothing>(
     DetailsMovieUiState()
 ) {
@@ -34,12 +36,11 @@ class DetailsMovieViewModel(
         loadData()
     }
 
-     private fun loadData() {
+    private fun loadData() {
         Log.d("TAG lol", "=== LOADING MOVIE DETAILS ===")
         tryToExecute(
             function = {
                 getMovieDetailsUseCase.invoke(args.movieId)
-
             },
             onSuccess = { movie ->
 
@@ -61,7 +62,7 @@ class DetailsMovieViewModel(
                 loadSimilarMovies()
                 loadReviews()
             },
-            onError = { error -> updateState { it.copy(isLoading = true) }},
+            onError = { error -> updateState { it.copy(isLoading = true) } },
             scope = viewModelScope,
             dispatcher = Dispatchers.IO
         )
@@ -148,11 +149,32 @@ class DetailsMovieViewModel(
 
     fun onClickLoveIcon(
 
-    ){
+    ) {
         updateState {
             it.copy(
                 isLoved = !it.isLoved
             )
         }
+    }
+
+    fun onPickRatingNumber(rating: Int) {
+        updateState {
+            it.copy(
+                userRating = rating
+            )
+        }
+    }
+
+    fun addRating() {
+        tryToExecute(
+            function = {
+                getAddRatingMoviesUseCase.movieRepository.addRatingMovie(
+                    state.value.movieId,
+                    state.value.userRating.toDouble()
+                )
+            },
+            onSuccess = {},
+            onError = {},
+        )
     }
 }

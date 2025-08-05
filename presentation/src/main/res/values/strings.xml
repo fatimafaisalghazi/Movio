@@ -28,5 +28,7 @@
 
     <string name="season_count">%1$d Seasons</string>
     <string name="library_screen">Library Screen</string>
+    <string name="submit">Submit</string>
+    <string name="add_your_overall_rating_for_this_movie">Add your overall rating for this movie</string>
 
 </resources>
