@@ -57,6 +57,10 @@ fun MoreScreen(
     val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("en")
     AppCompatDelegate.setApplicationLocales(appLocale)
 
+    val packageManager = context.packageManager
+    val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
+    val appVersion by remember { mutableStateOf(packageInfo.versionName) }
+
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -75,7 +79,8 @@ fun MoreScreen(
         state = state,
         interactionListener = viewModel as MoreInteractionListener,
         currentLocale = currentLocale,
-        currentLanguage = deviceLocale.language
+        currentLanguage = deviceLocale.language,
+        appVersion = appVersion.toString()
     )
 
     LogoutConfirmationBottomSheet(
@@ -94,7 +99,8 @@ private fun MoreScreenContent(
     state: MoreUiState,
     interactionListener: MoreInteractionListener,
     currentLocale: MutableState<Language>,
-    currentLanguage: String
+    currentLanguage: String,
+    appVersion: String,
 ) {
     var selectedLanguage by remember { mutableStateOf(currentLanguage) }
     val context = LocalContext.current
@@ -157,7 +163,7 @@ private fun MoreScreenContent(
                 SettingsItem(
                     icon = R.drawable.outline_smartphone,
                     title = stringResource(presentationR.string.app_version),
-                    text = state.appVersion,
+                    text = appVersion,
                     clickable = false,
                 )
                 SettingsItem(
