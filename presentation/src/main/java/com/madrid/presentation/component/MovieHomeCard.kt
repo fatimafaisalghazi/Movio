@@ -1,5 +1,6 @@
 package com.madrid.presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +29,15 @@ import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.detectImageContent.FilteredImage
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asComposeRenderEffect
+import androidx.compose.ui.graphics.graphicsLayer
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun MovieHomeCard(
     name: String,
@@ -52,12 +62,24 @@ fun MovieHomeCard(
                 .height(200.dp)
         )
         MovioIcon(
-            painter = painterResource(R.drawable.bold_video_circle),
+            painter = painterResource(R.drawable.circle_video_play),
             contentDescription = "bold video circle",
-            tint = Theme.color.surfaces.onSurface,
+            tint = Theme.color.surfaces.onSurfaceAt2,
             modifier = Modifier
                 .align(Alignment.Center)
-                .size(48.dp)
+                .size(40.dp)
+                .clip(CircleShape)
+                .clickable {
+                    onClick()
+                }
+        )
+        MovioIcon(
+            painter = painterResource(R.drawable.button_video_play),
+            contentDescription = "bold video play",
+            tint = Theme.color.brand.onPrimary,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(14.dp)
                 .clickable {
                     onClick()
                 }
