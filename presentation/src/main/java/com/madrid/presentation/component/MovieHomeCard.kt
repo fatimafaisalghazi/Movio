@@ -2,6 +2,7 @@ package com.madrid.presentation.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,14 +56,13 @@ fun MovieHomeCard(
                 .fillMaxSize()
                 .height(200.dp)
         )
-        MovioIcon(
-            painter = painterResource(R.drawable.circle_video_play),
-            contentDescription = "bold video circle",
-            tint = Theme.color.surfaces.onSurfaceAt2,
+        Box(
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(40.dp)
                 .clip(CircleShape)
+                .background(color = Theme.color.surfaces.onSurfaceAt2)
+                .blur(32.dp)
                 .clickable {
                     onClick()
                 }

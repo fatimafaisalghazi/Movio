@@ -1,5 +1,6 @@
 package com.madrid.presentation.component.movioCards
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,10 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,13 +54,16 @@ fun MovioEpisodesCard(
                     .clip(RoundedCornerShape(8.dp)),
                 radius = 8.dp,
             )
-            MovioIcon(
-                contentDescription = "video circle",
-                tint = Theme.color.surfaces.onSurfaceAt1,
-                painter = painterResource(R.drawable.circle_video_play),
+            Box(
                 modifier = Modifier
-                    .size(20.dp)
                     .align(Alignment.Center)
+                    .size(20.dp)
+                    .clip(CircleShape)
+                    .background(color = Theme.color.surfaces.onSurfaceAt2)
+                    .blur(16.dp)
+                    .clickable {
+                        onClick()
+                    }
             )
             MovioIcon(
                 contentDescription = "video circle",
