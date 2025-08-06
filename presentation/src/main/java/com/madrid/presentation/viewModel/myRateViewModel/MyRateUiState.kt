@@ -6,6 +6,7 @@ data class MyRateUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val ratedMedia: List<RatedMediaState> = emptyList(),
+    val showLoadingScreen: Boolean = false
 )
 
 data class RatedMediaState(
