@@ -173,4 +173,8 @@ class MovieRepositoryImpl @Inject constructor(
             sortType
         ).movieResults?.map { it.toMovie() } ?: emptyList()
     }
+
+    override suspend fun clearHomeMoviesCache(){
+        localDataSource.clearHomeMoviesCache()
+    }
 }
