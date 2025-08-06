@@ -10,7 +10,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
 @HiltWorker
-class WorkerClass @AssistedInject constructor(
+class MovieCacheCleanupWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val clearHomeMoviesCacheUseCase: ClearHomeMoviesCacheUseCase

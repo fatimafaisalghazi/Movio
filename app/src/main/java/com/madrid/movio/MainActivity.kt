@@ -19,7 +19,7 @@ import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.navigation.MovioNavGraph
 import com.madrid.presentation.viewModel.authentication.MainViewModel
-import com.madrid.presentation.workManager.WorkerClass
+import com.madrid.presentation.workManager.MovieCacheCleanupWorker
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 
@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity(){
             }
         }
 
-        val uploadWorkRequest = PeriodicWorkRequestBuilder<WorkerClass>(24, TimeUnit.HOURS).build()
+        val uploadWorkRequest = PeriodicWorkRequestBuilder<MovieCacheCleanupWorker>(24, TimeUnit.HOURS).build()
 
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             uniqueWorkName = "clearHome",
