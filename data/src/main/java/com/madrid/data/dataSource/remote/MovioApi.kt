@@ -1,5 +1,6 @@
 package com.madrid.data.dataSource.remote
 
+import com.madrid.data.dataSource.remote.dto.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.ArtistKnownForResponse
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -224,6 +225,13 @@ interface MovioApi {
     suspend fun getUpcomingMovies(
         @Query("page") page: Int
     ): UpcomingMoviesResponse
+
+    @POST("account/{account_id}/favorite")
+    suspend fun addToFavorite(
+        @Path("account_id") accountId :Int,
+        @Query("session_id") sessionId :String ,
+        @Body body: AddToFavoriteRequest
+    )
 
     companion object {
         private const val DISCOVER_MOVIE = "discover/movie"

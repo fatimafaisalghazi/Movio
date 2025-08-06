@@ -1,9 +1,7 @@
 package com.madrid.data.repositories
 
-import android.util.Log
 import com.madrid.data.dataSource.local.mappers.toGenre
 import com.madrid.data.dataSource.local.mappers.toMovie
-import com.madrid.data.dataSource.local.mappers.toMovieTable
 import com.madrid.data.dataSource.local.mappers.toSectionMovieTable
 import com.madrid.data.dataSource.local.table.MovieSection
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
@@ -12,7 +10,6 @@ import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
-import com.madrid.data.dataSource.remote.mapper.toMovies
 import com.madrid.data.dataSource.remote.mapper.toReview
 import com.madrid.data.dataSource.remote.mapper.toSimilarMovie
 import com.madrid.data.dataSource.remote.mapper.toTrailer
@@ -149,6 +146,13 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieGenres(): List<Genre> {
         return remoteDataSource.getMovieGenres().map { it.toGenre() }
+    }
+
+    override suspend fun addToFavorite(accountId: Int, sessionId: String) {
+         remoteDataSource.addToFavorite(
+            accountId, sessionId,
+            request = TODO()
+        )
     }
 
     override suspend fun getMoviesByGenreId(

@@ -1,6 +1,7 @@
 package com.madrid.data.dataSource.remote
 
 import android.util.Log
+import com.madrid.data.dataSource.remote.dto.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -198,6 +199,17 @@ class RemoteDataSourceImpl @Inject constructor(
         return sessionId.sessionId
     }
 
+    override suspend fun addToFavorite(
+        accountId: Int,
+        sessionId: String,
+        request: AddToFavoriteRequest
+    ) {
+        api.addToFavorite(
+            accountId = accountId, sessionId = sessionId,
+            body = request
+        )
+    }
+
     override suspend fun loginAsGuest(): String {
         return api.getCreateGuestSession().requestToken
     }
@@ -215,5 +227,6 @@ class RemoteDataSourceImpl @Inject constructor(
         Log.d("TAG getCurrentUserDetails", "in dataaaaaa getCurrentUserDetails: 2 $x")
         return x
     }
+
 
 }
