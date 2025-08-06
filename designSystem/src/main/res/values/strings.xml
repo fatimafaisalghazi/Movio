@@ -13,4 +13,5 @@
     <string name="log_out">You\'ll lose access to your library, favorites, and history until you sign back in.</string>
     <string name="logout">logout</string>
     <string name="conform_log_out">Confirm Logout</string>
+    <string name="this_list_has_empty">This list has empty</string>
 </resources>

@@ -12,8 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 
@@ -37,7 +39,9 @@ fun CustomTextTitle(
                 painter = startIcon,
                 contentDescription = "Primary Text Icon",
                 tint =Theme.color.surfaces.onSurface,
-                modifier = Modifier.padding(end = 8.dp).size(24.dp)
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(24.dp)
             )
         }
         Column (
@@ -50,7 +54,7 @@ fun CustomTextTitle(
             )
             AnimatedVisibility (isListEmpty){
                 MovioText(
-                    text = "This list has empty",
+                    text = stringResource(R.string.this_list_has_empty),
                     color = Theme.color.surfaces.onSurfaceVariant,
                     textStyle = Theme.textStyle.label.smallRegular12,
                     modifier = Modifier.padding(top = 8.dp)
