@@ -34,7 +34,7 @@ import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
         SectionsMovieTable::class,
         MediaHistoryTable::class
     ],
-    version = 2
+    version = 3
 )
 abstract class MovioDatabase : RoomDatabase() {
 

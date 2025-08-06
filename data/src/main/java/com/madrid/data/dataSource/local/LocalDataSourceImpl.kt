@@ -1,5 +1,6 @@
 package com.madrid.data.dataSource.local
 
+import android.util.Log
 import com.madrid.data.dataSource.local.dao.ArtistDao
 import com.madrid.data.dataSource.local.dao.MovieDao
 import com.madrid.data.dataSource.local.dao.MovieGenreDao
@@ -141,6 +142,11 @@ class LocalDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getUpComingMovies(): List<SectionsMovieTable> {
+        try {
+            movieDao.getMoviesBySection(MovieSection.UPCOMING.value)
+        }catch (e: Exception){
+            Log.d("getUpComingMovies", "getUpComingMovies: ${e.message}")
+        }
         return movieDao.getMoviesBySection(MovieSection.UPCOMING.value)
     }
 
@@ -152,7 +158,7 @@ class LocalDataSourceImpl @Inject constructor(
         movieDao.insertHistoryMovie(
             MediaHistoryTable(
                 mediaId = movieId,
-                mediaType = "Series"
+                mediaType = "Movie"
             )
         )
     }
@@ -161,7 +167,7 @@ class LocalDataSourceImpl @Inject constructor(
         seriesDao.insertHistorySeries(
             MediaHistoryTable(
                 mediaId = seriesId,
-                mediaType = "Movie"
+                mediaType = "Series"
             )
         )
     }

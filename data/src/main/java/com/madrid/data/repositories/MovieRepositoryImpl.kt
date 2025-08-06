@@ -120,11 +120,17 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
+        Log.d("getNowPlayingMovie in repo", "getNowPlayingMovie: 1 in start repo")
         val localMovies = localDataSource.getNowPlayingMovies()
+        Log.d("getNowPlayingMovie in repo", "getNowPlayingMovie: 2 local movies: $localMovies")
+
         if (localMovies.isNotEmpty()) {
             return localMovies.map { it.toMovie() }
         }
+        Log.d("getNowPlayingMovie in repo", "getNowPlayingMovie: 3")
+
         val remoteResult = remoteDataSource.getNowPlayingMovie(page)
+        Log.d("getNowPlayingMovie in repo", "getNowPlayingMovie: 4 $remoteResult")
         val remoteMovies = remoteResult.nowPlayingMovieResults?.map { it.toMovie() } ?: emptyList()
 
         remoteMovies.forEach { movie ->
