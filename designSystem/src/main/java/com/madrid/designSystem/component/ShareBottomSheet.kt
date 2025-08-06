@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,19 +33,20 @@ fun ShareBottomSheetContent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
         MovioText(
             text = stringResource(R.string.share_via),
             textStyle = Theme.textStyle.body.mediumMedium14,
             color = Theme.color.surfaces.onSurface,
-            modifier = Modifier.padding(bottom = 16.dp)
         )
 
         Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
         ) {
             ShareOptionItem(
                 icon = R.drawable.copy_link,
@@ -81,7 +82,7 @@ fun ShareOptionItem(
             modifier = Modifier
                 .size(48.dp)
                 .padding(bottom = 8.dp)
-                .clip(RoundedCornerShape(100.dp))
+                .clip(shape = CircleShape)
                 .background(Theme.color.surfaces.surfaceContainer)
 
         ) {
