@@ -111,6 +111,15 @@ class SeriesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addSeriesToHistory(seriesId: Int){
+        localDataSource.addSeriesToHistory(seriesId = seriesId)
+    }
+
+    override suspend fun getAllSeriesInHistory(): List<Series> {
+        val seriesIds = localDataSource.getAllSeriesInHistory().map { it.mediaId }
+        return seriesIds.map { getSeriesDetailsById(it) }
+    }
+
     override suspend fun getUserSeriesRate(sessionId: String): List<GetUserRatedSeriesUseCase.RatedSeries> {
         val result =
             remoteDataSource.getUserRatingForSeries(sessionId)

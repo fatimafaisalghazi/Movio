@@ -28,4 +28,6 @@ interface MovieRepository {
     suspend fun getMovieGenres(): List<Genre>
     suspend fun getUserMovieRate(sessionId :String):List<GetUserRatedMovieUseCase.RatedMovie>
     suspend fun clearHomeMoviesCache()
+    suspend fun addMovieToHistory(movieId: Int)
+    suspend fun getAllMoviesInHistory(): List<Movie>
 }
