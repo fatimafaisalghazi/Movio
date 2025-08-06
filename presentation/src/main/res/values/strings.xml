@@ -113,6 +113,15 @@
     <string name="movio">Movio</string>
     <string name="and_let_the_noise_fade_away">and let the noise fade away</string>
     <string name="onboarding_sub_description">Swipe, pick, dive in… and be the star of the scene.</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="view_all">view all</string>
+    <string name="favorites">Favorites</string>
+    <string name="history">History</string>
+    <string name="add_icon">add Icon</string>
+    <string name="movio_icon">Movio icon</string>
+    <string name="star_icon">star icon</string>
+    <string name="background_image_of_squares">background image of squares</string>
+    <string name="watch_list_icon">watch list icon</string>
     <string name="no_ratings_yet">No Ratings Yet!</string>
     <string name="you_haven_t_rated_anything_yet_start_exploring_and_share_your_thoughts">You haven’t rated anything yet. Start exploring and share your thoughts!</string>
     <string name="confirm">Confirm</string>

@@ -11,8 +11,6 @@ android {
     namespace = "com.madrid.presentation"
     compileSdk = 36
 
-
-
     defaultConfig {
         minSdk = 26
 
@@ -87,6 +85,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     implementation (libs.dagger)
+
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 
     implementation (libs.androidx.core.splashscreen)
 

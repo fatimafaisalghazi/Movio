@@ -166,6 +166,10 @@ class MovieRepositoryImpl @Inject constructor(
             sortType
         ).movieResults?.map { it.toMovie() } ?: emptyList()
     }
+
+    override suspend fun clearHomeMoviesCache(){
+        localDataSource.clearHomeMoviesCache()
+    }
     override suspend fun getUserMovieRate( sessionId :String): List<GetUserRatedMovieUseCase.RatedMovie> {
         val result = remoteDataSource.getUserRatingForMovie(
             sessionId = sessionId
