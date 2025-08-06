@@ -1,4 +1,3 @@
-// ListManagementBottomSheet.kt
 package com.madrid.presentation.screens.addtolist
 
 import androidx.compose.animation.AnimatedContent
@@ -18,18 +17,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioBottomSheet
+import com.madrid.domain.entity.UserList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-data class UserList(
-    val id: String,
-    val name: String,
-    var isSelected: Boolean = false,
-    var isLoading: Boolean = false
-)
 
 enum class ListBottomSheetMode {
     LIST_SELECTION,
@@ -121,6 +114,7 @@ fun ListManagementBottomSheet(
                             }
                         )
                     }
+
                     ListBottomSheetMode.CREATE_NEW_LIST -> {
                         CreateListBottomSheet(
                             show = true,

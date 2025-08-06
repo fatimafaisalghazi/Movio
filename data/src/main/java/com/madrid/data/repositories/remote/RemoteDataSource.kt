@@ -6,6 +6,7 @@ import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AccountDetailsResponse
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.movie.ListDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
@@ -75,5 +76,6 @@ interface RemoteDataSource {
 
     suspend fun getSessionId(username: String, password: String): String
     // endregion
+    suspend fun getListDetails(listId: Int, sessionId: String): ListDetailsResponse
 
 }

@@ -24,6 +24,7 @@ import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
+import com.madrid.domain.entity.UserList
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.CastMember
@@ -33,7 +34,6 @@ import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailS
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.addtolist.ListManagementBottomSheet
-import com.madrid.presentation.screens.addtolist.UserList
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.toReviewScreenUiState
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie

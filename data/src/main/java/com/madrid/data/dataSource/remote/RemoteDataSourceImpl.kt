@@ -9,6 +9,7 @@ import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.movie.ListDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
@@ -214,6 +215,10 @@ class RemoteDataSourceImpl @Inject constructor(
         val x = api.getAccountDetails(sessionId)
         Log.d("TAG getCurrentUserDetails", "in dataaaaaa getCurrentUserDetails: 2 $x")
         return x
+    }
+
+    override suspend fun getListDetails(listId: Int, sessionId: String): ListDetailsResponse {
+        return api.getListDetails(listId, sessionId)
     }
 
 }

@@ -20,6 +20,7 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
+import com.madrid.domain.entity.UserList
 
 @Composable
 fun UserListItem(
