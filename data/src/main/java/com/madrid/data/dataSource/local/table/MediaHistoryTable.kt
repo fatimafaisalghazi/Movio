@@ -10,8 +10,3 @@ data class MediaHistoryTable (
     val mediaType: String,
     val addedAt: Long
 )
-
-enum class MediaType {
-    MOVIE,
-    SERIES
-}
