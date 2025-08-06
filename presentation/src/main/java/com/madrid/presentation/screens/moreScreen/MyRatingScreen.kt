@@ -1,11 +1,10 @@
 package com.madrid.presentation.screens.moreScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -19,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
@@ -67,40 +67,63 @@ fun MyRatingScreen(
             }
         }
     }
-    if (state.isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            EmptySearchLayout(
-                title = stringResource(R.string.internet_is_not_available),
-                description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                image = R.drawable.img_no_internet
+    when {
+        state.showLoadingScreen -> {
+            LoadingScreen(message = stringResource(R.string.loading))
+        }
+
+        state.isLoading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 64.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                DialogWithButtonLayout(
+                    title = stringResource(R.string.internet_is_not_available),
+                    description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                    image = R.drawable.img_no_internet,
+                    buttonText = stringResource(R.string.try_again),
+                    onClick = { navController.navigate(Destinations.MyRatingScreen) },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .navigationBarsPadding()
+                        .padding(16.dp)
+                )
+            }
+        }
+
+        state.ratedMedia.isNotEmpty() -> {
+            MyRatingScreenContent(
+                state = state,
+                interaction = viewModel as MyRatingInteractionListener,
+                onBackClick = { viewModel.onBackClick() }
             )
         }
-    } else if (state.ratedMedia.isNotEmpty()) {
-        MyRatingScreenContent(
-            state = state,
-            interaction = viewModel as MyRatingInteractionListener,
-            onBackClick = { viewModel.onBackClick() }
-        )
-    } else if (state.ratedMedia.isEmpty()) {
-        LoadingScreen(message = stringResource(R.string.loading))
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 64.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            EmptySearchLayout(
-                stringResource(R.string.no_ratings_yet),
-                description =
-                    stringResource(R.string.you_haven_t_rated_anything_yet_start_exploring_and_share_your_thoughts),
-                image = R.drawable.img_empty_more
-            )
+
+        state.ratedMedia.isEmpty() -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 64.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column {
+                    TopAppBar(
+                        text = stringResource(R.string.my_ratings),
+                        secondIcon = null,
+                        thirdIcon = null,
+                        onFirstIconClick = { navController.popBackStack() },
+                        modifier = Modifier.padding(16.dp)
+                    )
+                    EmptySearchLayout(
+                        stringResource(R.string.no_ratings_yet),
+                        description = stringResource(R.string.you_haven_t_rated_anything_yet_start_exploring_and_share_your_thoughts),
+                        image = R.drawable.img_empty_more,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
         }
     }
 }
@@ -116,6 +139,7 @@ private fun MyRatingScreenContent(
             .padding(16.dp)
             .background(Theme.color.surfaces.surface)
             .statusBarsPadding()
+            .navigationBarsPadding()
     ) {
         TopAppBar(
             text = stringResource(R.string.my_ratings),
