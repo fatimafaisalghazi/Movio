@@ -25,5 +25,5 @@ interface MovieRepository {
     suspend fun getNowPlayingMovie(page: Int): List<Movie>
     suspend fun getUpcomingMovie(page: Int): List<Movie>
     suspend fun getMovieGenres(): List<Genre>
-    suspend fun addToFavorite(accountId: Int,sessionId: String )
+    suspend fun addMovieToFavorite(mediaId:Int, sessionId: String)
 }

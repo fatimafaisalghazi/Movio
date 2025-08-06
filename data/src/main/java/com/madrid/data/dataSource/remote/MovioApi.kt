@@ -1,6 +1,6 @@
 package com.madrid.data.dataSource.remote
 
-import com.madrid.data.dataSource.remote.dto.AddToFavoriteRequest
+import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.ArtistKnownForResponse
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -228,7 +228,7 @@ interface MovioApi {
 
     @POST("account/{account_id}/favorite")
     suspend fun addToFavorite(
-        @Path("account_id") accountId :Int,
+        @Path("account_id") accountId :Int? = null,
         @Query("session_id") sessionId :String ,
         @Body body: AddToFavoriteRequest
     )

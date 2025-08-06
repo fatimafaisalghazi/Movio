@@ -7,6 +7,7 @@ import com.madrid.data.dataSource.local.table.MovieSection
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
+import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
@@ -148,10 +149,15 @@ class MovieRepositoryImpl @Inject constructor(
         return remoteDataSource.getMovieGenres().map { it.toGenre() }
     }
 
-    override suspend fun addToFavorite(accountId: Int, sessionId: String) {
+    override suspend fun addMovieToFavorite(mediaId:Int, sessionId: String) {
+        val request = AddToFavoriteRequest(
+            mediaType = "movie",
+            mediaId = mediaId,
+            favorite = true
+        )
          remoteDataSource.addToFavorite(
-            accountId, sessionId,
-            request = TODO()
+             sessionId=sessionId,
+             request = request
         )
     }
 

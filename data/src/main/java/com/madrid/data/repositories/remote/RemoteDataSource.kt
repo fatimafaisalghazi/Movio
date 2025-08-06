@@ -1,6 +1,6 @@
 package com.madrid.data.repositories.remote
 
-import com.madrid.data.dataSource.remote.dto.AddToFavoriteRequest
+import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -78,5 +78,6 @@ interface RemoteDataSource {
     // endregion
 
     // region addToFavorite
-    suspend fun addToFavorite(accountId: Int,sessionId: String,request: AddToFavoriteRequest)
+    suspend fun addToFavorite(sessionId: String, request: AddToFavoriteRequest)
+    // endregion
 }

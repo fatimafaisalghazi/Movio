@@ -1,7 +1,7 @@
 package com.madrid.data.dataSource.remote
 
 import android.util.Log
-import com.madrid.data.dataSource.remote.dto.AddToFavoriteRequest
+import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -200,10 +200,10 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun addToFavorite(
-        accountId: Int,
         sessionId: String,
         request: AddToFavoriteRequest
     ) {
+        val accountId = api.getAccountDetails(sessionId).id
         api.addToFavorite(
             accountId = accountId, sessionId = sessionId,
             body = request
