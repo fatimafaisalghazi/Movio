@@ -11,6 +11,7 @@ import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toReview
+import com.madrid.data.dataSource.remote.mapper.toRatedMovie
 import com.madrid.data.dataSource.remote.mapper.toSimilarMovie
 import com.madrid.data.dataSource.remote.mapper.toTrailer
 import com.madrid.data.repositories.local.LocalDataSource
@@ -23,6 +24,8 @@ import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.MovieRepository
 import javax.inject.Inject
+import com.madrid.domain.usecase.movie.GetUserRatedMovieUseCase
+import kotlin.collections.ifEmpty
 
 class MovieRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
@@ -161,6 +164,12 @@ class MovieRepositoryImpl @Inject constructor(
             genreId,
             sortType
         ).movieResults?.map { it.toMovie() } ?: emptyList()
+    }
+    override suspend fun getUserMovieRate( sessionId :String): List<GetUserRatedMovieUseCase.RatedMovie> {
+        val result = remoteDataSource.getUserRatingForMovie(
+            sessionId = sessionId
+        )
+        return result.ratedMovie.map { it.toRatedMovie() }
     }
 
     override suspend fun clearHomeMoviesCache(){

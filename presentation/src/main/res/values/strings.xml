@@ -3,7 +3,7 @@
     <string name="similar_movies">Similar Movies</string>
     <string name="internet_is_not_available">Internet is not available</string>
     <string name="no_results_found">No results found</string>
-    <string name="we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else">We couldn\'t find anything matching your search. Try checking the spelling or explore something else!</string>
+    <string name="we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else">We couldn’t find anything matching your search. Try checking the spelling or explore something else!</string>
     <string name="please_make_sure_you_are_connected_to_the_internet_and_try_again">Please make sure you are connected to the internet and try again.</string>
     <string name="known_for">Known For</string>
     <string name="loading_actor_details">Loading actor details...</string>
@@ -114,6 +114,9 @@
     <string name="movio">Movio</string>
     <string name="and_let_the_noise_fade_away">and let the noise fade away</string>
     <string name="onboarding_sub_description">Swipe, pick, dive in… and be the star of the scene.</string>
+    <string name="no_ratings_yet">No Ratings Yet!</string>
+    <string name="you_haven_t_rated_anything_yet_start_exploring_and_share_your_thoughts">You haven’t rated anything yet. Start exploring and share your thoughts!</string>
+    <string name="try_again">Try Again</string>
     <string name="watchlist">Watchlist</string>
     <string name="view_all">view all</string>
     <string name="favorites">Favorites</string>
