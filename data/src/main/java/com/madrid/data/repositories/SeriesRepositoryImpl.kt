@@ -1,6 +1,5 @@
 package com.madrid.data.repositories
 
-import android.util.Log
 import com.madrid.data.dataSource.local.mappers.toGenre
 import com.madrid.data.dataSource.local.mappers.toSeries
 import com.madrid.data.dataSource.mapper.toSeriesGenreTable
@@ -115,5 +114,14 @@ class SeriesRepositoryImpl @Inject constructor(
         val result =
             remoteDataSource.getUserRatingForSeries(sessionId)
         return result.ratedSeries.map { it.toRatedSeries() }
+    }
+
+    override suspend fun addSeriesToHistory(seriesId: Int){
+        localDataSource.addSeriesToHistory(seriesId = seriesId)
+    }
+
+    override suspend fun getAllSeriesInHistory(): List<Series> {
+        val seriesIds = localDataSource.getAllSeriesInHistory().map { it.mediaId }
+        return seriesIds.map { getSeriesDetailsById(it) }
     }
 }
