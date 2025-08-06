@@ -19,10 +19,8 @@ class MovieCacheCleanupWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         return try {
             clearHomeMoviesCacheUseCase()
-            Log.d("WorkerClass", "Cache cleared successfully")
             Result.success()
         } catch (e: Exception) {
-            Log.e("WorkerClass", "Failed to clear cache: ${e.message}")
             Result.failure()
         }
     }
