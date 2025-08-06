@@ -1,9 +1,7 @@
 package com.madrid.data.repositories
 
-import android.util.Log
 import com.madrid.data.dataSource.local.mappers.toGenre
 import com.madrid.data.dataSource.local.mappers.toMovie
-import com.madrid.data.dataSource.local.mappers.toMovieTable
 import com.madrid.data.dataSource.local.mappers.toSectionMovieTable
 import com.madrid.data.dataSource.local.table.MovieSection
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
@@ -12,7 +10,6 @@ import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
-import com.madrid.data.dataSource.remote.mapper.toMovies
 import com.madrid.data.dataSource.remote.mapper.toReview
 import com.madrid.data.dataSource.remote.mapper.toSimilarMovie
 import com.madrid.data.dataSource.remote.mapper.toTrailer
@@ -121,9 +118,11 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
         val localMovies = localDataSource.getNowPlayingMovies()
+
         if (localMovies.isNotEmpty()) {
             return localMovies.map { it.toMovie() }
         }
+
         val remoteResult = remoteDataSource.getNowPlayingMovie(page)
         val remoteMovies = remoteResult.nowPlayingMovieResults?.map { it.toMovie() } ?: emptyList()
 
@@ -166,5 +165,14 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun clearHomeMoviesCache(){
         localDataSource.clearHomeMoviesCache()
+    }
+
+    override suspend fun addMovieToHistory(movieId: Int){
+        localDataSource.addMovieToHistory(movieId = movieId)
+    }
+
+    override suspend fun getAllMoviesInHistory(): List<Movie> {
+        val moviesIds = localDataSource.getAllMoviesInHistory().map { it.mediaId }
+        return moviesIds.map { getMovieDetailsById(it) }
     }
 }
