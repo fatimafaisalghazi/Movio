@@ -150,7 +150,6 @@ fun MovioNavHost(
             SeeAllTVShowsScreen(
                 viewModel = hiltViewModel<SeeAllTVShowsViewModel, SeeAllTVShowsViewModel.Factory>(
                     key = destination.type.toString()
-                    key = destination.type.toString()
                 ) { factory -> factory.create(strategy) })
         }
         composable<Destinations.ViewAllScreen> { backStackEntry ->
