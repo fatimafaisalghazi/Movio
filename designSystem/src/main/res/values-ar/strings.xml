@@ -13,6 +13,7 @@
     <string name="log_out">ستفقد الوصول إلى مكتبتك والمفضلة وسجل المشاهدة حتى تسجل الدخول مرة أخرى.</string>
     <string name="logout">تسجيل خروج</string>
     <string name="conform_log_out">تاكيد تسجيل الخروج</string>
+    <string name="this_list_has_empty">هذه القائمه فارغه</string>
     <string name="share_via">مشاركة عبر</string>
     <string name="copy_link">انسخ الرابط</string>
     <string name="facebook">فيسبوك</string>
