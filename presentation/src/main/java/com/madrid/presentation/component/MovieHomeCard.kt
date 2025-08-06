@@ -1,6 +1,7 @@
 package com.madrid.presentation.component
 
-import androidx.compose.foundation.background
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,13 +30,6 @@ import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.detectImageContent.FilteredImage
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asComposeRenderEffect
-import androidx.compose.ui.graphics.graphicsLayer
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -79,7 +73,7 @@ fun MovieHomeCard(
             tint = Theme.color.brand.onPrimary,
             modifier = Modifier
                 .align(Alignment.Center)
-                .size(14.dp)
+                .size(width = 13.6.dp, height = 14.46.dp)
                 .clickable {
                     onClick()
                 }
