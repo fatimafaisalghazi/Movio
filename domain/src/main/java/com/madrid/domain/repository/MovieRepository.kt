@@ -26,4 +26,5 @@ interface MovieRepository {
     suspend fun getUpcomingMovie(page: Int): List<Movie>
     suspend fun getMovieGenres(): List<Genre>
     suspend fun addRatingMovie(movieId: Int, rate: Double)
+    suspend fun clearHomeMoviesCache()
 }

@@ -1,6 +1,11 @@
 package com.madrid.presentation.screens.detailsScreen.seriesDetails
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,6 +45,9 @@ import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.component.TextWithReadMore
+import com.madrid.designSystem.component.MovioBottomSheet
+import com.madrid.designSystem.component.ShareBottomSheetContent
 import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
@@ -68,6 +77,33 @@ fun SeriesDetailsScreen(
     val seasons = uiState.currentSeasonsUiStates
     val artists = uiState.topCast
     var showAddRatingBottomSheet by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var showSheet by remember { mutableStateOf(false) }
+
+    fun copyToClipboard(text: String) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Series Link", text)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(context, "Link copied", Toast.LENGTH_SHORT).show()
+    }
+
+    fun shareToApp(appPackage: String, url: String) {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+            setPackage(appPackage)
+        }
+        try {
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            val fallback = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, url)
+            }
+            context.startActivity(Intent.createChooser(fallback, "Share via"))
+        }
+    }
+
     if (uiState.isLoading) {
         Box(
             modifier = Modifier
@@ -77,12 +113,38 @@ fun SeriesDetailsScreen(
         ) {
             EmptySearchLayout(
                 title = stringResource(R.string.internet_is_not_available),
-                description =
-                    stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                image = com.madrid.presentation.R.drawable.img_no_internet
+                description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                image = R.drawable.img_no_internet
             )
         }
     } else {
+        MovioBottomSheet(
+            show = showSheet,
+            onDismiss = { showSheet = false },
+            containerColor = Theme.color.surfaces.surface
+        ) {
+            ShareBottomSheetContent(
+                onCopyLink = {
+                    copyToClipboard("https://www.themoviedb.org/tv/${uiState.seriesId}")
+                    showSheet = false
+                },
+                onShareFacebook = {
+                    shareToApp(
+                        "com.facebook.katana",
+                        "https://www.themoviedb.org/tv/${uiState.seriesId}"
+                    )
+                    showSheet = false
+                },
+                onShareX = {
+                    shareToApp(
+                        "com.twitter.android",
+                        "https://www.themoviedb.org/tv/${uiState.seriesId}"
+                    )
+                    showSheet = false
+                }
+            )
+        }
+
         Box(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
@@ -96,7 +158,8 @@ fun SeriesDetailsScreen(
             TopAppBar(
                 text = null,
                 modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
-                onFirstIconClick = { navController.popBackStack() }
+                onFirstIconClick = { navController.popBackStack() },
+                onSecondIconClick = { showSheet = true } // Share action
             )
             Column(
                 modifier = Modifier
@@ -108,10 +171,7 @@ fun SeriesDetailsScreen(
                     movieName = uiState.seriesName,
                     seriesCategory = uiState.seriesGenre,
                     date = uiState.productionDate,
-                    time = stringResource(
-                        id = R.string.season_count,
-                        uiState.numberOfSeasons
-                    ),
+                    time = stringResource(id = R.string.season_count, uiState.numberOfSeasons),
                     rate = uiState.rate.take(3),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
                 )
@@ -196,6 +256,7 @@ fun SeriesDetailsScreen(
                         .padding(bottom = 32.dp),
                     maxLines = 5
                 )
+
                 TopCastHorizontalScroll(
                     castMembers = uiState.topCast.map { cast ->
                         CastMember(
@@ -218,8 +279,9 @@ fun SeriesDetailsScreen(
                                 artistId = castId
                             )
                         )
-                    },
+                    }
                 )
+
                 CustomTextTitle(
                     primaryText = stringResource(R.string.current_seasons),
                     secondaryText = stringResource(R.string.see_all),
@@ -239,11 +301,12 @@ fun SeriesDetailsScreen(
                         bottom = 12.dp
                     )
                 )
+
                 LazyRow(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    itemsIndexed(seasons) { index, season ->
+                    itemsIndexed(seasons) { _, season ->
                         MovioSeasonCard(
                             movieTitle = "",
                             movieImage = season.imageUrl,
@@ -258,12 +321,14 @@ fun SeriesDetailsScreen(
                                 )
                             },
                             yearOfPublish = season.productionDate,
-                            currentSeason = (season.seasonNumber).toString(),
+                            currentSeason = season.seasonNumber.toString(),
                             timeOfPublish = season.productionDate
                         )
                     }
                 }
+
                 Spacer(modifier = Modifier.height(32.dp))
+
                 if (uiState.reviews.isNotEmpty()) {
                     ReviewScreen(
                         onSeeAllReviews = {
@@ -278,6 +343,7 @@ fun SeriesDetailsScreen(
                     )
                     Spacer(modifier = Modifier.height(32.dp))
                 }
+
                 if (uiState.similarSeries.isNotEmpty()) {
                     Log.d(
                         "in series details screen",
@@ -289,7 +355,7 @@ fun SeriesDetailsScreen(
                                 id = series.id,
                                 title = series.name,
                                 imageUrl = series.imageUrl,
-                                rating = (series.rate.take(3)).toDouble()
+                                rating = series.rate.take(3).toDoubleOrNull() ?: 0.0
                             )
                         },
                         onSeeAllClick = {
