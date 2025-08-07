@@ -49,7 +49,7 @@ fun SeeAllTVShowsScreen(
     }
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(minSize = 102.dp),
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
@@ -88,8 +88,7 @@ fun SeeAllTVShowsScreen(
                 description = movie.name,
                 movieImage = movie.imageUrl,
                 rate = movie.rate.take(3),
-                width = 130.dp,
-                height = 200.dp,
+                height = 180.dp,
                 onClick = {
                     navController.navigate(
                         Destinations.SeriesDetailsScreen(
