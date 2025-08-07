@@ -33,6 +33,8 @@ import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
 import com.madrid.data.dataSource.remote.dto.movie.ListDetailsResponse
+import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
+import com.madrid.data.dataSource.remote.dto.list.ListsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -249,6 +251,18 @@ interface MovioApi {
         @Query("session_id") sessionId: String,
         @Body body: Int
     ): ListOperationResponse
+    // region List
+
+    @GET("account/account_id/lists")
+    suspend fun getCustomLists(
+        @Query("session_id") sessionId: String,
+    ): ListsResponse
+
+    @GET("list/{list_id}")
+    suspend fun getCustomListDetails(
+        @Path("list_id") listId: Int,
+    ): ListsDetailsResponse
+    // region EpisodeRating
 
     @GET("account/{account_id}/rated/movies")
     suspend fun getUserRatingForMovie(

@@ -10,6 +10,8 @@ import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
 import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
+import com.madrid.data.dataSource.remote.dto.list.ListDto
+import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
@@ -74,6 +76,14 @@ interface RemoteDataSource {
     suspend fun getArtistMovies(artistId: Int): List<KnownForMoviesNetwork>
 
     // endregion
+
+    // region Lists
+    suspend fun createMovieList(sessionId: String, movieListBody: MovieListBody): CreateListResponse
+    suspend fun addMovieToList(listId: Int, sessionId: String, mediaId: Int): ListOperationResponse
+    suspend fun getCustomLists(sessionId: String): List<ListDto>
+    suspend fun getCustomListDetails(listId: Int): ListsDetailsResponse
+    // endregion
+
     // region authentication
     suspend fun login(username: String, password: String): String
     suspend fun loginAsGuest(): String
@@ -84,7 +94,6 @@ interface RemoteDataSource {
 
     suspend fun getUserRatingForMovie(sessionId: String):RatingMovieResponse
     suspend fun getUserRatingForSeries(sessionId: String):RatingSeriesResponse
-    suspend fun createMovieList(sessionId: String, movieListBody: MovieListBody): CreateListResponse
-    suspend fun addMovieToList(listId: Int, sessionId: String, mediaId: Int): ListOperationResponse
+
 
 }
