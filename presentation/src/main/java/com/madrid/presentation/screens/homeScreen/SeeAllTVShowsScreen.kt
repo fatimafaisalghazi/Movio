@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -64,11 +65,11 @@ fun SeeAllTVShowsScreen(
     }
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(minSize = 100.dp),
         modifier = Modifier
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
-            .statusBarsPadding(),
+            .statusBarsPadding().navigationBarsPadding(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -174,13 +175,6 @@ fun SeeAllTVShowsScreen(
             }
 
             listOfItem.itemCount > 0 -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    CustomTextTitle(
-                        primaryText = stringResource(com.madrid.presentation.R.string.explore_more)
-                    )
-                }
                 items(
                     count = listOfItem.itemCount,
                 ) { index ->
@@ -189,8 +183,8 @@ fun SeeAllTVShowsScreen(
                         description = movie?.name ?: "no description" ,
                         movieImage = movie?.imageUrl ?:"https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
                         rate = movie?.rate?.take(3) ?: "4.3",
-                        width = 130.dp,
-                        height = 200.dp,
+                        width = 101.dp,
+                        height = 136.dp,
                         onClick = {
                             navController.navigate(
                                 Destinations.SeriesDetailsScreen(
