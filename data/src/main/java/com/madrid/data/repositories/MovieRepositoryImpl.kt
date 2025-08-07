@@ -8,7 +8,6 @@ import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
-import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toRatedMovie
 import com.madrid.data.dataSource.remote.mapper.toReview
@@ -182,7 +181,12 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovieGenres(): List<Genre> {
-        return remoteDataSource.getMovieGenres().map { it.toGenre() }
+        return localDataSource.getAllMovieGenres().ifEmpty {
+            remoteDataSource.getMovieGenres().forEach {
+                localDataSource.insertMovieGenre(it.toMovieGenreTable())
+            }
+            localDataSource.getAllMovieGenres()
+        }.map { it.toGenre() }
     }
 
     override suspend fun getMoviesByGenreId(
