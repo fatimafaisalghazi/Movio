@@ -28,7 +28,9 @@ import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.authentication.SessionIdResponse
 import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
+import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
+import com.madrid.data.dataSource.remote.dto.list.MovieListBody
 import com.madrid.data.dataSource.remote.dto.movie.ListDetailsResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -235,6 +237,12 @@ interface MovioApi {
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String
     ): ListDetailsResponse
+
+    @POST("3/list")
+    suspend fun createMovieList(
+        @Query("session_id") sessionId: String,
+        @Body body: MovieListBody
+    ): CreateListResponse
 
     @POST("list/{list_id}/add_item")
     @Headers("Content-Type: application/json")

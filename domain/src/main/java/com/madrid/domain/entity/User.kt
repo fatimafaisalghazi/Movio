@@ -15,3 +15,8 @@ data class UserList(
     var isSelected: Boolean = false,
     var isLoading: Boolean = false
 )
+
+data class ListOperationStatus(
+    val success: Boolean,
+    val message: String
+)
