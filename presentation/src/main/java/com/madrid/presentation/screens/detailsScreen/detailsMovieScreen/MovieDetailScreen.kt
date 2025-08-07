@@ -243,9 +243,8 @@ fun MovieDetailsScreen(
                                         )
                                         .height(48.dp),
                                     onClick = {
-                                        viewModel.addRating()
                                         showAddRatingBottomSheet = false
-                                    },
+                                        navController.navigate(Destinations.AuthenticationScreen)                                    },
                                     colors = ButtonDefaults.buttonColors(
                                         backgroundColor = Theme.color.brand.primary,
                                     ),
