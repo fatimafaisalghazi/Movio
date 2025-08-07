@@ -245,7 +245,6 @@ fun MovieDetailsScreen(
         isVisible = showAddToListBottomSheet,
         onDismiss = { showAddToListBottomSheet = false },
         movieId = uiState.movieId,
-        sessionId = viewModel.sessionId,
         initialUserLists = addToListUiState.userLists, // Pass user lists from ViewModel
         viewModel = addToListViewModel
     )

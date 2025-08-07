@@ -6,8 +6,6 @@ import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AccountDetailsResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AuthenticationResponse
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
-import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
-import com.madrid.data.dataSource.remote.dto.authentication.SessionIdResponse
 import com.madrid.data.dataSource.remote.dto.common.TrailerResponse
 import com.madrid.data.dataSource.remote.dto.genre.GenresResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse

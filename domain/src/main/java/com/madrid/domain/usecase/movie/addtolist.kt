@@ -1,26 +1,34 @@
 package com.madrid.domain.usecase.movie
 
 import com.madrid.domain.entity.ListOperationStatus
+import com.madrid.domain.repository.AuthenticationRepository
 import com.madrid.domain.repository.MovieRepository
+import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class CreateMovieListUseCase(private val movieRepository: MovieRepository) {
+class CreateMovieListUseCase @Inject constructor(
+    private val movieRepository: MovieRepository,
+    private val authenticationRepository: AuthenticationRepository
+) {
     suspend operator fun invoke(
-        sessionId: String,
         name: String,
-        description: String,
-        language: String
+        description: String = "",
+        language: String = "en"
     ): ListOperationStatus {
+        val sessionId = authenticationRepository.getSessionId().first()
         return movieRepository.createMovieList(sessionId, name, description, language)
     }
 }
 
-class AddMovieToListUseCase(private val movieRepository: MovieRepository) {
+class AddMovieToListUseCase @Inject constructor(
+    private val movieRepository: MovieRepository,
+    private val authenticationRepository: AuthenticationRepository
+) {
     suspend operator fun invoke(
         listId: Int,
-        sessionId: String,
         movieId: Int
     ): ListOperationStatus {
-        // The order of arguments is corrected to match the repository interface
+        val sessionId = authenticationRepository.getSessionId().first()
         return movieRepository.addMovieToList(listId, sessionId, movieId)
     }
 }

@@ -36,7 +36,6 @@ class MovieListViewModel @Inject constructor(
 ) : BaseViewModel<MovieListUiState, MovieListEvent>(MovieListUiState()) {
 
     fun createMovieList(
-        sessionId: String,
         name: String,
         onSuccess: (() -> Unit)? = null
     ) {
@@ -45,7 +44,6 @@ class MovieListViewModel @Inject constructor(
 
             try {
                 val status: ListOperationStatus = createMovieListUseCase(
-                    sessionId = sessionId,
                     name = name,
                     description = "My new list",
                     language = "en"
@@ -80,7 +78,6 @@ class MovieListViewModel @Inject constructor(
     }
 
     fun addMovieToList(
-        sessionId: String,
         listId: Int,
         movieId: Int,
         onSuccess: (() -> Unit)? = null
@@ -91,7 +88,6 @@ class MovieListViewModel @Inject constructor(
             try {
                 val status: ListOperationStatus = addMovieToListUseCase(
                     listId = listId,
-                    sessionId = sessionId,
                     movieId = movieId
                 )
 

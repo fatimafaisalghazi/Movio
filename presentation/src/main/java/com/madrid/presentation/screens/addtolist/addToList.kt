@@ -36,7 +36,6 @@ fun ListManagementBottomSheet(
     isVisible: Boolean,
     onDismiss: () -> Unit,
     movieId: Int,
-    sessionId: String,
     initialUserLists: List<UserList> = emptyList(),
     viewModel: MovieListViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
@@ -48,7 +47,6 @@ fun ListManagementBottomSheet(
     var successMessage: String? by remember { mutableStateOf("") }
     var bottomSheetVisible by remember(isVisible) { mutableStateOf(isVisible) }
 
-    // Handle UI state changes from ViewModel
     LaunchedEffect(uiState.createListSuccess) {
         if (uiState.createListSuccess && uiState.successMessage != null) {
             successMessage = uiState.successMessage
@@ -123,7 +121,6 @@ fun ListManagementBottomSheet(
                             onSelectionChanged = { userList, isSelected ->
                                 if (isSelected) {
                                     viewModel.addMovieToList(
-                                        sessionId = sessionId,
                                         listId = userList.id.toInt(),
                                         movieId = movieId
                                     )
@@ -137,7 +134,6 @@ fun ListManagementBottomSheet(
                             show = true,
                             onCreateClick = { listName ->
                                 viewModel.createMovieList(
-                                    sessionId = sessionId,
                                     name = listName
                                 )
                             },
