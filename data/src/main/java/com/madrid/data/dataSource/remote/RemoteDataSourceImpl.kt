@@ -9,7 +9,9 @@ import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
 import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
+import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
 import com.madrid.data.dataSource.remote.dto.movie.ListDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
@@ -214,13 +216,12 @@ class RemoteDataSourceImpl @Inject constructor(
         return x
     }
 
-    override suspend fun getListDetails(listId: Int, sessionId: String): ListDetailsResponse {
-        return api.getListDetails(listId, sessionId)
+    override suspend fun createMovieList(sessionId: String, movieListBody: MovieListBody): CreateListResponse {
+        return api.createMovieList(sessionId, movieListBody)
     }
 
-
-    override suspend fun createMovieList(sessionId: String, movieListBody: MovieListBody): CreateListResponse {
-        return api.createMovieList(sessionId = sessionId, body = movieListBody)
+    override suspend fun addMovieToList(listId: Int, sessionId: String, requestBody: AddToListRequest): ListOperationResponse {
+        return api.addMovieToList(listId, sessionId, requestBody)
     }
 
 }

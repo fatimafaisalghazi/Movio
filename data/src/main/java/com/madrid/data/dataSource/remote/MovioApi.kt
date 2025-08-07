@@ -244,12 +244,11 @@ interface MovioApi {
         @Body body: MovieListBody
     ): CreateListResponse
 
-    @POST("list/{list_id}/add_item")
-    @Headers("Content-Type: application/json")
+    @POST("3/list/{list_id}/add_item")
     suspend fun addMovieToList(
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String,
-        @Body request: AddToListRequest
+        @Body body: AddToListRequest
     ): ListOperationResponse
     companion object {
         private const val DISCOVER_MOVIE = "discover/movie"

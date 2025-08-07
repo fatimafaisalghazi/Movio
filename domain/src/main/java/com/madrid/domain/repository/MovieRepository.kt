@@ -7,6 +7,7 @@ import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
+import com.madrid.domain.entity.UserList
 
 interface MovieRepository {
     suspend fun getMovieDetailsById(movieId: Int): Movie
@@ -31,5 +32,5 @@ interface MovieRepository {
     suspend fun getAllMoviesInHistory(): List<Movie>
 
     suspend fun createMovieList(sessionId: String, name: String, description: String, language: String): ListOperationStatus
-
+    suspend fun addMovieToList(listId: Int, sessionId: String, mediaId: Int): ListOperationStatus
 }
