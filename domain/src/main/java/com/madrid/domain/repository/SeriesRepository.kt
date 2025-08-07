@@ -7,6 +7,7 @@ import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
 import com.madrid.domain.entity.SortType
 import com.madrid.domain.entity.Trailer
+import com.madrid.domain.usecase.series.GetUserRatedSeriesUseCase
 
 interface SeriesRepository {
     suspend fun getSeriesDetailsById(seriesId: Int): Series
@@ -24,4 +25,7 @@ interface SeriesRepository {
     suspend fun getSeriesGenres(): List<Genre>
     suspend fun getSeriesByGenreId(page: Int, genreId: Int?, sortBy: SortType): List<Series>
     suspend fun addRatingSeries(seriesId: Int, rate: Double)
+    suspend fun getUserSeriesRate(sessionId:String): List<GetUserRatedSeriesUseCase.RatedSeries>
+    suspend fun addSeriesToHistory(seriesId: Int)
+    suspend fun getAllSeriesInHistory(): List<Series>
 }

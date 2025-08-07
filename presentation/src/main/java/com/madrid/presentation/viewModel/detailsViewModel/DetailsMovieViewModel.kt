@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.madrid.domain.usecase.movie.AddRatingMoviesUseCase
+import com.madrid.domain.usecase.movie.AddMovieToHistoryUseCase
 import com.madrid.domain.usecase.movie.GetMovieDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieReviewsUseCase
 import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
@@ -27,6 +28,7 @@ class DetailsMovieViewModel @Inject constructor(
     private val getMovieTopCastUseCase: GetMovieTopCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
+    private val addMovieToHistoryUseCase: AddMovieToHistoryUseCase,
     private val getAddRatingMoviesUseCase: AddRatingMoviesUseCase
 ) : BaseViewModel<DetailsMovieUiState, Nothing>(
     DetailsMovieUiState()
@@ -34,7 +36,16 @@ class DetailsMovieViewModel @Inject constructor(
     val args = saveStateHandle.toRoute<Destinations.MovieDetailsScreen>()
 
     init {
+        saveMovieToHistory()
         loadData()
+    }
+
+    private fun saveMovieToHistory() {
+        tryToExecute(
+            function = { addMovieToHistoryUseCase(args.movieId) },
+            onSuccess = {},
+            onError = {}
+        )
     }
 
     private fun loadData() {
