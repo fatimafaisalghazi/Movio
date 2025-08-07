@@ -40,7 +40,7 @@ fun LibraryScreen(
                 is LibraryScreenEffect.NavigateToMediaDetails -> {
                     navController.navigate(
                         Destinations.MovieDetailsScreen(
-                            movieId = effect.mediaId
+                            movieId = effect.mediaId,
                         )
                     )
                 }
