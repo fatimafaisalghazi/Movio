@@ -98,7 +98,7 @@ class SeriesRepositoryImpl @Inject constructor(
             page,
             genreId,
             sortType
-        ).seriesResults?.map { it.toSeries() } ?: emptyList()
+        ).seriesResults.map { it.toSeries() }
     }
 
     override suspend fun getSeriesByGenres(): Map<String, List<Series>> {
@@ -123,5 +123,9 @@ class SeriesRepositoryImpl @Inject constructor(
     override suspend fun getAllSeriesInHistory(): List<Series> {
         val seriesIds = localDataSource.getAllSeriesInHistory().map { it.mediaId }
         return seriesIds.map { getSeriesDetailsById(it) }
+    }
+
+    override suspend fun getFavoriteSeries(sessionId: String): List<Series> {
+        return remoteDataSource.getFavoriteSeries(sessionId).map { it.toSeries() }
     }
 }

@@ -92,7 +92,7 @@ fun OnBoardingPager(modifier: Modifier = Modifier) {
     )
 
     val textColor by animateColorAsState(
-        if(swipeProgress >= 0.5 ) Theme.color.brand.onPrimary else Theme.color.surfaces.onSurface
+        if (swipeProgress >= 0.5) Theme.color.brand.onPrimary else Theme.color.surfaces.onSurface
     )
 
 
