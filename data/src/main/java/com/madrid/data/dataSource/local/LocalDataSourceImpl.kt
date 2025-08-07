@@ -1,17 +1,20 @@
 package com.madrid.data.dataSource.local
 
 import com.madrid.data.dataSource.local.dao.ArtistDao
-import com.madrid.data.dataSource.local.dao.MovieGenreDao
 import com.madrid.data.dataSource.local.dao.MovieDao
+import com.madrid.data.dataSource.local.dao.MovieGenreDao
 import com.madrid.data.dataSource.local.dao.RecentSearchDao
 import com.madrid.data.dataSource.local.dao.SeriesDao
 import com.madrid.data.dataSource.local.dao.SeriesGenreDao
 import com.madrid.data.dataSource.local.table.ArtistTable
+import com.madrid.data.dataSource.local.table.MediaHistoryTable
 import com.madrid.data.dataSource.local.table.MovieGenreTable
+import com.madrid.data.dataSource.local.table.MovieSection
 import com.madrid.data.dataSource.local.table.MovieTable
 import com.madrid.data.dataSource.local.table.RecentSearchTable
-import com.madrid.data.dataSource.local.table.SeriesTable
+import com.madrid.data.dataSource.local.table.SectionsMovieTable
 import com.madrid.data.dataSource.local.table.SeriesGenreTable
+import com.madrid.data.dataSource.local.table.SeriesTable
 import com.madrid.data.dataSource.local.table.relationship.GenreWithMovies
 import com.madrid.data.dataSource.local.table.relationship.GenreWithSeries
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
@@ -20,8 +23,9 @@ import com.madrid.data.dataSource.local.table.relationship.SeriesGenreCrossRef
 import com.madrid.data.dataSource.local.table.relationship.SeriesWithGenres
 import com.madrid.data.dataSource.local.util.calculateOffset
 import com.madrid.data.repositories.local.LocalDataSource
+import javax.inject.Inject
 
-class LocalDataSourceImpl(
+class LocalDataSourceImpl @Inject constructor(
     private val movieDao: MovieDao,
     private val seriesDao: SeriesDao,
     private val artistDao: ArtistDao,
@@ -33,6 +37,10 @@ class LocalDataSourceImpl(
 
     override suspend fun insertMovie(movie: MovieTable) {
         movieDao.insertMovie(movie)
+    }
+
+    override suspend fun insertSectionMovie(movie: SectionsMovieTable) {
+        movieDao.insertSectionMovie(movie)
     }
 
     override suspend fun insertSeries(series: SeriesTable) {
@@ -60,7 +68,10 @@ class LocalDataSourceImpl(
         return movieDao.searchMovies("%$query%", offset)
     }
 
-    override suspend fun searchSeriesByQueryFromDB(query: String, page: Int): List<SeriesWithGenres> {
+    override suspend fun searchSeriesByQueryFromDB(
+        query: String,
+        page: Int
+    ): List<SeriesWithGenres> {
         val offset = calculateOffset(page)
         return seriesDao.searchSeries("%$query%", offset)
     }
@@ -125,4 +136,39 @@ class LocalDataSourceImpl(
         return seriesGenreDao.getSeriesByGenres()
     }
 
+    override suspend fun getNowPlayingMovies(): List<SectionsMovieTable> {
+        return movieDao.getMoviesBySection(MovieSection.NOW_PLAYING.value)
+    }
+
+    override suspend fun getUpComingMovies(): List<SectionsMovieTable> {
+        return movieDao.getMoviesBySection(MovieSection.UPCOMING.value)
+    }
+
+    override suspend fun clearHomeMoviesCache() {
+        movieDao.clearHomeMoviesCache()
+    }
+
+    override suspend fun addMovieToHistory(movieId: Int) {
+        movieDao.insertHistoryMovie(
+            MediaHistoryTable(
+                mediaId = movieId,
+                mediaType = "Movie",
+                addedAt = System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun addSeriesToHistory(seriesId: Int) {
+        seriesDao.insertHistorySeries(
+            MediaHistoryTable(
+                mediaId = seriesId,
+                mediaType = "Series",
+                addedAt = System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun getAllMoviesInHistory() = movieDao.getALLMoviesInHistory()
+
+    override suspend fun getAllSeriesInHistory() = seriesDao.getALLSeriesInHistory()
 }

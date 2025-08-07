@@ -1,9 +1,11 @@
 package com.madrid.presentation.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -14,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.CustomTextTitel
+import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
@@ -23,37 +25,42 @@ import com.madrid.presentation.viewModel.shared.MediaUiState
 
 @Composable
 fun CustomHorizontalCard(
-    primaryTextForCustomTextTitel: String,
+    primaryTextForCustomTextTitle: String,
     listOfMedia: List<MediaUiState>,
     modifier: Modifier = Modifier,
     headerModifier: Modifier = Modifier,
-    secondaryTextForCustomTextTitel: String? = null,
-    endIconForCustomTextTitel: Painter? = null,
+    startIconForPrimaryTextTitle: Painter? = null,
+    secondaryTextForCustomTextTitle: String? = null,
+    endIconForCustomTextTitle: Painter? = null,
     onSeeAllClick: (() -> Unit)? = null,
     onMediaClick: (MediaUiState) -> Unit = {},
 ) {
     Column(modifier = modifier) {
-        CustomTextTitel(
-            primaryText = primaryTextForCustomTextTitel,
-            secondaryText = secondaryTextForCustomTextTitel,
-            endIcon = endIconForCustomTextTitel,
+        CustomTextTitle(
+            modifier = headerModifier.padding(bottom = 12.dp),
+            primaryText = primaryTextForCustomTextTitle,
+            startIcon = startIconForPrimaryTextTitle,
+            secondaryText = secondaryTextForCustomTextTitle,
+            endIcon = endIconForCustomTextTitle,
             onSeeAllClick = onSeeAllClick,
-            modifier = headerModifier
+            isListEmpty = listOfMedia.isEmpty()
         )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(200.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(listOfMedia) { media ->
-                MovioVerticalCard(
-                    description = media.title,
-                    movieImage = media.imageUrl,
-                    rate = media.rating.take(3),
-                    width = 124.dp,
-                    height = 160.dp,
-                    onClick = { onMediaClick(media) }
-                )
+        AnimatedVisibility(listOfMedia.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.height(200.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+            ) {
+                items(listOfMedia) { media ->
+                    MovioVerticalCard(
+                        description = media.title,
+                        movieImage = media.imageUrl,
+                        rate = media.rating.take(3),
+                        width = 124.dp,
+                        height = 160.dp,
+                        onClick = { onMediaClick(media) }
+                    )
+                }
             }
         }
     }
@@ -97,9 +104,9 @@ fun CustomHorizontalCardPreview() {
 
     MovioTheme {
         CustomHorizontalCard(
-            primaryTextForCustomTextTitel = "Trending Now",
-            secondaryTextForCustomTextTitel = stringResource(com.madrid.presentation.R.string.see_all),
-            endIconForCustomTextTitel = painterResource(R.drawable.outline_alt_arrow_left),
+            primaryTextForCustomTextTitle = "Trending Now",
+            secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+            endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
             listOfMedia = fakeMediaList,
             onSeeAllClick = {},
             onMediaClick = {}

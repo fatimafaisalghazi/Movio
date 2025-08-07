@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
+import com.madrid.domain.usecase.series.AddSeriesToHistoryUseCase
 import com.madrid.domain.usecase.series.GetEpisodesForSeasonUseCase
 import com.madrid.domain.usecase.series.GetSeriesDetailsUseCase
 import com.madrid.domain.usecase.series.GetSeriesReviewsUseCase
@@ -16,22 +17,34 @@ import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SeriesDetailsViewModel(
+@HiltViewModel
+class SeriesDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getSeriesDetailsUseCase: GetSeriesDetailsUseCase,
     private val getSeriesTopCastUseCase: GetSeriesTopCastUseCase,
     private val getSeriesReviewsUseCase: GetSeriesReviewsUseCase,
     private val getSimilarSeriesUseCase: GetSimilarSeriesUseCase,
-    private val getEpisodesForSeasonUseCase: GetEpisodesForSeasonUseCase
+    private val getEpisodesForSeasonUseCase: GetEpisodesForSeasonUseCase,
+    private val addSeriesToHistoryUseCase: AddSeriesToHistoryUseCase,
 ) : BaseViewModel<SeriesDetailsUiState, Nothing>(SeriesDetailsUiState()) {
     private val args = savedStateHandle.toRoute<Destinations.SeriesDetailsScreen>()
 
     init {
-        Log.d("loool", ": ")
+        saveSeriesToHistory()
         loadData()
+    }
+
+    private fun saveSeriesToHistory(){
+        tryToExecute(
+            function = { addSeriesToHistoryUseCase(args.seriesId) },
+            onSuccess = {},
+            onError = {}
+        )
     }
 
     private fun loadData() {
@@ -66,8 +79,6 @@ class SeriesDetailsViewModel(
 
     private fun loadAllSeasonsEpisodes() {
         viewModelScope.launch {
-            val seasonCount = state.first().currentSeasonsUiStates.size
-            Log.d("TAG lol", "loadAllSeasonsEpisodes: ${state.first().numberOfSeasons}")
             state.first().currentSeasonsUiStates.forEachIndexed { index, season ->
                 tryToExecute(
                     function = {
@@ -100,7 +111,7 @@ class SeriesDetailsViewModel(
     private fun loadSeasonEpisodes(seasonNumber: Int = 1) {
         tryToExecute(
             function = {
-                getEpisodesForSeasonUseCase(args.seriesId.toInt(), seasonNumber)
+                getEpisodesForSeasonUseCase(args.seriesId, seasonNumber)
             },
             onSuccess = { episodes ->
                 updateState { state ->
@@ -125,11 +136,11 @@ class SeriesDetailsViewModel(
     private fun loadCastData() {
         tryToExecute(
             function = {
-                getSeriesTopCastUseCase(args.seriesId.toInt())
+                getSeriesTopCastUseCase(args.seriesId)
             },
-            onSuccess = { Artists ->
+            onSuccess = { artists ->
                 updateState {
-                    it.copy(topCast = Artists.map { artist ->
+                    it.copy(topCast = artists.map { artist ->
                         artist.mapToUiState()
                     })
                 }
@@ -143,7 +154,7 @@ class SeriesDetailsViewModel(
     private fun loadReviews() {
         tryToExecute(
             function = {
-                getSeriesReviewsUseCase(args.seriesId.toInt())
+                getSeriesReviewsUseCase(args.seriesId)
             },
             onSuccess = { reviews ->
                 updateState {
@@ -162,7 +173,7 @@ class SeriesDetailsViewModel(
     private fun loadSimilarSeries() {
         tryToExecute(
             function = {
-                getSimilarSeriesUseCase(args.seriesId.toInt())
+                getSimilarSeriesUseCase(args.seriesId)
             },
             onSuccess = { allSeries ->
                 updateState {

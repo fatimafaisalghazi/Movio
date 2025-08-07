@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -14,6 +16,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        resourceConfigurations.plus(listOf("en","ar"))
     }
 
     buildTypes {
@@ -65,11 +68,6 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.common.ktx)
 
-    // Koin
-    implementation(libs.koin.androidx.compose)
-    api(libs.koin.annotations)
-    implementation(libs.koin.android)
-
     //coil
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -81,4 +79,16 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.core)
-    implementation("androidx.webkit:webkit:1.9.0")}
+    implementation("androidx.webkit:webkit:1.9.0")
+    //Dagger- Hilt
+    ksp(libs.hilt.android.compiler.v2511)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation)
+    implementation (libs.dagger)
+
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+
+    implementation (libs.androidx.core.splashscreen)
+
+}
