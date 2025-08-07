@@ -54,8 +54,19 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecommendedMovies(page: Int): List<Movie> {
-        return remoteDataSource.getPopularMovies(page).movieResults?.map { it.toMovie() }
-            ?: emptyList()
+        val localMovies = localDataSource.getRecommendedMovies()
+        if (localMovies.isNotEmpty()) {
+            return localMovies.map { it.toMovie() }
+        }
+        val remoteResult = remoteDataSource.getPopularMovies(page)
+        val remoteMovies = remoteResult.movieResults?.map { it.toMovie() } ?: emptyList()
+        remoteMovies.forEach { movie ->
+            localDataSource.insertSectionMovie(
+                movie.toSectionMovieTable().copy(movieSection = MovieSection.RECOMMENDED.value)
+            )
+        }
+
+        return remoteMovies
     }
 
     override suspend fun getExploreMoreMovies(page: Int): List<Movie> {
@@ -64,8 +75,19 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTrendingMovies(page: Int): List<Movie> {
-        return remoteDataSource.getTrendingMovies(page).movieResults?.map { it.toMovie() }
-            ?: emptyList()
+        val localMovies = localDataSource.getTrendingMovies()
+        if (localMovies.isNotEmpty()) {
+            return localMovies.map { it.toMovie() }
+        }
+        val remoteResult = remoteDataSource.getTrendingMovies(page)
+        val remoteMovies = remoteResult.movieResults?.map { it.toMovie() } ?: emptyList()
+        remoteMovies.forEach { movie ->
+            localDataSource.insertSectionMovie(
+                movie.toSectionMovieTable().copy(movieSection = MovieSection.TRENDING.value)
+            )
+        }
+
+        return remoteMovies
     }
 
     override suspend fun getMoviesGenres(): List<Genre> {
@@ -91,12 +113,19 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTopRatedMovies(page: Int): List<Movie> {
-        val res = remoteDataSource.getTopRatedMovies(
-            page = page
-        ).movieResults?.map {
-            it.toMovie()
-        } ?: listOf()
-        return res
+        val localMovies = localDataSource.getTopRatingMovies()
+        if (localMovies.isNotEmpty()) {
+            return localMovies.map { it.toMovie() }
+        }
+        val remoteResult = remoteDataSource.getTopRatedMovies(page)
+        val remoteMovies = remoteResult.movieResults?.map { it.toMovie() } ?: emptyList()
+        remoteMovies.forEach { movie ->
+            localDataSource.insertSectionMovie(
+                movie.toSectionMovieTable().copy(movieSection = MovieSection.TOP_RATED.value)
+            )
+        }
+
+        return remoteMovies
     }
 
     override suspend fun getPopularMovies(page: Int): List<Movie> {
