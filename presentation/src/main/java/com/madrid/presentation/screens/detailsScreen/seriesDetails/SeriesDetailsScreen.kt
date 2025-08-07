@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -32,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.EmptySearchLayout
@@ -167,10 +167,10 @@ fun SeriesDetailsScreen(
                         val trailerKey = uiState.trailerKey
                         if (trailerKey.isNotEmpty()) {
                             val youtubeAppIntent =
-                                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$trailerKey"))
+                                Intent(Intent.ACTION_VIEW, "vnd.youtube:$trailerKey".toUri())
                             val youtubeWebIntent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://www.youtube.com/watch?v=$trailerKey")
+                                "https://www.youtube.com/watch?v=$trailerKey".toUri()
                             )
 
                             try {
