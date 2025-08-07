@@ -30,5 +30,6 @@ interface MovieRepository {
     suspend fun clearHomeMoviesCache()
     suspend fun addMovieToHistory(movieId: Int)
     suspend fun getAllMoviesInHistory(): List<Movie>
+    suspend fun getFavoriteMovies(sessionId: String): List<Movie>
     suspend fun addMovieToFavorite(mediaId:Int, sessionId: String)
 }

@@ -9,6 +9,7 @@ import com.madrid.domain.usecase.movie.AddMovieToHistoryUseCase
 import com.madrid.domain.usecase.movie.GetMovieDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieReviewsUseCase
 import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
+import com.madrid.domain.usecase.movie.GetMovieTrailersUseCase
 import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
@@ -29,6 +30,7 @@ class DetailsMovieViewModel @Inject constructor(
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val addMovieToHistoryUseCase: AddMovieToHistoryUseCase,
+    private val getMovieTrailersUseCase: GetMovieTrailersUseCase,
     private val addMovieToFavoriteUseCase: AddMovieToFavoriteUseCase
 ) : BaseViewModel<DetailsMovieUiState, Nothing>(
     DetailsMovieUiState()
@@ -74,6 +76,7 @@ class DetailsMovieViewModel @Inject constructor(
                 loadCast()
                 loadSimilarMovies()
                 loadReviews()
+                loadTrailer()
             },
             onError = { error -> updateState { it.copy(isLoading = true) } },
             scope = viewModelScope,
@@ -173,4 +176,22 @@ class DetailsMovieViewModel @Inject constructor(
             onError = {},
         )
     }
+    private fun loadTrailer() {
+        tryToExecute(
+            function = { getMovieTrailersUseCase(args.movieId) },
+            onSuccess = { trailers ->
+                val trailerKey = trailers.firstOrNull()?.key
+                if (trailerKey != null) {
+                    updateState { it.copy(trailerKey = trailerKey) }
+                }
+            },
+            onError = {
+                // Log or handle error if needed
+            },
+            scope = viewModelScope,
+            dispatcher = Dispatchers.IO
+        )
+    }
+
+
 }
