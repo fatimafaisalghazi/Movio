@@ -20,6 +20,7 @@ data class SeriesDetailsUiState(
     val isLoading :Boolean = false,
     val userRating: Int = 0,
     val isGuest: Boolean = true,
+    val trailerKey: String = "",
     )
 
 data class SeriesUiState(

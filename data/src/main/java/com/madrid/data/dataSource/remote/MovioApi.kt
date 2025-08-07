@@ -30,6 +30,8 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
+import com.madrid.data.dataSource.remote.dto.list.ListsResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -244,6 +246,17 @@ interface MovioApi {
     )
     // endregion
 
+    // region List
+
+    @GET("account/account_id/lists")
+    suspend fun getCustomLists(
+        @Query("session_id") sessionId: String,
+    ): ListsResponse
+
+    @GET("list/{list_id}")
+    suspend fun getCustomListDetails(
+        @Path("list_id") listId: Int,
+    ): ListsDetailsResponse
     // region EpisodeRating
 
     @GET("account/{account_id}/rated/movies")
@@ -260,11 +273,27 @@ interface MovioApi {
 
     // endregion
 
+    @GET(FAVORITE_MOVIES)
+    suspend fun getFavoriteMovies(
+        @Query(SESSION_ID) sessionId: String,
+    ): SearchMovieResponse
+
+    @GET(FAVORITE_SERIES)
+    suspend fun getFavoriteSeries(
+        @Query(SESSION_ID) sessionId: String,
+    ): SearchSeriesResponse
+
     companion object {
         private const val DISCOVER_MOVIE = "discover/movie"
         private const val PAGE = "page"
 
+        private const val SESSION_ID = "session_id"
+
         private const val WITH_GENRES = "with_genres"
         private const val SORT_BY = "sort_by"
+
+        private const val FAVORITE_MOVIES = "account/account_id/favorite/movies"
+        private const val FAVORITE_SERIES = "account/account_id/favorite/tv"
+
     }
 }

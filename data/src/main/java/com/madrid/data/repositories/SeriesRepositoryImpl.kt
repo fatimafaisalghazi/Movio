@@ -60,19 +60,19 @@ class SeriesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTopRatedSeries(page: Int): List<Series> {
-        return remoteDataSource.getTopRatedSeries().toTvShows()
+        return remoteDataSource.getTopRatedSeries(page = page).toTvShows()
     }
 
     override suspend fun getOnAirSeries(page: Int): List<Series> {
-        return remoteDataSource.getOnAirSeries().toTvShows()
+        return remoteDataSource.getOnAirSeries(page = page).toTvShows()
     }
 
     override suspend fun getAiringTodaySeries(page: Int): List<Series> {
-        return remoteDataSource.getAiringTodaySeries().toTvShows()
+        return remoteDataSource.getAiringTodaySeries(page = page).toTvShows()
     }
 
     override suspend fun getRecommendedSeries(page: Int): List<Series> {
-        return remoteDataSource.getRecommendedSeries().toTvShows()
+        return remoteDataSource.getRecommendedSeries(page = page).toTvShows()
     }
 
     override suspend fun increaseSeriesGenreInterestPoints(genreTitle: String) {
@@ -105,7 +105,7 @@ class SeriesRepositoryImpl @Inject constructor(
             page,
             genreId,
             sortType
-        ).seriesResults?.map { it.toSeries() } ?: emptyList()
+        ).seriesResults.map { it.toSeries() }
     }
 
     override suspend fun getSeriesByGenres(): Map<String, List<Series>> {
@@ -130,5 +130,9 @@ class SeriesRepositoryImpl @Inject constructor(
     override suspend fun getAllSeriesInHistory(): List<Series> {
         val seriesIds = localDataSource.getAllSeriesInHistory().map { it.mediaId }
         return seriesIds.map { getSeriesDetailsById(it) }
+    }
+
+    override suspend fun getFavoriteSeries(sessionId: String): List<Series> {
+        return remoteDataSource.getFavoriteSeries(sessionId).map { it.toSeries() }
     }
 }

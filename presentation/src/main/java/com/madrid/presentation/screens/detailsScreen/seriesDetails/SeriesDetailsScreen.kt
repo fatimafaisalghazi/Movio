@@ -41,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.R.drawable
 import com.madrid.designSystem.component.CustomTextTitle
@@ -153,7 +154,7 @@ fun SeriesDetailsScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
-                .background(Theme.color.surfaces.surfaceContainer)
+                .background(Theme.color.surfaces.surface)
         ) {
             MoviePosterDetailScreen(
                 imageUrl = uiState.topImageUrl,
@@ -181,7 +182,23 @@ fun SeriesDetailsScreen(
                 )
                 BottomMediaActions(
                     onRateClick = { showAddRatingBottomSheet = true },
-                    onPlayClick = {},
+                    onPlayClick = {
+                        val trailerKey = uiState.trailerKey
+                        if (trailerKey.isNotEmpty()) {
+                            val youtubeAppIntent =
+                                Intent(Intent.ACTION_VIEW, "vnd.youtube:$trailerKey".toUri())
+                            val youtubeWebIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                "https://www.youtube.com/watch?v=$trailerKey".toUri()
+                            )
+
+                            try {
+                                context.startActivity(youtubeAppIntent)
+                            } catch (e: Exception) {
+                                context.startActivity(youtubeWebIntent)
+                            }
+                        }
+                    },
                     onAddToListClick = {},
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
