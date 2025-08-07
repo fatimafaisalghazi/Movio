@@ -237,13 +237,13 @@ interface MovioApi {
         @Query("session_id") sessionId: String
     ): ListDetailsResponse
 
-    @POST("3/list")
+    @POST("list")
     suspend fun createMovieList(
         @Query("session_id") sessionId: String,
         @Body body: MovieListBody
     ): CreateListResponse
 
-    @POST("3/list/{list_id}/add_item")
+    @POST("list/{list_id}/add_item")
     suspend fun addMovieToList(
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String,
