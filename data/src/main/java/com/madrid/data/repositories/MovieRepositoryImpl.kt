@@ -30,7 +30,7 @@ class MovieRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
 ) : MovieRepository {
-
+    private val pageNumberCached = 1
     override suspend fun getMovieDetailsById(movieId: Int): Movie {
         return remoteDataSource.getMovieDetailsById(movieId).toMovie()
     }
@@ -119,10 +119,12 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
-        val localMovies = localDataSource.getNowPlayingMovies()
+        if(page == pageNumberCached ){
+            val localMovies = localDataSource.getNowPlayingMovies()
 
-        if (localMovies.isNotEmpty()) {
-            return localMovies.map { it.toMovie() }
+            if (localMovies.isNotEmpty()) {
+                return localMovies.map { it.toMovie() }
+            }
         }
 
         val remoteResult = remoteDataSource.getNowPlayingMovie(page)
@@ -137,10 +139,13 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUpcomingMovie(page: Int): List<Movie> {
-        val localMovies = localDataSource.getUpComingMovies()
-        if (localMovies.isNotEmpty()) {
-            return localMovies.map { it.toMovie() }
+        if(page == pageNumberCached ){
+            val localMovies = localDataSource.getUpComingMovies()
+            if (localMovies.isNotEmpty()) {
+                return localMovies.map { it.toMovie() }
+            }
         }
+
         val remoteResult = remoteDataSource.getUpcomingMovie(page)
         val remoteMovies = remoteResult.upcomingMovieResult?.map { it.toMovie() } ?: emptyList()
         remoteMovies.forEach { movie ->

@@ -86,9 +86,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     // region Series
     override suspend fun getTopRatedSeries(page: Int): TopRatedSeriesResponse {
-        val x = api.getTopRatedSeries(page)
-        Log.d("getTopRatedSeries", "getTopRatedSeries: in data source: ${x.results}")
-        return x
+        return  api.getTopRatedSeries(page)
     }
 
     override suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse {
