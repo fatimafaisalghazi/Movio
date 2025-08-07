@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
+import com.madrid.domain.usecase.authentication.LoginUseCase
+import com.madrid.domain.usecase.series.AddRatingSeriesUseCase
 import com.madrid.domain.usecase.series.AddSeriesToHistoryUseCase
 import com.madrid.domain.usecase.series.GetEpisodesForSeasonUseCase
 import com.madrid.domain.usecase.series.GetSeriesDetailsUseCase
@@ -19,6 +21,8 @@ import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,16 +36,19 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getSimilarSeriesUseCase: GetSimilarSeriesUseCase,
     private val getEpisodesForSeasonUseCase: GetEpisodesForSeasonUseCase,
     private val addSeriesToHistoryUseCase: AddSeriesToHistoryUseCase,
+    private val addRatingSeriesUseCase: AddRatingSeriesUseCase,
+    private val isGuestUseCase: LoginUseCase,
     private val getSeriesTrailersUseCase: GetSeriesTrailersUseCase,
 ) : BaseViewModel<SeriesDetailsUiState, Nothing>(SeriesDetailsUiState()) {
     private val args = savedStateHandle.toRoute<Destinations.SeriesDetailsScreen>()
 
     init {
+        fetchIsGuest()
         saveSeriesToHistory()
         loadData()
     }
 
-    private fun saveSeriesToHistory(){
+    private fun saveSeriesToHistory() {
         tryToExecute(
             function = { addSeriesToHistoryUseCase(args.seriesId) },
             onSuccess = {},
@@ -77,7 +84,7 @@ class SeriesDetailsViewModel @Inject constructor(
                         rate = RateFormatter.formatRate(series.rate), // Format rate here
                         numberOfSeasons = series.seasons.size,
                         productionDate = formatDateKotlinx(series.airDate),
-                        description =formatDuration( series.description),
+                        description = formatDuration(series.description),
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
                         selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState()
                     )
@@ -206,6 +213,39 @@ class SeriesDetailsViewModel @Inject constructor(
             },
         )
     }
+
+    private fun fetchIsGuest() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                isGuestUseCase.isGuest().collectLatest { result ->
+                    updateState { it.copy(isGuest = result) }
+                }
+            } catch (e: Exception) {
+                updateState { it.copy(isGuest = true) }
+            }
+        }
+    }
+
+    fun onPickRatingNumber(rating: Int) {
+        updateState {
+            it.copy(
+                userRating = rating
+            )
+        }
+    }
+
+    fun addRating() {
+        tryToExecute(
+            function = {
+                addRatingSeriesUseCase(
+                    state.value.seriesId,
+                    state.value.userRating.toDouble() * 2
+                )
+            },
+            onSuccess = {},
+            onError = {},
+        )
+    }
 }
 
 fun Series.toUiState(): SeriesUiState {
@@ -227,4 +267,3 @@ fun Review.toUiState(): ReviewUiState {
         content = this.comment
     )
 }
-
