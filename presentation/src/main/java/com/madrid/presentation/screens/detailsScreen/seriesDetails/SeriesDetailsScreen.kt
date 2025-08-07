@@ -213,7 +213,7 @@ fun SeriesDetailsScreen(
                                         tint = if (i <= uiState.userRating) Theme.color.system.warning else Theme.color.surfaces.onSurfaceVariant,
                                         modifier = Modifier
                                             .size(28.dp)
-                                            .clickable { viewModel.onPickRatingNumber(i) }
+                                            .clickable { viewModel.onPickRatingNumber(i*2) }
                                     )
                                 }
                             }
