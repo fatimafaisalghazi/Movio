@@ -8,6 +8,8 @@ import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionBody
 import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.list.ListDto
+import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
@@ -15,6 +17,8 @@ import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
 import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
+import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
@@ -96,8 +100,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     // region Series
     override suspend fun getTopRatedSeries(page: Int): TopRatedSeriesResponse {
-        val x = api.getTopRatedSeries(page)
-        return x
+        return  api.getTopRatedSeries(page)
     }
 
     override suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse {
@@ -180,8 +183,16 @@ class RemoteDataSourceImpl @Inject constructor(
         return api.getSeriesByGenreId(page, genreId, sortBy)
     }
 
-override suspend fun login(username: String, password: String): String {
-    try {
+    override suspend fun getCustomLists(sessionId: String): List<ListDto> {
+        return api.getCustomLists(sessionId).results
+    }
+
+    override suspend fun getCustomListDetails(listId: Int): ListsDetailsResponse {
+        return api.getCustomListDetails(listId)
+    }
+
+    override suspend fun login(username: String, password: String): String {
+        try {
         val requestTokenResponse = api.getRequestToken()
         val requestToken = requestTokenResponse.requestToken
         val sessionResponse = api.postCreateSession(
@@ -217,7 +228,7 @@ override suspend fun login(username: String, password: String): String {
             throw UnknownException("HTTP error $code: $errorBody")
         }
     } catch (e: IOException) {
-        throw NetworkException("No internet connection  ")
+        throw NetworkException("No internet connection")
     } catch (e: Exception) {
         throw UnknownException("Unknown error during login: ${e.message}")
     }
@@ -283,5 +294,17 @@ override suspend fun login(username: String, password: String): String {
         return    api.getAccountDetails(sessionId)
     }
 
-}
+    override suspend fun getCurrentUserDetails(sessionId: String): AccountDetailsResponse {
+        return api.getAccountDetails(sessionId)
+    }
 
+    override suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse {
+        val accountId = api.getAccountDetails(sessionId).id
+        return api.getUserRatingForMovie(accountId, sessionId)
+    }
+
+    override suspend fun getUserRatingForSeries(sessionId: String): RatingSeriesResponse {
+        val accountId = api.getAccountDetails(sessionId).id
+        return api.getUserRatingForSeries(accountId, sessionId)
+    }
+}

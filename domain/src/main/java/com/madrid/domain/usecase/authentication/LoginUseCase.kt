@@ -7,19 +7,18 @@ import com.madrid.domain.exceptions.InvalidCredentialsException
 import com.madrid.domain.exceptions.MovioException
 import com.madrid.domain.exceptions.UnknownException
 import com.madrid.domain.exceptions.ValidationException
-import com.madrid.domain.repository.UserRepository
+import com.madrid.domain.repository.AuthenticationRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
 class LoginUseCase @Inject constructor(
-   private val userRepository: UserRepository
+    private val authenticationRepository: AuthenticationRepository
 ) {
-
     suspend fun execute(username: String, password: String): Boolean {
-       try {
-           validateCredentials(username, password)
-            val success = userRepository.login(username, password)
+        try {
+            validateCredentials(username, password)
+            val success = authenticationRepository.login(username, password)
             if (!success) throw InvalidCredentialsException()
             return true
         } catch (e: MovioException) {
@@ -60,11 +59,11 @@ class LoginUseCase @Inject constructor(
     }
 
     fun checkActiveSession(): Flow<Boolean> {
-        return userRepository.isUserLoggedIn()
+        return authenticationRepository.isUserLoggedIn()
     }
 
     fun isGuest(): Flow<Boolean> {
-        return userRepository.isGuest()
+        return authenticationRepository.isGuest()
     }
 }
 
