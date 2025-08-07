@@ -7,9 +7,7 @@ import com.madrid.data.dataSource.local.table.MovieSection
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
-import com.madrid.data.dataSource.mapper.toSeriesGenreTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
-import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toRatedMovie
 import com.madrid.data.dataSource.remote.mapper.toReview

@@ -232,7 +232,6 @@ interface MovioApi {
 
     @GET("account/account_id/lists")
     suspend fun getCustomLists(
-//        @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String,
     ): ListsResponse
 
