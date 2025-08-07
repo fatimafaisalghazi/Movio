@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,10 +34,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.R.drawable
@@ -77,6 +80,7 @@ fun SeriesDetailsScreen(
     val seasons = uiState.currentSeasonsUiStates
     val artists = uiState.topCast
     var showAddRatingBottomSheet by remember { mutableStateOf(false) }
+    var showDoneRatingBottomSheet by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var showSheet by remember { mutableStateOf(false) }
 
@@ -186,24 +190,153 @@ fun SeriesDetailsScreen(
                     show = showAddRatingBottomSheet,
                     onDismiss = { showAddRatingBottomSheet = false },
                     content = {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            MovioArtistsCard(
-                                imageUrl = uiState.topImageUrl,
-                                circleImageSize = 88.dp,
-                                artistsName = uiState.seriesName,
+                        if (uiState.isGuest) {
+                            Column {
+                                Image(
+                                    painter = painterResource(id = drawable.library_main_icon),
+                                    contentDescription = "Search Icon",
+                                    modifier = Modifier
+                                        .size(width = 60.dp, height = 66.dp)
+                                        .align(CenterHorizontally)
+                                        .padding(bottom = 16.dp),
+                                )
+                                MovioText(
+                                    text = stringResource(R.string.you_dont_have_an_account),
+                                    textStyle = Theme.textStyle.title.mediumMedium16,
+                                    color = Theme.color.surfaces.onSurface,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(bottom = 8.dp)
+                                )
+                                MovioText(
+                                    text = stringResource(R.string.this_rating_is_only_available_to_registered_users_Login_to_share_your_rating),
+                                    textStyle = Theme.textStyle.label.smallRegular12,
+                                    color = Theme.color.surfaces.onSurfaceContainer,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                )
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 40.dp,
+                                            bottom = 32.dp,
+                                            start = 16.dp,
+                                            end = 16.dp
+                                        )
+                                        .height(48.dp),
+                                    onClick = {
+                                        viewModel.addRating()
+                                        showAddRatingBottomSheet = false
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = Theme.color.brand.primary,
+                                    ),
+                                    shape = RoundedCornerShape(24.dp),
+                                    elevation = ButtonDefaults.elevation(0.dp)
+                                ) {
+                                    MovioText(
+                                        text = stringResource(R.string.login),
+                                        textStyle = Theme.textStyle.label.mediumMedium14,
+                                        color = Theme.color.brand.onPrimary,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    )
+                                }
+                            }
+                        } else {
+
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                MovioArtistsCard(
+                                    imageUrl = uiState.topImageUrl,
+                                    circleImageSize = 88.dp,
+                                    artistsName = uiState.seriesName,
+                                )
+                                MovioText(
+                                    modifier = Modifier.padding(top = 24.dp),
+                                    text = stringResource(R.string.add_your_overall_rating_for_this_movie),
+                                    color = Theme.color.surfaces.onSurfaceContainer,
+                                    textStyle = Theme.textStyle.label.smallRegular14
+                                )
+                                Row(
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    (1..5).forEach { i ->
+                                        MovioIcon(
+                                            painter = painterResource(drawable.bold_star),
+                                            contentDescription = null,
+                                            tint = if (i <= uiState.userRating) Theme.color.system.warning else Theme.color.surfaces.onSurfaceVariant,
+                                            modifier = Modifier
+                                                .size(28.dp)
+                                                .clickable { viewModel.onPickRatingNumber(i) }
+                                        )
+                                    }
+                                }
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 40.dp,
+                                            bottom = 32.dp,
+                                            start = 16.dp,
+                                            end = 16.dp
+                                        )
+                                        .height(48.dp),
+                                    onClick = {
+                                        viewModel.addRating()
+                                        showAddRatingBottomSheet = false
+                                        showDoneRatingBottomSheet = true
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = Theme.color.brand.primary,
+                                    ),
+                                    shape = RoundedCornerShape(24.dp),
+                                    elevation = ButtonDefaults.elevation(0.dp)
+                                ) {
+                                    MovioText(
+                                        text = stringResource(R.string.submit),
+                                        color = Theme.color.brand.onPrimary,
+                                        textStyle = Theme.textStyle.label.mediumMedium14
+                                    )
+                                }
+                            }
+                        }
+                    }
+                )
+
+                MovioBottomSheet(
+                    show = showDoneRatingBottomSheet,
+                    onDismiss = { showDoneRatingBottomSheet = false },
+                    content = {
+                        Column {
+                            Image(
+                                painter = painterResource(id = R.drawable.party_icon),
+                                contentDescription = "Party Icon",
+                                modifier = Modifier
+                                    .size(68.dp)
+                                    .align(CenterHorizontally)
+                                    .padding(bottom = 8.dp),
                             )
                             MovioText(
-                                modifier = Modifier.padding(top = 24.dp),
-                                text = stringResource(R.string.add_your_overall_rating_for_this_movie),
+                                text = stringResource(R.string.thank_you_for_your_rating),
+                                textStyle = Theme.textStyle.label.smallRegular14,
                                 color = Theme.color.surfaces.onSurfaceContainer,
-                                textStyle = Theme.textStyle.label.smallRegular14
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 16.dp)
                             )
                             Row(
-                                modifier = Modifier.padding(top = 16.dp),
+                                modifier = Modifier.padding(top = 16.dp).align(Alignment.CenterHorizontally),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 (1..5).forEach { i ->
@@ -212,8 +345,8 @@ fun SeriesDetailsScreen(
                                         contentDescription = null,
                                         tint = if (i <= uiState.userRating) Theme.color.system.warning else Theme.color.surfaces.onSurfaceVariant,
                                         modifier = Modifier
-                                            .size(28.dp)
-                                            .clickable { viewModel.onPickRatingNumber(i*2) }
+                                            .size(if (i == uiState.userRating) 48.dp else 28.dp)
+                                            .align(Alignment.CenterVertically)
                                     )
                                 }
                             }
@@ -228,8 +361,7 @@ fun SeriesDetailsScreen(
                                     )
                                     .height(48.dp),
                                 onClick = {
-                                    viewModel.addRating()
-                                    showAddRatingBottomSheet = false
+                                    showDoneRatingBottomSheet = false
                                 },
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = Theme.color.brand.primary,
@@ -238,7 +370,7 @@ fun SeriesDetailsScreen(
                                 elevation = ButtonDefaults.elevation(0.dp)
                             ) {
                                 MovioText(
-                                    text = stringResource(R.string.submit),
+                                    text = stringResource(R.string.done),
                                     color = Theme.color.brand.onPrimary,
                                     textStyle = Theme.textStyle.label.mediumMedium14
                                 )

@@ -34,7 +34,7 @@ class DetailsMovieViewModel @Inject constructor(
     private val addMovieToHistoryUseCase: AddMovieToHistoryUseCase,
     private val getAddRatingMoviesUseCase: AddRatingMoviesUseCase,
     private val isGuestUseCase: LoginUseCase,
-    ) : BaseViewModel<DetailsMovieUiState, Nothing>(
+) : BaseViewModel<DetailsMovieUiState, Nothing>(
     DetailsMovieUiState()
 ) {
     val args = saveStateHandle.toRoute<Destinations.MovieDetailsScreen>()
@@ -193,13 +193,13 @@ class DetailsMovieViewModel @Inject constructor(
             )
         }
     }
-//
+
     fun addRating() {
         tryToExecute(
             function = {
                 getAddRatingMoviesUseCase(
                     state.value.movieId,
-                    state.value.userRating.toDouble()*2
+                    state.value.userRating.toDouble() * 2
                 )
             },
             onSuccess = {},
