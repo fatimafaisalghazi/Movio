@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.FilterBar
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.MovioText
