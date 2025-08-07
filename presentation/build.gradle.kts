@@ -16,6 +16,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("proguard-rules.pro")
+        resourceConfigurations.plus(listOf("en","ar"))
     }
 
     buildTypes {
@@ -36,7 +37,7 @@ android {
     }
     android {
         buildFeatures {
-            compose = false
+            compose = true
         }
         composeOptions {
             kotlinCompilerExtensionVersion = libs.versions.compiler.get()
