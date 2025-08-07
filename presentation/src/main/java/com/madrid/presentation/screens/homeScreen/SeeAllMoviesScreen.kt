@@ -28,12 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.FilterBar
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
+import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
@@ -68,13 +68,13 @@ fun SeeAllMoviesScreen(
             .background(Theme.color.surfaces.surface)
             .statusBarsPadding(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) }
         ) {
-            TopAppBar(uiState.title, secondIcon = null, thirdIcon = null, onFirstIconClick = { navController.popBackStack()})
+            TopAppBar(uiState.title, secondIcon = null, thirdIcon = null, onFirstIconClick = { navController.popBackStack()}, modifier = Modifier.padding(start = 16.dp))
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
 
@@ -149,7 +149,7 @@ fun SeeAllMoviesScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         MovioText(
-                            text = "No results found",
+                            text = stringResource(R.string.no_results_found),
                             textStyle = Theme.textStyle.title.mediumMedium16,
                             color = Theme.color.surfaces.onSurface,
                             textAlign = TextAlign.Center,
@@ -171,23 +171,16 @@ fun SeeAllMoviesScreen(
             }
 
             listOfItem.itemCount > 0 -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    CustomTextTitle(
-                        primaryText = stringResource(com.madrid.presentation.R.string.explore_more)
-                    )
-                }
                 items(
                     count = listOfItem.itemCount,
                 ) { index ->
                     val movie = listOfItem[index]
                     MovioVerticalCard(
-                        description = movie?.name ?: "no description",
+                        description = movie?.name ?: stringResource(R.string.no_results_found),
                         movieImage = movie?.imageUrl ?: "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
                         rate = movie?.rate?.take(3) ?: "4.5",
-                        width = 130.dp,
-                        height = 200.dp,
+                        width = 101.dp,
+                        height = 136.dp,
                         onClick = {
                             navController.navigate(
                                 Destinations.MovieDetailsScreen(
