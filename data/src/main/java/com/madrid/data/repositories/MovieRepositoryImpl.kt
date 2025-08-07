@@ -62,7 +62,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
 
         val remoteResult = remoteDataSource.getPopularMovies(page)
-        val remoteMovies = remoteResult.movieResults?.map { it.toMovie() } ?: emptyList()
+        val remoteMovies = remoteResult.movieResults.map { it.toMovie() }
         remoteMovies.forEach { movie ->
             localDataSource.insertSectionMovie(
                 movie.toSectionMovieTable().copy(movieSection = MovieSection.RECOMMENDED.value)
@@ -73,8 +73,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getExploreMoreMovies(page: Int): List<Movie> {
-        return remoteDataSource.getTopRatedMovies(page).movieResults?.map { it.toMovie() }
-            ?: emptyList()
+        return remoteDataSource.getTopRatedMovies(page).movieResults.map { it.toMovie() }
     }
 
     override suspend fun getTrendingMovies(page: Int): List<Movie> {
@@ -86,7 +85,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
 
         val remoteResult = remoteDataSource.getTrendingMovies(page)
-        val remoteMovies = remoteResult.movieResults?.map { it.toMovie() } ?: emptyList()
+        val remoteMovies = remoteResult.movieResults.map { it.toMovie() }
         remoteMovies.forEach { movie ->
             localDataSource.insertSectionMovie(
                 movie.toSectionMovieTable().copy(movieSection = MovieSection.TRENDING.value)
@@ -127,7 +126,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
 
         val remoteResult = remoteDataSource.getTopRatedMovies(page)
-        val remoteMovies = remoteResult.movieResults?.map { it.toMovie() } ?: emptyList()
+        val remoteMovies = remoteResult.movieResults.map { it.toMovie() }
         remoteMovies.forEach { movie ->
             localDataSource.insertSectionMovie(
                 movie.toSectionMovieTable().copy(movieSection = MovieSection.TOP_RATED.value)
@@ -141,7 +140,7 @@ class MovieRepositoryImpl @Inject constructor(
         val movies = remoteDataSource.getPopularMovies(
             page = page
         ).movieResults
-        movies?.map { movie ->
+        movies.map { movie ->
             localDataSource.insertMovie(movie.toMovieTable())
             movie.genreIds?.map { genreId ->
                 localDataSource.relateMovieToGenre(
@@ -152,7 +151,7 @@ class MovieRepositoryImpl @Inject constructor(
                 )
             }
         }
-        return movies?.map { it.toMovie() } ?: emptyList()
+        return movies.map { it.toMovie() }
     }
 
     override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
@@ -214,7 +213,7 @@ class MovieRepositoryImpl @Inject constructor(
             page,
             genreId,
             sortType
-        ).movieResults?.map { it.toMovie() } ?: emptyList()
+        ).movieResults.map { it.toMovie() }
     }
 
     override suspend fun getUserMovieRate(sessionId: String): List<GetUserRatedMovieUseCase.RatedMovie> {

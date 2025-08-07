@@ -98,7 +98,7 @@ class SeriesRepositoryImpl @Inject constructor(
             page,
             genreId,
             sortType
-        ).seriesResults?.map { it.toSeries() } ?: emptyList()
+        ).seriesResults.map { it.toSeries() }
     }
 
     override suspend fun getSeriesByGenres(): Map<String, List<Series>> {
