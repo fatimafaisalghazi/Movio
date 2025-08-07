@@ -7,6 +7,7 @@ import com.madrid.data.dataSource.local.table.MovieSection
 import com.madrid.data.dataSource.local.table.relationship.MovieGenreCrossRef
 import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
+import com.madrid.data.dataSource.mapper.toSeriesGenreTable
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toGenre
 import com.madrid.data.dataSource.remote.mapper.toMovie
@@ -127,27 +128,36 @@ class MovieRepositoryImpl @Inject constructor(
         val remoteMovies = remoteResult.nowPlayingMovieResults?.map { it.toMovie() } ?: emptyList()
 
         remoteMovies.forEach { movie ->
-            localDataSource.insertSectionMovie(movie.toSectionMovieTable().copy(movieSection = MovieSection.NOW_PLAYING.value))
+            localDataSource.insertSectionMovie(
+                movie.toSectionMovieTable().copy(movieSection = MovieSection.NOW_PLAYING.value)
+            )
         }
         return remoteMovies
     }
 
     override suspend fun getUpcomingMovie(page: Int): List<Movie> {
         val localMovies = localDataSource.getUpComingMovies()
-        if (localMovies.isNotEmpty()){
+        if (localMovies.isNotEmpty()) {
             return localMovies.map { it.toMovie() }
         }
         val remoteResult = remoteDataSource.getUpcomingMovie(page)
         val remoteMovies = remoteResult.upcomingMovieResult?.map { it.toMovie() } ?: emptyList()
         remoteMovies.forEach { movie ->
-            localDataSource.insertSectionMovie(movie.toSectionMovieTable().copy(movieSection = MovieSection.UPCOMING.value))
+            localDataSource.insertSectionMovie(
+                movie.toSectionMovieTable().copy(movieSection = MovieSection.UPCOMING.value)
+            )
         }
 
         return remoteMovies
     }
 
     override suspend fun getMovieGenres(): List<Genre> {
-        return remoteDataSource.getMovieGenres().map { it.toGenre() }
+        return localDataSource.getAllMovieGenres().ifEmpty {
+            remoteDataSource.getMovieGenres().forEach {
+                localDataSource.insertMovieGenre(it.toMovieGenreTable())
+            }
+            localDataSource.getAllMovieGenres()
+        }.map { it.toGenre() }
     }
 
     override suspend fun getMoviesByGenreId(
@@ -163,11 +173,11 @@ class MovieRepositoryImpl @Inject constructor(
         ).movieResults?.map { it.toMovie() } ?: emptyList()
     }
 
-    override suspend fun clearHomeMoviesCache(){
+    override suspend fun clearHomeMoviesCache() {
         localDataSource.clearHomeMoviesCache()
     }
 
-    override suspend fun addMovieToHistory(movieId: Int){
+    override suspend fun addMovieToHistory(movieId: Int) {
         localDataSource.addMovieToHistory(movieId = movieId)
     }
 
