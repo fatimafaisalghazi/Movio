@@ -1,6 +1,5 @@
 package com.madrid.data.dataSource.remote
 
-import android.util.Log
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -13,6 +12,7 @@ import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
+import com.madrid.data.dataSource.remote.dto.movie.MovieResult
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
@@ -27,6 +27,7 @@ import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
+import com.madrid.data.dataSource.remote.dto.series.SeriesResult
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
@@ -84,11 +85,15 @@ class RemoteDataSourceImpl @Inject constructor(
     ): SearchMovieResponse {
         return api.getMoviesByGenreId(page, genreId, sortBy)
     }
+
+    override suspend fun getFavoriteMovies(sessionId: String): List<MovieResult> {
+        return api.getFavoriteMovies(sessionId).movieResults
+    }
     // endregion
 
     // region Series
     override suspend fun getTopRatedSeries(page: Int): TopRatedSeriesResponse {
-        return  api.getTopRatedSeries(page)
+        return api.getTopRatedSeries(page)
     }
 
     override suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse {
@@ -128,6 +133,10 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getSeriesDetailsById(seriesId: Int): SeriesDetailsResponse {
         return api.getSeriesDetailsById(seriesId)
+    }
+
+    override suspend fun getFavoriteSeries(sessionId: String): List<SeriesResult> {
+        return api.getFavoriteSeries(sessionId).seriesResults
     }
 
     // Artist
