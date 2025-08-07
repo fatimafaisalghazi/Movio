@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ListsResponse(
+data class ListsDetailsResponse(
     @SerializedName("created_by")
     val createdBy: String,
     val description: String,
     @SerializedName("favorite_count")
     val favoriteCount: Int = 0,
-    val items: List<ListDto> = emptyList(),
+    val items: List<ListItemDto> = emptyList(),
     @SerializedName("item_count")
     val itemCount: Int = 0,
     val name: String? = null,
@@ -20,7 +20,7 @@ data class ListsResponse(
 
 
 @Serializable
-data class ItemDto(
+data class ListItemDto(
     val adult: Boolean = true,
     @SerializedName("backdrop_path")
     val backdropPath: String? = null,
@@ -42,7 +42,7 @@ data class ItemDto(
     val title: String? = null,
     val video: Boolean = true,
     @SerializedName("vote_average")
-    val voteAverage: Int = 0,
+    val voteAverage: Double = 0.0,
     @SerializedName("vote_count")
     val voteCount: Int = 0
 )
