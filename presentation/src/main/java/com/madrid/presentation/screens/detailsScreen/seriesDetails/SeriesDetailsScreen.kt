@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -162,7 +163,23 @@ fun SeriesDetailsScreen(
                 )
                 BottomMediaActions(
                     onRateClick = {},
-                    onPlayClick = {},
+                    onPlayClick = {
+                        val trailerKey = uiState.trailerKey
+                        if (trailerKey.isNotEmpty()) {
+                            val youtubeAppIntent =
+                                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$trailerKey"))
+                            val youtubeWebIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://www.youtube.com/watch?v=$trailerKey")
+                            )
+
+                            try {
+                                context.startActivity(youtubeAppIntent)
+                            } catch (e: Exception) {
+                                context.startActivity(youtubeWebIntent)
+                            }
+                        }
+                    },
                     onAddToListClick = {},
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
