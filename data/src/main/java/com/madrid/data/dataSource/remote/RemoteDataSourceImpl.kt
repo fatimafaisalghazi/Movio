@@ -100,7 +100,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     // region Series
     override suspend fun getTopRatedSeries(page: Int): TopRatedSeriesResponse {
-        return  api.getTopRatedSeries(page)
+        return api.getTopRatedSeries(page)
     }
 
     override suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse {
@@ -193,46 +193,49 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun login(username: String, password: String): String {
         try {
-        val requestTokenResponse = api.getRequestToken()
-        val requestToken = requestTokenResponse.requestToken
-        val sessionResponse = api.postCreateSession(
-            CreateSessionBody(
-                username = username,
-                password = password,
-                requestToken = requestToken
+            val requestTokenResponse = api.getRequestToken()
+            val requestToken = requestTokenResponse.requestToken
+            val sessionResponse = api.postCreateSession(
+                CreateSessionBody(
+                    username = username,
+                    password = password,
+                    requestToken = requestToken
+                )
             )
-        )
-        return sessionResponse.requestToken
-    } catch (e: HttpException) {
-        val code = e.code()
-        val errorBody = e.response()?.errorBody()?.string()?.lowercase()
+            return sessionResponse.requestToken
+        } catch (e: HttpException) {
+            val code = e.code()
+            val errorBody = e.response()?.errorBody()?.string()?.lowercase()
 
-        if (code == HTTP_UNAUTHORIZED) {
-            when {
-                errorBody?.contains("invalid username") == true ||
-                        errorBody?.contains("invalid password") == true ||
-                        errorBody?.contains("unauthorized") == true -> {
-                    throw InvalidCredentialsException()
+            if (code == HTTP_UNAUTHORIZED) {
+                when {
+                    errorBody?.contains("invalid username") == true ||
+                            errorBody?.contains("invalid password") == true ||
+                            errorBody?.contains("unauthorized") == true -> {
+                        throw InvalidCredentialsException()
+                    }
+
+                    errorBody?.contains("suspended") == true -> {
+                        throw AccountLockedException()
+                    }
+
+                    errorBody?.contains("expired") == true -> {
+                        throw SessionExpiredException()
+                    }
+
+                    else -> {
+                        throw AuthorizationException("Unauthorized access")
+                    }
                 }
-                errorBody?.contains("suspended") == true -> {
-                    throw AccountLockedException()
-                }
-                errorBody?.contains("expired") == true -> {
-                    throw SessionExpiredException()
-                }
-                else -> {
-                    throw AuthorizationException("Unauthorized access")
-                }
+            } else {
+                throw UnknownException("HTTP error $code: $errorBody")
             }
-        } else {
-            throw UnknownException("HTTP error $code: $errorBody")
+        } catch (e: IOException) {
+            throw NetworkException("No internet connection")
+        } catch (e: Exception) {
+            throw UnknownException("Unknown error during login: ${e.message}")
         }
-    } catch (e: IOException) {
-        throw NetworkException("No internet connection")
-    } catch (e: Exception) {
-        throw UnknownException("Unknown error during login: ${e.message}")
     }
-}
 
 
     override suspend fun getSessionId(username: String, password: String): String {
@@ -247,24 +250,19 @@ class RemoteDataSourceImpl @Inject constructor(
                     requestToken = requestToken
                 )
             )
-
             val sessionId = api.createSession(
                 CreateSessionRawBody(sessionResponse.requestToken)
             )
-
             return sessionId.sessionId
-
         } catch (e: HttpException) {
             when (e.code()) {
                 401 -> throw InvalidCredentialsException()
                 403 -> throw SessionExpiredException()
                 else -> throw UnknownException("HTTP ${e.code()}: ${e.message()}")
             }
-
         } catch (e: IOException) {
             throw NetworkException("No internet connection  ")
         } catch (e: Exception) {
-
             if (e.message?.contains("invalid username or password", true) == true) {
                 throw InvalidCredentialsException()
             }
@@ -277,21 +275,13 @@ class RemoteDataSourceImpl @Inject constructor(
         try {
             val guestSessionResponse = api.getCreateGuestSession()
             return guestSessionResponse.requestToken
-
         } catch (e: HttpException) {
             throw AuthorizationException("Function…")
         } catch (e: IOException) {
             throw NetworkException("No internet connection")
         } catch (e: Exception) {
             throw UnknownException("Unknown error}")
-
-
         }
-    }
-
-
-    override suspend fun getCurrentUserDetails(sessionId : String): AccountDetailsResponse {
-        return    api.getAccountDetails(sessionId)
     }
 
     override suspend fun getCurrentUserDetails(sessionId: String): AccountDetailsResponse {

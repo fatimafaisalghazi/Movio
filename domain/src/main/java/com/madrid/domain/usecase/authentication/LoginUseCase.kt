@@ -1,7 +1,6 @@
 package com.madrid.domain.usecase.authentication
 
 
-
 import com.madrid.domain.exceptions.GuestLoginException
 import com.madrid.domain.exceptions.InvalidCredentialsException
 import com.madrid.domain.exceptions.MovioException
@@ -35,26 +34,24 @@ class LoginUseCase @Inject constructor(
     suspend fun loginAsGuest(): Boolean {
 
         try {
-        val successisGuest = userRepository.loginAsGuest()
-        if (!successisGuest)  throw GuestLoginException()
-        return true
-    } catch (e: MovioException) {
-        throw e
-    }
-        catch (e: Exception) {
-        throw UnknownException("e $e.message ?:")
+            val successisGuest = authenticationRepository.loginAsGuest()
+            if (!successisGuest) throw GuestLoginException()
+            return true
+        } catch (e: MovioException) {
+            throw e
+        } catch (e: Exception) {
+            throw UnknownException("e $e.message ?:")
+
+        }
+
 
     }
-
-
-    }
-
 
 
     private fun validateCredentials(username: String, password: String) {
         ValidationException.apply {
-            validateField("Username", username, )
-            validateField("Password", password, )
+            validateField("Username", username)
+            validateField("Password", password)
         }
     }
 
