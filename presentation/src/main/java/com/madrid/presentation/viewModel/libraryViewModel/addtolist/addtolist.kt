@@ -7,6 +7,7 @@ import com.madrid.domain.exceptions.MovioException
 import com.madrid.domain.exceptions.NetworkException
 import com.madrid.domain.usecase.movie.AddMovieToListUseCase
 import com.madrid.domain.usecase.movie.CreateMovieListUseCase
+import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,33 +22,49 @@ data class MovieListUiState(
     val createListSuccess: Boolean = false,
     val addToListSuccess: Boolean = false,
     val userLists: List<WatchList> = emptyList(),
-    val isLoadingLists: Boolean = false // Add separate loading state for lists
+    val watchListItems: List<WatchListItemUiState> = emptyList(),
+    val isLoadingLists: Boolean = false
+)
+
+data class WatchListItemUiState(
+    val id: Int = 0,
+    val videosSize: Int = 0,
+    val watchListTitle: String = ""
 )
 
 sealed class MovieListEvent {
     object ClearMessages : MovieListEvent()
     object DismissNotification : MovieListEvent()
-    object LoadUserLists : MovieListEvent() // Add this event
+    object LoadUserLists : MovieListEvent()
 }
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
     private val createMovieListUseCase: CreateMovieListUseCase,
     private val addMovieToListUseCase: AddMovieToListUseCase,
-    private val getUserListsUseCase: suspend () -> List<WatchList>,
+    private val getWatchListsUseCase: GetWatchListsUseCase, // Changed: Use the actual use case class
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BaseViewModel<MovieListUiState, MovieListEvent>(MovieListUiState()) {
 
-    // Add this method to load user lists
     fun loadUserLists() {
         viewModelScope.launch(dispatcher) {
             updateState { it.copy(isLoadingLists = true, errorMessage = null) }
 
             try {
-                val userLists = getUserListsUseCase()
+                val userLists = getWatchListsUseCase() // Changed: Call invoke() on the use case
+                // Map domain entities to UI state
+                val uiLists = userLists.map { watchList ->
+                    WatchListItemUiState(
+                        id = watchList.id,
+                        videosSize = watchList.itemCount ?: 0, // Assuming itemCount exists
+                        watchListTitle = watchList.name
+                    )
+                }
+
                 updateState {
                     it.copy(
-                        userLists = userLists,
+                        userLists = userLists, // Keep original for other operations
+                        watchListItems = uiLists, // Add UI-specific list
                         isLoadingLists = false
                     )
                 }
