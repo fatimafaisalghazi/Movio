@@ -1,6 +1,5 @@
 package com.madrid.data.dataSource.remote
 
-import android.util.Log
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -13,28 +12,47 @@ import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
+import com.madrid.data.dataSource.remote.dto.movie.MovieResult
 import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
+import com.madrid.data.dataSource.remote.dto.rating.RateRequest
+import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
 import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
-import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesDetailsResponse
+import com.madrid.data.dataSource.remote.dto.series.SeriesResult
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
+import com.madrid.data.repositories.datasource.UserPreferences
 import com.madrid.data.repositories.remote.RemoteDataSource
+import kotlinx.coroutines.flow.first
+
+import com.madrid.domain.exceptions.AccountLockedException
+import com.madrid.domain.exceptions.AuthorizationException
+import com.madrid.domain.exceptions.InvalidCredentialsException
+import com.madrid.domain.exceptions.NetworkException
+import com.madrid.domain.exceptions.SessionExpiredException
+import com.madrid.domain.exceptions.UnknownException
+import retrofit2.HttpException
+import java.io.IOException
+import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
+
+
 import javax.inject.Inject
 
+
 class RemoteDataSourceImpl @Inject constructor(
-    private val api: MovioApi
+    private val api: MovioApi,
+    private val userPreferences: UserPreferences
 ) : RemoteDataSource {
     //  region Movies
     override suspend fun searchMoviesByQuery(name: String, page: Int): SearchMovieResponse {
@@ -84,11 +102,15 @@ class RemoteDataSourceImpl @Inject constructor(
     ): SearchMovieResponse {
         return api.getMoviesByGenreId(page, genreId, sortBy)
     }
+
+    override suspend fun getFavoriteMovies(sessionId: String): List<MovieResult> {
+        return api.getFavoriteMovies(sessionId).movieResults
+    }
     // endregion
 
     // region Series
     override suspend fun getTopRatedSeries(page: Int): TopRatedSeriesResponse {
-        return  api.getTopRatedSeries(page)
+        return api.getTopRatedSeries(page)
     }
 
     override suspend fun searchSeriesByQuery(name: String, page: Int): SearchSeriesResponse {
@@ -130,6 +152,10 @@ class RemoteDataSourceImpl @Inject constructor(
         return api.getSeriesDetailsById(seriesId)
     }
 
+    override suspend fun getFavoriteSeries(sessionId: String): List<SeriesResult> {
+        return api.getFavoriteSeries(sessionId).seriesResults
+    }
+
     // Artist
     override suspend fun searchArtistByQuery(name: String, page: Int): SearchArtistResponse {
         return api.searchArtistByQuery(name, page)
@@ -163,6 +189,22 @@ class RemoteDataSourceImpl @Inject constructor(
         return api.getNowPlayingMovies(page)
     }
 
+    override suspend fun addRatingMovie(movieId: Int, value: Double) {
+        return api.addRatingForMovie(
+            movieId = movieId,
+            sessionId = userPreferences.getAuthToken().first(),
+            body = RateRequest(value)
+        )
+    }
+
+    override suspend fun addRatingSeries(seriesId: Int, value: Double) {
+        return api.addRatingForSeries(
+            seriesId = seriesId,
+            sessionId = userPreferences.getAuthToken().first(),
+            body = RateRequest(value)
+        )
+    }
+
     override suspend fun getSeriesByGenreId(
         page: Int,
         genreId: Int?,
@@ -184,36 +226,96 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun login(username: String, password: String): String {
-        val requestTokenResponse = api.getRequestToken()
-        val requestToken = requestTokenResponse.requestToken
-        val sessionResponse = api.postCreateSession(
-            CreateSessionBody(
-                username = username,
-                password = password,
-                requestToken = requestToken
+        try {
+            val requestTokenResponse = api.getRequestToken()
+            val requestToken = requestTokenResponse.requestToken
+            val sessionResponse = api.postCreateSession(
+                CreateSessionBody(
+                    username = username,
+                    password = password,
+                    requestToken = requestToken
+                )
             )
-        )
-        return sessionResponse.requestToken
+            return sessionResponse.requestToken
+        } catch (e: HttpException) {
+            val code = e.code()
+            val errorBody = e.response()?.errorBody()?.string()?.lowercase()
+
+            if (code == HTTP_UNAUTHORIZED) {
+                when {
+                    errorBody?.contains("invalid username") == true ||
+                            errorBody?.contains("invalid password") == true ||
+                            errorBody?.contains("unauthorized") == true -> {
+                        throw InvalidCredentialsException()
+                    }
+
+                    errorBody?.contains("suspended") == true -> {
+                        throw AccountLockedException()
+                    }
+
+                    errorBody?.contains("expired") == true -> {
+                        throw SessionExpiredException()
+                    }
+
+                    else -> {
+                        throw AuthorizationException("Unauthorized access")
+                    }
+                }
+            } else {
+                throw UnknownException("HTTP error $code: $errorBody")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("No internet connection")
+        } catch (e: Exception) {
+            throw UnknownException("Unknown error during login: ${e.message}")
+        }
     }
 
+
     override suspend fun getSessionId(username: String, password: String): String {
-        val requestTokenResponse = api.getRequestToken()
-        val requestToken = requestTokenResponse.requestToken
-        val sessionResponse = api.postCreateSession(
-            CreateSessionBody(
-                username = username,
-                password = password,
-                requestToken = requestToken
+        try {
+            val requestTokenResponse = api.getRequestToken()
+            val requestToken = requestTokenResponse.requestToken
+
+            val sessionResponse = api.postCreateSession(
+                CreateSessionBody(
+                    username = username,
+                    password = password,
+                    requestToken = requestToken
+                )
             )
-        )
-        val sessionId = api.createSession(
-            CreateSessionRawBody(sessionResponse.requestToken)
-        )
-        return sessionId.sessionId
+            val sessionId = api.createSession(
+                CreateSessionRawBody(sessionResponse.requestToken)
+            )
+            return sessionId.sessionId
+        } catch (e: HttpException) {
+            when (e.code()) {
+                401 -> throw InvalidCredentialsException()
+                403 -> throw SessionExpiredException()
+                else -> throw UnknownException("HTTP ${e.code()}: ${e.message()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("No internet connection  ")
+        } catch (e: Exception) {
+            if (e.message?.contains("invalid username or password", true) == true) {
+                throw InvalidCredentialsException()
+            }
+            throw UnknownException("Unexpected error: ${e.message}")
+        }
+
     }
 
     override suspend fun loginAsGuest(): String {
-        return api.getCreateGuestSession().requestToken
+        try {
+            val guestSessionResponse = api.getCreateGuestSession()
+            return guestSessionResponse.requestToken
+        } catch (e: HttpException) {
+            throw AuthorizationException("Function…")
+        } catch (e: IOException) {
+            throw NetworkException("No internet connection")
+        } catch (e: Exception) {
+            throw UnknownException("Unknown error}")
+        }
     }
 
     override suspend fun getCurrentUserDetails(sessionId: String): AccountDetailsResponse {
