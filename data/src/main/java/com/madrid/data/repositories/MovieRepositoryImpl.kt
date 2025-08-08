@@ -203,6 +203,13 @@ class MovieRepositoryImpl @Inject constructor(
         }.map { it.toGenre() }
     }
 
+    override suspend fun addRatingMovie(
+        movieId: Int,
+        rate: Double
+    ){
+        return remoteDataSource.addRatingMovie(movieId, rate)
+    }
+
     override suspend fun getMoviesByGenreId(
         page: Int,
         genreId: Int?,
