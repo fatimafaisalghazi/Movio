@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -33,7 +35,8 @@ fun MovioHorizontalCard(
     width: Dp,
     onClick: () -> Unit ={ },
     modifier: Modifier = Modifier,
-    containerModifier: Modifier = Modifier
+    containerModifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Crop
 ) {
     Row(
         modifier = containerModifier
@@ -47,13 +50,13 @@ fun MovioHorizontalCard(
             modifier = Modifier
                 .width(width)
                 .height(height),
-            radius = 8.dp
+            radius = 8.dp,
+            contentScale = contentScale
         )
         Column(
             modifier = modifier
                 .height(height)
                 .padding(vertical = 4.dp),
-            verticalArrangement = Arrangement.SpaceAround
         ) {
             MovioText(
                 text = movieTitle,
@@ -62,7 +65,11 @@ fun MovioHorizontalCard(
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            RateIcon(rate = movieRate)
+            RateIcon(
+                modifier = Modifier.padding(top = 8.dp).weight(1f),
+                rate = movieRate,
+                contentAlignment = Alignment.TopCenter
+            )
             MovioCategory(movieCategory, Theme.color.surfaces.onSurfaceAt3)
         }
     }
