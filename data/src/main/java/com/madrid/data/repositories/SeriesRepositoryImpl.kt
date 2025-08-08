@@ -102,14 +102,14 @@ class SeriesRepositoryImpl @Inject constructor(
         ).seriesResults.map { it.toSeries() }
     }
 
-    override suspend fun addSeriesToFavorite(mediaId:Int, sessionId: String) {
+    override suspend fun addSeriesToFavorite(mediaId: Int, sessionId: String) {
         val request = AddToFavoriteRequest(
             mediaType = "tv",
             mediaId = mediaId,
             favorite = true
         )
         remoteDataSource.addToFavorite(
-            sessionId=  sessionId,
+            sessionId = sessionId,
             request = request
         )
     }
