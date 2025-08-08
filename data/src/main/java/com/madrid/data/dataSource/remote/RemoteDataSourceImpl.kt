@@ -175,8 +175,9 @@ class RemoteDataSourceImpl @Inject constructor(
         return api.getCustomLists(sessionId).results
     }
 
-    override suspend fun getCustomListDetails(listId: Int): ListsDetailsResponse {
-        return api.getCustomListDetails(listId)
+    override suspend fun getCustomListDetails(listId: Int , sessionId: String): ListsDetailsResponse {
+        return api.getCustomListDetails(listId , sessionId)
+
     }
 
     override suspend fun login(username: String, password: String): String {

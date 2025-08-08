@@ -75,7 +75,7 @@ interface RemoteDataSource {
 
     // region Lists
     suspend fun getCustomLists(sessionId: String): List<ListDto>
-    suspend fun getCustomListDetails(listId: Int): ListsDetailsResponse
+    suspend fun getCustomListDetails(listId: Int,sessionId: String): ListsDetailsResponse
     // endregion
 
     // region authentication
