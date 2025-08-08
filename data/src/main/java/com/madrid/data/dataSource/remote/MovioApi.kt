@@ -257,6 +257,7 @@ interface MovioApi {
     @GET("list/{list_id}")
     suspend fun getCustomListDetails(
         @Path("list_id") listId: Int,
+        @Query("session_id") sessionId: String
     ): ListsDetailsResponse
     // region EpisodeRating
 
