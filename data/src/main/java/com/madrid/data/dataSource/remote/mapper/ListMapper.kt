@@ -1,5 +1,6 @@
 package com.madrid.data.dataSource.remote.mapper
 
+import android.util.Log
 import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListItemDto
 import com.madrid.domain.entity.Genre
@@ -20,14 +21,11 @@ fun ListDto.toWatchList(): WatchList {
     )
 }
 
-/**
- * Maps a ListItemDto to a Movie domain entity with associated genres
- */
 fun ListItemDto.toMovie(genres: List<Genre>): Movie {
     return Movie(
         id = id,
-        title = title ?: "",
-        imageUrl = posterPath ?: "",
+        title = originalTitle ?: "no name",
+        imageUrl = "https://image.tmdb.org/t/p/original/$posterPath" ?: "",
         rate = voteAverage,
         releaseDate = releaseDate ?: "",
         movieDuration = "",
@@ -36,14 +34,13 @@ fun ListItemDto.toMovie(genres: List<Genre>): Movie {
     )
 }
 
-/**
- * Maps a ListItemDto to a Series domain entity with associated genres
- */
+
 fun ListItemDto.toSeries(genres: List<Genre>): Series {
+    Log.i("MY_TAG","original title ${originalTitle.toString()}   title${title.toString()}")
     return Series(
         id = id,
-        title = title ?: "",
-        imageUrl = posterPath ?: "",
+        title = originalTitle ?: "no name",
+        imageUrl = "https://image.tmdb.org/t/p/original/$posterPath" ?: "",
         rate = voteAverage,
         description = overview ?: "",
         airDate = "",
@@ -52,10 +49,7 @@ fun ListItemDto.toSeries(genres: List<Genre>): Series {
     )
 }
 
-/**
- * Maps a list of ListItemDto to WatchListItems, separating movies and series
- * and enriching them with their respective genres
- */
+
 fun List<ListItemDto>.toWatchListItems(
     moviesGenres: Map<Int, Genre>,
     seriesGenres: Map<Int, Genre>

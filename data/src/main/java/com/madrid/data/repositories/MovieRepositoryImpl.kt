@@ -11,6 +11,7 @@ import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
+import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toRatedMovie
@@ -59,7 +60,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecommendedMovies(page: Int): List<Movie> {
-        if(page == pageNumberCached ){
+        if (page == pageNumberCached) {
             val localMovies = localDataSource.getRecommendedMovies()
             if (localMovies.isNotEmpty()) {
                 return localMovies.map { it.toMovie() }
@@ -82,7 +83,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTrendingMovies(page: Int): List<Movie> {
-        if(page == pageNumberCached ){
+        if (page == pageNumberCached) {
             val localMovies = localDataSource.getTrendingMovies()
             if (localMovies.isNotEmpty()) {
                 return localMovies.map { it.toMovie() }
@@ -123,7 +124,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getTopRatedMovies(page: Int): List<Movie> {
-        if(page == pageNumberCached ){
+        if (page == pageNumberCached) {
             val localMovies = localDataSource.getTopRatingMovies()
             if (localMovies.isNotEmpty()) {
                 return localMovies.map { it.toMovie() }
@@ -160,10 +161,10 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNowPlayingMovie(page: Int): List<Movie> {
-        if(page == pageNumberCached ){
+        if (page == pageNumberCached) {
             val localMovies = localDataSource.getNowPlayingMovies()
 
-                if (localMovies.isNotEmpty()) {
+            if (localMovies.isNotEmpty()) {
                 return localMovies.map { it.toMovie() }
             }
         }
@@ -181,7 +182,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUpcomingMovie(page: Int): List<Movie> {
-        if(page == pageNumberCached ){
+        if (page == pageNumberCached) {
             val localMovies = localDataSource.getUpComingMovies()
             if (localMovies.isNotEmpty()) {
                 return localMovies.map { it.toMovie() }
@@ -213,6 +214,18 @@ class MovieRepositoryImpl @Inject constructor(
         rate: Double
     ){
         return remoteDataSource.addRatingMovie(movieId, rate)
+    }
+
+    override suspend fun addMovieToFavorite(mediaId: Int, sessionId: String) {
+        val request = AddToFavoriteRequest(
+            mediaType = "movie",
+            mediaId = mediaId,
+            favorite = true
+        )
+        remoteDataSource.addToFavorite(
+            sessionId = sessionId,
+            request = request
+        )
     }
 
     override suspend fun getMoviesByGenreId(
