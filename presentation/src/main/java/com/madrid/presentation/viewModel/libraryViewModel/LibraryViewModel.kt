@@ -35,7 +35,6 @@ class LibraryViewModel @Inject constructor(
                 getWatchListUseCase()
             },
             onSuccess = {watchList->
-                Log.i("MY_TAG","watchlist : ${watchList}")
                 updateState {
                     it.copy(
                         isLoading = false,
@@ -114,16 +113,25 @@ class LibraryViewModel @Inject constructor(
     }
 
 
-    override fun onItemClick(itemId: Int) { // itemId may be a watchlist item or a media item(favorite or history)
-//        viewModelScope.launch {
-//            _effects.emit(LibraryScreenEffect.NavigateToMediaDetails(itemId))
-//        }
+    override fun onItemClick(itemId: String) {
+        emitNewEffect(
+            LibraryScreenEffect.NavigateToMediaDetails(itemId)
+        )
     }
 
-    override fun onViewAllClick(type: String) {  // type = watchlist or favorite or history
-//        viewModelScope.launch {
-//            _effects.emit(LibraryScreenEffect.NavigateToViewAll(type))
-//        }
+    override fun onItemWatchListClick(watchListItem: WatchListState) {
+        emitNewEffect(
+            LibraryScreenEffect.NavigateToWatchListDetails(
+                watchListId = watchListItem.id,
+                watchListTitle = watchListItem.watchListTitle
+            )
+        )
+    }
+
+    override fun onViewAllClick(type: String) {
+        emitNewEffect(
+            LibraryScreenEffect.NavigateToViewAll(type)
+        )
     }
 
 }
