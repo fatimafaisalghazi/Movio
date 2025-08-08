@@ -99,7 +99,6 @@ fun MovieDetailsScreen(
         }
     }
 
-    val casts = uiState.casts
     var showAddRatingBottomSheet by remember { mutableStateOf(false) }
     var showDoneRatingBottomSheet by remember { mutableStateOf(false) }
 
@@ -161,7 +160,11 @@ fun MovieDetailsScreen(
                 text = null,
                 modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
                 onFirstIconClick = { navController.popBackStack() },
-                onSecondIconClick = { showSheet = true }
+                onSecondIconClick = { showSheet = true },
+                onThirdIconClick = {
+                    viewModel.onClickLoveIcon(uiState.movieId)
+                },
+                isFavorite = uiState.isLoved
             )
             Column(
                 modifier = Modifier
