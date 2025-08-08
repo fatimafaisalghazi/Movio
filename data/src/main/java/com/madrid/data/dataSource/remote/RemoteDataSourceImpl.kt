@@ -287,7 +287,6 @@ class RemoteDataSourceImpl @Inject constructor(
         request: AddToFavoriteRequest
     ) {
         val accountId = api.getAccountDetails(sessionId).id
-        Log.d("accountId fav", "addToFavorite: -------- $accountId")
         api.addToFavorite(
             accountId = accountId,
              sessionId = sessionId,

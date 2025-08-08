@@ -11,6 +11,7 @@ import com.madrid.domain.usecase.movie.GetMovieReviewsUseCase
 import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
 import com.madrid.domain.usecase.movie.GetMovieTrailersUseCase
 import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
+import com.madrid.domain.usecase.movie.IsFavoriteMovieUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.utils.RateFormatter
@@ -31,7 +32,8 @@ class DetailsMovieViewModel @Inject constructor(
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val addMovieToHistoryUseCase: AddMovieToHistoryUseCase,
     private val getMovieTrailersUseCase: GetMovieTrailersUseCase,
-    private val addMovieToFavoriteUseCase: AddMovieToFavoriteUseCase
+    private val addMovieToFavoriteUseCase: AddMovieToFavoriteUseCase,
+    private val isFavoriteMovieUseCase: IsFavoriteMovieUseCase
 ) : BaseViewModel<DetailsMovieUiState, Nothing>(
     DetailsMovieUiState()
 ) {
@@ -40,6 +42,7 @@ class DetailsMovieViewModel @Inject constructor(
     init {
         saveMovieToHistory()
         loadData()
+        checkIfFavoriteMovie()
     }
 
     private fun saveMovieToHistory() {
@@ -176,6 +179,7 @@ class DetailsMovieViewModel @Inject constructor(
             onError = {},
         )
     }
+
     private fun loadTrailer() {
         tryToExecute(
             function = { getMovieTrailersUseCase(args.movieId) },
@@ -193,5 +197,15 @@ class DetailsMovieViewModel @Inject constructor(
         )
     }
 
-
+    private fun checkIfFavoriteMovie() {
+        tryToExecute(
+            function = { isFavoriteMovieUseCase(args.movieId) },
+            onSuccess = { isFavorite ->
+                updateState { it.copy(isLoved = isFavorite) }
+            },
+            onError = {
+                updateState { it.copy(isLoved = false) }
+            },
+        )
+    }
 }
