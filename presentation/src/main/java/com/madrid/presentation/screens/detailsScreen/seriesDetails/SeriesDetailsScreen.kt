@@ -145,7 +145,9 @@ fun SeriesDetailsScreen(
                 text = null,
                 modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
                 onFirstIconClick = { navController.popBackStack() },
-                onSecondIconClick = { showSheet = true } // Share action
+                onSecondIconClick = { showSheet = true }, // Share action
+                onThirdIconClick = { viewModel.onClickFavoriteIcon(uiState.seriesId) },
+                isFavorite = uiState.isFavourite
             )
             Column(
                 modifier = Modifier
@@ -231,7 +233,12 @@ fun SeriesDetailsScreen(
                             )
                         )
                     },
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 12.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 32.dp,
+                        bottom = 12.dp
+                    )
                 )
 
                 LazyRow(

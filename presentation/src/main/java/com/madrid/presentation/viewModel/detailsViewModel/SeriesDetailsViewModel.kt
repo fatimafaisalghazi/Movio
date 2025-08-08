@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Series
+import com.madrid.domain.usecase.series.AddSeriesToFavoriteUseCase
 import com.madrid.domain.usecase.series.AddSeriesToHistoryUseCase
 import com.madrid.domain.usecase.series.GetEpisodesForSeasonUseCase
 import com.madrid.domain.usecase.series.GetSeriesDetailsUseCase
@@ -13,6 +14,7 @@ import com.madrid.domain.usecase.series.GetSeriesReviewsUseCase
 import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.domain.usecase.series.GetSeriesTrailersUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
+import com.madrid.domain.usecase.series.IsFavoriteSeriesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.utils.RateFormatter
 import com.madrid.presentation.viewModel.base.BaseViewModel
@@ -33,15 +35,18 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getEpisodesForSeasonUseCase: GetEpisodesForSeasonUseCase,
     private val addSeriesToHistoryUseCase: AddSeriesToHistoryUseCase,
     private val getSeriesTrailersUseCase: GetSeriesTrailersUseCase,
+    private val addSeriesToFavoriteUseCase: AddSeriesToFavoriteUseCase,
+    private val isFavoriteSeriesUseCase: IsFavoriteSeriesUseCase
 ) : BaseViewModel<SeriesDetailsUiState, Nothing>(SeriesDetailsUiState()) {
     private val args = savedStateHandle.toRoute<Destinations.SeriesDetailsScreen>()
 
     init {
         saveSeriesToHistory()
         loadData()
+        checkIfFavoriteSeriesUseCase()
     }
 
-    private fun saveSeriesToHistory(){
+    private fun saveSeriesToHistory() {
         tryToExecute(
             function = { addSeriesToHistoryUseCase(args.seriesId) },
             onSuccess = {},
@@ -77,7 +82,7 @@ class SeriesDetailsViewModel @Inject constructor(
                         rate = RateFormatter.formatRate(series.rate), // Format rate here
                         numberOfSeasons = series.seasons.size,
                         productionDate = formatDateKotlinx(series.airDate),
-                        description =formatDuration( series.description),
+                        description = formatDuration(series.description),
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
                         selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState()
                     )
@@ -203,6 +208,36 @@ class SeriesDetailsViewModel @Inject constructor(
             onError = { e ->
                 Log.d("TAG lol", "loadCastData: ${e.message}")
                 updateState { it.copy(isLoading = true) }
+            },
+        )
+    }
+
+    fun onClickFavoriteIcon(seriesId: Int) {
+        tryToExecute(
+            function = { addSeriesToFavoriteUseCase(seriesId) },
+            onSuccess = {
+                Log.d("onClickFavoriteIcon", "onClickFavoriteIcon: ${args.seriesId}")
+                updateState {
+                    it.copy(isFavourite = true)
+                }
+            },
+            onError = {},
+        )
+    }
+
+    private fun checkIfFavoriteSeriesUseCase() {
+        tryToExecute(
+            function = { isFavoriteSeriesUseCase(args.seriesId) },
+            onSuccess = { isFavorite ->
+                Log.d("checkIfFavoriteSeriesUseCase", "checkIfFavoriteSeriesUseCase: $isFavorite")
+                updateState {
+                    it.copy(isFavourite = isFavorite)
+                }
+            },
+            onError = {
+                updateState { state ->
+                    state.copy(isFavourite = false)
+                }
             },
         )
     }
