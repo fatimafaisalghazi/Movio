@@ -39,6 +39,7 @@ data class ArtistUiState(
 
 data class SeasonUiState(
     val id: Int = 0,
+    val title :String="",
     val imageUrl: String = "",
     val seasonNumber: Int = 0,
     val productionDate: String = "",

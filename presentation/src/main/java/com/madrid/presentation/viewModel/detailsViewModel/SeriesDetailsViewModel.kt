@@ -86,10 +86,10 @@ class SeriesDetailsViewModel @Inject constructor(
                         isLoading = false,
                         topImageUrl = series.imageUrl,
                         seriesName = series.title,
-                        rate = RateFormatter.formatRate(series.rate), // Format rate here
+                        rate = RateFormatter.formatRate(series.rate),
                         numberOfSeasons = series.seasons.size,
                         productionDate = formatDateKotlinx(series.airDate),
-                        description = formatDuration(series.description),
+                        description = series.description,
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
                         selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState()
                     )

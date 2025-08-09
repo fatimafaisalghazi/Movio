@@ -170,7 +170,7 @@ fun SeriesDetailsScreen(
                     .offset(y = 342.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent , Theme.color.surfaces.surface)
+                            colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
                         )
                     )
             )
@@ -369,7 +369,9 @@ fun SeriesDetailsScreen(
                                     .padding(bottom = 16.dp)
                             )
                             Row(
-                                modifier = Modifier.padding(top = 16.dp).align(Alignment.CenterHorizontally),
+                                modifier = Modifier
+                                    .padding(top = 16.dp)
+                                    .align(Alignment.CenterHorizontally),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 (1..5).forEach { i ->
@@ -413,17 +415,17 @@ fun SeriesDetailsScreen(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                TextWithReadMore(
-                    description = uiState.description,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 32.dp),
-                    maxLines = 5
-                )
-
+                if (uiState.description.isNotEmpty()) {
+                    TextWithReadMore(
+                        description = uiState.description,
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 32.dp),
+                        maxLines = 5
+                    )
+                }
                 TopCastHorizontalScroll(
-                    castMembers = uiState.topCast.map { cast ->
+                    castMembers = artists.map { cast ->
                         CastMember(
                             id = cast.id.toString(),
                             name = cast.name,
@@ -473,7 +475,7 @@ fun SeriesDetailsScreen(
                 ) {
                     itemsIndexed(seasons) { _, season ->
                         MovioSeasonCard(
-                            movieTitle = "",
+                            movieTitle = season.title,
                             movieImage = season.imageUrl,
                             movieRate = season.rate,
                             totalNumberOfEpisodes = season.numberOfEpisodes.toString(),

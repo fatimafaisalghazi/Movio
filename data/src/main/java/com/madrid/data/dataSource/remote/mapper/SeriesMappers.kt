@@ -126,7 +126,7 @@ fun SeriesDetailsResponse.toSeries(): Series {
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
         airDate = this.firstAirDate ?: "",
-        seasons = this.seasons?.map { it.toSeason() } ?: emptyList(),
+        seasons = this.seasons?.map { it.toSeason(this.name?:"" ) } ?: emptyList(),
         description = this.overview ?: "",
         genre = this.genres?.map { it.toGenre() } ?: emptyList(),
     )
@@ -168,9 +168,10 @@ fun SimilarSeriesNetwork.toSimilarSeries(): Series {
     )
 }
 
-fun SeasonsNetwork.toSeason(): Season {
+fun SeasonsNetwork.toSeason(seriesName: String): Season {
     return Season(
         id = this.id ?: 0,
+        title = seriesName,
         seasonNumber = this.seasonNumber ?: 0,
         imageUrl = "https://image.tmdb.org/t/p/original${this.posterPath}",
         rate = this.voteAverage ?: 0.0,
@@ -178,7 +179,6 @@ fun SeasonsNetwork.toSeason(): Season {
         description = this.overview ?: "",
         episodeCount = this.episodeCount ?: 0,
     )
-
 }
 
 fun EpisodeDto.toEpisode(): Episode {
