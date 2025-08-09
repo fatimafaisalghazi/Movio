@@ -1,5 +1,7 @@
 package com.madrid.presentation.screens.homeScreen.layout
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +48,8 @@ fun MoviesLayout(
     nowPlayingMovies: List<MediaUiState>,
     upComingMovies: List<MediaUiState>,
     recommendedMovies: List<MediaUiState>,
-    onScroll: (Boolean) -> Unit ={},
+    onScroll: (Boolean) -> Unit = {},
+    onClickMediaButton: (Int) -> Unit = {},
 ) {
     val navController = LocalNavController.current
     val lazyGridState = rememberLazyGridState()
@@ -58,7 +61,7 @@ fun MoviesLayout(
             .distinctUntilChanged()
             .collect { scrollOffset ->
                 val scrollDistance = scrollOffset.toFloat()
-                when(scrollDistance){
+                when (scrollDistance) {
                     in 0f..100f -> onScroll(false)
                     else -> onScroll(true)
                 }
@@ -76,10 +79,11 @@ fun MoviesLayout(
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item(span = { GridItemSpan(2) }) {
-            Box(){
+            Box() {
                 MovioPager(
                     medias = trendingMovies.take(7),
-                    onClickItem = { id -> navController.navigate(Destinations.MovieDetailsScreen(id)) }
+                    onClickItem = { id -> navController.navigate(Destinations.MovieDetailsScreen(id)) },
+                    onClickMediaButton = {mediaIndex ->  onClickMediaButton(mediaIndex)}
                 )
             }
             Box(
@@ -89,7 +93,7 @@ fun MoviesLayout(
                     .offset(y = 390.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent , Theme.color.surfaces.surface)
+                            colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
                         )
                     )
             )
@@ -161,9 +165,28 @@ fun MoviesLayout(
                 movieImage = media.imageUrl,
                 rate = media.rating.take(3),
                 height = 220.dp,
-                onClick = { navController.navigate(Destinations.MovieDetailsScreen(media.id.toInt()))},
+                onClick = { navController.navigate(Destinations.MovieDetailsScreen(media.id.toInt())) },
                 modifier = Modifier.padding(start = startPaddingValue.dp, end = endPaddingValue.dp)
             )
         }
+    }
+}
+
+fun shareToApp(appPackage: String, url: String, context: Context) {
+
+    val intent = Intent(Intent.ACTION_SEND).apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, url)
+        setPackage(appPackage)
+    }
+
+    try {
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        val fallback = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, url)
+        }
+        context.startActivity(Intent.createChooser(fallback, "Share via"))
     }
 }

@@ -1,5 +1,8 @@
 package com.madrid.presentation.screens.homeScreen
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -21,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -73,12 +77,18 @@ fun HomeScreenContent(
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     var isScrolledDown by remember { mutableStateOf(false) }
-    val backgroundColor by animateColorAsState(if(isScrolledDown) Theme.color.surfaces.surface else Color.Transparent , tween(500))
+    val backgroundColor by animateColorAsState(
+        if (isScrolledDown) Theme.color.surfaces.surface else Color.Transparent,
+        tween(500)
+    )
     Box(
         Modifier
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
     ) {
+
+        val context = LocalContext.current
+
         LayoutContent(
             uiState = state,
             selectedTab = HomeTab.entries[selectedTabIndex],
@@ -86,11 +96,16 @@ fun HomeScreenContent(
             onClickSeriesTab = interactionListener::loadSeriesLayoutData,
             onScroll = { isScrolled ->
                 isScrolledDown = isScrolled
+            },
+            onClickMediaButton = { movieIndex ->
+                interactionListener.onClickPlayButton(movieIndex,context = context)
             }
         )
-        Column(modifier = Modifier
-            .background(backgroundColor)
-            .padding(top = 32.dp)) {
+        Column(
+            modifier = Modifier
+                .background(backgroundColor)
+                .padding(top = 32.dp)
+        ) {
             HomeAppBar(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 image = state.profileImage,
@@ -133,19 +148,21 @@ private fun LayoutContent(
     uiState: HomeScreenState,
     onClickMoviesTab: () -> Unit,
     onClickSeriesTab: () -> Unit,
-    onScroll: (Boolean) -> Unit ={},
-    ) {
+    onScroll: (Boolean) -> Unit = {},
+    onClickMediaButton: (Int) -> Unit = {},
+) {
     when (selectedTab) {
 //        HomeTab.ALL -> AllMediaLayout()
         HomeTab.MOVIES -> {
-            onClickMoviesTab()
+//            onClickMoviesTab()
             MoviesLayout(
                 trendingMovies = uiState.movieTabUiState.trending.media,
                 topRatingMovies = uiState.movieTabUiState.topRated.media,
                 nowPlayingMovies = uiState.movieTabUiState.nowPlaying.media,
                 upComingMovies = uiState.movieTabUiState.upcoming.media,
                 recommendedMovies = uiState.movieTabUiState.moreRecommended.media,
-                onScroll = onScroll
+                onScroll = onScroll,
+                onClickMediaButton = {mediaIndex -> onClickMediaButton(mediaIndex) }
             )
         }
 
@@ -166,7 +183,7 @@ private fun LayoutContent(
 }
 
 enum class HomeTab {
-//    ALL,
+    //    ALL,
     MOVIES,
     TV_SHOWS,
     CATEGORIES

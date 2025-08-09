@@ -1,14 +1,20 @@
 package com.madrid.presentation.viewModel.homeViewModel
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.flatMap
-import com.madrid.domain.entity.User
 import com.madrid.domain.usecase.authentication.GetCurrentUserDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieGenresUseCase
+import com.madrid.domain.usecase.movie.GetMovieTrailersUseCase
 import com.madrid.domain.usecase.movie.GetMoviesByGenreIdUseCase
+import com.madrid.domain.usecase.movie.GetMoviesWithTrailers
 import com.madrid.domain.usecase.movie.GetNowPlayingMovieUseCase
 import com.madrid.domain.usecase.movie.GetTopRatedMoviesUseCase
 import com.madrid.domain.usecase.movie.GetTrendingMoviesUseCase
@@ -19,6 +25,7 @@ import com.madrid.domain.usecase.series.GetOnAirSeriesUseCase
 import com.madrid.domain.usecase.series.GetRecommendedSeriesUseCase
 import com.madrid.domain.usecase.series.GetSeriesByGenreIdUseCase
 import com.madrid.domain.usecase.series.GetSeriesGenresUseCase
+import com.madrid.domain.usecase.series.GetSeriesTrailersUseCase
 import com.madrid.domain.usecase.series.GetTopRatedSeriesUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.MediaType
@@ -42,21 +49,25 @@ class HomeViewModel @Inject constructor(
     private val getAiringTodaySeriesUseCase: GetAiringTodaySeriesUseCase,
     private val getOnAirSeriesUseCase: GetOnAirSeriesUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
-    private val getCurrentUserDetailsUseCase: GetCurrentUserDetailsUseCase
+    private val getCurrentUserDetailsUseCase: GetCurrentUserDetailsUseCase,
+    private val getMovieTrailersUseCase: GetMovieTrailersUseCase,
+    private val getSeriesTrailersUseCase: GetSeriesTrailersUseCase,
+    private val getMoviesWithTrailers: GetMoviesWithTrailers
 ) : BaseViewModel<HomeScreenState, HomeScreenEffect>(
     HomeScreenState()
 ), HomeInteractionListener {
     init {
         loadGenres()
         loadFileImage()
+        loadMoviesLayoutData()
     }
 
     private fun loadFileImage() {
         tryToExecute(
-            function ={
+            function = {
                 getCurrentUserDetailsUseCase()
             },
-            onSuccess = {user->
+            onSuccess = { user ->
                 updateState {
                     it.copy(
                         profileImage = user?.profilePicUrl
@@ -185,7 +196,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadSliderMovies() {
         tryToExecute(
-            function = { getTrendingMoviesUseCase(1) },
+            function = {
+                val x = getTrendingMoviesUseCase(1)
+                getMoviesWithTrailers(x)
+            },
             onSuccess = { movies ->
                 updateState { state ->
                     state.copy(
@@ -199,6 +213,59 @@ class HomeViewModel @Inject constructor(
             },
             onError = { onError() }
         )
+        Log.d("tag trailer", "lol yabaaaaaaaaaaaa: ")
+    }
+
+//    private fun loadTrendingMoviesTrailers() {
+//        Log.d("tag trailer", "lol yabaaaaaaaaaaaa in loadTrendingMoviesTrailers: ")
+//        state.value.movieTabUiState.trending.media.forEachIndexed { index, movie ->
+//            tryToExecute(
+//                function = {
+//                    val x = getMovieTrailersUseCase(movieId = movie.id.toInt()).take(8)
+//                    Log.d("tag trailer", "loadTrendingMoviesTrailers:the movie of in functionnnnnnnnnnnn")
+//                    x
+//                },
+//                onSuccess = { trailerKey ->
+//                    updateState { it ->
+//                        val updatedMedia =
+//                            it.movieTabUiState.trending.media.mapIndexed { innerIndex, mediaUiState ->
+//                                if (index == innerIndex) {
+//                                    mediaUiState.copy(trailerKey = trailerKey.first().key)
+//                                } else {
+//                                    mediaUiState
+//                                }
+//                            }
+//
+//                        it.copy(
+//                            movieTabUiState = it.movieTabUiState.copy(
+//                                trending = it.movieTabUiState.trending.copy(
+//                                    media = updatedMedia
+//                                )
+//                            )
+//                        )
+//                    }
+//                },
+//                onError = { Log.d("tag trailer", "loadTrendingMoviesTrailers: errorrrrrr")}
+//            )
+//        }
+//    }
+
+    override fun onClickPlayButton(movieIndex: Int, context: Context) {
+        val key = state.value.movieTabUiState.trending.media[movieIndex].trailerKey
+        Log.d("tag trailer", " key is : $key")
+        Log.d("tag trailer", " movie index is : $movieIndex")
+        val youtubeAppIntent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$key"))
+        val youtubeWebIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://www.youtube.com/watch?v=$key")
+        )
+
+        try {
+            context.startActivity(youtubeAppIntent)
+        } catch (e: ActivityNotFoundException) {
+            context.startActivity(youtubeWebIntent)
+        }
     }
 
     private fun loadTopRatingMoviesSection() {
