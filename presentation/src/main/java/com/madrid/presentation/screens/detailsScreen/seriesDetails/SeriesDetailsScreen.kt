@@ -72,6 +72,8 @@ import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeriesS
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewsScreenUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsViewModel
+import com.madrid.presentation.viewModel.shared.parser.formatFullDateKtx
+import com.madrid.presentation.viewModel.shared.parser.formatYearKtx
 
 @Composable
 fun SeriesDetailsScreen(
@@ -485,9 +487,9 @@ fun SeriesDetailsScreen(
                                     )
                                 )
                             },
-                            yearOfPublish = season.productionDate,
+                            yearOfPublish = season.productionDate.formatYearKtx(),
                             currentSeason = season.seasonNumber.toString(),
-                            timeOfPublish = season.productionDate,
+                            timeOfPublish = season.productionDate.formatFullDateKtx(),
                         )
                     }
                 }
