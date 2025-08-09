@@ -52,8 +52,6 @@ import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
-import com.madrid.designSystem.component.TextWithReadMore
-import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.ShareBottomSheetContent
 import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
@@ -286,7 +284,7 @@ fun SeriesDetailsScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = CenterHorizontally
                             ) {
                                 MovioArtistsCard(
                                     imageUrl = uiState.topImageUrl,
@@ -371,7 +369,7 @@ fun SeriesDetailsScreen(
                             Row(
                                 modifier = Modifier
                                     .padding(top = 16.dp)
-                                    .align(Alignment.CenterHorizontally),
+                                    .align(CenterHorizontally),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 (1..5).forEach { i ->
@@ -452,7 +450,7 @@ fun SeriesDetailsScreen(
                 CustomTextTitle(
                     primaryText = stringResource(R.string.current_seasons),
                     secondaryText = stringResource(R.string.see_all),
-                    endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_alt_arrow_left),
+                    endIcon = painterResource(drawable.outline_alt_arrow_left),
                     onSeeAllClick = {
                         navController.navigate(
                             Destinations.SeasonsScreen(
@@ -489,7 +487,7 @@ fun SeriesDetailsScreen(
                             },
                             yearOfPublish = season.productionDate,
                             currentSeason = season.seasonNumber.toString(),
-                            timeOfPublish = season.productionDate
+                            timeOfPublish = season.productionDate,
                         )
                     }
                 }

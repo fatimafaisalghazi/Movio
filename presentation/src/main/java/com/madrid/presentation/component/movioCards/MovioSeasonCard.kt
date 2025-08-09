@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioText
@@ -49,15 +50,19 @@ fun MovioSeasonCard(
         Column(
             modifier = modifier
                 .padding(horizontal = 8.dp, vertical = 4.dp)
-                .align(Alignment.CenterVertically),
+                .align(Alignment.CenterVertically)
+                .width(250.dp),
         ) {
-            Row {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 MovioText(
                     text = "Season $currentSeason",
                     color = Theme.color.surfaces.onSurface,
                     textStyle = Theme.textStyle.title.mediumMedium14,
                     maxLines = 1,
-                    modifier = Modifier.weight(1f),
                 )
                 RateIcon(
                     rate = movieRate,
@@ -67,14 +72,14 @@ fun MovioSeasonCard(
                 modifier = Modifier.padding(top = 8.dp),
                 text = "$yearOfPublish | $totalNumberOfEpisodes Episodes",
                 color = Theme.color.surfaces.onSurfaceVariant,
-                textStyle = Theme.textStyle.title.mediumMedium14,
+                textStyle = Theme.textStyle.body.smallRegular10,
                 maxLines = 1,
             )
             MovioText(
                 modifier = Modifier.padding(top = 10.dp),
-                text = "Season $currentSeason $movieTitle $timeOfPublish.",
+                text = "Season $currentSeason of $movieTitle $timeOfPublish.",
                 color = Theme.color.surfaces.onSurfaceContainer,
-                textStyle = Theme.textStyle.title.mediumMedium14,
+                textStyle = Theme.textStyle.label.smallRegular12,
                 maxLines = 3,
             )
         }
