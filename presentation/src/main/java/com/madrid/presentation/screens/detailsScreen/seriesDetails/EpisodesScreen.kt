@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TopAppBar
@@ -70,7 +71,7 @@ fun EpisodesScreenContent(
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 MovioText(
-                    text = "Season ${uiState.selectedSeasonUiState.seasonNumber}",
+                    text = "Episodes ${uiState.selectedSeasonUiState.numberOfEpisodes}",
                     textStyle = Theme.textStyle.headline.mediumMedium18,
                     color = Theme.color.surfaces.onSurface,
                     modifier = Modifier
@@ -96,7 +97,7 @@ fun EpisodesScreenContent(
             MovioEpisodesCard(
                 movieTitle = episode.episodeName,
                 movieRate = (episode.rate.toFloat() / 2).toString().take(3),
-                currentMovieEpisode = episode.episodeNumber.toString(),
+                currentMovieEpisode = "episode ${episode.episodeNumber}",
                 movieTime = "${episode.episodeDuration} m",
                 movieImageUrl = episode.imageUrl,
                 onClick = {
@@ -114,7 +115,3 @@ private fun getSeasonsNames(numberOfSeasons: Int, uiState: SeriesDetailsUiState)
     else
         (1..<numberOfSeasons + 1).map { "Season $it" }
 }
-
-
-
-
