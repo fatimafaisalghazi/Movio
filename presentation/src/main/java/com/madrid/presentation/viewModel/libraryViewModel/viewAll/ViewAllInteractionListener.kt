@@ -1,10 +1,10 @@
 package com.madrid.presentation.viewModel.libraryViewModel.viewAll
 
+import com.madrid.presentation.viewModel.shared.MediaType
+
 interface ViewAllInteractionListener {
-
-    fun onItemClicked(mediaId: Int, mediaType: String)
-
-    fun onItemDeleted(mediaId: Int, mediaType: String)
-
+    fun onBackClicked()
+    fun onItemClicked(mediaId: String, mediaType: MediaType)
+    fun onItemDeleted(mediaId: String, mediaType: MediaType)
     fun onRetryClicked()
 }
