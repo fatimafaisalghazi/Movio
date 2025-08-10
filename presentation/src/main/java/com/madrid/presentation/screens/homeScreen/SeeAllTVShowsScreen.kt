@@ -65,7 +65,7 @@ fun SeeAllTVShowsScreen(
 
     Column {
 
-        TopAppBar(uiState.title, secondIcon = null, thirdIcon = null, onFirstIconClick = { navController.popBackStack()}, modifier = Modifier.padding(horizontal = 16.dp).statusBarsPadding())
+        TopAppBar(uiState.title, secondIcon = null, thirdIcon = null, onFirstIconClick = { navController.navigate(Destinations.HomeScreen)}, modifier = Modifier.padding(horizontal = 16.dp).statusBarsPadding())
         Spacer(Modifier.height(16.dp))
         val updatedItems: MutableList<String> = items.map { it.name }.toMutableList()
         updatedItems.add(0, "All")
