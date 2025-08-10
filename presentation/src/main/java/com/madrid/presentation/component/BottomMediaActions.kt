@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,32 +50,51 @@ fun BottomMediaActions(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         if (onRateClick != null) {
-            MediaActionItem(
-                label = stringResource(com.madrid.presentation.R.string.rate_it),
-                isActive = isRated,
-                inactiveIcon = R.drawable.outline_star,
-                tint = Theme.color.surfaces.onSurfaceContainer,
-                onToggle = {
-                    isRated = !isRated
-                    onRateClick(isRated)
-                }
-            )
+            Column(
+                modifier = Modifier
+                    .width(136.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                MediaActionItem(
+                    modifier = Modifier.size(24.dp),
+                    label = stringResource(com.madrid.presentation.R.string.rate_it),
+                    isActive = isRated,
+                    inactiveIcon = R.drawable.outline_star,
+                    tint = Theme.color.surfaces.onSurfaceContainer,
+                    onToggle = {
+                        isRated = !isRated
+                        onRateClick(isRated)
+                    }
+                )
+            }
         }
         if (onPlayClick != null) {
             PlayButton(onClick = onPlayClick)
         }
 
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+
         if (onAddToListClick != null) {
-            MediaActionItem(
-                label = stringResource(com.madrid.presentation.R.string.add_to_list),
-                isActive = isSaved,
-                inactiveIcon = R.drawable.outline_bookmark,
-                tint = Theme.color.surfaces.onSurfaceVariant,
-                onToggle = {
-                    isSaved = !isSaved
-                    onAddToListClick(isSaved)
-                },
-            )
+            Column(
+                modifier = Modifier
+                    .width(136.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                MediaActionItem(
+                    label = stringResource(com.madrid.presentation.R.string.add_to_list),
+                    isActive = isSaved,
+                    inactiveIcon = R.drawable.outline_bookmark,
+                    onToggle = {
+                        isSaved = !isSaved
+                        onAddToListClick(isSaved)
+                    },
+                    tint = Theme.color.surfaces.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
         }
     }
 }
@@ -85,11 +105,12 @@ private fun MediaActionItem(
     isActive: Boolean,
     inactiveIcon: Int,
     onToggle: () -> Unit,
-    tint: Color
+    tint: Color,
+    modifier: Modifier
 ) {
     Column(
         modifier = Modifier
-            .padding(4.dp),
+            .padding(top=4.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
         MovioIcon(
             painter = painterResource(
@@ -109,7 +130,7 @@ private fun MediaActionItem(
             text = label,
             textStyle = Theme.textStyle.label.smallRegular12,
             color = Theme.color.surfaces.onSurfaceVariant,
-            modifier = Modifier.padding(top = 6.dp)
+            modifier = Modifier.padding(top = 6.dp),
         )
     }
 }
