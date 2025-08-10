@@ -1,5 +1,6 @@
 package com.madrid.data.dataSource.remote
 
+import android.util.Log
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -208,7 +209,9 @@ class RemoteDataSourceImpl @Inject constructor(
         genreId: Int?,
         sortBy: String
     ): SearchSeriesResponse {
-        return api.getSeriesByGenreId(page, genreId, sortBy)
+        val x  = api.getSeriesByGenreId(page, genreId, sortBy)
+        Log.d("TAG getSeriesByGenreId in data ", "getSeriesByGenreId: $x")
+        return x
     }
 
     override suspend fun getCustomLists(sessionId: String): List<ListDto> {

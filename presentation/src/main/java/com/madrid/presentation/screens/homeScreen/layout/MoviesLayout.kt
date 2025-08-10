@@ -71,7 +71,7 @@ fun MoviesLayout(
 
     LazyVerticalGrid(
         state = lazyGridState,
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(minSize = 168.dp),
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -98,7 +98,7 @@ fun MoviesLayout(
                     )
             )
         }
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             CustomHorizontalCard(
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
@@ -113,7 +113,7 @@ fun MoviesLayout(
         }
 
 
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             CustomHorizontalCard(
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.now_playing),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
@@ -128,7 +128,7 @@ fun MoviesLayout(
         }
 
 
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             CustomHorizontalCard(
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.upcoming),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
@@ -142,7 +142,7 @@ fun MoviesLayout(
             )
         }
 
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             CustomTextTitle(
                 primaryText = stringResource(com.madrid.presentation.R.string.more_recommended),
                 secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
