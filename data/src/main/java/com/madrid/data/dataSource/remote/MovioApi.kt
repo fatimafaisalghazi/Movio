@@ -174,7 +174,7 @@ interface MovioApi {
     @GET("genre/tv/list")
     suspend fun getSeriesGenres(): GenresResponse
 
-    @GET(DISCOVER_MOVIE)
+    @GET(DISCOVER_SERIES)
     suspend fun getSeriesByGenreId(
         @Query(PAGE) page: Int,
         @Query(WITH_GENRES) genreId: Int?,
@@ -318,6 +318,7 @@ interface MovioApi {
 
     companion object {
         private const val DISCOVER_MOVIE = "discover/movie"
+        private const val DISCOVER_SERIES = "discover/tv"
         private const val PAGE = "page"
 
         private const val SESSION_ID = "session_id"
