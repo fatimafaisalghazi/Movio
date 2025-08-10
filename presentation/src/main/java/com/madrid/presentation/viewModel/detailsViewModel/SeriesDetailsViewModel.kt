@@ -86,6 +86,7 @@ class SeriesDetailsViewModel @Inject constructor(
                         isLoading = false,
                         topImageUrl = series.imageUrl,
                         seriesName = series.title,
+                        seriesGenre = series.genre.map { it.name },
                         rate = RateFormatter.formatRate(series.rate),
                         numberOfSeasons = series.seasons.size,
                         productionDate = formatDateKotlinx(series.airDate),
