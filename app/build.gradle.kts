@@ -65,6 +65,9 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
+            ndk {
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+            }
         }
         debug {
             isMinifyEnabled = false
