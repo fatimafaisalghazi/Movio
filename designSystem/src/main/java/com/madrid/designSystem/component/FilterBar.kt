@@ -34,7 +34,6 @@ fun FilterBar(
         LazyRow(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
             itemsIndexed(items) { index,item ->
                 FilterChip(
