@@ -18,7 +18,7 @@ jobs:
           pr_url="${{ github.event.pull_request.html_url }}"
           pr_user="${{ github.event.pull_request.user.login }}"
 
-          # Slack blocks message with channel mention
+          # Slack blocks message
           blocks=$(jq -n \
             --arg pr_title "$pr_title" \
             --arg pr_url "$pr_url" \
@@ -29,8 +29,7 @@ jobs:
                 "type": "section",
                 "text": {
                   "type": "mrkdwn",
-                  "text": ":rotating_light: <!channel> 
-          *New Pull Request to `develop`* :rotating_light:\n*Link :<\($pr_url)|\($pr_title)>*\n*Author:* `\($pr_user)`"
+                  "text": ":rotating_light: *New Pull Request to develop* :rotating_light:\n*<\($pr_url)|\($pr_title)>*\n*Author:* \($pr_user)"
                 }
               },
               {
