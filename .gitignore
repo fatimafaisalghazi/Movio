@@ -20,4 +20,3 @@ local.properties
 secret.properties
 /.kotlin
 /data/schemas
-/.kotlin/
