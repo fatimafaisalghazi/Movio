@@ -36,7 +36,6 @@ fun MovieDetailsHeader(
         )
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
         ) {
             movieCategory.forEach {
                 MovioText(
