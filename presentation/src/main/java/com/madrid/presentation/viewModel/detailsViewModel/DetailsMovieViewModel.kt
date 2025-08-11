@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.madrid.domain.usecase.authentication.LoginUseCase
-import com.madrid.domain.usecase.movie.AddRatingMoviesUseCase
 import com.madrid.domain.usecase.movie.AddMovieToFavoriteUseCase
 import com.madrid.domain.usecase.movie.AddMovieToHistoryUseCase
+import com.madrid.domain.usecase.movie.AddRatingMoviesUseCase
 import com.madrid.domain.usecase.movie.GetMovieDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieReviewsUseCase
 import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
@@ -26,7 +26,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.toDouble
 
 @HiltViewModel
 class DetailsMovieViewModel @Inject constructor(
@@ -188,11 +187,11 @@ class DetailsMovieViewModel @Inject constructor(
     fun onClickLoveIcon(movieId: Int) {
         tryToExecute(
             function = {
-                addMovieToFavoriteUseCase(movieId)
+                addMovieToFavoriteUseCase(movieId, !state.value.isLoved)
             },
             onSuccess = {
                 updateState {
-                    it.copy(isLoved = true)
+                    it.copy(isLoved = !state.value.isLoved)
                 }
             },
             onError = {},
@@ -235,6 +234,7 @@ class DetailsMovieViewModel @Inject constructor(
             },
         )
     }
+
     fun addRating() {
         tryToExecute(
             function = {

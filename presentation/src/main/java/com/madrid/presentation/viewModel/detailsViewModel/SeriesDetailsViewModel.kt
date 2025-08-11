@@ -254,11 +254,10 @@ class SeriesDetailsViewModel @Inject constructor(
 
     fun onClickFavoriteIcon(seriesId: Int) {
         tryToExecute(
-            function = { addSeriesToFavoriteUseCase(seriesId) },
+            function = { addSeriesToFavoriteUseCase(seriesId, !state.value.isFavourite) },
             onSuccess = {
-                Log.d("onClickFavoriteIcon", "onClickFavoriteIcon: ${args.seriesId}")
                 updateState {
-                    it.copy(isFavourite = true)
+                    it.copy(isFavourite = !state.value.isFavourite)
                 }
             },
             onError = {},
