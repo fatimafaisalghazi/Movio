@@ -308,7 +308,7 @@ class RemoteDataSourceImpl @Inject constructor(
 
     }
 
-    override suspend fun addMovieToFavorite(movieId: Int, sessionId: String, isFavorite: Boolean) {
+    override suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean) {
         val request = AddToFavoriteRequest(
             mediaType = "movie",
             mediaId = movieId,
@@ -323,7 +323,7 @@ class RemoteDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun addSeriesToFavorite(seriesId: Int, sessionId: String, isFavorite: Boolean) {
+    override suspend fun setSeriesFavoriteStatus(seriesId: Int, sessionId: String, isFavorite: Boolean) {
         val request = AddToFavoriteRequest(
             mediaType = "tv",
             mediaId = seriesId,

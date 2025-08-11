@@ -36,5 +36,5 @@ interface MovieRepository {
 
     suspend fun createMovieList(sessionId: String, name: String, description: String, language: String): ListOperationStatus
     suspend fun addMovieToList(listId: Int, sessionId: String, mediaId: Int): ListOperationStatus
-    suspend fun addMovieToFavorite(movieId:Int, sessionId: String, isFavorite: Boolean)
+    suspend fun setMovieFavoriteStatus(movieId:Int, sessionId: String, isFavorite: Boolean)
 }

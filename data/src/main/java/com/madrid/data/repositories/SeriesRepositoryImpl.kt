@@ -108,12 +108,12 @@ class SeriesRepositoryImpl @Inject constructor(
         ).seriesResults.map { it.toSeries() }
     }
 
-    override suspend fun addSeriesToFavorite(
+    override suspend fun setSeriesFavoriteStatus(
         seriesId: Int,
         sessionId: String,
         isFavorite: Boolean
     ) {
-        remoteDataSource.addSeriesToFavorite(
+        remoteDataSource.setSeriesFavoriteStatus(
             seriesId = seriesId,
             sessionId = sessionId,
             isFavorite = isFavorite
