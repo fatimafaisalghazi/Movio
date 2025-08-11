@@ -9,6 +9,10 @@ import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
+import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
+import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
+import com.madrid.data.dataSource.remote.dto.list.MovieListBody
 import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
@@ -50,7 +54,7 @@ import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
     private val api: MovioApi,
-    private val userPreferences: UserPreferences
+    private val userPreferences: UserPreferences,
 ) : RemoteDataSource {
     //  region Movies
     override suspend fun searchMoviesByQuery(name: String, page: Int): SearchMovieResponse {
@@ -330,6 +334,22 @@ class RemoteDataSourceImpl @Inject constructor(
         return api.getAccountDetails(sessionId)
     }
 
+    override suspend fun createMovieList(sessionId: String, movieListBody: MovieListBody): CreateListResponse {
+        return api.createMovieList(sessionId, movieListBody)
+    }
+    override suspend fun addMovieToList(listId: Int, movieId: Int, sessionId: String): ListOperationResponse {
+        val request = AddToListRequest(
+            media_id = movieId,
+            media_type = "movie"
+        )
+
+        // Return the actual API response, not a hardcoded one
+        return api.addMovieToList(
+            listId = listId,
+            sessionId = sessionId,
+            request = request
+        )
+    }
     override suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse {
         val accountId = api.getAccountDetails(sessionId).id
         return api.getUserRatingForMovie(accountId, sessionId)
