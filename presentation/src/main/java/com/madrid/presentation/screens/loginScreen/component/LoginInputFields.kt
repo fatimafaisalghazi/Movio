@@ -1,9 +1,15 @@
 package com.madrid.presentation.screens.loginScreen.component
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -52,8 +58,29 @@ fun LoginInputFields(
             isError = state.errorMessage != null &&
                     (state.errorMessage.contains("Password") ||
                             state.errorMessage.contains("Invalid")),
-            errorBorderBrush = Theme.color.gradients.errorBorderGradient
+            errorBorderBrush = Theme.color.gradients.errorBorderGradient,
+
         )
     }
 
+
+//    @Composable
+//    fun AnimatedEyeIcon(
+//        visible: Boolean,
+//        painterVisible: Painter,
+//        painterHidden: Painter,
+//        onClick: () -> Unit
+//    ) {
+//
+//        val rotation by animateFloatAsState(targetValue = if (visible) 0f else 180f)
+//
+//        Icon(
+//            painter = if (visible) painterVisible else painterHidden,
+//            contentDescription = null,
+//            modifier = Modifier
+//                .size(20.dp)
+//                .rotate(rotation)
+//                .clickable { onClick() }
+//        )
+//    }
 }
