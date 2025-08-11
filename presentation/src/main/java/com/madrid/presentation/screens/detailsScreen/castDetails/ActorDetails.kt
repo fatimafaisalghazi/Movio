@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -177,7 +176,7 @@ fun ActorDetailsContent(
                         movieImage = movie.imageUrl,
                         rate = movie.rating,
                         width = 124.dp,
-                        height = 160.dp,
+                        heightForImage = 160.dp,
                         onClick = { onKnownForClick(movie.mediaId) },
                         modifier = Modifier
                             .navigationBarsPadding()

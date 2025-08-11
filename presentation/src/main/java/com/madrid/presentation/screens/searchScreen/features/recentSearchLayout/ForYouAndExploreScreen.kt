@@ -4,12 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -35,12 +37,11 @@ import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 fun LazyGridScope.forYouAndExploreScreen(
     showSearchResults: Boolean,
     isLoading: Boolean,
-    isError : Boolean,
+    isError: Boolean,
+    onClickSeeAll: () -> Unit,
     forYouMovies: List<SearchScreenState.MovieUiState>,
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
     onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
-    onExploreClick: (LazyPagingItems<SearchScreenState.MovieUiState>) -> Unit = {},
-    onClickSeeAll: () -> Unit
 ) {
     if (!showSearchResults) {
         when {
@@ -61,14 +62,14 @@ fun LazyGridScope.forYouAndExploreScreen(
                 item(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
-                    Column (
+                    Column(
                         modifier = Modifier
                             .fillMaxSize(),
                         horizontalAlignment = CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Image(
-                            painter = painterResource(id =  com.madrid.presentation.R.drawable.img_no_internet),
+                            painter = painterResource(id = com.madrid.presentation.R.drawable.img_no_internet),
                             contentDescription = "Search Icon",
                             modifier = Modifier
                                 .size(128.dp)
@@ -78,12 +79,14 @@ fun LazyGridScope.forYouAndExploreScreen(
                     }
                 }
             }
+
             forYouMovies.isNotEmpty() -> {
                 item(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
                     CustomTextTitle(
-                        modifier = Modifier.padding(top = 24.dp),
+                        modifier = Modifier
+                            .padding(top = 16.dp),
                         primaryText = stringResource(com.madrid.presentation.R.string.for_u),
                         secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
                         endIcon = painterResource(R.drawable.outline_alt_arrow_left),
@@ -97,6 +100,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                         modifier = Modifier
                             .padding(bottom = 32.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp)
                     ) {
                         items(forYouMovies) { movie ->
                             MovioVerticalCard(
@@ -104,7 +108,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                                 movieImage = movie.imageUrl,
                                 rate = movie.rating,
                                 width = 124.dp,
-                                height = 160.dp,
+                                heightForImage = 160.dp,
                                 onClick = { onMovieClick(movie) }
                             )
                         }
@@ -134,7 +138,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 item(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
-                    Column (
+                    Column(
                         modifier = Modifier
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
@@ -164,7 +168,7 @@ fun LazyGridScope.forYouAndExploreScreen(
 
             exploreMoreMovies.itemCount == 0 && exploreMoreMovies.loadState.refresh is LoadState.NotLoading && exploreMoreMovies.loadState.refresh.endOfPaginationReached -> {
                 item(span = { GridItemSpan(maxLineSpan) }) {
-                    Column (
+                    Column(
                         modifier = Modifier
                             .fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
@@ -200,18 +204,15 @@ fun LazyGridScope.forYouAndExploreScreen(
                         primaryText = stringResource(com.madrid.presentation.R.string.explore_more)
                     )
                 }
-                items(
-                    count = exploreMoreMovies.itemCount,
-                ) { index ->
-
+                items(count = exploreMoreMovies.itemCount) { index ->
                     MovioVerticalCard(
                         modifier = Modifier
-                            .fillMaxWidth(),
+                            .height(222.dp)
+                            .width(158.dp),
                         description = exploreMoreMovies[index]!!.title,
                         movieImage = exploreMoreMovies[index]!!.imageUrl,
                         rate = exploreMoreMovies[index]!!.rating,
-                        height = 222.dp,
-                        gap = 12.dp,
+                        heightForImage = 180.dp,
                         onClick = {
                             onMovieClick(exploreMoreMovies[index]!!)
                         }

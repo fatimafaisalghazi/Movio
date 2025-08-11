@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
-import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.shared.MediaUiState
 
 @Composable
@@ -37,7 +36,7 @@ fun MovioVerticalGrid(
                 description = media.title,
                 movieImage = media.imageUrl,
                 rate = media.rating.take(3),
-                height = 180.dp,
+                heightForImage = 180.dp,
                 onClick = {
                     onClickMedia(media.id.toInt())
                 }

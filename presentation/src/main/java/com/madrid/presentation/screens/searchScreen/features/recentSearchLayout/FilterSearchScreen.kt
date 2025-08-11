@@ -1,9 +1,7 @@
 package com.madrid.presentation.screens.searchScreen.features.recentSearchLayout
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -15,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
@@ -130,7 +127,7 @@ fun LazyGridScope.filterSearchScreen(
                                     description = topRated[index]!!.title,
                                     movieImage = topRated[index]!!.imageUrl,
                                     rate = topRated[index]!!.rating,
-                                    height = 180.dp,
+                                    heightForImage = 180.dp,
                                     onClick = { onTopResultClick(topRated[index]!!.id.toInt()) }
                                 )
                             }
@@ -208,7 +205,7 @@ fun LazyGridScope.filterSearchScreen(
                                     description = movies[index]!!.title,
                                     movieImage = movies[index]!!.imageUrl,
                                     rate = movies[index]!!.rating,
-                                    height = 180.dp,
+                                    heightForImage = 180.dp,
                                     onClick = { onMovieClick(movies[index]!!.id.toInt()) }
                                 )
                             }
@@ -287,7 +284,7 @@ fun LazyGridScope.filterSearchScreen(
                                     description = series[index]!!.title,
                                     movieImage = series[index]!!.imageUrl,
                                     rate = series[index]!!.rating,
-                                    height = 180.dp,
+                                    heightForImage = 180.dp,
                                     onClick = { onSeriesClick(series[index]!!.id.toInt()) }
                                 )
                             }

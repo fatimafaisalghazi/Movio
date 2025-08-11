@@ -180,7 +180,7 @@ fun SeeAllMoviesScreen(
                         movieImage = movie?.imageUrl ?: "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
                         rate = movie?.rate?.take(3) ?: "4.5",
                         width = 101.dp,
-                        height = 136.dp,
+                        heightForImage = 136.dp,
                         onClick = {
                             navController.navigate(
                                 Destinations.MovieDetailsScreen(

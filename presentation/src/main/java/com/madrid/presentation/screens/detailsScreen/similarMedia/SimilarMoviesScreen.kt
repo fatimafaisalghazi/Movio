@@ -58,7 +58,7 @@ fun SimilarMoviesSection(
                     movieImage = movie.imageUrl,
                     rate = movie.rating,
                     width = 124.dp,
-                    height = 160.dp,
+                    heightForImage = 160.dp,
                     onClick = { onMovieClick(movie) },
                 )
             }

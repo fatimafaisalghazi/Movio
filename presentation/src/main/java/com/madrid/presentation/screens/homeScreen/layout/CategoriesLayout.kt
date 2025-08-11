@@ -69,7 +69,7 @@ fun CategoriesLayout(
                     description = mediaItems[index]?.title ?: "",
                     movieImage = mediaItems[index]?.imageUrl ?: "",
                     rate = mediaItems[index]?.rating?.take(3) ?: "",
-                    height = 180.dp,
+                    heightForImage = 180.dp,
                     onClick = {
                         onMediaItemClicked(
                             mediaItems[index]?.id?.toIntOrNull() ?: 0,

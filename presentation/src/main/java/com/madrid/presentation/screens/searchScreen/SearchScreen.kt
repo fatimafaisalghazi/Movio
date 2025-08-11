@@ -205,14 +205,13 @@ fun ContentSearchScreen(
             }
     }
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(minSize = 158.dp),
         modifier = modifier
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
             .statusBarsPadding(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) }
@@ -228,8 +227,8 @@ fun ContentSearchScreen(
                 endIconPainter = painterResource(R.drawable.outline_add),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onSearchBarClick() }
-                    .padding(top = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .clickable { onSearchBarClick() },
                 onClickEndIcon = { onSearchQueryChange("") }
             )
         }
