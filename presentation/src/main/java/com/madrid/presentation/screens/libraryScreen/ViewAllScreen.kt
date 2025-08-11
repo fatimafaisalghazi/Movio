@@ -3,6 +3,7 @@ package com.madrid.presentation.screens.libraryScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -67,10 +68,12 @@ fun ViewAllScreenContent(
     ) {
         TopAppBar(
             text = state.title,
-            modifier = Modifier,
             secondIcon = null,
             thirdIcon = null,
-            onFirstIconClick = { interactionListener.onBackClicked() }
+            onFirstIconClick = { interactionListener.onBackClicked() },
+            modifier = Modifier.padding(
+                horizontal = 16.dp
+            )
         )
 
         LazyColumn(

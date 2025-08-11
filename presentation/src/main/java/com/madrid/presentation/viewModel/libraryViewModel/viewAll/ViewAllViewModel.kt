@@ -38,7 +38,7 @@ class ViewAllViewModel @AssistedInject constructor(
             onSuccess = { result ->
                 updateState {
                     it.copy(
-                        items = result.map { media -> media.toMediaUiState() },
+                        items = result,
                         isLoading = false
                     )
                 }

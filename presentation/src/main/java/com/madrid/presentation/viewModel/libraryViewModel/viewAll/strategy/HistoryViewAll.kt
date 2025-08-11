@@ -2,11 +2,15 @@ package com.madrid.presentation.viewModel.libraryViewModel.viewAll.strategy
 
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.usecase.movie.GetAllMoviesInHistoryUseCase
+import com.madrid.domain.usecase.series.GetAllSeriesInHistoryUseCase
 import com.madrid.presentation.viewModel.shared.MediaType
+import com.madrid.presentation.viewModel.shared.MediaUiState
+import com.madrid.presentation.viewModel.shared.toMediaUiState
 import javax.inject.Inject
 
 class HistoryViewAll @Inject constructor(
-    private val getHistoryUseCase: GetAllMoviesInHistoryUseCase,
+    private val getMoviesHistoryUseCase: GetAllMoviesInHistoryUseCase,
+    private val getSeriesHistoryUseCase: GetAllSeriesInHistoryUseCase
 //    private val deleteHistoryUseCase: DeleteMovieFromHistoryUseCase
 ) : ViewAllStrategy {
 
@@ -14,8 +18,11 @@ class HistoryViewAll @Inject constructor(
         return "History"
     }
 
-    override suspend fun getAllItems(): List<Movie>  {
-        return getHistoryUseCase()
+    override suspend fun getAllItems(): List<MediaUiState> {
+        return (getMoviesHistoryUseCase()
+            .map { it.toMediaUiState() }
+                + getSeriesHistoryUseCase()
+            .map { it.toMediaUiState() })
     }
 
     override suspend fun deleteItem(mediaId: String, mediaType: MediaType) {
