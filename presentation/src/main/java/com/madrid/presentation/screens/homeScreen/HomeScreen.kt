@@ -1,5 +1,8 @@
 package com.madrid.presentation.screens.homeScreen
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -21,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.madrid.designSystem.component.HeaderSectionBar
@@ -44,6 +48,7 @@ fun HomeScreen(
 ) {
     val state by homeViewModel.state.collectAsState()
     val navController = LocalNavController.current
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         homeViewModel.effect.collect { effect ->
@@ -57,6 +62,10 @@ fun HomeScreen(
                 }
 
                 is HomeScreenEffect.NavigateToProfile -> navController.navigate(Destinations.MoreScreen)
+                is HomeScreenEffect.GoToYoutube -> {
+                    val key = effect.trailerKey
+                    openYoutubeMediaTrailer(key = key, context = context)
+                }
             }
         }
     }
@@ -80,20 +89,16 @@ fun HomeScreenContent(
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
     ) {
-
-        val context = LocalContext.current
-
         LayoutContent(
             uiState = state,
             selectedTab = HomeTab.entries[selectedTabIndex],
             onScroll = { isScrolled ->
                 isScrolledDown = isScrolled
             },
-            onClickMediaButton = { isMovie, mediaIndex ->
+            onClickMediaButton = { mediaType, mediaIndex ->
                 interactionListener.onClickPlayButton(
                     mediaIndex = mediaIndex,
-                    context = context,
-                    isMovie = isMovie
+                    mediaType = mediaType
                 )
             }
         )
@@ -143,7 +148,7 @@ private fun LayoutContent(
     selectedTab: HomeTab,
     uiState: HomeScreenState,
     onScroll: (Boolean) -> Unit = {},
-    onClickMediaButton: (Boolean, Int) -> Unit = { _, _ -> },
+    onClickMediaButton: (MediaType, Int) -> Unit = { _, _ -> },
 ) {
     when (selectedTab) {
         HomeTab.MOVIES -> {
@@ -154,7 +159,12 @@ private fun LayoutContent(
                 upComingMovies = uiState.movieTabUiState.upcoming.media,
                 recommendedMovies = uiState.movieTabUiState.moreRecommended.media,
                 onScroll = onScroll,
-                onClickMediaButton = { mediaIndex -> onClickMediaButton(true, mediaIndex) }
+                onClickMediaButton = { mediaIndex ->
+                    onClickMediaButton(
+                        MediaType.MOVIE,
+                        mediaIndex
+                    )
+                }
             )
         }
 
@@ -166,7 +176,12 @@ private fun LayoutContent(
                 onAirSeries = uiState.tvShowTabUiState.onTv.media,
                 recommendedSeries = uiState.tvShowTabUiState.moreRecommended.media,
                 onScroll = onScroll,
-                onClickMediaButton = { mediaIndex -> onClickMediaButton(false, mediaIndex) }
+                onClickMediaButton = { mediaIndex ->
+                    onClickMediaButton(
+                        MediaType.TV_SHOW,
+                        mediaIndex
+                    )
+                }
             )
         }
 
@@ -174,8 +189,22 @@ private fun LayoutContent(
     }
 }
 
+private fun openYoutubeMediaTrailer(key: String, context: Context) {
+    val youtubeAppIntent =
+        Intent(Intent.ACTION_VIEW, "vnd.youtube:$key".toUri())
+    val youtubeWebIntent = Intent(
+        Intent.ACTION_VIEW,
+        "https://www.youtube.com/watch?v=$key".toUri()
+    )
+
+    try {
+        context.startActivity(youtubeAppIntent)
+    } catch (e: ActivityNotFoundException) {
+        context.startActivity(youtubeWebIntent)
+    }
+}
+
 enum class HomeTab {
-    //    ALL,
     MOVIES,
     TV_SHOWS,
     CATEGORIES

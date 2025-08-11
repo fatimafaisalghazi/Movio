@@ -213,22 +213,12 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    override fun onClickPlayButton(mediaIndex: Int, context: Context, isMovie: Boolean) {
+    override fun onClickPlayButton(mediaIndex: Int, mediaType: MediaType) {
         val key =
-            if (isMovie) state.value.movieTabUiState.trending.media[mediaIndex].trailerKey
+            if (mediaType == MediaType.MOVIE) state.value.movieTabUiState.trending.media[mediaIndex].trailerKey
             else state.value.tvShowTabUiState.trending.media[mediaIndex].trailerKey
-        val youtubeAppIntent =
-            Intent(Intent.ACTION_VIEW, "vnd.youtube:$key".toUri())
-        val youtubeWebIntent = Intent(
-            Intent.ACTION_VIEW,
-            "https://www.youtube.com/watch?v=$key".toUri()
-        )
+        emitNewEffect(HomeScreenEffect.GoToYoutube(key))
 
-        try {
-            context.startActivity(youtubeAppIntent)
-        } catch (e: ActivityNotFoundException) {
-            context.startActivity(youtubeWebIntent)
-        }
     }
 
     private fun loadTopRatingMoviesSection() {
