@@ -45,7 +45,7 @@ fun MoviesLayout(
     nowPlayingMovies: List<MediaUiState>,
     upComingMovies: List<MediaUiState>,
     recommendedMovies: List<MediaUiState>,
-    onScroll: (Boolean) -> Unit ={},
+    onScroll: (Boolean) -> Unit = {},
     isLoading: Boolean = true,
     onClickMediaButton: (Int) -> Unit = {},
 ) {
@@ -132,7 +132,7 @@ fun MoviesLayout(
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.NOW_PLAYING)) },
                 headerModifier = Modifier.padding(horizontal = 16.dp),
                 itemCount = 5
-            ){
+            ) {
                 CustomHorizontalCard(
                     primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.now_playing),
                     secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
@@ -157,7 +157,7 @@ fun MoviesLayout(
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.UPCOMING)) },
                 headerModifier = Modifier.padding(horizontal = 16.dp),
                 itemCount = 5
-            ){
+            ) {
                 CustomHorizontalCard(
                     primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.upcoming),
                     secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),

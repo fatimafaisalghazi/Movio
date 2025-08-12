@@ -33,7 +33,6 @@ import com.madrid.presentation.component.MovioPager
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.viewModel.seeAll.movies.SeeAllMoviesType
 import com.madrid.presentation.viewModel.seeAll.tvShows.SeeAllTvShowType
 import com.madrid.presentation.viewModel.shared.MediaUiState
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -45,10 +44,10 @@ fun TvShowsLayout(
     airingTodaySeries: List<MediaUiState>,
     onAirSeries: List<MediaUiState>,
     recommendedSeries: List<MediaUiState>,
-    onScroll: (Boolean) -> Unit ={},
+    onScroll: (Boolean) -> Unit = {},
     isLoading: Boolean = true,
     onClickMediaButton: (Int) -> Unit = {},
-    ) {
+) {
     val navController = LocalNavController.current
     val lazyGridState = rememberLazyGridState()
 
@@ -59,7 +58,7 @@ fun TvShowsLayout(
             .distinctUntilChanged()
             .collect { scrollOffset ->
                 val scrollDistance = scrollOffset.toFloat()
-                when(scrollDistance){
+                when (scrollDistance) {
                     in 0f..100f -> onScroll(false)
                     else -> onScroll(true)
                 }
@@ -79,7 +78,14 @@ fun TvShowsLayout(
         item(span = { GridItemSpan(maxLineSpan) }) {
             MovioPager(
                 medias = trendingSeries.take(7),
-                onClickItem = { id -> navController.navigate(Destinations.SeriesDetailsScreen(id,1)) },
+                onClickItem = { id ->
+                    navController.navigate(
+                        Destinations.SeriesDetailsScreen(
+                            id,
+                            1
+                        )
+                    )
+                },
                 onClickMediaButton = onClickMediaButton,
                 isLoading = isLoading
             )
@@ -90,7 +96,7 @@ fun TvShowsLayout(
                     .offset(y = 390.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent , Theme.color.surfaces.surface)
+                            colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
                         )
                     )
             )
@@ -110,7 +116,7 @@ fun TvShowsLayout(
                 },
                 headerModifier = Modifier.padding(horizontal = 16.dp),
                 itemCount = 5
-            ){
+            ) {
                 CustomHorizontalCard(
                     primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
                     secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
@@ -151,7 +157,7 @@ fun TvShowsLayout(
                 },
                 headerModifier = Modifier.padding(horizontal = 16.dp),
                 itemCount = 5
-            ){
+            ) {
                 CustomHorizontalCard(
                     primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.airing_today),
                     secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
@@ -193,7 +199,7 @@ fun TvShowsLayout(
                 },
                 headerModifier = Modifier.padding(horizontal = 16.dp),
                 itemCount = 5
-            ){
+            ) {
                 CustomHorizontalCard(
                     primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.on_tv),
                     secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
@@ -235,26 +241,11 @@ fun TvShowsLayout(
             )
         }
 
-        item(span = { GridItemSpan(maxLineSpan) }){
+        item(span = { GridItemSpan(maxLineSpan) }) {
             Column(Modifier.padding(horizontal = 16.dp)) {
             }
         }
         itemsIndexed(recommendedSeries) { index, media ->
-            var startPadding = 0
-            var endPadding = 0
-            if(index == 0){
-                startPadding = 16
-                endPadding = 6
-            }
-            else if (recommendedSeries.lastIndex == index)
-                endPadding = 16
-            else{
-                startPadding = 6
-                endPadding = 6
-            }
-
-
-
             MovioVerticalCard(
                 description = media.title,
                 movieImage = media.imageUrl,

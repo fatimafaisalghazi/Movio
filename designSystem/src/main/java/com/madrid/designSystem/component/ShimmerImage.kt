@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +41,7 @@ import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.madrid.designSystem.theme.Theme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -61,10 +63,38 @@ fun ShimmerItem(
                     .clip(RoundedCornerShape(12.dp))
                     .shimmerEffect()
             ) {
-                Box(modifier = Modifier.padding(top = 207.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
-                Box(modifier = Modifier.padding(top = 232.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
-                Box(modifier = Modifier.padding(top = 232.dp, start = 59.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
-                Box(modifier = Modifier.padding(top = 232.dp, start = 112.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                Box(
+                    modifier = Modifier
+                        .padding(top = 207.dp, start = 8.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color(0xFF101128))
+                        .width(44.dp)
+                        .height(20.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(top = 232.dp, start = 8.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color(0xFF101128))
+                        .width(44.dp)
+                        .height(20.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(top = 232.dp, start = 59.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color(0xFF101128))
+                        .width(44.dp)
+                        .height(20.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .padding(top = 232.dp, start = 112.dp)
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color(0xFF101128))
+                        .width(44.dp)
+                        .height(20.dp)
+                )
             }
         }
     } else {
@@ -85,11 +115,39 @@ fun ShimmerItem(
                         .size(width = 200.dp, height = 260.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .shimmerEffect()
-                ){
-                    Box(modifier = Modifier.padding(top = 207.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
-                    Box(modifier = Modifier.padding(top = 232.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
-                    Box(modifier = Modifier.padding(top = 232.dp, start = 59.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
-                    Box(modifier = Modifier.padding(top = 232.dp, start = 112.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 207.dp, start = 8.dp)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(Color(0xFF101128))
+                            .width(44.dp)
+                            .height(20.dp)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 232.dp, start = 8.dp)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(Color(0xFF101128))
+                            .width(44.dp)
+                            .height(20.dp)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 232.dp, start = 59.dp)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(Color(0xFF101128))
+                            .width(44.dp)
+                            .height(20.dp)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 232.dp, start = 112.dp)
+                            .clip(RoundedCornerShape(24.dp))
+                            .background(Color(0xFF101128))
+                            .width(44.dp)
+                            .height(20.dp)
+                    )
                 }
             }
         }
@@ -97,6 +155,30 @@ fun ShimmerItem(
             contentAfterLoading()
     }
 
+}
+
+@Composable
+fun ShimmerBlurredImage(
+    isLoading: Boolean,
+    modifier: Modifier = Modifier,
+    contentAfterLoading: @Composable () -> Unit,
+) {
+    if(isLoading)
+        Box(modifier = modifier.fillMaxWidth().height(413.dp).background(Theme.color.surfaces.surface))
+    else{
+        var showContent by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            delay(2000L)
+            showContent = true
+        }
+
+        if(showContent.not())
+            Box(modifier = modifier.fillMaxWidth().height(413.dp).background(Theme.color.surfaces.surface))
+
+        if (showContent)
+            contentAfterLoading()
+    }
 }
 
 @Composable
