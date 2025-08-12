@@ -28,13 +28,11 @@ import com.madrid.domain.entity.Trailer
 import com.madrid.domain.repository.AuthenticationRepository
 import com.madrid.domain.repository.MovieRepository
 import com.madrid.domain.usecase.movie.GetUserRatedMovieUseCase
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
-    private val authenticationRepository: AuthenticationRepository
 ) : MovieRepository {
     private val pageNumberCached = 1
     override suspend fun getMovieDetailsById(movieId: Int): Movie {
@@ -225,8 +223,7 @@ class MovieRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun removeMovieFromList(listId: Int, mediaId: Int) {
-        val sessionId = authenticationRepository.getSessionId().first()
+    override suspend fun removeMovieFromList(listId: Int, mediaId: Int, sessionId: String) {
         remoteDataSource.removeMovieFromList(
             listId = listId,
             mediaId = mediaId,
