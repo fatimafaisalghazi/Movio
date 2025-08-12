@@ -34,7 +34,7 @@ import com.madrid.detectImageContent.FilteredImage
 @Composable
 fun ReviewCard(
     reviewerName: String,
-    reviewerImageUrl: String,
+    reviewerImageUrl: String? = com.madrid.detectimagecontent.R.drawable.place_holder.toString(),
     rating: Float,
     date: String,
     content: String,
