@@ -52,11 +52,12 @@ fun CustomHorizontalCardForWatchList(
                 modifier = Modifier,
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
-                items(listOfWatch) { watchList ->
+                items(listOfWatch, key = { it.id }) { watchList ->
                     VideoLibrary(
                         onClick = { onWatchListClick(watchList) },
                         videosNumber = watchList.numberOfVideos,
-                        title = watchList.watchListTitle
+                        title = watchList.watchListTitle,
+                        posterUrl = watchList.posterUrl,
                     )
                 }
             }

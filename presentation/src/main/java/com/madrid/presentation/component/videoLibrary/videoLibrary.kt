@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import coil.compose.rememberAsyncImagePainter
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
@@ -31,7 +32,8 @@ import com.madrid.designSystem.theme.Theme
 fun VideoLibrary(
     onClick: () -> Unit = { },
     videosNumber: Int,
-    title : String ,
+    title: String,
+    posterUrl: String? = null
 ) {
     Column(
         modifier = Modifier
@@ -41,14 +43,17 @@ fun VideoLibrary(
             .clickable { onClick() }
     ) {
         Box(
-            modifier = Modifier.size(width = 158.dp , height =  110.dp),
+            modifier = Modifier.size(width = 158.dp, height = 110.dp),
             contentAlignment = Alignment.Center
         )
         {
             Image(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
-                painter = painterResource(com.madrid.presentation.R.drawable.library_background),
+                painter = if (posterUrl != null) rememberAsyncImagePainter(posterUrl) else
+                    painterResource(
+                        com.madrid.presentation.R.drawable.library_background
+                    ),
                 contentDescription = stringResource(com.madrid.presentation.R.string.background_image_of_squares),
             )
             MovioIcon(
@@ -84,7 +89,10 @@ fun VideoLibrary(
             color = Theme.color.surfaces.onSurface,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            modifier =  Modifier.padding(top= 8.dp).fillMaxWidth().height(48.dp)
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .height(48.dp)
         )
     }
 }

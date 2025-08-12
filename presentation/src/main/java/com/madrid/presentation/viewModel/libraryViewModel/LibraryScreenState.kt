@@ -14,7 +14,8 @@ data class LibraryScreenState(
 data class WatchListState(
     val id: Int = 0,
     val numberOfVideos: Int = 0,
-    val watchListTitle: String = ""
+    val watchListTitle: String = "",
+    val posterUrl: String? = null,
 )
 
 
@@ -22,7 +23,8 @@ fun WatchList.toWatchListState(): WatchListState {
     return WatchListState(
         id = id,
         numberOfVideos = itemCount,
-        watchListTitle = name
-        )
+        watchListTitle = name,
+        posterUrl = posterUrl,
+    )
 }
 
