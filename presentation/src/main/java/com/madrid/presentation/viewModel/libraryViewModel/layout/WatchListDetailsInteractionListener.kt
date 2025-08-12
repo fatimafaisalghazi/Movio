@@ -1,0 +1,7 @@
+package com.madrid.presentation.viewModel.libraryViewModel.layout
+
+interface WatchListDetailsInteractionListener {
+    fun onNavigateBack()
+    fun onClickMovieItem(movieId: String)
+    fun onDeleteMovie(movieId: String)
+}
