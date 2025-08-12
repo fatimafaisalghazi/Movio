@@ -145,7 +145,8 @@ private fun LayoutContent(
                 nowPlayingMovies = uiState.movieTabUiState.nowPlaying.media,
                 upComingMovies = uiState.movieTabUiState.upcoming.media,
                 recommendedMovies = uiState.movieTabUiState.moreRecommended.media,
-                onScroll = onScroll
+                onScroll = onScroll,
+                isLoading = uiState.isLoading
             )
         }
 
@@ -157,7 +158,8 @@ private fun LayoutContent(
                 airingTodaySeries = uiState.tvShowTabUiState.airingToday.media,
                 onAirSeries = uiState.tvShowTabUiState.onTv.media,
                 recommendedSeries = uiState.tvShowTabUiState.moreRecommended.media,
-                onScroll = onScroll
+                onScroll = onScroll,
+                isLoading = uiState.isLoading
             )
         }
 

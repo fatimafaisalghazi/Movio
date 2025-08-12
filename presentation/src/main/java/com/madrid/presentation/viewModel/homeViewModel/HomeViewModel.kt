@@ -53,10 +53,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadFileImage() {
         tryToExecute(
-            function ={
+            function = {
                 getCurrentUserDetailsUseCase()
             },
-            onSuccess = {user->
+            onSuccess = { user ->
                 updateState {
                     it.copy(
                         profileImage = user?.profilePicUrl
@@ -169,7 +169,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onError(errorMessage: String = "") {
-        updateState { it.copy(isLoading = false, errorMessage = errorMessage) }
+        updateState { it.copy(isLoading = true, errorMessage = errorMessage) }
     }
 
     /*************************************** Movies Section ***************************************/
@@ -185,7 +185,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadSliderMovies() {
         tryToExecute(
-            function = { getTrendingMoviesUseCase(1) },
+            function = {
+                startLoading()
+                getTrendingMoviesUseCase(1)
+            },
             onSuccess = { movies ->
                 updateState { state ->
                     state.copy(
@@ -196,6 +199,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                updateState { it.copy(isLoading = false) }
             },
             onError = { onError() }
         )
@@ -257,7 +261,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadRecommendedMoviesSection() {
         tryToExecute(
-            function = { getRecommendedMoviesUseCase(1) },
+            function = {
+                startLoading()
+                getRecommendedMoviesUseCase(1)
+            },
             onSuccess = { movies ->
                 updateState { state ->
                     state.copy(
@@ -268,6 +275,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                updateState { it.copy(isLoading = false) }
             },
             onError = { onError() }
         )
@@ -287,7 +295,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadSliderSeries() {
         tryToExecute(
-            function = { getRecommendedSeriesUseCase(1) },
+            function = {
+                startLoading()
+                getRecommendedSeriesUseCase(1)
+            },
             onSuccess = { allSeries ->
                 updateState { state ->
                     state.copy(
@@ -298,6 +309,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                updateState { it.copy(isLoading = false) }
             },
             onError = { onError() }
         )
@@ -359,7 +371,9 @@ class HomeViewModel @Inject constructor(
 
     private fun loadRecommendedSeriesSection() {
         tryToExecute(
-            function = { getRecommendedSeriesUseCase(1) },
+            function = {
+                startLoading()
+                getRecommendedSeriesUseCase(1) },
             onSuccess = { allSeries ->
                 updateState { state ->
                     state.copy(
@@ -370,6 +384,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                updateState { it.copy(isLoading = false) }
             },
             onError = { onError() }
         )

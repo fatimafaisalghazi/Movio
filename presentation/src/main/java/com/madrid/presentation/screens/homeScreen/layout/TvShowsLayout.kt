@@ -25,12 +25,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
+import com.madrid.designSystem.component.ShimmerHorizontalCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.MovioPager
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
+import com.madrid.presentation.viewModel.seeAll.movies.SeeAllMoviesType
 import com.madrid.presentation.viewModel.seeAll.tvShows.SeeAllTvShowType
 import com.madrid.presentation.viewModel.shared.MediaUiState
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -43,6 +45,7 @@ fun TvShowsLayout(
     onAirSeries: List<MediaUiState>,
     recommendedSeries: List<MediaUiState>,
     onScroll: (Boolean) -> Unit ={},
+    isLoading: Boolean = true,
     ) {
     val navController = LocalNavController.current
     val lazyGridState = rememberLazyGridState()
@@ -74,7 +77,8 @@ fun TvShowsLayout(
         item(span = { GridItemSpan(2) }) {
             MovioPager(
                 medias = trendingSeries.take(7),
-                onClickItem = { id -> navController.navigate(Destinations.SeriesDetailsScreen(id,1)) }
+                onClickItem = { id -> navController.navigate(Destinations.SeriesDetailsScreen(id,1)) },
+                isLoading = isLoading
             )
             Box(
                 modifier = Modifier
@@ -89,11 +93,11 @@ fun TvShowsLayout(
             )
         }
         item(span = { GridItemSpan(2) }) {
-            CustomHorizontalCard(
+            ShimmerHorizontalCard(
+                isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = topRatingSeries,
                 onSeeAllClick = {
                     navController.navigate(
                         Destinations.SeeAllTvShowsScreen(
@@ -101,24 +105,40 @@ fun TvShowsLayout(
                         )
                     )
                 },
-                onMediaClick = { mediaUiState ->
-                    navController.navigate(
-                        Destinations.SeriesDetailsScreen(
-                            mediaUiState.id.toInt(),
-                            1
+                headerModifier = Modifier.padding(horizontal = 16.dp),
+                itemCount = 5
+            ){
+                CustomHorizontalCard(
+                    primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
+                    secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                    endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
+                    listOfMedia = topRatingSeries,
+                    onSeeAllClick = {
+                        navController.navigate(
+                            Destinations.SeeAllTvShowsScreen(
+                                SeeAllTvShowType.TOP_RATING
+                            )
                         )
-                    )
-                },
-                headerModifier = Modifier.padding(horizontal = 16.dp)
-            )
+                    },
+                    onMediaClick = { mediaUiState ->
+                        navController.navigate(
+                            Destinations.SeriesDetailsScreen(
+                                mediaUiState.id.toInt(),
+                                1
+                            )
+                        )
+                    },
+                    headerModifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
         }
 
         item(span = { GridItemSpan(2) }) {
-            CustomHorizontalCard(
+            ShimmerHorizontalCard(
+                isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.airing_today),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = airingTodaySeries,
                 onSeeAllClick = {
                     navController.navigate(
                         Destinations.SeeAllTvShowsScreen(
@@ -126,24 +146,41 @@ fun TvShowsLayout(
                         )
                     )
                 },
-                onMediaClick = { mediaUiState ->
-                    navController.navigate(
-                        Destinations.SeriesDetailsScreen(
-                            mediaUiState.id.toInt(),
-                            1
+                headerModifier = Modifier.padding(horizontal = 16.dp),
+                itemCount = 5
+            ){
+                CustomHorizontalCard(
+                    primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.airing_today),
+                    secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                    endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
+                    listOfMedia = airingTodaySeries,
+                    onSeeAllClick = {
+                        navController.navigate(
+                            Destinations.SeeAllTvShowsScreen(
+                                SeeAllTvShowType.AIRING_TODAY
+                            )
                         )
-                    )
-                },
-                headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
-            )
+                    },
+                    onMediaClick = { mediaUiState ->
+                        navController.navigate(
+                            Destinations.SeriesDetailsScreen(
+                                mediaUiState.id.toInt(),
+                                1
+                            )
+                        )
+                    },
+                    headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
+                )
+            }
         }
 
         item(span = { GridItemSpan(2) }) {
-            CustomHorizontalCard(
+
+            ShimmerHorizontalCard(
+                isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.on_tv),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = onAirSeries,
                 onSeeAllClick = {
                     navController.navigate(
                         Destinations.SeeAllTvShowsScreen(
@@ -151,16 +188,32 @@ fun TvShowsLayout(
                         )
                     )
                 },
-                onMediaClick = { mediaUiState ->
-                    navController.navigate(
-                        Destinations.SeriesDetailsScreen(
-                            mediaUiState.id.toInt(),
-                            1
+                headerModifier = Modifier.padding(horizontal = 16.dp),
+                itemCount = 5
+            ){
+                CustomHorizontalCard(
+                    primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.on_tv),
+                    secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                    endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
+                    listOfMedia = onAirSeries,
+                    onSeeAllClick = {
+                        navController.navigate(
+                            Destinations.SeeAllTvShowsScreen(
+                                SeeAllTvShowType.ON_TV
+                            )
                         )
-                    )
-                },
-                headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
-            )
+                    },
+                    onMediaClick = { mediaUiState ->
+                        navController.navigate(
+                            Destinations.SeriesDetailsScreen(
+                                mediaUiState.id.toInt(),
+                                1
+                            )
+                        )
+                    },
+                    headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
+                )
+            }
         }
 
         item(span = { GridItemSpan(2) }) {

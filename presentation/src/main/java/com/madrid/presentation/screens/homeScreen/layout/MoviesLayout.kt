@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
+import com.madrid.designSystem.component.ShimmerHorizontalCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.MovioPager
@@ -47,6 +48,7 @@ fun MoviesLayout(
     upComingMovies: List<MediaUiState>,
     recommendedMovies: List<MediaUiState>,
     onScroll: (Boolean) -> Unit ={},
+    isLoading: Boolean = true,
 ) {
     val navController = LocalNavController.current
     val lazyGridState = rememberLazyGridState()
@@ -79,7 +81,8 @@ fun MoviesLayout(
             Box(){
                 MovioPager(
                     medias = trendingMovies.take(7),
-                    onClickItem = { id -> navController.navigate(Destinations.MovieDetailsScreen(id)) }
+                    onClickItem = { id -> navController.navigate(Destinations.MovieDetailsScreen(id)) },
+                    isLoading = isLoading
                 )
             }
             Box(
@@ -95,47 +98,78 @@ fun MoviesLayout(
             )
         }
         item(span = { GridItemSpan(2) }) {
-            CustomHorizontalCard(
+
+            ShimmerHorizontalCard(
+                isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = topRatingMovies,
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.TOP_RATING)) },
-                onMediaClick = { mediaUiState ->
-                    navController.navigate(Destinations.MovieDetailsScreen(mediaUiState.id.toInt()))
-                },
-                headerModifier = Modifier.padding(horizontal = 16.dp)
-            )
+                headerModifier = Modifier.padding(horizontal = 16.dp),
+                itemCount = 5
+            ) {
+                CustomHorizontalCard(
+                    primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
+                    secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                    endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
+                    listOfMedia = topRatingMovies,
+                    onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.TOP_RATING)) },
+                    onMediaClick = { mediaUiState ->
+                        navController.navigate(Destinations.MovieDetailsScreen(mediaUiState.id.toInt()))
+                    },
+                    headerModifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
         }
 
 
         item(span = { GridItemSpan(2) }) {
-            CustomHorizontalCard(
+            ShimmerHorizontalCard(
+                isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.now_playing),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = nowPlayingMovies,
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.NOW_PLAYING)) },
-                onMediaClick = { mediaUiState ->
-                    navController.navigate(Destinations.MovieDetailsScreen(mediaUiState.id.toInt()))
-                },
-                headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
-            )
+                headerModifier = Modifier.padding(horizontal = 16.dp),
+                itemCount = 5
+            ){
+                CustomHorizontalCard(
+                    primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.now_playing),
+                    secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                    endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
+                    listOfMedia = nowPlayingMovies,
+                    onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.NOW_PLAYING)) },
+                    onMediaClick = { mediaUiState ->
+                        navController.navigate(Destinations.MovieDetailsScreen(mediaUiState.id.toInt()))
+                    },
+                    headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
+                )
+            }
         }
 
 
         item(span = { GridItemSpan(2) }) {
-            CustomHorizontalCard(
+            ShimmerHorizontalCard(
+                isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.upcoming),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
-                listOfMedia = upComingMovies,
                 onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.UPCOMING)) },
-                onMediaClick = { mediaUiState ->
-                    navController.navigate(Destinations.MovieDetailsScreen(mediaUiState.id.toInt()))
-                },
-                headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
-            )
+                headerModifier = Modifier.padding(horizontal = 16.dp),
+                itemCount = 5
+            ){
+                CustomHorizontalCard(
+                    primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.upcoming),
+                    secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
+                    endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
+                    listOfMedia = upComingMovies,
+                    onSeeAllClick = { navController.navigate(Destinations.SeeAllMoviesScreen(type = SeeAllMoviesType.UPCOMING)) },
+                    onMediaClick = { mediaUiState ->
+                        navController.navigate(Destinations.MovieDetailsScreen(mediaUiState.id.toInt()))
+                    },
+                    headerModifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 20.dp)
+                )
+            }
         }
 
         item(span = { GridItemSpan(2) }) {

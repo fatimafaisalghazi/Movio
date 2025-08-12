@@ -1,5 +1,7 @@
 package com.madrid.presentation.component
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
+import com.madrid.designSystem.component.ShimmerItem
 import com.madrid.designSystem.theme.Theme
 import com.madrid.detectImageContent.FilteredImage
 import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
@@ -39,6 +42,7 @@ fun MovioPager(
     medias: List<MediaUiState>,
     modifier: Modifier = Modifier,
     onClickItem: (Int) -> Unit = {},
+    isLoading: Boolean = true,
 ) {
     if(medias.isNotEmpty()){
         val pagerState = rememberPagerState(
@@ -53,57 +57,66 @@ fun MovioPager(
                 .shadow(elevation = 8.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            FilteredImage(
-                imageUrl = medias[pagerState.currentPage].imageUrl,
-                contentDescription = "null",
-                modifier = Modifier
-                    .matchParentSize()
-                    .blur(radius = 16.dp, edgeTreatment = Unbounded),
-                contentScale = ContentScale.Crop
-            )
+            AnimatedVisibility(isLoading) {
+                FilteredImage(
+                    imageUrl = medias[pagerState.currentPage].imageUrl,
+                    contentDescription = "null",
+                    modifier = Modifier
+                        .matchParentSize()
+                        .blur(radius = 16.dp, edgeTreatment = Unbounded),
+                    contentScale = ContentScale.Crop
+                )
+            }
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HorizontalPager(
-                    modifier = Modifier.fillMaxWidth(),
-                    pageSpacing = (-240).dp,
-                    state = pagerState,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) { page ->
-                    val pageOffset =
-                        ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
 
-                    val absOffset = pageOffset.absoluteValue
+                ShimmerItem(isLoading) {
+                    HorizontalPager(
+                        modifier = Modifier.fillMaxWidth(),
+                        pageSpacing = (-240).dp,
+                        state = pagerState,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) { page ->
+                        val pageOffset =
+                            ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
 
-                    val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
-                    val rotation =
-                        lerp(20f, 0f, 1f - absOffset.coerceIn(0f, 1f)) * if (pageOffset < 0) 1f else -1f
-                    val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                        val absOffset = pageOffset.absoluteValue
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        MovieHomeCard(
+                        val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                        val rotation =
+                            lerp(20f, 0f, 1f - absOffset.coerceIn(0f, 1f)) * if (pageOffset < 0) 1f else -1f
+                        val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+
+                        Box(
                             modifier = Modifier
-                                .graphicsLayer {
-                                    scaleX = scale
-                                    scaleY = scale
-                                    rotationZ = rotation
-                                    alpha = alphaa
-                                    cameraDistance = 12 * density
-                                }
-                                .zIndex(1f - absOffset)
-                                .clip(RoundedCornerShape(8.dp))
-                                .size(width = 200.dp, height = 260.dp),
-                            movieId = medias[page].imageUrl,
-                            name = medias[page].title,
-                            genres = medias[page].category.map { it.name },
-                            onClick = { onClickItem(medias[page].id.toInt()) },
-                        )
+                                .fillMaxWidth()
+                                .then(
+                                    if (pagerState.currentPage == page) Modifier.zIndex(1f) else Modifier
+                                ),
+                            contentAlignment = Alignment.Center
+                        ){
+                            Log.d("in Pager","loading state: $isLoading")
+                            MovieHomeCard(
+                                modifier = Modifier
+                                    .graphicsLayer {
+                                        scaleX = scale
+                                        scaleY = scale
+                                        rotationZ = rotation
+                                        alpha = alphaa
+                                        cameraDistance = 12 * density
+                                    }
+                                    .zIndex(1f - absOffset)
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .size(width = 200.dp, height = 260.dp),
+                                movieId = medias[page].imageUrl,
+                                name = medias[page].title,
+                                genres = medias[page].category.map { it.name },
+                                onClick = { onClickItem(medias[page].id.toInt()) },
+                            )
+                        }
                     }
                 }
 
