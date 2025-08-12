@@ -54,7 +54,7 @@ fun MoviePosterDetailScreen(
             } else {
                 Box(
                     modifier = Modifier
-                        .padding(top = 88.dp, bottom = 24.dp , start = 80.dp, end = 80.dp)
+                        .padding(top = 88.dp, bottom = 24.dp , start = 90.dp, end = 80.dp)
                         .size(width = 200.dp, height = 260.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(Color.Black.copy(alpha = 0.7f)),
