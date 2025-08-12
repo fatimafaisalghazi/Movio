@@ -57,16 +57,14 @@ fun MovioPager(
                 .shadow(elevation = 8.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            AnimatedVisibility(isLoading) {
-                FilteredImage(
-                    imageUrl = medias[pagerState.currentPage].imageUrl,
-                    contentDescription = "null",
-                    modifier = Modifier
-                        .matchParentSize()
-                        .blur(radius = 16.dp, edgeTreatment = Unbounded),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            FilteredImage(
+                imageUrl = medias[pagerState.currentPage].imageUrl,
+                contentDescription = "null",
+                modifier = Modifier
+                    .matchParentSize()
+                    .blur(radius = 16.dp, edgeTreatment = Unbounded),
+                contentScale = ContentScale.Crop
+            )
 
             Column(
                 modifier = Modifier.fillMaxWidth(),

@@ -50,14 +50,24 @@ fun ShimmerItem(
     contentAfterLoading: @Composable () -> Unit,
 ) {
 
-    if(isLoading){
-        Column(modifier = modifier.padding(top = 100.dp),horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(modifier = Modifier
-                .size(width = 200.dp, height = 260.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .shimmerEffect())
+    if (isLoading) {
+        Column(
+            modifier = modifier.padding(top = 100.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(width = 200.dp, height = 260.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .shimmerEffect()
+            ) {
+                Box(modifier = Modifier.padding(top = 207.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                Box(modifier = Modifier.padding(top = 232.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                Box(modifier = Modifier.padding(top = 232.dp, start = 59.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                Box(modifier = Modifier.padding(top = 232.dp, start = 112.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+            }
         }
-    }else{
+    } else {
         var showContent by remember { mutableStateOf(false) }
 
         LaunchedEffect(Unit) {
@@ -65,15 +75,25 @@ fun ShimmerItem(
             showContent = true
         }
 
-        if(showContent.not()){
-            Column(modifier = modifier.padding(top = 100.dp),horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(modifier = Modifier
-                    .size(width = 200.dp, height = 260.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .shimmerEffect())
+        if (showContent.not()) {
+            Column(
+                modifier = modifier.padding(top = 100.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(width = 200.dp, height = 260.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .shimmerEffect()
+                ){
+                    Box(modifier = Modifier.padding(top = 207.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                    Box(modifier = Modifier.padding(top = 232.dp, start = 8.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                    Box(modifier = Modifier.padding(top = 232.dp, start = 59.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                    Box(modifier = Modifier.padding(top = 232.dp, start = 112.dp).clip(RoundedCornerShape(24.dp)).background(Color(0xFF101128)).width(44.dp).height(20.dp))
+                }
             }
         }
-        if(showContent)
+        if (showContent)
             contentAfterLoading()
     }
 
@@ -120,17 +140,9 @@ fun ShimmerHorizontalCard(
                         Spacer(modifier = Modifier.height(8.dp))
                         Box(
                             modifier = Modifier
-                                .width(100.dp)
-                                .height(12.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .shimmerEffect()
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Box(
-                            modifier = Modifier
-                                .width(60.dp)
-                                .height(10.dp)
-                                .clip(RoundedCornerShape(4.dp))
+                                .width(112.dp)
+                                .height(15.dp)
+                                .clip(RoundedCornerShape(24.dp))
                                 .shimmerEffect()
                         )
                     }
@@ -143,7 +155,7 @@ fun ShimmerHorizontalCard(
                 delay(2000L)
                 showContent = true
             }
-            if(!showContent){
+            if (!showContent) {
                 CustomTextTitle(
                     modifier = headerModifier.padding(bottom = 12.dp),
                     primaryText = primaryTextForCustomTextTitle,
@@ -169,17 +181,9 @@ fun ShimmerHorizontalCard(
                             Spacer(modifier = Modifier.height(8.dp))
                             Box(
                                 modifier = Modifier
-                                    .width(100.dp)
-                                    .height(12.dp)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .shimmerEffect()
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Box(
-                                modifier = Modifier
-                                    .width(60.dp)
-                                    .height(10.dp)
-                                    .clip(RoundedCornerShape(4.dp))
+                                    .width(112.dp)
+                                    .height(15.dp)
+                                    .clip(RoundedCornerShape(24.dp))
                                     .shimmerEffect()
                             )
                         }
@@ -204,13 +208,14 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     )
 
     background(
-        brush = Brush.linearGradient(colors = listOf(
-            Color(0xFFB8B5B5),
-            Color(0xFF8F8B8B),
-            Color(0xFFB8B5B5),
-        ),
-            start = Offset(startOffsetX,0f),
-            end = Offset(startOffsetX + size.width.toFloat(),size.height.toFloat())
+        brush = Brush.linearGradient(
+            colors = listOf(
+                Color(0xFF2A2445),
+                Color(0xFF3D3660),
+                Color(0xFF2A2445),
+            ),
+            start = Offset(startOffsetX, 0f),
+            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
         )
     )
         .onGloballyPositioned {
