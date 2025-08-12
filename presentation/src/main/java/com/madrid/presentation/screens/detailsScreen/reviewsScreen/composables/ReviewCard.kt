@@ -2,7 +2,6 @@ package com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
@@ -117,18 +115,6 @@ fun ReviewCard(
             maxLines = maxLines,
             modifier = Modifier.fillMaxWidth()
         )
-
-        if (showReadMore) {
-            Spacer(modifier = Modifier.height(4.dp))
-            MovioText(
-                text = if (isExpanded) stringResource(R.string.read_less) else stringResource(R.string.read_more),
-                textStyle = Theme.textStyle.label.mediumMedium12,
-                color = Theme.color.brand.onPrimaryContainer,
-                modifier = Modifier
-                    .clickable { isExpanded = !isExpanded }
-                    .padding(top = 4.dp)
-            )
-        }
     }
 }
 
