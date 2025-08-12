@@ -1,14 +1,18 @@
 package com.madrid.presentation.viewModel.homeViewModel
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.flatMap
-import com.madrid.domain.entity.User
 import com.madrid.domain.usecase.authentication.GetCurrentUserDetailsUseCase
 import com.madrid.domain.usecase.movie.GetMovieGenresUseCase
 import com.madrid.domain.usecase.movie.GetMoviesByGenreIdUseCase
+import com.madrid.domain.usecase.movie.GetMoviesWithTrailers
 import com.madrid.domain.usecase.movie.GetNowPlayingMovieUseCase
 import com.madrid.domain.usecase.movie.GetTopRatedMoviesUseCase
 import com.madrid.domain.usecase.movie.GetTrendingMoviesUseCase
@@ -19,6 +23,7 @@ import com.madrid.domain.usecase.series.GetOnAirSeriesUseCase
 import com.madrid.domain.usecase.series.GetRecommendedSeriesUseCase
 import com.madrid.domain.usecase.series.GetSeriesByGenreIdUseCase
 import com.madrid.domain.usecase.series.GetSeriesGenresUseCase
+import com.madrid.domain.usecase.series.GetSeriesWithTrailersUseCase
 import com.madrid.domain.usecase.series.GetTopRatedSeriesUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.MediaType
@@ -42,13 +47,17 @@ class HomeViewModel @Inject constructor(
     private val getAiringTodaySeriesUseCase: GetAiringTodaySeriesUseCase,
     private val getOnAirSeriesUseCase: GetOnAirSeriesUseCase,
     private val getRecommendedSeriesUseCase: GetRecommendedSeriesUseCase,
-    private val getCurrentUserDetailsUseCase: GetCurrentUserDetailsUseCase
+    private val getCurrentUserDetailsUseCase: GetCurrentUserDetailsUseCase,
+    private val getMoviesWithTrailers: GetMoviesWithTrailers,
+    private val getSeriesWithTrailers: GetSeriesWithTrailersUseCase,
 ) : BaseViewModel<HomeScreenState, HomeScreenEffect>(
     HomeScreenState()
 ), HomeInteractionListener {
     init {
         loadGenres()
         loadFileImage()
+        loadMoviesLayoutData()
+        loadSeriesLayoutData()
     }
 
     private fun loadFileImage() {
@@ -187,7 +196,8 @@ class HomeViewModel @Inject constructor(
         tryToExecute(
             function = {
                 startLoading()
-                getTrendingMoviesUseCase(1)
+                val trendingMovies = getTrendingMoviesUseCase(1)
+                getMoviesWithTrailers(trendingMovies)
             },
             onSuccess = { movies ->
                 updateState { state ->
@@ -203,6 +213,14 @@ class HomeViewModel @Inject constructor(
             },
             onError = { onError() }
         )
+    }
+
+    override fun onClickPlayButton(mediaIndex: Int, mediaType: MediaType) {
+        val key =
+            if (mediaType == MediaType.MOVIE) state.value.movieTabUiState.trending.media[mediaIndex].trailerKey
+            else state.value.tvShowTabUiState.trending.media[mediaIndex].trailerKey
+        emitNewEffect(HomeScreenEffect.GoToYoutube(key))
+
     }
 
     private fun loadTopRatingMoviesSection() {
@@ -297,7 +315,8 @@ class HomeViewModel @Inject constructor(
         tryToExecute(
             function = {
                 startLoading()
-                getRecommendedSeriesUseCase(1)
+                val series = getRecommendedSeriesUseCase(1)
+                getSeriesWithTrailers(series)
             },
             onSuccess = { allSeries ->
                 updateState { state ->

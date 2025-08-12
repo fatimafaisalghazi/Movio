@@ -43,7 +43,8 @@ fun MovioPager(
     modifier: Modifier = Modifier,
     onClickItem: (Int) -> Unit = {},
     isLoading: Boolean = true,
-) {
+    onClickMediaButton: (Int) -> Unit = {},
+    ) {
     if(medias.isNotEmpty()){
         val pagerState = rememberPagerState(
             initialPage = medias.size / 2,
@@ -83,38 +84,40 @@ fun MovioPager(
 
                         val absOffset = pageOffset.absoluteValue
 
-                        val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
-                        val rotation =
-                            lerp(20f, 0f, 1f - absOffset.coerceIn(0f, 1f)) * if (pageOffset < 0) 1f else -1f
-                        val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                    val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                    val rotation =
+                        lerp(20f, 0f, 1f - absOffset.coerceIn(0f, 1f)) * if (pageOffset < 0) 1f else -1f
+                    val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                    val zIndex = if (page == pagerState.currentPage) {
+                        medias.size.toFloat()
+                    } else {
+                        medias.size - absOffset
+                    }
 
-                        Box(
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (pagerState.currentPage == page) Modifier.zIndex(1f) else Modifier
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        MovieHomeCard(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .then(
-                                    if (pagerState.currentPage == page) Modifier.zIndex(1f) else Modifier
-                                ),
-                            contentAlignment = Alignment.Center
-                        ){
-                            Log.d("in Pager","loading state: $isLoading")
-                            MovieHomeCard(
-                                modifier = Modifier
-                                    .graphicsLayer {
-                                        scaleX = scale
-                                        scaleY = scale
-                                        rotationZ = rotation
-                                        alpha = alphaa
-                                        cameraDistance = 12 * density
-                                    }
-                                    .zIndex(1f - absOffset)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .size(width = 200.dp, height = 260.dp),
-                                movieId = medias[page].imageUrl,
-                                name = medias[page].title,
-                                genres = medias[page].category.map { it.name },
-                                onClick = { onClickItem(medias[page].id.toInt()) },
-                            )
-                        }
+                                .graphicsLayer {
+                                    scaleX = scale
+                                    scaleY = scale
+                                    rotationZ = rotation
+                                    alpha = alphaa
+                                    cameraDistance = 12 * density
+                                }
+                                .clip(RoundedCornerShape(8.dp))
+                                .size(width = 200.dp, height = 260.dp),
+                            movieId = medias[page].imageUrl,
+                            name = medias[page].title,
+                            genres = medias[page].category.map { it.name },
+                            onClick = { onClickMediaButton(page) },
+                        )
                     }
                 }
 

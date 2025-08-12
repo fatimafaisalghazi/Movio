@@ -3,6 +3,7 @@ package com.madrid.presentation.screens.homeScreen.layout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,6 +47,7 @@ fun TvShowsLayout(
     recommendedSeries: List<MediaUiState>,
     onScroll: (Boolean) -> Unit ={},
     isLoading: Boolean = true,
+    onClickMediaButton: (Int) -> Unit = {},
     ) {
     val navController = LocalNavController.current
     val lazyGridState = rememberLazyGridState()
@@ -67,17 +69,18 @@ fun TvShowsLayout(
 
     LazyVerticalGrid(
         state = lazyGridState,
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(minSize = 158.dp),
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             MovioPager(
                 medias = trendingSeries.take(7),
                 onClickItem = { id -> navController.navigate(Destinations.SeriesDetailsScreen(id,1)) },
+                onClickMediaButton = onClickMediaButton,
                 isLoading = isLoading
             )
             Box(
@@ -92,7 +95,7 @@ fun TvShowsLayout(
                     )
             )
         }
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             ShimmerHorizontalCard(
                 isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
@@ -133,7 +136,7 @@ fun TvShowsLayout(
             }
         }
 
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             ShimmerHorizontalCard(
                 isLoading = isLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.airing_today),
@@ -174,7 +177,7 @@ fun TvShowsLayout(
             }
         }
 
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
 
             ShimmerHorizontalCard(
                 isLoading = isLoading,
@@ -216,7 +219,7 @@ fun TvShowsLayout(
             }
         }
 
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             CustomTextTitle(
                 primaryText = stringResource(com.madrid.presentation.R.string.more_recommended),
                 secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
@@ -232,14 +235,26 @@ fun TvShowsLayout(
             )
         }
 
+        item(span = { GridItemSpan(maxLineSpan) }){
+            Column(Modifier.padding(horizontal = 16.dp)) {
+            }
+        }
         itemsIndexed(recommendedSeries) { index, media ->
-            var endPaddingValue = 0
-            var startPaddingValue = 0
+            var startPadding = 0
+            var endPadding = 0
+            if(index == 0){
+                startPadding = 16
+                endPadding = 6
+            }
+            else if (recommendedSeries.lastIndex == index)
+                endPadding = 16
+            else{
+                startPadding = 6
+                endPadding = 6
+            }
 
-            if (index % 2 == 0)
-                startPaddingValue = 16
-            else
-                endPaddingValue = 16
+
+
             MovioVerticalCard(
                 description = media.title,
                 movieImage = media.imageUrl,
@@ -253,8 +268,9 @@ fun TvShowsLayout(
                         )
                     )
                 },
-                modifier = Modifier.padding(start = startPaddingValue.dp, end = endPaddingValue.dp)
+                modifier = Modifier.padding(start = 6.dp, end = 6.dp)
             )
         }
+
     }
 }
