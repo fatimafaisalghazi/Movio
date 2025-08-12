@@ -106,6 +106,7 @@ interface RemoteDataSource {
     suspend fun getUserRatingForSeries(sessionId: String): RatingSeriesResponse
 
     // region addToFavorite
-    suspend fun addToFavorite(sessionId: String, request: AddToFavoriteRequest)
+    suspend fun setMovieFavoriteStatus(movieId:Int, sessionId: String, isFavorite: Boolean)
+    suspend fun setSeriesFavoriteStatus(seriesId:Int, sessionId: String, isFavorite: Boolean)
     // endregion
 }

@@ -1,5 +1,6 @@
 package com.madrid.data.dataSource.remote
 
+import android.util.Log
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -13,9 +14,9 @@ import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
 import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
-import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
-import com.madrid.data.dataSource.remote.dto.list.RemoveMovieDto
+import com.madrid.data.dataSource.remote.dto.list.ListDto
+import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieResult
@@ -213,7 +214,9 @@ class RemoteDataSourceImpl @Inject constructor(
         genreId: Int?,
         sortBy: String
     ): SearchSeriesResponse {
-        return api.getSeriesByGenreId(page, genreId, sortBy)
+        val x  = api.getSeriesByGenreId(page, genreId, sortBy)
+        Log.d("TAG getSeriesByGenreId in data ", "getSeriesByGenreId: $x")
+        return x
     }
 
     override suspend fun getCustomLists(sessionId: String): List<ListDto> {
@@ -325,10 +328,28 @@ class RemoteDataSourceImpl @Inject constructor(
 
     }
 
-    override suspend fun addToFavorite(
-        sessionId: String,
-        request: AddToFavoriteRequest
-    ) {
+    override suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean) {
+        val request = AddToFavoriteRequest(
+            mediaType = "movie",
+            mediaId = movieId,
+            favorite = isFavorite
+        )
+
+        val accountId = api.getAccountDetails(sessionId).id
+        api.addToFavorite(
+            accountId = accountId,
+            sessionId = sessionId,
+            body = request
+        )
+    }
+
+    override suspend fun setSeriesFavoriteStatus(seriesId: Int, sessionId: String, isFavorite: Boolean) {
+        val request = AddToFavoriteRequest(
+            mediaType = "tv",
+            mediaId = seriesId,
+            favorite = isFavorite
+        )
+
         val accountId = api.getAccountDetails(sessionId).id
         api.addToFavorite(
             accountId = accountId,

@@ -33,6 +33,7 @@ interface MovieRepository {
     suspend fun addMovieToHistory(movieId: Int)
     suspend fun getAllMoviesInHistory(): List<Movie>
     suspend fun getFavoriteMovies(sessionId: String): List<Movie>
+    suspend fun setMovieFavoriteStatus(movieId:Int, sessionId: String, isFavorite: Boolean)
 
     suspend fun createMovieList(
         sessionId: String,
@@ -42,6 +43,5 @@ interface MovieRepository {
     ): ListOperationStatus
 
     suspend fun addMovieToList(listId: Int, sessionId: String, mediaId: Int): ListOperationStatus
-    suspend fun addMovieToFavorite(mediaId: Int, sessionId: String)
     suspend fun removeMovieFromList(listId: Int, mediaId: Int)
 }
