@@ -1,12 +1,14 @@
 package com.madrid.data.repositories.remote
 
-import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AccountDetailsResponse
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
+import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
+import com.madrid.data.dataSource.remote.dto.list.MovieListBody
 import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
@@ -79,6 +81,8 @@ interface RemoteDataSource {
     // endregion
 
     // region Lists
+    suspend fun createMovieList(sessionId: String, movieListBody: MovieListBody): CreateListResponse
+    suspend fun  addMovieToList(listId: Int, movieId: Int , sessionId: String): ListOperationResponse
     suspend fun getCustomLists(sessionId: String): List<ListDto>
     suspend fun getCustomListDetails(listId: Int,sessionId: String): ListsDetailsResponse
     // endregion
@@ -100,6 +104,7 @@ interface RemoteDataSource {
     suspend fun getUserRatingForSeries(sessionId: String):RatingSeriesResponse
 
     // region addToFavorite
-    suspend fun addToFavorite(sessionId: String, request: AddToFavoriteRequest)
+    suspend fun setMovieFavoriteStatus(movieId:Int, sessionId: String, isFavorite: Boolean)
+    suspend fun setSeriesFavoriteStatus(seriesId:Int, sessionId: String, isFavorite: Boolean)
     // endregion
 }

@@ -1,5 +1,6 @@
 package com.madrid.data.dataSource.remote
 
+import android.util.Log
 import com.madrid.data.dataSource.remote.dto.artist.ArtistDetailsResponse
 import com.madrid.data.dataSource.remote.dto.artist.KnownForMoviesNetwork
 import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
@@ -9,8 +10,12 @@ import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
+import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListDto
+import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
+import com.madrid.data.dataSource.remote.dto.list.MovieListBody
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieResult
@@ -18,13 +23,13 @@ import com.madrid.data.dataSource.remote.dto.movie.MovieReviewResponse
 import com.madrid.data.dataSource.remote.dto.movie.NowPlayingMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SearchMovieResponse
 import com.madrid.data.dataSource.remote.dto.movie.SimilarMoviesResponse
-import com.madrid.data.dataSource.remote.dto.rating.RateRequest
-import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.movie.UpcomingMoviesResponse
 import com.madrid.data.dataSource.remote.dto.rate.RatingMovieResponse
 import com.madrid.data.dataSource.remote.dto.rate.RatingSeriesResponse
+import com.madrid.data.dataSource.remote.dto.rating.RateRequest
 import com.madrid.data.dataSource.remote.dto.series.AiringTodayTvShowsResponse
 import com.madrid.data.dataSource.remote.dto.series.OnAirTvShowsResponse
+import com.madrid.data.dataSource.remote.dto.series.RecommendedSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SearchSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.SeasonResponse
 import com.madrid.data.dataSource.remote.dto.series.SeriesCreditResponse
@@ -35,13 +40,13 @@ import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
 import com.madrid.data.repositories.datasource.UserPreferences
 import com.madrid.data.repositories.remote.RemoteDataSource
-import kotlinx.coroutines.flow.first
 import com.madrid.domain.exceptions.AccountLockedException
 import com.madrid.domain.exceptions.AuthorizationException
 import com.madrid.domain.exceptions.InvalidCredentialsException
 import com.madrid.domain.exceptions.NetworkException
 import com.madrid.domain.exceptions.SessionExpiredException
 import com.madrid.domain.exceptions.UnknownException
+import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
@@ -50,7 +55,7 @@ import javax.inject.Inject
 
 class RemoteDataSourceImpl @Inject constructor(
     private val api: MovioApi,
-    private val userPreferences: UserPreferences
+    private val userPreferences: UserPreferences,
 ) : RemoteDataSource {
     //  region Movies
     override suspend fun searchMoviesByQuery(name: String, page: Int): SearchMovieResponse {
@@ -208,16 +213,21 @@ class RemoteDataSourceImpl @Inject constructor(
         genreId: Int?,
         sortBy: String
     ): SearchSeriesResponse {
-        return api.getSeriesByGenreId(page, genreId, sortBy)
+        val x  = api.getSeriesByGenreId(page, genreId, sortBy)
+        Log.d("TAG getSeriesByGenreId in data ", "getSeriesByGenreId: $x")
+        return x
     }
 
     override suspend fun getCustomLists(sessionId: String): List<ListDto> {
         return api.getCustomLists(sessionId).results
     }
 
-    override suspend fun getCustomListDetails(listId: Int , sessionId: String): ListsDetailsResponse {
+    override suspend fun getCustomListDetails(
+        listId: Int,
+        sessionId: String
+    ): ListsDetailsResponse {
 
-        return  api.getCustomListDetails(listId , sessionId)
+        return api.getCustomListDetails(listId, sessionId)
 
     }
 
@@ -301,10 +311,28 @@ class RemoteDataSourceImpl @Inject constructor(
 
     }
 
-    override suspend fun addToFavorite(
-        sessionId: String,
-        request: AddToFavoriteRequest
-    ) {
+    override suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean) {
+        val request = AddToFavoriteRequest(
+            mediaType = "movie",
+            mediaId = movieId,
+            favorite = isFavorite
+        )
+
+        val accountId = api.getAccountDetails(sessionId).id
+        api.addToFavorite(
+            accountId = accountId,
+            sessionId = sessionId,
+            body = request
+        )
+    }
+
+    override suspend fun setSeriesFavoriteStatus(seriesId: Int, sessionId: String, isFavorite: Boolean) {
+        val request = AddToFavoriteRequest(
+            mediaType = "tv",
+            mediaId = seriesId,
+            favorite = isFavorite
+        )
+
         val accountId = api.getAccountDetails(sessionId).id
         api.addToFavorite(
             accountId = accountId,
@@ -328,6 +356,31 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getCurrentUserDetails(sessionId: String): AccountDetailsResponse {
         return api.getAccountDetails(sessionId)
+    }
+
+    override suspend fun createMovieList(
+        sessionId: String,
+        movieListBody: MovieListBody
+    ): CreateListResponse {
+        return api.createMovieList(sessionId, movieListBody)
+    }
+
+    override suspend fun addMovieToList(
+        listId: Int,
+        movieId: Int,
+        sessionId: String
+    ): ListOperationResponse {
+        val request = AddToListRequest(
+            media_id = movieId,
+            media_type = "movie"
+        )
+
+        // Return the actual API response, not a hardcoded one
+        return api.addMovieToList(
+            listId = listId,
+            sessionId = sessionId,
+            request = request
+        )
     }
 
     override suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse {
