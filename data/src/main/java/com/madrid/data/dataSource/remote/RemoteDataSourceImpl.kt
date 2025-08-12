@@ -14,9 +14,9 @@ import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
 import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
-import com.madrid.data.dataSource.remote.dto.list.MovieListBody
-import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
+import com.madrid.data.dataSource.remote.dto.list.MovieListBody
+import com.madrid.data.dataSource.remote.dto.list.RemoveMovieDto
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieResult
@@ -214,7 +214,7 @@ class RemoteDataSourceImpl @Inject constructor(
         genreId: Int?,
         sortBy: String
     ): SearchSeriesResponse {
-        val x  = api.getSeriesByGenreId(page, genreId, sortBy)
+        val x = api.getSeriesByGenreId(page, genreId, sortBy)
         Log.d("TAG getSeriesByGenreId in data ", "getSeriesByGenreId: $x")
         return x
     }
@@ -328,7 +328,11 @@ class RemoteDataSourceImpl @Inject constructor(
 
     }
 
-    override suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean) {
+    override suspend fun setMovieFavoriteStatus(
+        movieId: Int,
+        sessionId: String,
+        isFavorite: Boolean
+    ) {
         val request = AddToFavoriteRequest(
             mediaType = "movie",
             mediaId = movieId,
@@ -343,7 +347,11 @@ class RemoteDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun setSeriesFavoriteStatus(seriesId: Int, sessionId: String, isFavorite: Boolean) {
+    override suspend fun setSeriesFavoriteStatus(
+        seriesId: Int,
+        sessionId: String,
+        isFavorite: Boolean
+    ) {
         val request = AddToFavoriteRequest(
             mediaType = "tv",
             mediaId = seriesId,
