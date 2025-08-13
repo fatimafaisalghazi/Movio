@@ -93,7 +93,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                 ) {
                     CustomTextTitle(
                         modifier = Modifier
-                            .padding(top = 16.dp, bottom = 12.dp),
+                            .padding(top = 24.dp, bottom = 12.dp),
                         primaryText = stringResource(com.madrid.presentation.R.string.for_u),
                         secondaryText = stringResource(com.madrid.presentation.R.string.see_all),
                         endIcon = painterResource(R.drawable.outline_alt_arrow_left),
