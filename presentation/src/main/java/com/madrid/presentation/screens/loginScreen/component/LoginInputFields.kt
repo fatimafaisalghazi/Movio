@@ -64,23 +64,5 @@ fun LoginInputFields(
     }
 
 
-//    @Composable
-//    fun AnimatedEyeIcon(
-//        visible: Boolean,
-//        painterVisible: Painter,
-//        painterHidden: Painter,
-//        onClick: () -> Unit
-//    ) {
-//
-//        val rotation by animateFloatAsState(targetValue = if (visible) 0f else 180f)
-//
-//        Icon(
-//            painter = if (visible) painterVisible else painterHidden,
-//            contentDescription = null,
-//            modifier = Modifier
-//                .size(20.dp)
-//                .rotate(rotation)
-//                .clickable { onClick() }
-//        )
-//    }
+
 }

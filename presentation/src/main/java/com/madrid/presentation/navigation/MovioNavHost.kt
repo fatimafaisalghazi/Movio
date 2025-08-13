@@ -24,7 +24,6 @@ import com.madrid.presentation.screens.libraryScreen.LibraryScreen
 import com.madrid.presentation.screens.libraryScreen.ViewAllScreen
 import com.madrid.presentation.screens.libraryScreen.layout.WatchListDetailsScreen
 import com.madrid.presentation.screens.loginScreen.AuthenticationScreen
-//import com.madrid.presentation.screens.loginScreen.component.ForgotPassword
 import com.madrid.presentation.screens.loginScreen.component.WebViewScreen
 import com.madrid.presentation.screens.moreScreen.MoreScreen
 import com.madrid.presentation.screens.moreScreen.MyRatingScreen
