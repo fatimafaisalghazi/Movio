@@ -210,7 +210,7 @@ fun ContentSearchScreen(
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
             .statusBarsPadding(),
-        contentPadding = PaddingValues(vertical = 16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item(
@@ -227,7 +227,6 @@ fun ContentSearchScreen(
                 endIconPainter = painterResource(R.drawable.outline_add),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
                     .clickable { onSearchBarClick() },
                 onClickEndIcon = { onSearchQueryChange("") }
             )
@@ -241,7 +240,8 @@ fun ContentSearchScreen(
                 forYouMovies = forYouMovies,
                 onMovieClick = onMovieClick,
                 exploreMoreMovies = exploreMoreMovies,
-                onClickSeeAll = { onClickSeeAll() }
+                onClickSeeAll = { onClickSeeAll() },
+                parentPadding =  16.dp
             )
         }
         if (searchQuery.isNotEmpty() && showRecentSearch != 1) {
