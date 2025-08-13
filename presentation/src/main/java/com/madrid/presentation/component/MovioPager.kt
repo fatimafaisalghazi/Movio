@@ -15,6 +15,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment.Companion.Unbounded
@@ -67,51 +69,53 @@ fun MovioPager(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HorizontalPager(
-                    modifier = Modifier.fillMaxWidth(),
-                    pageSpacing = (-240).dp,
-                    state = pagerState,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) { page ->
-                    val pageOffset =
-                        ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    HorizontalPager(
+                        modifier = Modifier.fillMaxWidth(),
+                        pageSpacing = (-240).dp,
+                        state = pagerState,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) { page ->
+                        val pageOffset =
+                            ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
 
-                    val absOffset = pageOffset.absoluteValue
+                        val absOffset = pageOffset.absoluteValue
 
-                    val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
-                    val rotation =
-                        lerp(20f, 0f, 1f - absOffset.coerceIn(0f, 1f)) * if (pageOffset < 0) 1f else -1f
-                    val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
-                    val zIndex = if (page == pagerState.currentPage) {
-                        medias.size.toFloat()
-                    } else {
-                        medias.size - absOffset
-                    }
+                        val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                        val rotation =
+                            lerp(20f, 0f, 1f - absOffset.coerceIn(0f, 1f)) * if (pageOffset < 0) 1f else -1f
+                        val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                        val zIndex = if (page == pagerState.currentPage) {
+                            medias.size.toFloat()
+                        } else {
+                            medias.size - absOffset
+                        }
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .then(
-                                if (pagerState.currentPage == page) Modifier.zIndex(1f) else Modifier
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        MovieHomeCard(
+                        Box(
                             modifier = Modifier
-                                .graphicsLayer {
-                                    scaleX = scale
-                                    scaleY = scale
-                                    rotationZ = rotation
-                                    alpha = alphaa
-                                    cameraDistance = 12 * density
-                                }
-                                .clip(RoundedCornerShape(8.dp))
-                                .size(width = 200.dp, height = 260.dp),
-                            movieId = medias[page].imageUrl,
-                            name = medias[page].title,
-                            genres = medias[page].category.map { it.name },
-                            onClick = { onClickMediaButton(page) },
-                        )
+                                .fillMaxWidth()
+                                .then(
+                                    if (pagerState.currentPage == page) Modifier.zIndex(1f) else Modifier
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            MovieHomeCard(
+                                modifier = Modifier
+                                    .graphicsLayer {
+                                        scaleX = scale
+                                        scaleY = scale
+                                        rotationZ = rotation
+                                        alpha = alphaa
+                                        cameraDistance = 12 * density
+                                    }
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .size(width = 200.dp, height = 260.dp),
+                                movieId = medias[page].imageUrl,
+                                name = medias[page].title,
+                                genres = medias[page].category.map { it.name },
+                                onClick = { onClickMediaButton(page) },
+                            )
+                        }
                     }
                 }
 
