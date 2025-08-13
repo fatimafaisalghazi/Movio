@@ -46,7 +46,11 @@ fun EpisodesScreenContent(
     onClickBack: () -> Unit = {},
 ) {
     val episodes: List<EpisodeUiState> = uiState.selectedSeasonUiState.episodesUiStates
-    LazyColumn {
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .background(Theme.color.surfaces.surface)
+    ) {
         item {
             Box {
                 TopAppBar(
@@ -114,7 +118,3 @@ private fun getSeasonsNames(numberOfSeasons: Int, uiState: SeriesDetailsUiState)
     else
         (1..<numberOfSeasons + 1).map { "Season $it" }
 }
-
-
-
-
