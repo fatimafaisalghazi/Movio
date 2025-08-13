@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import com.madrid.designSystem.theme.Theme
 
 @Composable
@@ -51,7 +53,8 @@ fun BasicTextInputField(
     cursorColor: Color = Theme.color.surfaces.onSurface,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    letterSpacing: Int = 0
 ) {
     val isFocused by interactionSource.collectIsFocusedAsState()
     val focusRequester = remember { FocusRequester() }
@@ -77,7 +80,8 @@ fun BasicTextInputField(
             color = if (isFocused || value.isNotEmpty())
                 Theme.color.surfaces.onSurface
             else
-                Theme.color.surfaces.onSurfaceContainer
+                Theme.color.surfaces.onSurfaceContainer,
+            letterSpacing = letterSpacing.sp
         ),
         interactionSource = interactionSource,
         singleLine = true,

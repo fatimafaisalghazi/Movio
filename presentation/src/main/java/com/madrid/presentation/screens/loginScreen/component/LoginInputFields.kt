@@ -60,7 +60,10 @@ fun LoginInputFields(
                             state.errorMessage.contains("Invalid")),
             errorBorderBrush = Theme.color.gradients.errorBorderGradient,
 
+            letterSpacing = if (state.showPassword) 0 else 8
+
         )
+
     }
 
 
