@@ -25,7 +25,7 @@ import com.madrid.detectimagecontent.R
 
 @Composable
 fun FilteredImage(
-    imageUrl: String? = R.drawable.place_holder.toString(),
+    imageUrl: String,
     contentDescription: String?,
     modifier: Modifier = Modifier,
     alignment: Alignment = Alignment.Center,
@@ -39,7 +39,7 @@ fun FilteredImage(
     val getImage = remember(context) { GetImageBitmap(context) }
     val detection = remember(context) { SensitiveContentDetection(context) }
 
-    if (imageUrl?.isNotBlank() == true) {
+    if (imageUrl.isNotBlank()) {
         LaunchedEffect(imageUrl) {
             try {
                 image = getImage.getImageBitmapFromUrl(imageUrl)
