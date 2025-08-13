@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioText
@@ -20,7 +21,8 @@ fun ActorDetailsHeader(
     actorRole: String,
     dateOfBirth: String,
     location: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    alpha: Float = 1f,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
@@ -39,7 +41,7 @@ fun ActorDetailsHeader(
         )
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(vertical = 4.dp)
+            modifier = Modifier.padding(vertical = 4.dp).alpha(alpha)
         ) {
             DetailsChips(
                 icon = painterResource(com.madrid.designSystem.R.drawable.outline_calendar),

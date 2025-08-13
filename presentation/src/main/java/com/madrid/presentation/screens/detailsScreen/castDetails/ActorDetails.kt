@@ -4,10 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,7 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -70,16 +68,15 @@ fun ActorDetails(
                 contentAlignment = Alignment.Center
             ) {
                 EmptySearchLayout(
-                    title = stringResource(R.string.internet_is_not_available),
+                    title = stringResource(R.string.empty_no_results_title),
                     description =
-                        stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                    image = R.drawable.img_no_internet
+                        stringResource(R.string.no_results_found),
+                    image = R.drawable.img_no_sesrch_found
                 )
             }
         }
     }
 }
-
 
 
 @Composable
@@ -103,22 +100,6 @@ fun ActorDetailsContent(
                     imageUrl = actor.actorImageUrl,
                     isActor = true
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Black.copy(alpha = 0.3f),
-                                    Color.Transparent
-                                ),
-                                startY = 0f,
-                                endY = 400f
-                            )
-                        )
-                        .align(Alignment.TopCenter)
-                )
                 TopAppBar(
                     null,
                     secondIcon = null,
@@ -135,11 +116,13 @@ fun ActorDetailsContent(
 
         item(span = { GridItemSpan(maxLineSpan) }
         ) {
+            val alpha = if (actor.dateOfBirth == "" || actor.location == "") 0f else 1f
             ActorDetailsHeader(
                 actorName = actor.actorName,
                 actorRole = actor.actorRole,
                 dateOfBirth = actor.dateOfBirth,
                 location = actor.location,
+                alpha = alpha
             )
         }
 
@@ -152,14 +135,14 @@ fun ActorDetailsContent(
                 maxLines = 5
             )
         }
-
+        val alpha = if (actor.knownFor.isEmpty()) 0f else 1f
         item(span = { GridItemSpan(maxLineSpan) }
         ) {
             MovioText(
                 text = stringResource(R.string.known_for),
                 color = Theme.color.surfaces.onSurface,
                 textStyle = Theme.textStyle.title.mediumMedium16,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).alpha(alpha)
             )
         }
         item(span = { GridItemSpan(maxLineSpan) }
