@@ -222,15 +222,11 @@ class MovieRepositoryImpl @Inject constructor(
         return remoteDataSource.addRatingMovie(movieId, rate)
     }
 
-    override suspend fun addMovieToFavorite(mediaId: Int, sessionId: String) {
-        val request = AddToFavoriteRequest(
-            mediaType = "movie",
-            mediaId = mediaId,
-            favorite = true
-        )
-        remoteDataSource.addToFavorite(
+    override suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean) {
+        remoteDataSource.setMovieFavoriteStatus(
+            movieId = movieId,
             sessionId = sessionId,
-            request = request
+            isFavorite = isFavorite
         )
     }
 
