@@ -25,7 +25,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.compose.ui.zIndex
@@ -34,6 +36,7 @@ import com.madrid.detectImageContent.FilteredImage
 import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
 import com.madrid.presentation.viewModel.shared.MediaType
 import com.madrid.presentation.viewModel.shared.MediaUiState
+import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
 
 @Composable
@@ -44,10 +47,25 @@ fun MovioPager(
     onClickMediaButton: (Int) -> Unit = {},
     ) {
     if(medias.isNotEmpty()){
+        val currentLayoutDirection = LocalLayoutDirection.current
+        val isRtl = currentLayoutDirection == LayoutDirection.Rtl
+
         val pagerState = rememberPagerState(
-            initialPage = medias.size / 2,
+            initialPage = if (isRtl) medias.size - 1 else 0,
             pageCount = { medias.size }
         )
+
+        LaunchedEffect(medias) {
+            while (true) {
+                delay(6000)
+                val nextPage = if (isRtl) {
+                    if (pagerState.currentPage == 0) medias.size - 1 else pagerState.currentPage - 1
+                } else {
+                    (pagerState.currentPage + 1) % medias.size
+                }
+                pagerState.animateScrollToPage(nextPage)
+            }
+        }
 
         Box(
             modifier = modifier
@@ -83,7 +101,11 @@ fun MovioPager(
 
                         val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
                         val rotation =
-                            lerp(20f, 0f, 1f - absOffset.coerceIn(0f, 1f)) * if (pageOffset < 0) 1f else -1f
+                            lerp(
+                                20f,
+                                0f,
+                                1f - absOffset.coerceIn(0f, 1f)
+                            ) * if (pageOffset < 0) 1f else -1f
                         val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
                         val zIndex = if (page == pagerState.currentPage) {
                             medias.size.toFloat()
