@@ -80,7 +80,9 @@ fun ReviewCard(
                     contentAlignment = Alignment.Center
                 ) {
                     MovioIcon(
-                        painter = painterResource(id = com.madrid.presentation.R.drawable.ic_no_user),
+                        painter = painterResource(id = com.madrid.detectimagecontent.R.drawable.place_holder),
+                        modifier = Modifier
+                            .clip(CircleShape),
                         contentDescription = "Default profile picture",
                     )
                 }
