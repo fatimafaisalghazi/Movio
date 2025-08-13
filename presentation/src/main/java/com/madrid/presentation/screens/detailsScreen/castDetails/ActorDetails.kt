@@ -167,14 +167,9 @@ fun ActorDetailsContent(
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier
-                    .padding(bottom = 12.dp)
+                    .padding(bottom = 16.dp)
                     .height(235.dp),
             ) {
-                item {
-                    Box(
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
                 items(actor.knownFor.size) { index ->
                     val movie = actor.knownFor[index]
                     MovioVerticalCard(
