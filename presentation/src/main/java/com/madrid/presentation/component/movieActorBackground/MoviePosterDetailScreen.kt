@@ -43,7 +43,7 @@ fun MoviePosterDetailScreen(
             if (isActor) {
                 Box(
                     modifier = Modifier
-                        .size(120.dp)
+                        .size(160.dp)
                         .align(Alignment.Center)
                         .clip(CircleShape)
                 ) {
@@ -74,6 +74,7 @@ fun MoviePosterDetailScreen(
 @Composable
 fun MoviePosterDetailScreenPreview() {
     MoviePosterDetailScreen(
+        isActor = true,
         imageUrl = "https://image.tmdb.org/t/p/original/bOGkgRGdhrBYJSLpXaxhXVstddV.jpg"
     )
 }
