@@ -36,7 +36,7 @@ import com.madrid.detectImageContent.FilteredImage
 @Composable
 fun ReviewCard(
     reviewerName: String,
-    reviewerImageUrl: String,
+    reviewerImageUrl: String?,
     rating: Float,
     date: String,
     content: String,
@@ -67,7 +67,7 @@ fun ReviewCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             FilteredImage(
-                imageUrl = reviewerImageUrl.takeIf { it.isNotBlank() },
+                imageUrl = reviewerImageUrl.takeIf { it?.isNotBlank() == true },
                 contentDescription = "$reviewerName profile picture",
                 modifier = Modifier
                     .clip(CircleShape)
@@ -104,8 +104,8 @@ fun ReviewCard(
                     modifier = Modifier.size(16.dp)
                 )
                 MovioText(
-                    text = rating.toString(),
-                    color = Theme.color.system.onWarning,
+                    text = String.format("%.1f", rating),
+                    color = Theme.color.surfaces.onSurface,
                     textStyle = Theme.textStyle.label.smallRegular12
                 )
             }
@@ -114,15 +114,14 @@ fun ReviewCard(
         Spacer(modifier = Modifier.height(12.dp))
 
         Column {
-                MovioText(
-                    text = if (isExpanded) "Read less" else "Read more",
-                    color = Theme.color.brand.primary,
-                    textStyle = Theme.textStyle.label.smallRegular12,
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .clickable { isExpanded = !isExpanded }
-                )
-
+            MovioText(
+                text = content,
+                color = Theme.color.surfaces.onSurfaceVariant,
+                textStyle = Theme.textStyle.label.smallRegular12,
+                maxLines = maxLines,
+                overflow = if (!isExpanded) TextOverflow.Ellipsis else TextOverflow.Visible,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
