@@ -37,14 +37,15 @@ fun LazyGridScope.filterSearchScreen(
     series: LazyPagingItems<SearchScreenState.SeriesUiState>,
     artist: LazyPagingItems<SearchScreenState.ArtistUiState>,
     onSeriesClick: (Int) -> Unit = {},
-    onMovieClick:(Int) -> Unit,
-    onTopResultClick:(Int) -> Unit,
-    onActorClick :(Int) -> Unit,
+    onMovieClick: (Int) -> Unit,
+    onTopResultClick: (Int) -> Unit,
+    onActorClick: (Int) -> Unit,
 ) {
     item(
         span = { GridItemSpan(maxLineSpan) }
     ) {
         HeaderSectionBar(
+            modifier = Modifier.padding(vertical = 12.dp),
             tabs = listOf(
                 stringResource(R.string.top_results),
                 stringResource(R.string.Movies),
@@ -64,7 +65,10 @@ fun LazyGridScope.filterSearchScreen(
             item(
                 span = { GridItemSpan(maxLineSpan) }
             ) {
-                SearchResultMessage(items = topRated.itemCount.toString())
+                SearchResultMessage(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    items = topRated.itemCount.toString()
+                )
             }
             item(
                 span = { GridItemSpan(maxLineSpan) }
@@ -73,7 +77,7 @@ fun LazyGridScope.filterSearchScreen(
                     columns = GridCells.Adaptive(minSize = 102.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.heightIn(min = 200.dp , max = 1000.dp)
+                    modifier = Modifier.heightIn(min = 200.dp, max = 1000.dp)
                 ) {
                     when {
                         topRated.itemCount == 0 && topRated.loadState.refresh is LoadState.Loading -> {
@@ -141,7 +145,10 @@ fun LazyGridScope.filterSearchScreen(
             item(
                 span = { GridItemSpan(maxLineSpan) }
             ) {
-                SearchResultMessage(items = movies.itemCount.toString())
+                SearchResultMessage(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    items = movies.itemCount.toString()
+                )
             }
             item(
                 span = { GridItemSpan(maxLineSpan) }
@@ -150,7 +157,7 @@ fun LazyGridScope.filterSearchScreen(
                     columns = GridCells.Adaptive(minSize = 102.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.heightIn(min = 200.dp , max = 1000.dp)
+                    modifier = Modifier.heightIn(min = 200.dp, max = 1000.dp)
                 ) {
                     when {
                         movies.itemCount == 0 && movies.loadState.refresh is LoadState.Loading -> {
@@ -219,7 +226,10 @@ fun LazyGridScope.filterSearchScreen(
             item(
                 span = { GridItemSpan(maxLineSpan) }
             ) {
-                SearchResultMessage(items = series.itemCount.toString())
+                SearchResultMessage(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    items = series.itemCount.toString()
+                )
             }
             item(
                 span = { GridItemSpan(maxLineSpan) }
@@ -228,8 +238,8 @@ fun LazyGridScope.filterSearchScreen(
                     columns = GridCells.Adaptive(minSize = 102.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.heightIn(min = 200.dp , max = 1000.dp)
-                ){
+                    modifier = Modifier.heightIn(min = 200.dp, max = 1000.dp)
+                ) {
                     when {
                         series.itemCount == 0 && series.loadState.refresh is LoadState.Loading -> {
                             items(9) {
@@ -298,7 +308,10 @@ fun LazyGridScope.filterSearchScreen(
             item(
                 span = { GridItemSpan(maxLineSpan) }
             ) {
-                SearchResultMessage(items = artist.itemCount.toString())
+                SearchResultMessage(
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    items = artist.itemCount.toString()
+                )
             }
             item(
                 span = { GridItemSpan(maxLineSpan) }
