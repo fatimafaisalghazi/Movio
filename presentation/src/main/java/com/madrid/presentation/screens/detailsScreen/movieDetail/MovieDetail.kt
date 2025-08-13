@@ -48,7 +48,7 @@ import com.madrid.presentation.component.rating.RatingBottomSheetContent
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.addtolist.ListManagementBottomSheet
-import com.madrid.presentation.screens.detailsScreen.reviewsScreen.ReviewScreen
+import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.toReviewScreenUiState
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection

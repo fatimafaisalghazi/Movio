@@ -1,4 +1,4 @@
-package com.madrid.presentation.screens.detailsScreen.reviewsScreen
+package com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.R
-import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewCard
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewsScreenUiState
 
