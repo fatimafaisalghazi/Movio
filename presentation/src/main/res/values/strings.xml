@@ -138,4 +138,6 @@
     <string name="watch_list_icon">watch list icon</string>
     <string name="confirm">Confirm</string>
     <string name="new_list_created_successfully">New list created successfully.</string>
+    <string name="nothing_here_yet">🎬 Nothing here yet!</string>
+    <string name="add_movies_and_tv_shows_to_build_your_personal_watchlist">Add movies and TV shows to build your personal watchlist. The perfect binge starts here!</string>
 </resources>

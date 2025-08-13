@@ -139,4 +139,6 @@
     <string name="watch_list_icon">ايقونه مشاهده القائمه</string>
     <string name="confirm">تأكيد</string>
     <string name="new_list_created_successfully">تم إنشاء قائمة جديدة بنجاح</string>
+    <string name="nothing_here_yet">لا يوجد شئ حاليا 🎬</string>
+    <string name="add_movies_and_tv_shows_to_build_your_personal_watchlist">أضف أفلامًا ومسلسلات تلفزيونية إلى قائمة مُشاهداتك. ابدأ متعة المشاهدة من هنا!</string>
 </resources>

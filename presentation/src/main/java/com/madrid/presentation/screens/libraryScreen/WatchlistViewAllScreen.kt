@@ -1,5 +1,6 @@
 package com.madrid.presentation.screens.libraryScreen
 
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.R
+import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.FloatingButton
 import com.madrid.designSystem.component.TopAppBar
@@ -112,11 +114,30 @@ fun WatchlistViewAllScreenContent(
         ) { LoadingContent() }
 
         AnimatedVisibility(
+            visible = state.errorMessage.isNullOrBlank().not(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            ErrorContent(
+                onClick = interactionListener::onTryAgainButtonClicked
+            )
+        }
+
+        AnimatedVisibility(
             visible = state.isLoading.not() && state.watchLists.isEmpty(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
             EmptyListContent()
+            CreateListSection(
+                onAddButtonClicked = interactionListener::onAddButtonClicked,
+                onDismissSnackBar = interactionListener::onDismissSnackBar,
+                onCreateButtonClicked = interactionListener::onCreateButtonClicked,
+                dismissCreateListBottomSheet = interactionListener::dismissCreateListBottomSheet,
+                showSnackBar = state.showSnackBar,
+                snackBarMessage = state.snackBarMessage,
+                showCreateListBottomSheet = state.showCreateListBottomSheet
+            )
         }
         AnimatedVisibility(
             visible = state.isLoading.not() && state.watchLists.isEmpty().not(),
@@ -124,38 +145,17 @@ fun WatchlistViewAllScreenContent(
             exit = fadeOut()
         ) {
             WatchListsGrid(interactionListener, state)
+            CreateListSection(
+                onAddButtonClicked = interactionListener::onAddButtonClicked,
+                onDismissSnackBar = interactionListener::onDismissSnackBar,
+                onCreateButtonClicked = interactionListener::onCreateButtonClicked,
+                dismissCreateListBottomSheet = interactionListener::dismissCreateListBottomSheet,
+                showSnackBar = state.showSnackBar,
+                snackBarMessage = state.snackBarMessage,
+                showCreateListBottomSheet = state.showCreateListBottomSheet
+            )
         }
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        FloatingButton(
-            onClick = interactionListener::onAddButtonClicked,
-            size = 60,
-            icon = painterResource(id = R.drawable.add),
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        )
-
-        SuccessNotificationRow(
-            isVisible = state.showSnackBar,
-            message = stringResource(state.snackBarMessage),
-            icon = painterResource(id = R.drawable.archive_tick),
-            onDismiss = interactionListener::onDismissSnackBar,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 16.dp, vertical = 24.dp)
-        )
-    }
-
-    CreateListBottomSheet(
-        show = state.showCreateListBottomSheet,
-        onCreateClick = interactionListener::onCreateButtonClicked,
-        onDismiss = interactionListener::dismissCreateListBottomSheet,
-    )
-
 }
 
 @Composable
@@ -175,9 +175,9 @@ private fun LoadingContent() {
             items(12) { index ->
                 Box(
                     modifier = Modifier
-                        .shimmerEffect()
                         .size(158.dp, 220.dp)
-                        .clip(shape = RoundedCornerShape(8.dp)),
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .shimmerEffect(),
                 )
             }
         }
@@ -185,10 +185,26 @@ private fun LoadingContent() {
 }
 
 @Composable
+private fun ErrorContent(onClick: () -> Unit = {}) {
+    DialogWithButtonLayout(
+        title = stringResource(presentationR.string.internet_is_not_available),
+        description = stringResource(presentationR.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+        image = R.drawable.no_internet,
+        imageSize = 150,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 32.dp)
+            .fillMaxSize(),
+        buttonText = stringResource(presentationR.string.try_again),
+        onClick = { onClick() }
+    )
+}
+
+@Composable
 private fun EmptyListContent() {
     EmptySearchLayout(
-        title = "\uD83C\uDFAC Nothing here yet!",
-        description = "Add movies and TV shows to build your personal watchlist. The perfect binge starts here!",
+        title = stringResource(presentationR.string.nothing_here_yet),
+        description = stringResource(presentationR.string.add_movies_and_tv_shows_to_build_your_personal_watchlist), //stringResource(presentationR.string.no_results_found),
         image = R.drawable.empty,
         imageSize = 180,
         modifier = Modifier.fillMaxSize()
@@ -218,6 +234,45 @@ private fun WatchListsGrid(
     }
 }
 
+@Composable
+private fun CreateListSection(
+    onAddButtonClicked: () -> Unit,
+    onDismissSnackBar: () -> Unit,
+    onCreateButtonClicked: (String) -> Unit,
+    dismissCreateListBottomSheet: () -> Unit,
+    showSnackBar: Boolean,
+    @StringRes snackBarMessage: Int,
+    showCreateListBottomSheet: Boolean
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        FloatingButton(
+            onClick = onAddButtonClicked,
+            size = 60,
+            icon = painterResource(id = R.drawable.add),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        )
+        SuccessNotificationRow(
+            isVisible = showSnackBar,
+            message = stringResource(snackBarMessage),
+            icon = painterResource(id = R.drawable.archive_tick),
+            onDismiss = onDismissSnackBar,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 16.dp, vertical = 24.dp)
+        )
+    }
+    CreateListBottomSheet(
+        show = showCreateListBottomSheet,
+        onCreateClick = onCreateButtonClicked,
+        onDismiss = dismissCreateListBottomSheet,
+    )
+}
+
 
 private fun Modifier.shimmerEffect(): Modifier = composed {
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -227,7 +282,6 @@ private fun Modifier.shimmerEffect(): Modifier = composed {
         targetValue = 2 * size.width.toFloat(),
         animationSpec = infiniteRepeatable(tween(1000)),
     )
-
     background(
         brush = Brush.linearGradient(
             colors = listOf(

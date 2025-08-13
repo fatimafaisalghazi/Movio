@@ -41,14 +41,7 @@ class WatchlistViewAllViewModel @Inject constructor(
                     )
                 }
             },
-            onError = { error ->
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = error.message.toString()
-                    )
-                }
-            }
+            onError = { error -> onError(error) }
         )
     }
 
@@ -78,28 +71,44 @@ class WatchlistViewAllViewModel @Inject constructor(
     override fun onCreateButtonClicked(name: String) {
         tryToExecute(
             function = { createMovieListUseCase(name) },
-            onSuccess = {
-                updateState {
-                    it.copy(
-                        showCreateListBottomSheet = false,
-                        showSnackBar = true,
-                        snackBarMessage = R.string.new_list_created_successfully
-                    )
-                }
-                loadWatchLists()
-            },
+            onSuccess = { onCreateSuccess() },
             onError = { error ->
                 updateState {
                     it.copy(
                         showCreateListBottomSheet = false,
-                        errorMessage = error.message.toString()
                     )
                 }
+                onError(error)
             }
         )
     }
 
+    private fun onCreateSuccess() {
+        updateState {
+            it.copy(
+                showCreateListBottomSheet = false,
+                showSnackBar = true,
+                snackBarMessage = R.string.new_list_created_successfully
+            )
+        }
+        loadWatchLists()
+    }
+
     override fun onDismissSnackBar() {
         updateState { it.copy(showSnackBar = false) }
+    }
+
+    override fun onTryAgainButtonClicked() {
+        updateState { it.copy(errorMessage = null) }
+        loadWatchLists()
+    }
+
+    private fun onError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                errorMessage = error.message.toString()
+            )
+        }
     }
 }

@@ -9,4 +9,5 @@ interface WatchListViewAllInteractionListener {
     fun dismissCreateListBottomSheet()
     fun onCreateButtonClicked(name : String)
     fun onDismissSnackBar()
+    fun onTryAgainButtonClicked()
 }
