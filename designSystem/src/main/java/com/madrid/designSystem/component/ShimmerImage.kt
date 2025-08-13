@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -110,44 +112,10 @@ fun ShimmerItem(
                 modifier = modifier.padding(top = 100.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(width = 200.dp, height = 260.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .shimmerEffect()
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 207.dp, start = 8.dp)
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(Color(0xFF101128))
-                            .width(44.dp)
-                            .height(20.dp)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 232.dp, start = 8.dp)
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(Color(0xFF101128))
-                            .width(44.dp)
-                            .height(20.dp)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 232.dp, start = 59.dp)
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(Color(0xFF101128))
-                            .width(44.dp)
-                            .height(20.dp)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 232.dp, start = 112.dp)
-                            .clip(RoundedCornerShape(24.dp))
-                            .background(Color(0xFF101128))
-                            .width(44.dp)
-                            .height(20.dp)
-                    )
+                Box(){
+                    ShimmerPagerCard(Modifier.offset(x = -150.dp,y = 30.dp).rotate(-20f).width(150.dp).height(200.dp))
+                    ShimmerPagerCard(Modifier.offset(x = 200.dp,y = 30.dp).rotate(20f).width(150.dp).height(200.dp))
+                    ShimmerPagerCard()
                 }
             }
         }
@@ -155,6 +123,49 @@ fun ShimmerItem(
             contentAfterLoading()
     }
 
+}
+
+@Composable
+fun ShimmerPagerCard(modifier: Modifier = Modifier){
+    Box(
+        modifier = modifier
+            .size(width = 200.dp, height = 260.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .shimmerEffect()
+    ) {
+        Box(
+            modifier = Modifier
+                .padding(top = 207.dp, start = 8.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(Color(0xFF101128))
+                .width(44.dp)
+                .height(20.dp)
+        )
+        Box(
+            modifier = Modifier
+                .padding(top = 232.dp, start = 8.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(Color(0xFF101128))
+                .width(44.dp)
+                .height(20.dp)
+        )
+        Box(
+            modifier = Modifier
+                .padding(top = 232.dp, start = 59.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(Color(0xFF101128))
+                .width(44.dp)
+                .height(20.dp)
+        )
+        Box(
+            modifier = Modifier
+                .padding(top = 232.dp, start = 112.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(Color(0xFF101128))
+                .width(44.dp)
+                .height(20.dp)
+        )
+    }
 }
 
 @Composable

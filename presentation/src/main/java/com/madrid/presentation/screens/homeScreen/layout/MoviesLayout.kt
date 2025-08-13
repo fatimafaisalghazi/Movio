@@ -76,7 +76,7 @@ fun MoviesLayout(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        item(span = { GridItemSpan(2) }) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
             Box() {
                 MovioPager(
                     medias = trendingMovies.take(7),
