@@ -1,7 +1,6 @@
-package com.madrid.presentation.screens.detailsScreen.reviewsScreen
+package com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,17 +14,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TopAppBar
-import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewCard
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewsScreenUiState
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewsScreenViewModel
 
@@ -61,9 +56,7 @@ fun ReviewsScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         val reviews = uiState.reviews
-        if (reviews.isEmpty()) {
-            EmptyReviewsFullScreen()
-        } else {
+        if (reviews.isNotEmpty()) {
             LazyColumn(
                 contentPadding = PaddingValues(bottom = 40.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -79,30 +72,6 @@ fun ReviewsScreenContent(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun EmptyReviewsFullScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            MovioText(
-                text = stringResource(R.string.no_reviews_available),
-                color = Theme.color.surfaces.onSurfaceVariant,
-                textStyle = Theme.textStyle.body.mediumMedium14
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            MovioText(
-                text = stringResource(R.string.no_reviews_available),
-                color = Theme.color.surfaces.onSurfaceContainer,
-                textStyle = Theme.textStyle.label.smallRegular12
-            )
         }
     }
 }

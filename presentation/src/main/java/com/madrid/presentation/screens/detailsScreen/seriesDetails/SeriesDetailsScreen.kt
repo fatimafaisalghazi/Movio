@@ -53,9 +53,7 @@ import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TextWithReadMore
-import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.ShareBottomSheetContent
-import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -68,7 +66,7 @@ import com.madrid.presentation.component.movioCards.MovioArtistsCard
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
+import com.madrid.presentation.screens.detailsScreen.reviewsScreen.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeries
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeriesSection
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
