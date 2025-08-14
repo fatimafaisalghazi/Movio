@@ -7,4 +7,5 @@ interface LibraryInteractionListener {
     fun onItemWatchListClick(watchListItem : WatchListState)
     fun onWatchListViewAllClick()
     fun onViewAllClick(type: ViewAllType)
+    fun onLoginBtnClick()
 }

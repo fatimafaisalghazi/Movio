@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.libraryViewModel
 
+import com.madrid.domain.usecase.authentication.LoginUseCase
 import com.madrid.domain.usecase.movie.GetAllMoviesInHistoryUseCase
 import com.madrid.domain.usecase.movie.GetFavoriteMoviesUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
@@ -7,6 +8,8 @@ import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.libraryViewModel.viewAll.factory.ViewAllType
 import com.madrid.presentation.viewModel.shared.toMediaUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,6 +17,7 @@ class LibraryViewModel @Inject constructor(
     private val getWatchListUseCase: GetWatchListsUseCase,
     private val getFavoriteUseCase: GetFavoriteMoviesUseCase,
     private val getHistoryUseCase: GetAllMoviesInHistoryUseCase,
+    private val isLoggedInUseCase: LoginUseCase,
 ) : BaseViewModel<LibraryScreenState, LibraryScreenEffect>(
     LibraryScreenState()
 ), LibraryInteractionListener {
@@ -22,12 +26,38 @@ class LibraryViewModel @Inject constructor(
         getWatchList()
         getFavoriteList()
         getHistoryList()
+        getIsGuest()
     }
 
     fun onRefresh() {
         getWatchList()
         getFavoriteList()
         getHistoryList()
+    }
+
+
+    override fun onLoginBtnClick() {
+        emitNewEffect(
+            LibraryScreenEffect.NavigateToLogin
+        )
+    }
+
+    fun getIsGuest() {
+        tryToCollect(
+            function = {
+                isLoggedInUseCase.isGuest()
+            },
+            onNewValue = { isGuest ->
+                updateState {
+                    it.copy(isGuest = isGuest)
+                }
+            },
+            onError = { throwable ->
+                updateState {
+                    it.copy(errorMessage = throwable.message.toString())
+                }
+            }
+        )
     }
 
     private fun getWatchList() {

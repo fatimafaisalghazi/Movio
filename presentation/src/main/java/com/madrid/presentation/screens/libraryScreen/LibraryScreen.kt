@@ -1,7 +1,9 @@
 package com.madrid.presentation.screens.libraryScreen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -14,8 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.DialogNavigator
 import com.madrid.designSystem.R
+import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.CustomHorizontalCardForWatchList
 import com.madrid.presentation.navigation.Destinations
@@ -28,6 +30,7 @@ import com.madrid.presentation.viewModel.libraryViewModel.LibraryScreenState
 import com.madrid.presentation.viewModel.libraryViewModel.LibraryViewModel
 import com.madrid.presentation.viewModel.libraryViewModel.viewAll.factory.ViewAllType
 import kotlinx.coroutines.flow.collectLatest
+import com.madrid.presentation.R as presentationR
 
 @Composable
 fun LibraryScreen(
@@ -69,6 +72,12 @@ fun LibraryScreen(
                         )
                     )
                 }
+
+                is LibraryScreenEffect.NavigateToLogin -> {
+                    navController.navigate(
+                        Destinations.AuthenticationScreen
+                    )
+                }
             }
         }
     }
@@ -85,6 +94,28 @@ fun LibraryScreen(
 
 @Composable
 private fun LibraryScreenContent(
+    state: LibraryScreenState,
+    libraryInteractionListener: LibraryInteractionListener
+) {
+    AnimatedVisibility(
+        visible = state.isGuest,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        LoginLayout(interactionListener = libraryInteractionListener)
+    }
+    
+    AnimatedVisibility(
+        visible = state.isGuest.not(),
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        LibraryColumn(state, libraryInteractionListener)
+    }
+}
+
+@Composable
+private fun LibraryColumn(
     state: LibraryScreenState,
     libraryInteractionListener: LibraryInteractionListener
 ) {
@@ -137,4 +168,22 @@ private fun LibraryScreenContent(
             )
         }
     }
+}
+
+
+@Composable
+private fun LoginLayout(
+    interactionListener: LibraryInteractionListener,
+) {
+    DialogWithButtonLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 32.dp),
+        title = stringResource(presentationR.string.unlock_your_personal_library),
+        description = stringResource(presentationR.string.access_your_watch_history_favorites_and_watchlist_all_in_one_place),
+        image = R.drawable.library_main_icon,
+        buttonText = stringResource(presentationR.string.login),
+        onClick = { interactionListener.onLoginBtnClick() },
+    )
 }

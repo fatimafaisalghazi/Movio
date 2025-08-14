@@ -10,6 +10,7 @@ data class LibraryScreenState(
     val favoriteList: List<MediaUiState> = listOf(),
     val historyList: List<MediaUiState> = listOf(),
     val refreshState: Boolean = false,
+    val isGuest: Boolean = false,
 )
 
 data class WatchListState(

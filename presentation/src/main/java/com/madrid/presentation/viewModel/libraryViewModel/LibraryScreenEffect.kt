@@ -13,4 +13,6 @@ sealed class LibraryScreenEffect {
 
     data class NavigateToViewAll(val type: ViewAllType) :
         LibraryScreenEffect()
+
+    data object NavigateToLogin : LibraryScreenEffect()
 }
