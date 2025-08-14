@@ -143,31 +143,12 @@ fun MovioPager(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        val indicatorRange =
-                            if (isRtl) (medias.size - 1) downTo 0 else 0 until medias.size
-                        repeat(medias.size) { index ->
-                            val isSelected = pagerState.currentPage == index
-                            Box(
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .size(if (isSelected) 15.dp else 5.dp, 5.dp)
-                                    .clip(if (isSelected) RoundedCornerShape(50) else CircleShape)
-                                    .background(
-                                        if (isSelected)
-                                            Theme.color.surfaces.onSurfaceAt1
-                                        else
-                                            Theme.color.surfaces.onSurfaceAt2
-                                    )
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.height(4.dp))
+                MovioPagerIndicator(
+                    pageCount = medias.size,
+                    currentPage = pagerState.currentPage,
+                    isRtl = isRtl,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
             }
         }
     }
@@ -175,6 +156,39 @@ fun MovioPager(
 
 }
 
+@Composable
+private fun MovioPagerIndicator(
+    pageCount: Int,
+    currentPage: Int,
+    isRtl: Boolean,
+    modifier: Modifier = Modifier
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+        ) {
+            val indicatorRange =
+                if (isRtl) (pageCount - 1) downTo 0 else 0 until pageCount
+            repeat(pageCount) { index ->
+                val isSelected = currentPage == index
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .size(if (isSelected) 15.dp else 5.dp, 5.dp)
+                        .clip(if (isSelected) RoundedCornerShape(50) else CircleShape)
+                        .background(
+                            if (isSelected)
+                                Theme.color.surfaces.onSurfaceAt1
+                            else
+                                Theme.color.surfaces.onSurfaceAt2
+                        )
+                )
+            }
+        }
+    }
+}
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MovioSliderPreview() {
