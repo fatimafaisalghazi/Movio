@@ -196,58 +196,6 @@ private fun LayoutContent(
             )
         }
     }
-
-
-    /*when (selectedTab) {
-        HomeTab.MOVIES -> {
-            //load
-            MoviesLayout(
-                trendingMovies = uiState.movieTabUiState.trending.media,
-                topRatingMovies = uiState.movieTabUiState.topRated.media,
-                nowPlayingMovies = uiState.movieTabUiState.nowPlaying.media,
-                upComingMovies = uiState.movieTabUiState.upcoming.media,
-                recommendedMovies = uiState.movieTabUiState.moreRecommended.media,
-                onScroll = onScroll,
-                onClickMediaButton = { mediaIndex ->
-                    onClickMediaButton(
-                        MediaType.MOVIE,
-                        mediaIndex
-                    )
-                },
-                isLoading = uiState.isLoading,
-                isSliderLoading = uiState.movieTabUiState.trending.isLoading,
-                isTopRatedLoading = uiState.movieTabUiState.topRated.isLoading,
-                isNowPlayingLoading = uiState.movieTabUiState.nowPlaying.isLoading,
-                isUpComingLoading = uiState.movieTabUiState.upcoming.isLoading,
-                isRecommendedLoading = uiState.movieTabUiState.moreRecommended.isLoading,
-            )
-        }
-
-        HomeTab.TV_SHOWS -> {
-            TvShowsLayout(
-                trendingSeries = uiState.tvShowTabUiState.trending.media,
-                topRatingSeries = uiState.tvShowTabUiState.topRated.media,
-                airingTodaySeries = uiState.tvShowTabUiState.airingToday.media,
-                onAirSeries = uiState.tvShowTabUiState.onTv.media,
-                recommendedSeries = uiState.tvShowTabUiState.moreRecommended.media,
-                onScroll = onScroll,
-                onClickMediaButton = { mediaIndex ->
-                    onClickMediaButton(
-                        MediaType.TV_SHOW,
-                        mediaIndex
-                    )
-                },
-                isLoading = uiState.isLoading,
-                isTrendingSeriesLoading = uiState.tvShowTabUiState.trending.isLoading,
-                isTopRatedSeriesLoading = uiState.tvShowTabUiState.topRated.isLoading,
-                isOnAirSeriesLoading = uiState.tvShowTabUiState.onTv.isLoading,
-                isAiringTodaySeriesLoading = uiState.tvShowTabUiState.airingToday.isLoading,
-                isRecommendedSeriesLoading = uiState.tvShowTabUiState.moreRecommended.isLoading
-            )
-        }
-
-        else -> {}
-    }*/
 }
 
 private fun openYoutubeMediaTrailer(key: String, context: Context) {
