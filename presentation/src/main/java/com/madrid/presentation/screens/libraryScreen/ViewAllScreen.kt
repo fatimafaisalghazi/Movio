@@ -127,7 +127,7 @@ fun ViewAllScreenContent(
         }
 
         AnimatedVisibility(
-            visible = state.isLoading.not() && state.items.isEmpty(),
+            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.items.isEmpty(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -138,7 +138,7 @@ fun ViewAllScreenContent(
         }
 
         AnimatedVisibility(
-            visible = state.isLoading.not() && state.items.isEmpty().not(),
+            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.items.isEmpty().not(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -208,7 +208,7 @@ private fun EmptyListContent(title: String, description: String) {
         description = description,
         image = R.drawable.empty,
         imageSize = 180,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
     )
 }
 

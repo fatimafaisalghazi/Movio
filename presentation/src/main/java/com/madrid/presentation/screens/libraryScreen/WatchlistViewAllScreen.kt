@@ -126,7 +126,7 @@ fun WatchlistViewAllScreenContent(
         }
 
         AnimatedVisibility(
-            visible = state.isLoading.not() && state.watchLists.isEmpty(),
+            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.watchLists.isEmpty(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -142,7 +142,7 @@ fun WatchlistViewAllScreenContent(
             )
         }
         AnimatedVisibility(
-            visible = state.isLoading.not() && state.watchLists.isEmpty().not(),
+            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.watchLists.isEmpty().not(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -209,7 +209,7 @@ private fun EmptyListContent() {
         description = stringResource(presentationR.string.add_movies_and_tv_shows_to_build_your_personal_watchlist), //stringResource(presentationR.string.no_results_found),
         image = R.drawable.empty,
         imageSize = 180,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
     )
 }
 
