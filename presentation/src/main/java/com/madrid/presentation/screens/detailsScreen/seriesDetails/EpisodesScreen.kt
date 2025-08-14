@@ -57,7 +57,7 @@ fun EpisodesScreenContent(
                     text = null,
                     secondIcon = null,
                     thirdIcon = null,
-                    modifier = Modifier.padding(start = 24.dp, top = 12.dp),
+                    modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
                     onFirstIconClick = { onClickBack() }
                 )
                 MoviePosterDetailScreen(
