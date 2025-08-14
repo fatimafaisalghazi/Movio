@@ -12,11 +12,28 @@ A modern Android application built with Jetpack Compose for browsing and watchin
 
 ## 🚀 Features
 
-- **Series Details**: Comprehensive information about TV series
-- **Season Management**: Browse through different seasons
-- **Episode Listings**: Detailed episode information
-- **Modern UI**: Built with Jetpack Compose and Material Design
-- **Clean Architecture**: MVVM pattern with Hilt dependency injection
+### 🎯 **Smart Movie Discovery**
+- **AI-Powered Content Detection**: Advanced image analysis to identify movies from screenshots or posters
+- **Personalized Recommendations**: Intelligent suggestion engine based on viewing history and preferences
+- **Episode Trailers**: Seamless trailer integration for TV shows and movie series
+
+### 🔍 **Enhanced Search & Browse**
+- **Real-time Search**: Lightning-fast movie and TV show search with auto-suggestions
+- **Trending Content**: Stay updated with what's popular worldwide
+
+### 📱 **Modern User Experience**
+- **Jetpack Compose UI**: Fluid, responsive interface
+- **Dark/Light Theme**: Automatic theme switching based on system preferences
+- **Offline Support**: Browse previously viewed content without internet connection
+
+### 🔐 **Robust Backend Integration**
+- **Firebase Analytics**: Comprehensive user behavior tracking
+- **Crash Reporting**: Real-time crash monitoring with Firebase Crashlytics
+
+### 🏗️ **Enterprise-Grade Architecture**
+- **Clean Architecture**: Separation of concerns with Domain-Data-Presentation layers
+- **Dependency Injection**: Hilt-powered DI for testable, maintainable code
+- **Modular Design**: Feature-based modules for scalability
 ## 🤖 AI/ML Features
 
 The app includes intelligent content detection capabilities:
@@ -30,10 +47,6 @@ The app includes intelligent content detection capabilities:
 ## 🛠️ Tech Stack
 
 - **Language**: Kotlin
-- **Android SDK**
-- **work Manager**
-- **Pagination**
-- **Firebase**: Performance, Analytics, and Crashlytics
 - **UI Framework**: Jetpack Compose
 - **Architecture**: MVVM + Clean Architecture
 - **Dependency Injection**: Hilt (Dagger)
