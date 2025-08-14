@@ -17,6 +17,7 @@ import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.list.ListsResponse
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
+import com.madrid.data.dataSource.remote.dto.list.RemoveMovieDto
 import com.madrid.data.dataSource.remote.dto.movie.ListDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
