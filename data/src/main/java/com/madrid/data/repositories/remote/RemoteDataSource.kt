@@ -87,9 +87,10 @@ interface RemoteDataSource {
 
     // region Lists
     suspend fun createMovieList(sessionId: String, movieListBody: MovieListBody): CreateListResponse
-    suspend fun  addMovieToList(listId: Int, movieId: Int , sessionId: String): ListOperationResponse
+    suspend fun addMovieToList(listId: Int, movieId: Int, sessionId: String): ListOperationResponse
     suspend fun getCustomLists(sessionId: String): List<ListDto>
-    suspend fun getCustomListDetails(listId: Int,sessionId: String): ListsDetailsResponse
+    suspend fun getCustomListDetails(listId: Int, sessionId: String): ListsDetailsResponse
+    suspend fun removeMovieFromList(listId: Int, mediaId: Int, sessionId: String)
     // endregion
 
     // region authentication
@@ -101,15 +102,15 @@ interface RemoteDataSource {
     // endregion
 
     // region add rating
-    suspend fun addRatingMovie(movieId: Int, body: Double)
-    suspend fun addRatingSeries(seriesId: Int, body: Double)
+    suspend fun addRatingMovie(movieId: Int, value: Double)
+    suspend fun addRatingSeries(seriesId: Int, value: Double)
     // endregion
 
-    suspend fun getUserRatingForMovie(sessionId: String):RatingMovieResponse
-    suspend fun getUserRatingForSeries(sessionId: String):RatingSeriesResponse
+    suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse
+    suspend fun getUserRatingForSeries(sessionId: String): RatingSeriesResponse
 
     // region addToFavorite
-    suspend fun setMovieFavoriteStatus(movieId:Int, sessionId: String, isFavorite: Boolean)
-    suspend fun setSeriesFavoriteStatus(seriesId:Int, sessionId: String, isFavorite: Boolean)
+    suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean)
+    suspend fun setSeriesFavoriteStatus(seriesId: Int, sessionId: String, isFavorite: Boolean)
     // endregion
 }

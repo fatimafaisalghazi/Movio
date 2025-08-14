@@ -17,6 +17,7 @@ import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
 import com.madrid.data.dataSource.remote.dto.list.ListsDetailsResponse
 import com.madrid.data.dataSource.remote.dto.list.ListsResponse
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
+import com.madrid.data.dataSource.remote.dto.list.RemoveMovieDto
 import com.madrid.data.dataSource.remote.dto.movie.ListDetailsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieCreditsResponse
 import com.madrid.data.dataSource.remote.dto.movie.MovieDetailsResponse
@@ -222,7 +223,6 @@ interface MovioApi {
     ): SessionIdResponse
 
 
-
     @GET("authentication/guest_session/new")
     suspend fun getCreateGuestSession(): AuthenticationResponse
 
@@ -318,9 +318,16 @@ interface MovioApi {
 
     @POST("account/{account_id}/favorite")
     suspend fun addToFavorite(
-        @Path("account_id") accountId :Int? = null,
-        @Query("session_id") sessionId :String ,
+        @Path("account_id") accountId: Int? = null,
+        @Query("session_id") sessionId: String,
         @Body body: AddToFavoriteRequest
+    )
+
+    @POST("list/{list_id}/remove_item")
+    suspend fun removeMovieFromList(
+        @Path("list_id") listId: Int,
+        @Query("session_id") sessionId: String,
+        @Body removeItemRequest: RemoveMovieDto
     )
 
     companion object {
