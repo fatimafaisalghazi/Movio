@@ -46,7 +46,9 @@ fun RecommendedSeriesResponse.toTvShows(): List<Series> {
     } ?: emptyList()
 }
 
-fun SeriesResult.toSeries(): Series {
+fun SeriesResult.toSeries(
+    genres : List<Genre> = emptyList(),
+): Series {
     return Series(
         id = this.id ?: 0,
         title = this.title ?: "",
@@ -54,7 +56,7 @@ fun SeriesResult.toSeries(): Series {
         rate = this.voteAverage ?: 0.0,
         airDate = this.releaseDate ?: "",
         description = this.overview ?: "",
-        genre = listOf(),
+        genre = genres,
         seasons = emptyList(),
     )
 }
