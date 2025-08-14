@@ -1,6 +1,6 @@
+
 package com.madrid.presentation.viewModel.libraryViewModel.viewAll
 
-import com.madrid.presentation.viewModel.detailsViewModel.MediaUiState
 import com.madrid.presentation.viewModel.shared.MediaType
 
 interface ViewAllInteractionListener {

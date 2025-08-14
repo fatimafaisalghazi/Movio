@@ -1,12 +1,9 @@
 package com.madrid.presentation.viewModel.libraryViewModel.viewAll
 
-import androidx.compose.ui.res.stringResource
 import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.detailsViewModel.MediaUiState
 import com.madrid.presentation.viewModel.libraryViewModel.viewAll.strategy.ViewAllStrategy
 import com.madrid.presentation.viewModel.shared.MediaType
-import com.madrid.presentation.viewModel.shared.toMediaUiState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
