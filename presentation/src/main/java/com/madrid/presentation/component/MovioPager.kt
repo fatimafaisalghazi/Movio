@@ -57,99 +57,95 @@ fun MovioPager(
                 .shadow(elevation = 8.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
-            ShimmerBlurredImage(isLoading = isLoading) {
-                FilteredImage(
-                    imageUrl = medias[pagerState.currentPage].imageUrl,
-                    contentDescription = "null",
-                    modifier = Modifier
-                        .matchParentSize()
-                        .blur(radius = 16.dp, edgeTreatment = Unbounded),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            FilteredImage(
+                imageUrl = medias[pagerState.currentPage].imageUrl,
+                contentDescription = "null",
+                modifier = Modifier
+                    .matchParentSize()
+                    .blur(radius = 16.dp, edgeTreatment = Unbounded),
+                contentScale = ContentScale.Crop
+            )
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                ShimmerItem(isLoading) {
-                    HorizontalPager(
-                        modifier = Modifier.fillMaxWidth(),
-                        pageSpacing = (-240).dp,
-                        state = pagerState,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) { page ->
-                        val pageOffset =
-                            ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
+                HorizontalPager(
+                    modifier = Modifier.fillMaxWidth(),
+                    pageSpacing = (-240).dp,
+                    state = pagerState,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) { page ->
+                    val pageOffset =
+                        ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
 
-                        val absOffset = pageOffset.absoluteValue
+                    val absOffset = pageOffset.absoluteValue
 
-                        val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
-                        val rotation =
-                            lerp(
-                                20f,
-                                0f,
-                                1f - absOffset.coerceIn(0f, 1f)
-                            ) * if (pageOffset < 0) 1f else -1f
-                        val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
-                        val zIndex = if (page == pagerState.currentPage) {
-                            medias.size.toFloat()
-                        } else {
-                            medias.size - absOffset
-                        }
+                    val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                    val rotation =
+                        lerp(
+                            20f,
+                            0f,
+                            1f - absOffset.coerceIn(0f, 1f)
+                        ) * if (pageOffset < 0) 1f else -1f
+                    val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
+                    val zIndex = if (page == pagerState.currentPage) {
+                        medias.size.toFloat()
+                    } else {
+                        medias.size - absOffset
+                    }
 
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (pagerState.currentPage == page) Modifier.zIndex(1f) else Modifier
+                            ),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        MovieHomeCard(
+                            modifier = Modifier
+                                .graphicsLayer {
+                                    scaleX = scale
+                                    scaleY = scale
+                                    rotationZ = rotation
+                                    alpha = alphaa
+                                    cameraDistance = 12 * density
+                                }
+                                .clip(RoundedCornerShape(8.dp))
+                                .size(width = 200.dp, height = 260.dp),
+                            movieId = medias[page].imageUrl,
+                            name = medias[page].title,
+                            genres = medias[page].category.map { it.name },
+                            onClick = { onClickMediaButton(page) },
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    repeat(medias.size) { index ->
+                        val isSelected = pagerState.currentPage == index
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .then(
-                                    if (pagerState.currentPage == page) Modifier.zIndex(1f) else Modifier
-                                ),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            MovieHomeCard(
-                                modifier = Modifier
-                                    .graphicsLayer {
-                                        scaleX = scale
-                                        scaleY = scale
-                                        rotationZ = rotation
-                                        alpha = alphaa
-                                        cameraDistance = 12 * density
-                                    }
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .size(width = 200.dp, height = 260.dp),
-                                movieId = medias[page].imageUrl,
-                                name = medias[page].title,
-                                genres = medias[page].category.map { it.name },
-                                onClick = { onClickMediaButton(page) },
-                            )
-                        }
+                                .padding(horizontal = 4.dp)
+                                .size(if (isSelected) 15.dp else 5.dp, 5.dp)
+                                .clip(if (isSelected) RoundedCornerShape(50) else CircleShape)
+                                .background(
+                                    if (isSelected)
+                                        Theme.color.surfaces.onSurfaceAt1
+                                    else
+                                        Theme.color.surfaces.onSurfaceAt2
+                                )
+                        )
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        repeat(medias.size) { index ->
-                            val isSelected = pagerState.currentPage == index
-                            Box(
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .size(if (isSelected) 15.dp else 5.dp, 5.dp)
-                                    .clip(if (isSelected) RoundedCornerShape(50) else CircleShape)
-                                    .background(
-                                        if (isSelected)
-                                            Theme.color.surfaces.onSurfaceAt1
-                                        else
-                                            Theme.color.surfaces.onSurfaceAt2
-                                    )
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(4.dp))
                 }
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }

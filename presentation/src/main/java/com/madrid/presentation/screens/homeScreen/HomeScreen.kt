@@ -165,7 +165,12 @@ private fun LayoutContent(
                         mediaIndex
                     )
                 },
-                isLoading = uiState.isLoading
+                isLoading = uiState.isLoading,
+                isSliderLoading = uiState.movieTabUiState.trending.isLoading,
+                isTopRatedLoading = uiState.movieTabUiState.topRated.isLoading,
+                isNowPlayingLoading = uiState.movieTabUiState.nowPlaying.isLoading,
+                isUpComingLoading = uiState.movieTabUiState.upcoming.isLoading,
+                isRecommendedLoading = uiState.movieTabUiState.moreRecommended.isLoading,
             )
         }
 
@@ -183,7 +188,12 @@ private fun LayoutContent(
                         mediaIndex
                     )
                 },
-                isLoading = uiState.isLoading
+                isLoading = uiState.isLoading,
+                isTrendingSeriesLoading = uiState.tvShowTabUiState.trending.isLoading,
+                isTopRatedSeriesLoading = uiState.tvShowTabUiState.topRated.isLoading,
+                isOnAirSeriesLoading = uiState.tvShowTabUiState.onTv.isLoading,
+                isAiringTodaySeriesLoading = uiState.tvShowTabUiState.airingToday.isLoading,
+                isRecommendedSeriesLoading = uiState.tvShowTabUiState.moreRecommended.isLoading
             )
         }
 

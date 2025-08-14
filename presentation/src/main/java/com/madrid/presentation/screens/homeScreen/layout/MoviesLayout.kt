@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.ShimmerHorizontalCard
+import com.madrid.designSystem.component.ShimmerItem
+import com.madrid.designSystem.component.ShimmerPagerCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.MovioPager
@@ -47,6 +49,11 @@ fun MoviesLayout(
     recommendedMovies: List<MediaUiState>,
     onScroll: (Boolean) -> Unit = {},
     isLoading: Boolean = true,
+    isSliderLoading: Boolean,
+    isTopRatedLoading: Boolean,
+    isNowPlayingLoading: Boolean,
+    isUpComingLoading: Boolean,
+    isRecommendedLoading: Boolean,
     onClickMediaButton: (Int) -> Unit = {},
 ) {
     val navController = LocalNavController.current
@@ -77,7 +84,8 @@ fun MoviesLayout(
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Box() {
+
+            ShimmerItem(isLoading = isSliderLoading) {
                 MovioPager(
                     medias = trendingMovies.take(7),
                     onClickItem = { id -> navController.navigate(Destinations.MovieDetailsScreen(id)) },
@@ -85,22 +93,11 @@ fun MoviesLayout(
                     isLoading = isLoading
                 )
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(30.dp)
-                    .offset(y = 390.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
-                        )
-                    )
-            )
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
 
             ShimmerHorizontalCard(
-                isLoading = isLoading,
+                isLoading = isTopRatedLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
@@ -125,7 +122,7 @@ fun MoviesLayout(
 
         item(span = { GridItemSpan(maxLineSpan) }) {
             ShimmerHorizontalCard(
-                isLoading = isLoading,
+                isLoading = isNowPlayingLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.now_playing),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
@@ -150,7 +147,7 @@ fun MoviesLayout(
 
         item(span = { GridItemSpan(maxLineSpan) }) {
             ShimmerHorizontalCard(
-                isLoading = isLoading,
+                isLoading = isUpComingLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.upcoming),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),

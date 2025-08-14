@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.ShimmerHorizontalCard
+import com.madrid.designSystem.component.ShimmerItem
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.MovioPager
@@ -46,6 +47,11 @@ fun TvShowsLayout(
     recommendedSeries: List<MediaUiState>,
     onScroll: (Boolean) -> Unit = {},
     isLoading: Boolean = true,
+    isTrendingSeriesLoading: Boolean,
+    isTopRatedSeriesLoading: Boolean,
+    isAiringTodaySeriesLoading: Boolean,
+    isRecommendedSeriesLoading: Boolean,
+    isOnAirSeriesLoading: Boolean,
     onClickMediaButton: (Int) -> Unit = {},
 ) {
     val navController = LocalNavController.current
@@ -76,34 +82,36 @@ fun TvShowsLayout(
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
-            MovioPager(
-                medias = trendingSeries.take(7),
-                onClickItem = { id ->
-                    navController.navigate(
-                        Destinations.SeriesDetailsScreen(
-                            id,
-                            1
+            ShimmerItem(isTrendingSeriesLoading) {
+                MovioPager(
+                    medias = trendingSeries.take(7),
+                    onClickItem = { id ->
+                        navController.navigate(
+                            Destinations.SeriesDetailsScreen(
+                                id,
+                                1
+                            )
                         )
-                    )
-                },
-                onClickMediaButton = onClickMediaButton,
-                isLoading = isLoading
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(30.dp)
-                    .offset(y = 390.dp)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
+                    },
+                    onClickMediaButton = onClickMediaButton,
+                    isLoading = isLoading
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(30.dp)
+                        .offset(y = 390.dp)
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
+                            )
                         )
-                    )
-            )
+                )
+            }
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
             ShimmerHorizontalCard(
-                isLoading = isLoading,
+                isLoading = isTopRatedSeriesLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.top_rating),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
@@ -144,7 +152,7 @@ fun TvShowsLayout(
 
         item(span = { GridItemSpan(maxLineSpan) }) {
             ShimmerHorizontalCard(
-                isLoading = isLoading,
+                isLoading = isAiringTodaySeriesLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.airing_today),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),
@@ -186,7 +194,7 @@ fun TvShowsLayout(
         item(span = { GridItemSpan(maxLineSpan) }) {
 
             ShimmerHorizontalCard(
-                isLoading = isLoading,
+                isLoading = isOnAirSeriesLoading,
                 primaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.on_tv),
                 secondaryTextForCustomTextTitle = stringResource(com.madrid.presentation.R.string.see_all),
                 endIconForCustomTextTitle = painterResource(R.drawable.outline_alt_arrow_left),

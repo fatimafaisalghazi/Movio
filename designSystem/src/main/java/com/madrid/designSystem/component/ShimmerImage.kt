@@ -1,6 +1,5 @@
 package com.madrid.designSystem.component
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -10,8 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -21,15 +20,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
@@ -39,13 +35,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.madrid.designSystem.theme.Theme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ShimmerItem(
@@ -53,76 +43,21 @@ fun ShimmerItem(
     modifier: Modifier = Modifier,
     contentAfterLoading: @Composable () -> Unit,
 ) {
-
-    if (isLoading) {
-        Column(
-            modifier = modifier.padding(top = 100.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+    if(isLoading) {
+        Row(
+            modifier = modifier.padding(top = 132.dp).fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
         ) {
-            Box(
-                modifier = Modifier
-                    .size(width = 200.dp, height = 260.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .shimmerEffect()
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 207.dp, start = 8.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(Color(0xFF101128))
-                        .width(44.dp)
-                        .height(20.dp)
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(top = 232.dp, start = 8.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(Color(0xFF101128))
-                        .width(44.dp)
-                        .height(20.dp)
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(top = 232.dp, start = 59.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(Color(0xFF101128))
-                        .width(44.dp)
-                        .height(20.dp)
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(top = 232.dp, start = 112.dp)
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(Color(0xFF101128))
-                        .width(44.dp)
-                        .height(20.dp)
-                )
+            Box(){
+                ShimmerPagerCard(Modifier.offset(x = -150.dp,y = 30.dp).rotate(-20f).width(150.dp).height(200.dp))
+                ShimmerPagerCard(Modifier.offset(x = 200.dp,y = 30.dp).rotate(20f).width(150.dp).height(200.dp))
+                ShimmerPagerCard()
             }
         }
-    } else {
-        var showContent by remember { mutableStateOf(false) }
-
-        LaunchedEffect(Unit) {
-            delay(2000L)
-            showContent = true
-        }
-
-        if (showContent.not()) {
-            Column(
-                modifier = modifier.padding(top = 100.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Box(){
-                    ShimmerPagerCard(Modifier.offset(x = -150.dp,y = 30.dp).rotate(-20f).width(150.dp).height(200.dp))
-                    ShimmerPagerCard(Modifier.offset(x = 200.dp,y = 30.dp).rotate(20f).width(150.dp).height(200.dp))
-                    ShimmerPagerCard()
-                }
-            }
-        }
-        if (showContent)
-            contentAfterLoading()
     }
-
+    if(!isLoading) {
+        contentAfterLoading()
+    }
 }
 
 @Composable
@@ -177,18 +112,7 @@ fun ShimmerBlurredImage(
     if(isLoading)
         Box(modifier = modifier.fillMaxWidth().height(413.dp).background(Theme.color.surfaces.surface))
     else{
-        var showContent by remember { mutableStateOf(false) }
-
-        LaunchedEffect(Unit) {
-            delay(2000L)
-            showContent = true
-        }
-
-        if(showContent.not())
-            Box(modifier = modifier.fillMaxWidth().height(413.dp).background(Theme.color.surfaces.surface))
-
-        if (showContent)
-            contentAfterLoading()
+        contentAfterLoading()
     }
 }
 
@@ -242,51 +166,7 @@ fun ShimmerHorizontalCard(
                 }
             }
         } else {
-            var showContent by remember { mutableStateOf(false) }
-
-            LaunchedEffect(Unit) {
-                delay(2000L)
-                showContent = true
-            }
-            if (!showContent) {
-                CustomTextTitle(
-                    modifier = headerModifier.padding(bottom = 12.dp),
-                    primaryText = primaryTextForCustomTextTitle,
-                    startIcon = startIconForPrimaryTextTitle,
-                    secondaryText = secondaryTextForCustomTextTitle,
-                    endIcon = endIconForCustomTextTitle,
-                    onSeeAllClick = onSeeAllClick,
-                    isListEmpty = isLoading
-                )
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.height(200.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(itemCount) {
-                        Column {
-                            Box(
-                                modifier = Modifier
-                                    .size(width = 124.dp, height = 160.dp)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .shimmerEffect()
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Box(
-                                modifier = Modifier
-                                    .width(112.dp)
-                                    .height(15.dp)
-                                    .clip(RoundedCornerShape(24.dp))
-                                    .shimmerEffect()
-                            )
-                        }
-                    }
-                }
-            }
-
-            if (showContent) {
-                contentAfterLoading()
-            }
+            contentAfterLoading()
         }
     }
 }
