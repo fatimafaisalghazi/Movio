@@ -71,6 +71,8 @@ class ViewAllViewModel @AssistedInject constructor(
                     it.copy(
                         deletedItemId = mediaId.toInt(),
                         deletedItemType = mediaType,
+                        showSnackBar = true,
+                        snackBarMessage = R.string.Item_has_been_deleted,
                         items = it.items
                             .filterNot { item -> item.id == mediaId && item.mediaType == mediaType })
                 }
@@ -80,18 +82,15 @@ class ViewAllViewModel @AssistedInject constructor(
     }
 
     override fun onUndoDeleteClicked(
-        mediaId: String,
-        mediaType: MediaType
     ) {
         tryToExecute(
-            function = { strategy.onUndoDelete(mediaId, mediaType) },
+            function = {
+                strategy.onUndoDelete(
+                    state.value.deletedItemId,
+                    state.value.deletedItemType
+                )
+            },
             onSuccess = {
-                updateState {
-                    it.copy(
-                        deletedItemId = null,
-                        deletedItemType = null,
-                    )
-                }
                 loadAllItems()
             },
             onError = { error -> onError(error) }

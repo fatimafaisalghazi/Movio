@@ -14,6 +14,6 @@ data class ViewAllUiState(
     val isEmpty: Boolean = false,
     val showSnackBar: Boolean = false,
     @StringRes val snackBarMessage: Int = R.string.Item_has_been_deleted,
-    val deletedItemId: Int? = null,
-    val deletedItemType: MediaType? = null
+    val deletedItemId: Int = 0,
+    val deletedItemType: MediaType = MediaType.MOVIE
 )

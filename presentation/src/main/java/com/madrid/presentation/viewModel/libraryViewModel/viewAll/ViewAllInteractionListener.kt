@@ -9,6 +9,6 @@ interface ViewAllInteractionListener {
     fun onItemDeleted(mediaId: String, mediaType: MediaType)
     fun onRetryClicked()
     fun onDismissSnackBar()
-    fun onUndoDeleteClicked(mediaId: String, mediaType: MediaType)
+    fun onUndoDeleteClicked()
     fun onTryAgainButtonClicked()
 }
