@@ -14,10 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,10 +34,12 @@ import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.homeScreen.layout.CategoriesLayout
 import com.madrid.presentation.screens.homeScreen.layout.MoviesLayout
 import com.madrid.presentation.screens.homeScreen.layout.TvShowsLayout
+import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
 import com.madrid.presentation.viewModel.homeViewModel.HomeInteractionListener
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenEffect
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenState
 import com.madrid.presentation.viewModel.homeViewModel.HomeViewModel
+import com.madrid.presentation.viewModel.homeViewModel.SortingType
 import com.madrid.presentation.viewModel.shared.MediaType
 
 @Composable
@@ -78,7 +78,7 @@ fun HomeScreenContent(
     state: HomeScreenState,
     interactionListener: HomeInteractionListener
 ) {
-    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+//    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     var isScrolledDown by remember { mutableStateOf(false) }
     val backgroundColor by animateColorAsState(
         if (isScrolledDown) Theme.color.surfaces.surface else Color.Transparent,
@@ -91,7 +91,6 @@ fun HomeScreenContent(
     ) {
         LayoutContent(
             uiState = state,
-            selectedTab = HomeTab.entries[selectedTabIndex],
             onScroll = { isScrolled ->
                 isScrolledDown = isScrolled
             },
@@ -118,40 +117,91 @@ fun HomeScreenContent(
                     stringResource(R.string.TV_Shows),
                     stringResource(R.string.Categories),
                 ),
-                selectedTabIndex = selectedTabIndex,
+                selectedTabIndex = state.selectedTabIndex,
                 onTabSelected = { index ->
-                    selectedTabIndex = index
+                    interactionListener.onSelectTab(index)
                 },
                 modifier = Modifier.padding(horizontal = 38.dp)
             )
-
-            if (HomeTab.CATEGORIES == HomeTab.entries[selectedTabIndex])
-                CategoriesLayout(
-                    categories = state.categoryTabUiState.categories,
-                    selectedCategory = state.categoryTabUiState.selectedCategory,
-                    onCategorySelected = { category -> interactionListener.onSelectCategory(category) },
-                    mediaItems = state.categoryTabUiState.media.collectAsLazyPagingItems(),
-                    sortingType = state.categoryTabUiState.sortingType,
-                    onSortingTypeSelected = { sortingType ->
-                        interactionListener.onSelectSortingType(
-                            sortingType
-                        )
-                    },
-                    onMediaItemClicked = interactionListener::onMediaSelected,
-                )
         }
     }
 }
 
 @Composable
 private fun LayoutContent(
-    selectedTab: HomeTab,
     uiState: HomeScreenState,
     onScroll: (Boolean) -> Unit = {},
     onClickMediaButton: (MediaType, Int) -> Unit = { _, _ -> },
+    onSelectCategory: (CategoryUiState) -> Unit = {},
+    onSelectSortingType: (SortingType) -> Unit = {},
+    onMediaSelected: (Int, MediaType) -> Unit = { _, _ -> },
 ) {
-    when (selectedTab) {
+    when (uiState.selectedTabIndex) {
+        0 -> {
+            MoviesLayout(
+                trendingMovies = uiState.movieTabUiState.trending.media,
+                topRatingMovies = uiState.movieTabUiState.topRated.media,
+                nowPlayingMovies = uiState.movieTabUiState.nowPlaying.media,
+                upComingMovies = uiState.movieTabUiState.upcoming.media,
+                recommendedMovies = uiState.movieTabUiState.moreRecommended.media,
+                onScroll = onScroll,
+                onClickMediaButton = { mediaIndex ->
+                    onClickMediaButton(
+                        MediaType.MOVIE,
+                        mediaIndex
+                    )
+                },
+                isLoading = uiState.isLoading,
+                isSliderLoading = uiState.movieTabUiState.trending.isLoading,
+                isTopRatedLoading = uiState.movieTabUiState.topRated.isLoading,
+                isNowPlayingLoading = uiState.movieTabUiState.nowPlaying.isLoading,
+                isUpComingLoading = uiState.movieTabUiState.upcoming.isLoading,
+                isRecommendedLoading = uiState.movieTabUiState.moreRecommended.isLoading,
+            )
+        }
+
+        1 -> {
+            TvShowsLayout(
+                trendingSeries = uiState.tvShowTabUiState.trending.media,
+                topRatingSeries = uiState.tvShowTabUiState.topRated.media,
+                airingTodaySeries = uiState.tvShowTabUiState.airingToday.media,
+                onAirSeries = uiState.tvShowTabUiState.onTv.media,
+                recommendedSeries = uiState.tvShowTabUiState.moreRecommended.media,
+                onScroll = onScroll,
+                onClickMediaButton = { mediaIndex ->
+                    onClickMediaButton(
+                        MediaType.TV_SHOW,
+                        mediaIndex
+                    )
+                },
+                isLoading = uiState.isLoading,
+                isTrendingSeriesLoading = uiState.tvShowTabUiState.trending.isLoading,
+                isTopRatedSeriesLoading = uiState.tvShowTabUiState.topRated.isLoading,
+                isOnAirSeriesLoading = uiState.tvShowTabUiState.onTv.isLoading,
+                isAiringTodaySeriesLoading = uiState.tvShowTabUiState.airingToday.isLoading,
+                isRecommendedSeriesLoading = uiState.tvShowTabUiState.moreRecommended.isLoading
+            )
+        }
+
+        2 -> {
+            CategoriesLayout(
+                categories = uiState.categoryTabUiState.categories,
+                selectedCategory = uiState.categoryTabUiState.selectedCategory,
+                onCategorySelected = { category -> onSelectCategory(category) },
+                mediaItems = uiState.categoryTabUiState.media.collectAsLazyPagingItems(),
+                sortingType = uiState.categoryTabUiState.sortingType,
+                onSortingTypeSelected = { sortingType ->
+                    onSelectSortingType(sortingType)
+                },
+                onMediaItemClicked = onMediaSelected,
+            )
+        }
+    }
+
+
+    /*when (selectedTab) {
         HomeTab.MOVIES -> {
+            //load
             MoviesLayout(
                 trendingMovies = uiState.movieTabUiState.trending.media,
                 topRatingMovies = uiState.movieTabUiState.topRated.media,
@@ -198,11 +248,11 @@ private fun LayoutContent(
         }
 
         else -> {}
-    }
+    }*/
 }
 
 private fun openYoutubeMediaTrailer(key: String, context: Context) {
-    if(key.isNotBlank()){
+    if (key.isNotBlank()) {
         val youtubeAppIntent =
             Intent(Intent.ACTION_VIEW, "vnd.youtube:$key".toUri())
         val youtubeWebIntent = Intent(
