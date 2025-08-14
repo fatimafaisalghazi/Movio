@@ -140,4 +140,8 @@
     <string name="new_list_created_successfully">New list created successfully.</string>
     <string name="nothing_here_yet">🎬 Nothing here yet!</string>
     <string name="add_movies_and_tv_shows_to_build_your_personal_watchlist">Add movies and TV shows to build your personal watchlist. The perfect binge starts here!</string>
+    <string name="Item_has_been_deleted">Item has been deleted</string>
+    <string name="empty_list_message">Your %1$s list is empty</string>
+    <string name="Start_adding_the_movies_and_shows_you_love">Start adding the movies and shows you love — keep them all in one place for easy access.</string>
+    <string name="Start_watching_movies_and_shows">Start watching movies and shows, and we’ll keep track of your viewing history here.</string>
 </resources>

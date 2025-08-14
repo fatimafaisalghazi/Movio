@@ -1,6 +1,9 @@
 package com.madrid.presentation.viewModel.libraryViewModel.viewAll
 
+import androidx.compose.ui.res.stringResource
+import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.MediaUiState
 import com.madrid.presentation.viewModel.libraryViewModel.viewAll.strategy.ViewAllStrategy
 import com.madrid.presentation.viewModel.shared.MediaType
 import com.madrid.presentation.viewModel.shared.toMediaUiState
@@ -24,11 +27,16 @@ class ViewAllViewModel @AssistedInject constructor(
 
     init {
         loadTitle()
+        loadEmptyListMessage()
         loadAllItems()
     }
 
     private fun loadTitle() {
         updateState { it.copy(title = strategy.getTitle()) }
+    }
+
+    private fun loadEmptyListMessage() {
+        updateState { it.copy(emptyListMessage = strategy.getEmptyListMessage()) }
     }
 
     private fun loadAllItems() {
@@ -43,7 +51,7 @@ class ViewAllViewModel @AssistedInject constructor(
                     )
                 }
             },
-            onError = { }
+            onError = { error -> onError(error) }
         )
     }
 
@@ -59,16 +67,59 @@ class ViewAllViewModel @AssistedInject constructor(
         tryToExecute(
             function = { strategy.deleteItem(mediaId, mediaType) },
             onSuccess = {
-                updateState { it.copy(items = it.items
-                    .filterNot { item -> item.id == mediaId && item.mediaType == mediaType }) }
+                updateState {
+                    it.copy(
+                        deletedItemId = mediaId.toInt(),
+                        deletedItemType = mediaType,
+                        items = it.items
+                            .filterNot { item -> item.id == mediaId && item.mediaType == mediaType })
+                }
             },
-            onError = { }
+            onError = { error -> onError(error) }
         )
     }
+
+    override fun onUndoDeleteClicked(
+        mediaId: String,
+        mediaType: MediaType
+    ) {
+        tryToExecute(
+            function = { strategy.onUndoDelete(mediaId, mediaType) },
+            onSuccess = {
+                updateState {
+                    it.copy(
+                        deletedItemId = null,
+                        deletedItemType = null,
+                    )
+                }
+                loadAllItems()
+            },
+            onError = { error -> onError(error) }
+        )
+    }
+
 
     override fun onRetryClicked() {
         loadTitle()
         loadAllItems()
+    }
+
+    override fun onDismissSnackBar() {
+        updateState { it.copy(showSnackBar = false) }
+    }
+
+    override fun onTryAgainButtonClicked() {
+        updateState { it.copy(errorMessage = null) }
+        loadAllItems()
+    }
+
+    private fun onError(error: Throwable) {
+        updateState {
+            it.copy(
+                isLoading = false,
+                errorMessage = error.message.toString()
+            )
+        }
     }
 
 }

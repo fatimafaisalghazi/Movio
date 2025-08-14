@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.libraryViewModel.viewAll
 
+import com.madrid.presentation.viewModel.detailsViewModel.MediaUiState
 import com.madrid.presentation.viewModel.shared.MediaType
 
 interface ViewAllInteractionListener {
@@ -7,4 +8,7 @@ interface ViewAllInteractionListener {
     fun onItemClicked(mediaId: String, mediaType: MediaType)
     fun onItemDeleted(mediaId: String, mediaType: MediaType)
     fun onRetryClicked()
+    fun onDismissSnackBar()
+    fun onUndoDeleteClicked(mediaId: String, mediaType: MediaType)
+    fun onTryAgainButtonClicked()
 }

@@ -6,6 +6,8 @@ import com.madrid.presentation.viewModel.shared.MediaUiState
 
 interface ViewAllStrategy {
     fun getTitle(): String
+    fun getEmptyListMessage(): Int
     suspend fun getAllItems(): List<MediaUiState>
     suspend fun deleteItem(mediaId: String, mediaType: MediaType)
+    suspend fun onUndoDelete(mediaId: String, mediaType: MediaType)
 }

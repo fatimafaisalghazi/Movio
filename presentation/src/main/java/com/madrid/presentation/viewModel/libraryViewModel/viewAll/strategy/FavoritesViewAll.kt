@@ -1,9 +1,11 @@
 package com.madrid.presentation.viewModel.libraryViewModel.viewAll.strategy
 
+import androidx.compose.ui.res.stringResource
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.usecase.authentication.GetCurrentUserDetailsUseCase
 import com.madrid.domain.usecase.movie.GetFavoriteMoviesUseCase
 import com.madrid.domain.usecase.series.GetFavoriteSeriesUseCase
+import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.shared.MediaType
 import com.madrid.presentation.viewModel.shared.MediaUiState
 import com.madrid.presentation.viewModel.shared.toMediaUiState
@@ -21,6 +23,10 @@ class FavoritesViewAll @Inject constructor(
         return "Favorites"
     }
 
+    override fun getEmptyListMessage(): Int {
+        return R.string.Start_adding_the_movies_and_shows_you_love
+    }
+
     override suspend fun getAllItems(): List<MediaUiState> {
         return (getFavoriteMoviesUseCase().map { it.toMediaUiState() } +
                 getFavoriteSeriesUseCase().map { it.toMediaUiState() })
@@ -30,4 +36,9 @@ class FavoritesViewAll @Inject constructor(
     override suspend fun deleteItem(mediaId: String, mediaType: MediaType) {
         // TODO: Implement delete functionality
     }
+
+    override suspend fun onUndoDelete(mediaId: String, mediaType: MediaType) {
+
+    }
+
 }
