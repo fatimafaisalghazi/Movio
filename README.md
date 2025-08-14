@@ -30,6 +30,10 @@ The app includes intelligent content detection capabilities:
 ## 🛠️ Tech Stack
 
 - **Language**: Kotlin
+- **Android SDK**
+- **work Manager**
+- **Pagination**
+- **Firebase**: Performance, Analytics, and Crashlytics
 - **UI Framework**: Jetpack Compose
 - **Architecture**: MVVM + Clean Architecture
 - **Dependency Injection**: Hilt (Dagger)
