@@ -46,7 +46,7 @@ fun MovioHorizontalCard(
         )
         Column(
             modifier = modifier
-                .padding(bottom = 4.dp)
+                .padding(vertical = 4.dp)
                 .height(height),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
