@@ -21,6 +21,7 @@ import com.madrid.presentation.component.CustomHorizontalCardForWatchList
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.libraryScreen.component.LibraryScreenHeader
+import com.madrid.presentation.screens.refreshScreenHolder.RefreshScreenHolder
 import com.madrid.presentation.viewModel.libraryViewModel.LibraryInteractionListener
 import com.madrid.presentation.viewModel.libraryViewModel.LibraryScreenEffect
 import com.madrid.presentation.viewModel.libraryViewModel.LibraryScreenState
@@ -71,10 +72,15 @@ fun LibraryScreen(
             }
         }
     }
-    LibraryScreenContent(
-        state = state,
-        libraryInteractionListener = libraryViewModel as LibraryInteractionListener,
-    )
+    RefreshScreenHolder(
+        refreshState = state.refreshState,
+        onRefresh = { libraryViewModel.onRefresh() }
+    ) {
+        LibraryScreenContent(
+            state = state,
+            libraryInteractionListener = libraryViewModel as LibraryInteractionListener,
+        )
+    }
 }
 
 @Composable

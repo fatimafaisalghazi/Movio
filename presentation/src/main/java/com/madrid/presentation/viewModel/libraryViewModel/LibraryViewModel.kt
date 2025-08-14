@@ -24,6 +24,11 @@ class LibraryViewModel @Inject constructor(
         getHistoryList()
     }
 
+    fun onRefresh() {
+        getWatchList()
+        getFavoriteList()
+        getHistoryList()
+    }
 
     private fun getWatchList() {
         updateState {
@@ -35,15 +40,15 @@ class LibraryViewModel @Inject constructor(
             function = {
                 getWatchListUseCase()
             },
-            onSuccess = {watchList->
+            onSuccess = { watchList ->
                 updateState {
                     it.copy(
                         isLoading = false,
-                        watchList = watchList.map{ it.toWatchListState()}
+                        watchList = watchList.map { it.toWatchListState() }
                     )
                 }
             },
-            onError = {throwable->
+            onError = { throwable ->
                 updateState {
                     it.copy(
                         isLoading = false,
@@ -64,15 +69,15 @@ class LibraryViewModel @Inject constructor(
             function = {
                 getFavoriteUseCase()
             },
-            onSuccess = {favoriteList->
+            onSuccess = { favoriteList ->
                 updateState {
                     it.copy(
                         isLoading = false,
-                        favoriteList = favoriteList.map{ it.toMediaUiState()}
+                        favoriteList = favoriteList.map { it.toMediaUiState() }
                     )
                 }
             },
-            onError = {throwable->
+            onError = { throwable ->
                 updateState {
                     it.copy(
                         isLoading = false,
@@ -93,15 +98,15 @@ class LibraryViewModel @Inject constructor(
             function = {
                 getHistoryUseCase()
             },
-            onSuccess = {historyList->
+            onSuccess = { historyList ->
                 updateState {
                     it.copy(
                         isLoading = false,
-                        historyList = historyList.map{ it.toMediaUiState()}
+                        historyList = historyList.map { it.toMediaUiState() }
                     )
                 }
             },
-            onError = {throwable->
+            onError = { throwable ->
                 updateState {
                     it.copy(
                         isLoading = false,
@@ -129,7 +134,7 @@ class LibraryViewModel @Inject constructor(
         )
     }
 
-    override fun onWatchListViewAllClick(){
+    override fun onWatchListViewAllClick() {
         emitNewEffect(
             LibraryScreenEffect.NavigateWatchListToViewAll
         )
