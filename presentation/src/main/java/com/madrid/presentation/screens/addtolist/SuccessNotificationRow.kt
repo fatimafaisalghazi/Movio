@@ -1,16 +1,30 @@
-// SuccessNotificationRow.kt
 package com.madrid.presentation.screens.addtolist
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,12 +37,12 @@ import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
-import com.madrid.domain.entity.WatchList
 import kotlinx.coroutines.delay
 
 @Composable
 fun SuccessNotificationRow(
     isVisible: Boolean,
+    modifier: Modifier = Modifier,
     message: String = "Successfully added to your collection.",
     onAction: () -> Unit = {},
     actionText: String? = null,
@@ -36,7 +50,6 @@ fun SuccessNotificationRow(
     icon: Painter = painterResource(id = com.madrid.designSystem.R.drawable.archive_tick),
     modifier: Modifier = Modifier
 ) {
-    // Auto-dismiss after 3 seconds
     LaunchedEffect(isVisible) {
         if (isVisible) {
             delay(3000)
@@ -78,104 +91,18 @@ fun SuccessNotificationRow(
 
             // Success message
             MovioText(
-                modifier = Modifier.weight(1f), // Modifier should be first
+                modifier = Modifier.weight(1f),
                 text = message,
                 color = Color.White,
                 textStyle = Theme.textStyle.label.mediumMedium14
             )
             if (actionText != null) {
                 MovioText(
-                    modifier = Modifier.clickable(onClick = onAction), // Modifier should be first
+                    modifier = Modifier.clickable(onClick = onAction),
                     text = actionText,
                     color = Theme.color.brand.primary,
                     textStyle = Theme.textStyle.label.mediumMedium14
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun ListManagementBottomSheetWithNotification(
-    isVisible: Boolean,
-    onDismiss: () -> Unit,
-    initialUserLists: List<WatchList>,
-    onListCreated: (String) -> Unit,
-    onSelectionChanged: ((WatchList, Boolean) -> Unit)? = null,
-    modifier: Modifier = Modifier
-) {
-    var currentMode by remember { mutableStateOf(ListBottomSheetMode.LIST_SELECTION) }
-    var showSuccessNotification by remember { mutableStateOf(false) }
-    var successMessage by remember { mutableStateOf("") }
-
-    LaunchedEffect(initialUserLists) {
-        val selectedLists = initialUserLists.filter { it.isSelected }
-        if (selectedLists.isNotEmpty()) {
-            successMessage = when (selectedLists.size) {
-                1 -> "Successfully added to ${selectedLists.first().name}."
-                else -> "Successfully added to ${selectedLists.size} lists."
-            }
-            showSuccessNotification = true
-        }
-    }
-
-    Column {
-        SuccessNotificationRow(
-            isVisible = showSuccessNotification,
-            message = successMessage,
-            onDismiss = { showSuccessNotification = false },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
-
-        MovioBottomSheet(
-            show = isVisible,
-            onDismiss = {
-                currentMode = ListBottomSheetMode.LIST_SELECTION
-                onDismiss()
-            },
-            containerColor = if (currentMode == ListBottomSheetMode.CREATE_NEW_LIST)
-                Color.Transparent else Theme.color.surfaces.surface,
-        ) {
-            AnimatedContent(
-                targetState = currentMode,
-                transitionSpec = {
-                    slideInHorizontally(initialOffsetX = { if (targetState == ListBottomSheetMode.CREATE_NEW_LIST) it else -it }) togetherWith
-                            slideOutHorizontally(targetOffsetX = { if (targetState == ListBottomSheetMode.CREATE_NEW_LIST) -it else it })
-                },
-                label = "ListBottomSheetAnimation"
-            ) { mode ->
-                when (mode) {
-                    ListBottomSheetMode.LIST_SELECTION -> {
-                        ListSelectionContent(
-                            initialUserLists = initialUserLists,
-                            onCreateNewListClick = {
-                                currentMode = ListBottomSheetMode.CREATE_NEW_LIST
-                            },
-                            onSelectionChanged = { userList, isSelected ->
-                                onSelectionChanged?.invoke(userList, isSelected)
-                                if (isSelected) {
-                                    successMessage = "Successfully added to ${userList.name}."
-                                    showSuccessNotification = true
-                                }
-                            }
-                        )
-                    }
-
-                    ListBottomSheetMode.CREATE_NEW_LIST -> {
-                        CreateListBottomSheet(
-                            show = true,
-                            onCreateClick = { listName ->
-                                onListCreated(listName)
-                                currentMode = ListBottomSheetMode.LIST_SELECTION
-                                successMessage = "Successfully created list: $listName"
-                                showSuccessNotification = true
-                            },
-                            onDismiss = {
-                                currentMode = ListBottomSheetMode.LIST_SELECTION
-                            },
-                        )
-                    }
-                }
             }
         }
     }
@@ -203,24 +130,3 @@ fun PreviewSuccessNotificationRow() {
         )
     }
 }
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewListManagementBottomSheetWithNotification() {
-//    ListManagementBottomSheetWithNotification(
-//        isVisible = true,
-//        onDismiss = { },
-//        initialUserLists = listOf(
-//            WatchList("1", "Watch later", isSelected = true),
-//            WatchList("2", "Watching after exam", isSelected = false),
-//            WatchList("3", "Watching soon", isSelected = false),
-//            WatchList("4", "Adventure movies", isSelected = false)
-//        ),
-//        onListCreated = { listName ->
-//            println("Creating list: $listName")
-//        },
-//        onSelectionChanged = { userList, isSelected ->
-//            println("Selection changed: ${userList.name} -> $isSelected")
-//        }
-//    )
-//}

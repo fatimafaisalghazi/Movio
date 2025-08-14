@@ -144,4 +144,6 @@
     <string name="empty_list_message">Your %1$s list is empty</string>
     <string name="Start_adding_the_movies_and_shows_you_love">Start adding the movies and shows you love — keep them all in one place for easy access.</string>
     <string name="Start_watching_movies_and_shows">Start watching movies and shows, and we’ll keep track of your viewing history here.</string>
+    <string name="empty_list_description">Save the movies and shows you want to watch, and they’ll appear here when you’re ready.</string>
+    <string name="undo">Undo</string>
 </resources>

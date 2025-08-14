@@ -222,11 +222,23 @@ class MovieRepositoryImpl @Inject constructor(
         return remoteDataSource.addRatingMovie(movieId, rate)
     }
 
-    override suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean) {
+    override suspend fun setMovieFavoriteStatus(
+        movieId: Int,
+        sessionId: String,
+        isFavorite: Boolean
+    ) {
         remoteDataSource.setMovieFavoriteStatus(
             movieId = movieId,
             sessionId = sessionId,
             isFavorite = isFavorite
+        )
+    }
+
+    override suspend fun removeMovieFromList(listId: Int, mediaId: Int, sessionId: String) {
+        remoteDataSource.removeMovieFromList(
+            listId = listId,
+            mediaId = mediaId,
+            sessionId = sessionId
         )
     }
 
@@ -296,4 +308,6 @@ class MovieRepositoryImpl @Inject constructor(
         )
         return response.toListOperationStatus()
     }
+
+
 }
