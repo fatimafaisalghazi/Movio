@@ -180,6 +180,13 @@ interface MovioApi {
         @Query("with_genres") genreId: Int?,
         @Query("sort_by") sortBy: String
     ): SearchSeriesResponse
+
+    @GET("tv/{series_id}/season/{season_number}/episode/{episode_number}/videos")
+    suspend fun getEpisodeTrailers(
+        @Path("series_id") seriesId: Int,
+        @Path("season_number") seasonNumber: Int,
+        @Path("episode_number") episodeNumber: Int
+    ): TrailerResponse
     // endregion
 
 
@@ -313,5 +320,12 @@ interface MovioApi {
         @Path("account_id") accountId: Int? = null,
         @Query("session_id") sessionId: String,
         @Body body: AddToFavoriteRequest
+    )
+
+    @POST("list/{list_id}/remove_item")
+    suspend fun removeMovieFromList(
+        @Path("list_id") listId: Int,
+        @Query("session_id") sessionId: String,
+        @Body removeItemRequest: RemoveMovieDto
     )
 }
