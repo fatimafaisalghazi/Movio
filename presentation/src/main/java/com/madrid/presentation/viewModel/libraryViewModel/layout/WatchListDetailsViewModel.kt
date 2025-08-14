@@ -2,6 +2,7 @@ package com.madrid.presentation.viewModel.libraryViewModel.layout
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
+import com.madrid.domain.usecase.movie.AddMovieToListUseCase
 import com.madrid.domain.usecase.movie.RemoveMovieFromListUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListItemsUseCase
 import com.madrid.presentation.navigation.Destinations
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class WatchListDetailsViewModel @Inject constructor(
     private val getWatchListItemsUseCase: GetWatchListItemsUseCase,
     private val removeMovieFromList: RemoveMovieFromListUseCase,
+    private val addMovieToListUseCase: AddMovieToListUseCase,
     saveStateHandle: SavedStateHandle
 ) : BaseViewModel<WatchListDetailsState, WatchListDetailsEffect>(WatchListDetailsState()),
     WatchListDetailsInteractionListener {
@@ -33,7 +35,7 @@ class WatchListDetailsViewModel @Inject constructor(
         tryToExecute(
             function = { getWatchListItemsUseCase(args.watchListId) },
             onSuccess = { onGetWatchListDetailsSuccess(it) },
-            onError = ::onError
+            onError = { onError(it) }
         )
     }
 
@@ -58,14 +60,41 @@ class WatchListDetailsViewModel @Inject constructor(
         tryToExecute(
             function = { removeMovieFromList(movieId.toInt(), args.watchListId) },
             onSuccess = { onDeleteMovieSuccess(movieId) },
-            onError = ::onError
+            onError = { onError(it) }
         )
+    }
+
+    override fun onDismissSnackBar() {
+        updateState { it.copy(isSnackBarVisible = false) }
+    }
+
+    override fun onClickUndoAction() {
+        tryToExecute(
+            function = {
+                addMovieToListUseCase(
+                    movieId = state.value.deletedMovieId.toInt(),
+                    listId = args.watchListId
+                )
+            },
+            onSuccess = {
+                loadWatchListDetails()
+                onDismissSnackBar()
+            },
+            onError = { onError(it) }
+        )
+    }
+
+    override fun onClickTryAgainButton() {
+        updateState { it.copy(errorMessage = null) }
+        loadWatchListDetails()
     }
 
     private fun onDeleteMovieSuccess(movieId: String) {
         updateState { currentState ->
             currentState.copy(
-                watchList = currentState.watchList.filterNot { it.id == movieId }
+                isSnackBarVisible = true,
+                watchList = currentState.watchList.filterNot { it.id == movieId },
+                deletedMovieId = movieId,
             )
         }
     }
@@ -74,7 +103,7 @@ class WatchListDetailsViewModel @Inject constructor(
         updateState {
             it.copy(
                 isLoading = false,
-                errorMessage = throwable.message
+                errorMessage = throwable.message,
             )
         }
     }

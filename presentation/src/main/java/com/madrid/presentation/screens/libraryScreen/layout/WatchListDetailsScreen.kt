@@ -1,23 +1,52 @@
 package com.madrid.presentation.screens.libraryScreen.layout
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.madrid.designSystem.component.DialogWithButtonLayout
+import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.TopAppBar
+import com.madrid.presentation.R
 import com.madrid.presentation.component.SwipeToDeleteCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
+import com.madrid.presentation.screens.addtolist.SuccessNotificationRow
 import com.madrid.presentation.viewModel.libraryViewModel.layout.WatchListDetailsEffect
 import com.madrid.presentation.viewModel.libraryViewModel.layout.WatchListDetailsInteractionListener
 import com.madrid.presentation.viewModel.libraryViewModel.layout.WatchListDetailsState
@@ -51,37 +80,153 @@ private fun WatchListDetailsScreenContent(
     state: WatchListDetailsState,
     interaction: WatchListDetailsInteractionListener
 ) {
+    TopAppBar(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .statusBarsPadding(),
+        text = state.headerTitle,
+        secondIcon = null,
+        thirdIcon = null,
+        onFirstIconClick = interaction::onNavigateBack,
+    )
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center
     ) {
-        TopAppBar(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = state.headerTitle,
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = interaction::onNavigateBack,
+
+        AnimatedVisibility(state.isLoading, enter = fadeIn(), exit = fadeOut()) {
+            LoadingContent()
+        }
+
+        AnimatedVisibility(
+            state.errorMessage.isNullOrBlank().not(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            DialogWithButtonLayout(
+                title = stringResource(R.string.empty_no_internet_title),
+                description = stringResource(R.string.empty_no_internet_description),
+                image = R.drawable.img_no_internet,
+                buttonText = stringResource(R.string.try_again),
+                onClick = interaction::onClickTryAgainButton,
+                imageSize = 150,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 32.dp),
+            )
+        }
+
+        AnimatedVisibility(
+            state.isLoading.not() && state.watchList.isEmpty() && state.errorMessage.isNullOrBlank(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            EmptySearchLayout(
+                title = stringResource(R.string.empty_list_message, state.headerTitle),
+                description = stringResource(R.string.empty_list_description),
+                image = R.drawable.empty_list,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+                imageSize = 180,
+            )
+        }
+
+        AnimatedVisibility(
+            state.isLoading.not() && state.watchList.isNotEmpty(),
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 64.dp),
+                contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(
+                    state.watchList.size, key = { index -> state.watchList[index].id }
+                ) { index ->
+                    val watchList = state.watchList[index]
+                    SwipeToDeleteCard(
+                        title = watchList.title,
+                        movieRate = watchList.rating,
+                        movieCategory = watchList.category.first().name,
+                        movieImageUrl = watchList.imageUrl,
+                        onDelete = { interaction.onDeleteMovie(watchList.id) },
+                        onClick = { interaction.onClickMovieItem(watchList.id) },
+                    )
+                }
+            }
+        }
+    }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        SuccessNotificationRow(
+            isVisible = state.isSnackBarVisible,
+            message = stringResource(R.string.item_has_been_deleted),
+            actionText = stringResource(R.string.undo),
+            onAction = { interaction.onClickUndoAction() },
+            onDismiss = interaction::onDismissSnackBar,
+            icon = painterResource(com.madrid.designSystem.R.drawable.archive_tick),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 16.dp, vertical = 32.dp)
         )
+    }
+}
+
+@Composable
+private fun LoadingContent() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 64.dp),
+        contentAlignment = Alignment.Center
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
-            contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(
+                vertical = 16.dp,
+                horizontal = 16.dp
+            )
         ) {
-            items(
-                state.watchList.size, key = { index -> state.watchList[index].id }
-            ) { index ->
-                val watchList = state.watchList[index]
-                SwipeToDeleteCard(
-                    title = watchList.title,
-                    movieRate = watchList.rating,
-                    movieCategory = watchList.category.first().name,
-                    movieImageUrl = watchList.imageUrl,
-                    onDelete = { interaction.onDeleteMovie(watchList.id) },
-                    onClick = { interaction.onClickMovieItem(watchList.id) },
+            items(5) { index ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .clip(shape = RoundedCornerShape(8.dp))
+                        .shimmerEffect(),
                 )
             }
         }
     }
+}
+
+private fun Modifier.shimmerEffect(): Modifier = composed {
+    var size by remember { mutableStateOf(IntSize.Zero) }
+    val transition = rememberInfiniteTransition()
+    val startOffsetX by transition.animateFloat(
+        initialValue = -2 * size.width.toFloat(),
+        targetValue = 2 * size.width.toFloat(),
+        animationSpec = infiniteRepeatable(tween(1000)),
+    )
+    background(
+        brush = Brush.linearGradient(
+            colors = listOf(
+                Color(0xFF2A2445),
+                Color(0xFF3D3660),
+                Color(0xFF2A2445),
+            ),
+            start = Offset(startOffsetX, 0f),
+            end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())
+        )
+    )
+        .onGloballyPositioned {
+            size = it.size
+        }
 }
