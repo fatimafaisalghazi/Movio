@@ -144,10 +144,10 @@ fun ShimmerCard(
     modifier: Modifier = Modifier,
     contentAfterLoading: @Composable () -> Unit = {}
 ) {
-    if(isLoading){
+    if (isLoading) {
         Log.d("TAG in shimmer", "ShimmerCard: ")
         Box(modifier = modifier.shimmerEffect())
-    }else{
+    } else {
         contentAfterLoading()
     }
 }
@@ -161,16 +161,17 @@ fun ShimmerGrid(
     contentAfterLoading: @Composable () -> Unit = {},
 ) {
     if (isLoading) {
-        Box(
-            modifier
-                .height(180.dp)
-                .fillMaxWidth()
-        )
-        LazyVerticalGrid(GridCells.Fixed(numberOfColumns)) {
-            items(30) {
+        LazyVerticalGrid(
+            GridCells.Fixed(numberOfColumns),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = modifier.padding(horizontal = 16.dp),
+        ) {
+            items(20) {
                 Box(
                     Modifier
                         .height(180.dp)
+                        .clip(RoundedCornerShape(8.dp))
                         .fillMaxWidth()
                         .shimmerEffect()
                 )
