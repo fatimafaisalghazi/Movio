@@ -1,11 +1,9 @@
 package com.madrid.presentation.viewModel.libraryViewModel.watchlistViewAll
 
-import android.provider.Settings.Global.getString
 import com.madrid.domain.usecase.movie.CreateMovieListUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
 import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.libraryViewModel.LibraryScreenEffect
 import com.madrid.presentation.viewModel.libraryViewModel.WatchListState
 import com.madrid.presentation.viewModel.libraryViewModel.toWatchListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +13,6 @@ import javax.inject.Inject
 class WatchlistViewAllViewModel @Inject constructor(
     private val getWatchListUseCase: GetWatchListsUseCase,
     private val createMovieListUseCase: CreateMovieListUseCase,
-//    private val deleteWatchListUseCase: DeleteWatchListUseCase
 ) : BaseViewModel<WatchlistViewAllUiState, WatchlistViewAllEffect>(WatchlistViewAllUiState()),
     WatchListViewAllInteractionListener {
 
