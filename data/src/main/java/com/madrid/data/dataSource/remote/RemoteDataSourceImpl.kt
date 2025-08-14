@@ -159,6 +159,16 @@ class RemoteDataSourceImpl @Inject constructor(
         return api.getFavoriteSeries(sessionId).seriesResults
     }
 
+    override suspend fun getEpisodeTrailers(
+        episodeNumber: Int,
+        seasonNumber: Int,
+        seriesId: Int
+    ): List<TrailerResult> {
+        return api.getEpisodeTrailers(seriesId, seasonNumber, episodeNumber).results
+    }
+
+
+
     // Artist
     override suspend fun searchArtistByQuery(name: String, page: Int): SearchArtistResponse {
         return api.searchArtistByQuery(name, page)
