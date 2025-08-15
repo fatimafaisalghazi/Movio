@@ -17,9 +17,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.MovioRecentSearchText
-import com.madrid.designSystem.component.MoviosText
+import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 
@@ -36,7 +35,7 @@ fun LazyGridScope.recentSearchScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 12.dp),
+                .padding(bottom = 12.dp, top = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -65,9 +64,10 @@ fun LazyGridScope.recentSearchScreen(
                 .height(40.dp)
                 .clickable { onSearchItemClick(searchText) }
                 .padding(bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            MoviosText(
+            MovioRecentSearchText(
                 text = highlightCharactersInText(
                     searchText,
                     searchQuery,
@@ -75,15 +75,15 @@ fun LazyGridScope.recentSearchScreen(
                     Theme.color.surfaces.onSurfaceVariant,
                     Theme.textStyle.label.smallRegular14
                 ),
-                modifier = Modifier.align(Alignment.CenterVertically),
+                modifier = Modifier.align(Alignment.CenterVertically).weight(1f),
 //                modifier = Modifier.align(Alignment.CenterVertically).weight(1f),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                textStyle = Theme.textStyle.label.smallRegular12,
+                textStyle = Theme.textStyle.label.smallRegular14,
                 textAlign = null,
                 startIcon = painterResource(com.madrid.designSystem.R.drawable.outline_history),
                 endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_add),
-                onEndIconClick = { onRemoveItem(searchText)}
+                onEndIconClick = { onRemoveItem(searchText) }
             )
         }
     }

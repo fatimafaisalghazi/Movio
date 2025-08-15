@@ -82,7 +82,6 @@ fun MovioRecentSearchText(
             overflow = overflow
         )
 
-
         MovioIcon(
             painter = endIcon,
             contentDescription = "end icon",
@@ -91,6 +90,5 @@ fun MovioRecentSearchText(
                 .size(24.dp)
                 .clickable { onEndIconClick() }
         )
-
     }
 }
