@@ -42,7 +42,7 @@ fun FilterSearchScreen(
     onActorClick: (Int) -> Unit,
 ) {
     HeaderSectionBar(
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+        modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
         tabs = listOf(
             stringResource(R.string.top_results),
             stringResource(R.string.Movies),
@@ -58,10 +58,6 @@ fun FilterSearchScreen(
 
     when (typeOfFilterSearch) {
         FilterPagesItem.TOP_RATED -> {
-            SearchResultMessage(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                items = topRated.itemCount.toString()
-            )
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
@@ -70,6 +66,15 @@ fun FilterSearchScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+
+                item(
+                    span = { GridItemSpan(maxLineSpan) }
+                ) {
+                    SearchResultMessage(
+                        items = topRated.itemCount.toString()
+                    )
+                }
+
                 when {
                     topRated.itemCount == 0 && topRated.loadState.refresh is LoadState.Loading -> {
                         items(9) {
@@ -126,16 +131,9 @@ fun FilterSearchScreen(
                     }
                 }
             }
-
-
         }
 
         FilterPagesItem.MOVIES -> {
-            SearchResultMessage(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                items = topRated.itemCount.toString()
-            )
-
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
@@ -144,6 +142,15 @@ fun FilterSearchScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+
+                item(
+                    span = { GridItemSpan(maxLineSpan) }
+                ) {
+                    SearchResultMessage(
+                        items = topRated.itemCount.toString()
+                    )
+                }
+
                 when {
                     movies.itemCount == 0 && movies.loadState.refresh is LoadState.Loading -> {
                         items(9) {
@@ -210,11 +217,6 @@ fun FilterSearchScreen(
 
         FilterPagesItem.SERIES -> {
 
-            SearchResultMessage(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                items = topRated.itemCount.toString()
-            )
-
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Adaptive(minSize = 102.dp),
@@ -222,6 +224,15 @@ fun FilterSearchScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+
+                item(
+                    span = { GridItemSpan(maxLineSpan) }
+                ) {
+                    SearchResultMessage(
+                        items = topRated.itemCount.toString()
+                    )
+                }
+
                 when {
                     series.itemCount == 0 && series.loadState.refresh is LoadState.Loading -> {
                         items(9) {
@@ -253,7 +264,6 @@ fun FilterSearchScreen(
                             series.loadState.refresh is LoadState.NotLoading -> {
                         item(
                             span = { GridItemSpan(maxLineSpan) }
-
                         ) {
                             Box(
                                 modifier = Modifier
@@ -290,11 +300,6 @@ fun FilterSearchScreen(
 
         FilterPagesItem.ARTISTS -> {
 
-            SearchResultMessage(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                items = topRated.itemCount.toString()
-            )
-
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Adaptive(minSize = 102.dp),
@@ -302,7 +307,15 @@ fun FilterSearchScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                // Artist
+
+                item(
+                    span = { GridItemSpan(maxLineSpan) }
+                ) {
+                    SearchResultMessage(
+                        items = topRated.itemCount.toString()
+                    )
+                }
+
                 when {
                     artist.itemCount == 0 && artist.loadState.refresh is LoadState.Loading -> {
                         items(9) {
