@@ -60,7 +60,7 @@ fun MovieLoginContent(
 
                 onClick = {
                     keyboardController?.hide()
-                    onLoginClick()
+                        interactionListener.onLoginClicked()
                 },
 
                 text = stringResource(R.string.login),
@@ -104,7 +104,7 @@ private fun MovieLoginContentPreview() {
             interactionListener = object : LoginInteractionListener {
                 override fun onUsernameChanged(username: String) {}
                 override fun onPasswordChanged(password: String) {}
-                override fun onLoginClicked() {}
+                override fun onLoginClicked(){}
                 override fun onLoginAsGuestClicked() {}
                 override fun onForgotPasswordClicked() {}
                 override fun onSignUpClicked() {}

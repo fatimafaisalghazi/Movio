@@ -97,6 +97,8 @@
     <string name="empty_no_history_description">ابدأ بمشاهدة الأفلام والمسلسلات وسنقوم بتتبع سجل مشاهداتك هنا.</string>
     <string name="empty_search_title">ماذا تبحث اليوم؟</string>
     <string name="empty_search_description">ابدأ بالكتابة في شريط البحث للعثور على ما تحتاجه.</string>
+    <string name="username_and_password_are_required">اسم المستخدم وكلمة السر مطلوب</string>
+
     <string name="username_is_required">اسم المستخدم مطلوب</string>
     <string name="password_is_required">كلمة المرور مطلوبة</string>
     <string name="invalid_username_or_password">اسم المستخدم أو كلمة المرور غير صحيحة</string>
@@ -147,4 +149,13 @@
     <string name="Start_watching_movies_and_shows">إبدء بمشاهدة الأفلام و المسلسلات. وسنقوم بتتبع سجل المشاهدة الخاص بك هنا.</string>
     <string name="empty_list_description">احفظ الأفلام والعروض التي تريد مشاهدتها، وستظهر هنا عندما تكون مستعدًا.</string>
     <string name="undo">تراجع</string>
+    <string name="invalid_credentials">خطا في اسم المستخدم او كلمة السر </string>
+    <string name="unauthorized">Unauthorized access</string>
+    <string name="network_timeout">"Request timed out</string>
+    <string name="network_error">لا يوجد اتصال بالانترنت </string>
+    <string name="server_error">Server error, please try later</string>
+    <string name="bad_request">Bad request</string>
+    <string name="resource.not_found">Resource not found</string>
+    <string name="unknown_error">لقد حدث خطأ ما </string>
+
 </resources>
