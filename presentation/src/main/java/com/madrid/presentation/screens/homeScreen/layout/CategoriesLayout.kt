@@ -43,6 +43,7 @@ fun CategoriesLayout(
         item(span = { GridItemSpan(maxLineSpan) }) {
             FilterBar(
                 modifier = Modifier.padding(top = 16.dp),
+                contentHorizontalPadding = 0.dp,
                 items = categories.map { it.name },
                 selectedItem = selectedCategory.name,
                 onItemClick = { category ->
@@ -56,6 +57,7 @@ fun CategoriesLayout(
         item(span = { GridItemSpan(maxLineSpan) }) {
             FilterBar(
                 modifier = Modifier.padding(top = 12.dp, bottom = 24.dp),
+                contentHorizontalPadding = 0.dp,
                 items = SortingType.entries.map { it.value },
                 selectedItem = sortingType.value,
                 onItemClick = { sortingValue ->
