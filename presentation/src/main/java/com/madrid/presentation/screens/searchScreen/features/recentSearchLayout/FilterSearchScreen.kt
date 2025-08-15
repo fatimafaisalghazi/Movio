@@ -1,7 +1,9 @@
 package com.madrid.presentation.screens.searchScreen.features.recentSearchLayout
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -26,6 +28,7 @@ import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.screens.searchScreen.utils.FilterPagesItem
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun FilterSearchScreen(
     typeOfFilterSearch: FilterPagesItem,
@@ -61,12 +64,11 @@ fun FilterSearchScreen(
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 102.dp),
+                columns = GridCells.Adaptive(minSize = 101.33.dp),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-
                 item(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
@@ -119,14 +121,19 @@ fun FilterSearchScreen(
 
                     topRated.itemCount > 0 -> {
                         items(count = topRated.itemCount) { index ->
-                            MovioVerticalCard(
-                                modifier = Modifier.width(102.dp),
-                                description = topRated[index]!!.title,
-                                movieImage = topRated[index]!!.imageUrl,
-                                rate = topRated[index]!!.rating,
-                                imageHeight = 136.dp,
-                                onClick = { onTopResultClick(topRated[index]!!.id.toInt()) }
-                            )
+                            BoxWithConstraints {
+                                val cardWidth = maxWidth
+                                val cardHeight = cardWidth * (136f / 101.33f)
+
+                                MovioVerticalCard(
+                                    modifier = Modifier.width(cardWidth),
+                                    description = topRated[index]!!.title,
+                                    movieImage = topRated[index]!!.imageUrl,
+                                    rate = topRated[index]!!.rating,
+                                    imageHeight = cardHeight,
+                                    onClick = { onTopResultClick(topRated[index]!!.id.toInt()) }
+                                )
+                            }
                         }
                     }
                 }
@@ -137,7 +144,7 @@ fun FilterSearchScreen(
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 102.dp),
+                columns = GridCells.Adaptive(minSize = 101.33.dp),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -200,15 +207,19 @@ fun FilterSearchScreen(
 
                     movies.itemCount > 0 -> {
                         items(count = movies.itemCount) { index ->
-                            MovioVerticalCard(
-                                modifier = Modifier
-                                    .width(102.dp),
-                                description = movies[index]!!.title,
-                                movieImage = movies[index]!!.imageUrl,
-                                rate = movies[index]!!.rating,
-                                imageHeight = 136.dp,
-                                onClick = { onMovieClick(movies[index]!!.id.toInt()) }
-                            )
+                            BoxWithConstraints {
+                                val cardWidth = maxWidth
+                                val cardHeight = cardWidth * (136f / 101.33f)
+
+                                MovioVerticalCard(
+                                    modifier = Modifier.width(cardWidth),
+                                    description = movies[index]!!.title,
+                                    movieImage = movies[index]!!.imageUrl,
+                                    rate = movies[index]!!.rating,
+                                    imageHeight = cardHeight,
+                                    onClick = { onMovieClick(movies[index]!!.id.toInt()) }
+                                )
+                            }
                         }
                     }
                 }
@@ -219,7 +230,7 @@ fun FilterSearchScreen(
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 102.dp),
+                columns = GridCells.Adaptive(minSize = 101.33.dp),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -282,15 +293,19 @@ fun FilterSearchScreen(
 
                     series.itemCount > 0 -> {
                         items(count = series.itemCount) { index ->
-                            MovioVerticalCard(
-                                modifier = Modifier
-                                    .width(102.dp),
-                                description = series[index]!!.title,
-                                movieImage = series[index]!!.imageUrl,
-                                rate = series[index]!!.rating,
-                                imageHeight = 136.dp,
-                                onClick = { onSeriesClick(series[index]!!.id.toInt()) }
-                            )
+                            BoxWithConstraints {
+                                val cardWidth = maxWidth
+                                val cardHeight = cardWidth * (136f / 101.33f)
+
+                                MovioVerticalCard(
+                                    modifier = Modifier.width(cardWidth),
+                                    description = series[index]!!.title,
+                                    movieImage = series[index]!!.imageUrl,
+                                    rate = series[index]!!.rating,
+                                    imageHeight = cardHeight,
+                                    onClick = { onSeriesClick(series[index]!!.id.toInt()) }
+                                )
+                            }
                         }
                     }
                 }
@@ -302,7 +317,7 @@ fun FilterSearchScreen(
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 102.dp),
+                columns = GridCells.Adaptive(minSize = 101.33.dp),
                 contentPadding = PaddingValues(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -365,16 +380,19 @@ fun FilterSearchScreen(
 
                     artist.itemCount > 0 -> {
                         items(count = artist.itemCount) { index ->
-                            MovioArtistsCard(
-                                modifier = Modifier.size(
-                                    width = 101.dp,
-                                    height = 111.dp
-                                ),
-                                artistsName = artist[index]!!.name,
-                                imageUrl = artist[index]!!.imageUrl,
-                                onClick = { onActorClick(artist[index]!!.id.toInt()) },
-                                circleImageSize = 88.dp
-                            )
+                            BoxWithConstraints {
+                                val cardWidth = maxWidth
+                                val circleImageSize = cardWidth * (88f / 101.33f)
+
+                                MovioArtistsCard(
+                                    modifier = Modifier.width(cardWidth),
+                                    paddingBetweenImageAndText = 8.dp,
+                                    artistsName = artist[index]!!.name,
+                                    imageUrl = artist[index]!!.imageUrl,
+                                    onClick = { onActorClick(artist[index]!!.id.toInt()) },
+                                    circleImageSize = circleImageSize
+                                )
+                            }
                         }
                     }
                 }

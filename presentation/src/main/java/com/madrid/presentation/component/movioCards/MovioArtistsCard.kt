@@ -21,6 +21,7 @@ fun MovioArtistsCard(
     imageUrl: String,
     circleImageSize: Dp,
     artistsName: String,
+    paddingBetweenImageAndText: Dp = 4.dp,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -41,7 +42,7 @@ fun MovioArtistsCard(
             color = Theme.color.surfaces.onSurface,
             textStyle = Theme.textStyle.body.mediumMedium14,
             maxLines = 1,
-            modifier = Modifier.padding(top = 4.dp)
+            modifier = Modifier.padding(top = paddingBetweenImageAndText)
         )
     }
 }

@@ -1,8 +1,10 @@
 package com.madrid.presentation.screens.searchScreen.features.recentSearchLayout
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +37,7 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 fun LazyGridScope.forYouAndExploreScreen(
     showSearchResults: Boolean,
     isLoading: Boolean,
@@ -107,7 +110,9 @@ fun LazyGridScope.forYouAndExploreScreen(
                     ) {
                         items(forYouMovies) { movie ->
                             MovioVerticalCard(
-                                modifier = Modifier.width(124.dp).height(202.dp),
+                                modifier = Modifier
+                                    .width(124.dp)
+                                    .height(202.dp),
                                 description = movie.title,
                                 movieImage = movie.imageUrl,
                                 rate = movie.rating,
@@ -211,18 +216,23 @@ fun LazyGridScope.forYouAndExploreScreen(
                 items(
                     count = exploreMoreMovies.itemCount
                 ) { index ->
-                    MovioVerticalCard(
-                        modifier = Modifier
-                            .width(158.dp)
-                            .padding(bottom = 12.dp),
-                        description = exploreMoreMovies[index]!!.title,
-                        movieImage = exploreMoreMovies[index]!!.imageUrl,
-                        rate = exploreMoreMovies[index]!!.rating,
-                        imageHeight = 180.dp,
-                        onClick = {
-                            onMovieClick(exploreMoreMovies[index]!!)
-                        }
-                    )
+                    BoxWithConstraints {
+                        val cardWidth = maxWidth
+                        val cardHeight = cardWidth * (180f / 158)
+
+                        MovioVerticalCard(
+                            modifier = Modifier
+                                .width(cardWidth)
+                                .padding(bottom = 12.dp),
+                            description = exploreMoreMovies[index]!!.title,
+                            movieImage = exploreMoreMovies[index]!!.imageUrl,
+                            rate = exploreMoreMovies[index]!!.rating,
+                            imageHeight = cardHeight,
+                            onClick = {
+                                onMovieClick(exploreMoreMovies[index]!!)
+                            }
+                        )
+                    }
                 }
             }
         }
