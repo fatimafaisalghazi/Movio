@@ -36,7 +36,7 @@ fun MovioVerticalGrid(
                 description = media.title,
                 movieImage = media.imageUrl,
                 rate = media.rating.take(3),
-                heightForImage = 180.dp,
+                imageHeight = 180.dp,
                 onClick = {
                     onClickMedia(media.id.toInt())
                 }

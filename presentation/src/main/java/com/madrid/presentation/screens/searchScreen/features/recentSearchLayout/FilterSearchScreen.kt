@@ -1,6 +1,5 @@
 package com.madrid.presentation.screens.searchScreen.features.recentSearchLayout
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -120,7 +119,7 @@ fun FilterSearchScreen(
                                 description = topRated[index]!!.title,
                                 movieImage = topRated[index]!!.imageUrl,
                                 rate = topRated[index]!!.rating,
-                                heightForImage = 136.dp,
+                                imageHeight = 136.dp,
                                 onClick = { onTopResultClick(topRated[index]!!.id.toInt()) }
                             )
                         }
@@ -200,7 +199,7 @@ fun FilterSearchScreen(
                                 description = movies[index]!!.title,
                                 movieImage = movies[index]!!.imageUrl,
                                 rate = movies[index]!!.rating,
-                                heightForImage = 136.dp,
+                                imageHeight = 136.dp,
                                 onClick = { onMovieClick(movies[index]!!.id.toInt()) }
                             )
                         }
@@ -279,7 +278,7 @@ fun FilterSearchScreen(
                                 description = series[index]!!.title,
                                 movieImage = series[index]!!.imageUrl,
                                 rate = series[index]!!.rating,
-                                heightForImage = 136.dp,
+                                imageHeight = 136.dp,
                                 onClick = { onSeriesClick(series[index]!!.id.toInt()) }
                             )
                         }

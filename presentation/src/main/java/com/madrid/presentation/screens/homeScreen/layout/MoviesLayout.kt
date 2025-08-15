@@ -153,7 +153,7 @@ fun MoviesLayout(
                 description = media.title,
                 movieImage = media.imageUrl,
                 rate = media.rating.take(3),
-                heightForImage = 220.dp,
+                imageHeight = 220.dp,
                 onClick = { navController.navigate(Destinations.MovieDetailsScreen(media.id.toInt())) },
                 modifier = Modifier.padding(start = 6.dp, end = 6.dp)
             )

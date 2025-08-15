@@ -176,7 +176,7 @@ fun ActorDetailsContent(
                         movieImage = movie.imageUrl,
                         rate = movie.rating,
                         width = 124.dp,
-                        heightForImage = 160.dp,
+                        imageHeight = 160.dp,
                         onClick = { onKnownForClick(movie.mediaId) },
                         modifier = Modifier
                             .navigationBarsPadding()

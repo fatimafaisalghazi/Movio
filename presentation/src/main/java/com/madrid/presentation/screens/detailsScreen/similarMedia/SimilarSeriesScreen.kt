@@ -89,7 +89,7 @@ private fun SeriesCard(
                 movieImage = series.imageUrl,
                 rate = series.rating.toString(),
                 width = 124.dp,
-                heightForImage = 160.dp,
+                imageHeight = 160.dp,
                 onClick = onClick,
             )
         }

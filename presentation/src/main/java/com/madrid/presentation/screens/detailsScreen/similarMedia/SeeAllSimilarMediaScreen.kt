@@ -108,7 +108,7 @@ fun SeeAllSimilarMediaScreenContent(
                     rate = movie.rating,
                     width = 101.dp,
                     modifier = Modifier.padding(top = 16.dp),
-                    heightForImage = 136.dp,
+                    imageHeight = 136.dp,
                     onClick = {
                         onClickMedia(movie.id, isMovie)
                     }

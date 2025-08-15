@@ -55,7 +55,7 @@ fun CustomHorizontalCard(
                         movieImage = media.imageUrl,
                         rate = media.rating.take(3),
                         width = 124.dp,
-                        heightForImage = 160.dp,
+                        imageHeight = 160.dp,
                         onClick = { onMediaClick(media) }
                     )
                 }
@@ -98,7 +98,7 @@ fun CustomHorizontalCard(
                         movieImage = media.imageUrl,
                         rate = media.rating.take(3),
                         width = 124.dp,
-                        heightForImage = 160.dp,
+                        imageHeight = 160.dp,
                         onClick = { onMediaClickWithId(media.id) }
                     )
                 }
