@@ -11,12 +11,14 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.component.MovioRecentSearchText
 import com.madrid.designSystem.component.MoviosText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -69,15 +71,19 @@ fun LazyGridScope.recentSearchScreen(
                 text = highlightCharactersInText(
                     searchText,
                     searchQuery,
-                    Theme.color.brand.primary,
                     Theme.color.surfaces.onSurface,
-                    Theme.textStyle.label.smallRegular12
+                    Theme.color.surfaces.onSurfaceVariant,
+                    Theme.textStyle.label.smallRegular14
                 ),
                 modifier = Modifier.align(Alignment.CenterVertically),
+//                modifier = Modifier.align(Alignment.CenterVertically).weight(1f),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textStyle = Theme.textStyle.label.smallRegular12,
-                textAlign = null
+                textAlign = null,
+                startIcon = painterResource(com.madrid.designSystem.R.drawable.outline_history),
+                endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_add),
+                onEndIconClick = { onRemoveItem(searchText)}
             )
         }
     }
