@@ -26,8 +26,8 @@ import com.madrid.designSystem.theme.Theme
 @Composable
 fun HomeAppBar(
     modifier: Modifier = Modifier,
-    image : String? ,
-    onClickIcon: () -> Unit ={},
+    image: String?,
+    onClickIcon: () -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,

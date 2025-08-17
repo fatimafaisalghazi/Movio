@@ -15,7 +15,6 @@ import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 
-
 @Composable
 fun MovioArtistsCard(
     imageUrl: String,
