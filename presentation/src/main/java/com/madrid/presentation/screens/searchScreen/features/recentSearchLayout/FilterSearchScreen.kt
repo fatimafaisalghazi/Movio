@@ -386,7 +386,6 @@ fun FilterSearchScreen(
 
                                 MovioArtistsCard(
                                     modifier = Modifier.width(cardWidth),
-                                    paddingBetweenImageAndText = 8.dp,
                                     artistsName = artist[index]!!.name,
                                     paddingBetweenImageAndText = 8.dp,
                                     imageUrl = artist[index]!!.imageUrl,

@@ -33,9 +33,9 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.modifier.removeWidthPaddingFromParent
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
-import com.madrid.presentation.modifier.removeWidthPaddingFromParent
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
