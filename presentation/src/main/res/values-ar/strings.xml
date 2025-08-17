@@ -22,11 +22,15 @@
     <string name="don_t_have_an_account">هل لديك حساب ؟</string>
     <string name="sign_up">إنشاء حساب</string>
     <string name="more_screen">المزيد</string>
-    <string name="episodes_count">الحلقات %1$d</string>
-    <string name="season_count">%1$d المواسم</string>
+    <string name="episodes_count">الحلقات %1$s</string>
+    <string name="season_count">%1$s المواسم</string>
     <string name="library_screen">المكتبة</string>
-    <string name="episode_number">الحلقة %1$d</string>
+    <string name="episode_number">الحلقة %1$s</string>
     <string name="episode_duration">%1$d د</string>
+    <string name="year_and_episodes">%1$s | %2$s حلقات</string>
+    <string name="season_of_movie">الموسم </string>
+    <string name="season_of">من</string>
+    <string name="premiered">عرض لأول مرة في %1$s</string>
     <string name="my_ratings">تقييماتي</string>
     <string name="theme">المظهر</string>
     <string name="language">اللغة</string>
@@ -138,4 +142,13 @@
     <string name="this_rating_is_only_available_to_registered_users_Login_to_share_your_rating">هذا التقييم متاح فقط للمستخدمين المسجلين، قم بتسجيل الدخول لمشاركة تقييمك</string>
     <string name="watch_list_icon">ايقونه مشاهده القائمه</string>
     <string name="confirm">تأكيد</string>
+    <string name="new_list_created_successfully">تم إنشاء قائمة جديدة بنجاح</string>
+    <string name="nothing_here_yet">لا يوجد شئ حاليا 🎬</string>
+    <string name="add_movies_and_tv_shows_to_build_your_personal_watchlist">أضف أفلامًا ومسلسلات تلفزيونية إلى قائمة مُشاهداتك. ابدأ متعة المشاهدة من هنا!</string>
+    <string name="Item_has_been_deleted">تم الحذف بنجاح</string>
+    <string name="empty_list_message">قائمة %1$s الخاصة بك فارغة</string>
+    <string name="Start_adding_the_movies_and_shows_you_love">ابدأ بإضافة الأفلام والعروض التي تحبها - واحتفظ بها جميعًا في مكان واحد لسهولة الوصول إليها.</string>
+    <string name="Start_watching_movies_and_shows">إبدء بمشاهدة الأفلام و المسلسلات. وسنقوم بتتبع سجل المشاهدة الخاص بك هنا.</string>
+    <string name="empty_list_description">احفظ الأفلام والعروض التي تريد مشاهدتها، وستظهر هنا عندما تكون مستعدًا.</string>
+    <string name="undo">تراجع</string>
 </resources>

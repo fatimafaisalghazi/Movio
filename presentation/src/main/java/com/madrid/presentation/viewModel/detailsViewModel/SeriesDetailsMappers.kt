@@ -11,12 +11,14 @@ fun Episode.toUiState(): EpisodeUiState {
         episodeNumber = this.episodeNumber,
         episodeDuration = this.duration,
         rate = this.rate.toString(),
+        trailerKey = this.trailer.toString(),
     )
 }
 
 fun Season.mapToUiState(): SeasonUiState {
     return SeasonUiState(
         id = this.id,
+        title = title,
         imageUrl = this.imageUrl,
         seasonNumber = this.seasonNumber,
         productionDate = this.date,

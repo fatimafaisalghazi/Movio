@@ -1,9 +1,5 @@
 package com.madrid.presentation.viewModel.homeViewModel
 
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
-import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -54,10 +50,8 @@ class HomeViewModel @Inject constructor(
     HomeScreenState()
 ), HomeInteractionListener {
     init {
-        loadGenres()
         loadFileImage()
         loadMoviesLayoutData()
-        loadSeriesLayoutData()
     }
 
     private fun loadFileImage() {
@@ -106,7 +100,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchMediaByCategory(genreId: Int?, sortingType: SortingType) {
-        startLoading()
+        startCategoryMediaLoading()
         val result = Pager(
             config = PagingConfig(pageSize = 20, prefetchDistance = 5),
             pagingSourceFactory = {
@@ -130,14 +124,20 @@ class HomeViewModel @Inject constructor(
             it.copy(
 
                 categoryTabUiState = it.categoryTabUiState.copy(
-                    media = result
+                    media = result,
+                    isLoading = false
                 )
             )
         }
     }
 
-    override fun onSelectTab() {
-        TODO("Not yet implemented")
+    override fun onSelectTab(index: Int) {
+        updateState { it.copy(selectedTabIndex = index) }
+        when (index) {
+            0 -> loadMoviesLayoutData()
+            1 -> loadSeriesLayoutData()
+            2 -> loadGenres()
+        }
     }
 
     override fun onSelectCategory(category: CategoryUiState) {
@@ -173,16 +173,79 @@ class HomeViewModel @Inject constructor(
         emitNewEffect(HomeScreenEffect.NavigateToProfile)
     }
 
-    private fun startLoading() {
-        updateState { it.copy(isLoading = true) }
+    private fun startCategoryMediaLoading() {
+        updateState { homeScreenState ->
+            homeScreenState.copy(
+                categoryTabUiState = homeScreenState.categoryTabUiState.copy(
+                    isLoading = true,
+                )
+            )
+        }
     }
 
     private fun onError(errorMessage: String = "") {
-        updateState { it.copy(isLoading = false, errorMessage = errorMessage) }
+        updateState { it.copy(isLoading = true, errorMessage = errorMessage) }
     }
 
     /*************************************** Movies Section ***************************************/
 
+    private fun trendingSectionMoviesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                movieTabUiState = state.movieTabUiState.copy(
+                    trending = state.movieTabUiState.trending.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun topRatingSectionMoviesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                movieTabUiState = state.movieTabUiState.copy(
+                    topRated = state.movieTabUiState.topRated.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun nowPlayingSectionMoviesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                movieTabUiState = state.movieTabUiState.copy(
+                    nowPlaying = state.movieTabUiState.nowPlaying.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun upcomingSectionMoviesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                movieTabUiState = state.movieTabUiState.copy(
+                    upcoming = state.movieTabUiState.upcoming.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun recommendedSectionMoviesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                movieTabUiState = state.movieTabUiState.copy(
+                    moreRecommended = state.movieTabUiState.moreRecommended.copy(isLoading = isLoading)
+                )
+            )
+        }
+    }
 
     override fun loadMoviesLayoutData() {
         loadSliderMovies()
@@ -193,10 +256,16 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadSliderMovies() {
+
         tryToExecute(
             function = {
+                trendingSectionMoviesLoading(true)
                 val trendingMovies = getTrendingMoviesUseCase(1)
-                getMoviesWithTrailers(trendingMovies)
+                try {
+                    getMoviesWithTrailers(trendingMovies)
+                } catch (e: Exception) {
+                    trendingMovies
+                }
             },
             onSuccess = { movies ->
                 updateState { state ->
@@ -208,8 +277,12 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                trendingSectionMoviesLoading(false)
             },
-            onError = { onError() }
+            onError = { e ->
+                trendingSectionMoviesLoading(false)
+                onError()
+            }
         )
     }
 
@@ -223,7 +296,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadTopRatingMoviesSection() {
         tryToExecute(
-            function = { getTopRatedMoviesUseCase(1) },
+            function = {
+                topRatingSectionMoviesLoading(true)
+                getTopRatedMoviesUseCase(1)
+            },
             onSuccess = { movies ->
                 updateState { state ->
                     state.copy(
@@ -234,6 +310,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                topRatingSectionMoviesLoading(false)
             },
             onError = { onError() }
         )
@@ -241,7 +318,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadNowPlayingMoviesSection() {
         tryToExecute(
-            function = { getNowPlayingMoviesUseCase(1) },
+            function = {
+                nowPlayingSectionMoviesLoading(true)
+                getNowPlayingMoviesUseCase(1)
+            },
             onSuccess = { movies ->
                 updateState { state ->
                     state.copy(
@@ -252,6 +332,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                nowPlayingSectionMoviesLoading(false)
             },
             onError = { onError() }
         )
@@ -259,7 +340,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadUpComingMoviesSection() {
         tryToExecute(
-            function = { getUpcomingMoviesUseCase(1) },
+            function = {
+                upcomingSectionMoviesLoading(true)
+                getUpcomingMoviesUseCase(1)
+            },
             onSuccess = { movies ->
                 updateState { state ->
                     state.copy(
@@ -270,6 +354,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                upcomingSectionMoviesLoading(false)
             },
             onError = { onError() }
         )
@@ -277,7 +362,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadRecommendedMoviesSection() {
         tryToExecute(
-            function = { getRecommendedMoviesUseCase(1) },
+            function = {
+                recommendedSectionMoviesLoading(true)
+                getRecommendedMoviesUseCase(1)
+            },
             onSuccess = { movies ->
                 updateState { state ->
                     state.copy(
@@ -288,6 +376,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                recommendedSectionMoviesLoading(false)
             },
             onError = { onError() }
         )
@@ -296,6 +385,63 @@ class HomeViewModel @Inject constructor(
 
     /*************************************** Series Tab Section ***************************************/
 
+    private fun trendingSectionSeriesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                tvShowTabUiState = state.tvShowTabUiState.copy(
+                    trending = state.tvShowTabUiState.trending.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun topRatingSectionSeriesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                tvShowTabUiState = state.tvShowTabUiState.copy(
+                    topRated = state.tvShowTabUiState.topRated.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun airingTodaySectionSeriesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                tvShowTabUiState = state.tvShowTabUiState.copy(
+                    airingToday = state.tvShowTabUiState.airingToday.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun onAirSectionSeriesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                tvShowTabUiState = state.tvShowTabUiState.copy(
+                    onTv = state.tvShowTabUiState.onTv.copy(
+                        isLoading = isLoading
+                    )
+                )
+            )
+        }
+    }
+
+    private fun recommendedSectionSeriesLoading(isLoading: Boolean = true) {
+        updateState { state ->
+            state.copy(
+                tvShowTabUiState = state.tvShowTabUiState.copy(
+                    moreRecommended = state.tvShowTabUiState.moreRecommended.copy(isLoading = isLoading)
+                )
+            )
+        }
+    }
 
     override fun loadSeriesLayoutData() {
         loadSliderSeries()
@@ -308,6 +454,7 @@ class HomeViewModel @Inject constructor(
     private fun loadSliderSeries() {
         tryToExecute(
             function = {
+                trendingSectionSeriesLoading(true)
                 val series = getRecommendedSeriesUseCase(1)
                 getSeriesWithTrailers(series)
             },
@@ -321,6 +468,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                trendingSectionSeriesLoading(false)
             },
             onError = { onError() }
         )
@@ -328,7 +476,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadTopRatingSeriesSection() {
         tryToExecute(
-            function = { getTopRatedSeriesUseCase(1) },
+            function = {
+                topRatingSectionSeriesLoading(true)
+                getTopRatedSeriesUseCase(1)
+            },
             onSuccess = { allSeries ->
                 updateState { state ->
                     state.copy(
@@ -339,6 +490,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                topRatingSectionSeriesLoading(false)
             },
             onError = { onError() }
         )
@@ -346,7 +498,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadAiringTodaySeriesSection() {
         tryToExecute(
-            function = { getAiringTodaySeriesUseCase(1) },
+            function = {
+                airingTodaySectionSeriesLoading(true)
+                getAiringTodaySeriesUseCase(1)
+            },
             onSuccess = { allSeries ->
                 updateState { state ->
                     state.copy(
@@ -357,6 +512,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                airingTodaySectionSeriesLoading(false)
             },
             onError = { onError() }
         )
@@ -364,7 +520,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadOnAirSeriesSection() {
         tryToExecute(
-            function = { getOnAirSeriesUseCase(1) },
+            function = {
+                onAirSectionSeriesLoading(true)
+                getOnAirSeriesUseCase(1)
+            },
             onSuccess = { allSeries ->
                 updateState { state ->
                     state.copy(
@@ -375,6 +534,7 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                onAirSectionSeriesLoading(false)
             },
             onError = { onError() }
         )
@@ -382,7 +542,10 @@ class HomeViewModel @Inject constructor(
 
     private fun loadRecommendedSeriesSection() {
         tryToExecute(
-            function = { getRecommendedSeriesUseCase(1) },
+            function = {
+                recommendedSectionSeriesLoading(true)
+                getRecommendedSeriesUseCase(1)
+            },
             onSuccess = { allSeries ->
                 updateState { state ->
                     state.copy(
@@ -393,9 +556,9 @@ class HomeViewModel @Inject constructor(
                         )
                     )
                 }
+                recommendedSectionSeriesLoading(false)
             },
             onError = { onError() }
         )
     }
-
 }

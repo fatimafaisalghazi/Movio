@@ -1,5 +1,6 @@
 package com.madrid.presentation.screens.detailsScreen.seriesDetails
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,9 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TopAppBar
@@ -38,16 +38,34 @@ import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsViewModel
 fun EpisodesScreen(viewModel: SeriesDetailsViewModel = hiltViewModel()) {
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
+    val context = LocalContext.current
     EpisodesScreenContent(
-        uiState,
-        viewModel::updateSelectedSeason,
-        onClickBack = { navController.popBackStack() })
+        uiState = uiState,
+        onSeasonSelection = viewModel::updateSelectedSeason,
+        onClickEpisode = { episode ->
+            viewModel.loadEpisodeTrailer(
+                seriesId = uiState.seriesId,
+                seasonNumber = uiState.selectedSeasonUiState.seasonNumber,
+                episodeNumber = episode.episodeNumber
+            ) { trailerKey ->
+                trailerKey?.let {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        "https://www.youtube.com/watch?v=$it".toUri()
+                    )
+                    context.startActivity(intent)
+                }
+            }
+        },
+        onClickBack = { navController.popBackStack() }
+    )
 }
 
 @Composable
 fun EpisodesScreenContent(
     uiState: SeriesDetailsUiState,
     onSeasonSelection: (Int) -> Unit = {},
+    onClickEpisode: (EpisodeUiState) -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
     val episodes: List<EpisodeUiState> = uiState.selectedSeasonUiState.episodesUiStates
@@ -57,7 +75,7 @@ fun EpisodesScreenContent(
             .background(Theme.color.surfaces.surface)
     ) {
         item {
-            Box() {
+            Box {
                 TopAppBar(
                     text = null,
                     secondIcon = null,
@@ -94,7 +112,7 @@ fun EpisodesScreenContent(
                     .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 MovioText(
-                    text = "Season ${uiState.selectedSeasonUiState.seasonNumber}",
+                    text = "Episodes ${uiState.selectedSeasonUiState.numberOfEpisodes}",
                     textStyle = Theme.textStyle.headline.mediumMedium18,
                     color = Theme.color.surfaces.onSurface,
                     modifier = Modifier
@@ -120,17 +138,15 @@ fun EpisodesScreenContent(
             MovioEpisodesCard(
                 movieTitle = episode.episodeName,
                 movieRate = (episode.rate.toFloat() / 2).toString().take(3),
-                currentMovieEpisode = episode.episodeNumber.toString(),
+                currentMovieEpisode = "episode ${episode.episodeNumber}",
                 movieTime = "${episode.episodeDuration} m",
                 movieImageUrl = episode.imageUrl,
-                onClick = {
-                },
+                onClick = { onClickEpisode(episode) },
                 modifier = Modifier.padding(bottom = 12.dp, start = 16.dp, end = 16.dp)
             )
         }
     }
 }
-
 
 private fun getSeasonsNames(numberOfSeasons: Int, uiState: SeriesDetailsUiState): List<String> {
     return if (uiState.currentSeasonsUiStates.first().seasonNumber == 0)

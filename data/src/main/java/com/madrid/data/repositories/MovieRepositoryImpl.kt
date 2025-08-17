@@ -10,6 +10,8 @@ import com.madrid.data.dataSource.mapper.toListOperationStatus
 import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
+import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
+import com.madrid.data.dataSource.remote.dto.movie.MovieResult
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toRatedMovie
@@ -34,6 +36,12 @@ class MovieRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
 ) : MovieRepository {
     private val pageNumberCached = 1
+    private suspend fun MovieResult.toMovieWithGenres(): Movie {
+        val genres = localDataSource
+            .getMovieGenresByIds(this.genreIds ?: emptyList()).map { it.toGenre() }
+        return this.toMovie(genres)
+    }
+
     override suspend fun getMovieDetailsById(movieId: Int): Movie {
         return remoteDataSource.getMovieDetailsById(movieId).toMovie()
     }
@@ -198,15 +206,6 @@ class MovieRepositoryImpl @Inject constructor(
         return remoteMovies
     }
 
-    override suspend fun getMovieGenres(): List<Genre> {
-        return localDataSource.getAllMovieGenres().ifEmpty {
-            remoteDataSource.getMovieGenres().forEach {
-                localDataSource.insertMovieGenre(it.toMovieGenreTable())
-            }
-            localDataSource.getAllMovieGenres()
-        }.map { it.toGenre() }
-    }
-
     override suspend fun addRatingMovie(
         movieId: Int,
         rate: Double
@@ -214,11 +213,23 @@ class MovieRepositoryImpl @Inject constructor(
         return remoteDataSource.addRatingMovie(movieId, rate)
     }
 
-    override suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean) {
+    override suspend fun setMovieFavoriteStatus(
+        movieId: Int,
+        sessionId: String,
+        isFavorite: Boolean
+    ) {
         remoteDataSource.setMovieFavoriteStatus(
             movieId = movieId,
             sessionId = sessionId,
             isFavorite = isFavorite
+        )
+    }
+
+    override suspend fun removeMovieFromList(listId: Int, mediaId: Int, sessionId: String) {
+        remoteDataSource.removeMovieFromList(
+            listId = listId,
+            mediaId = mediaId,
+            sessionId = sessionId
         )
     }
 
@@ -260,7 +271,9 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFavoriteMovies(sessionId: String): List<Movie> {
-        return remoteDataSource.getFavoriteMovies(sessionId).map { it.toMovie() }
+        return remoteDataSource.getFavoriteMovies(sessionId).map { movie ->
+            movie.toMovieWithGenres()
+        }
     }
 
     override suspend fun createMovieList(
@@ -286,4 +299,6 @@ class MovieRepositoryImpl @Inject constructor(
         )
         return response.toListOperationStatus()
     }
+
+
 }

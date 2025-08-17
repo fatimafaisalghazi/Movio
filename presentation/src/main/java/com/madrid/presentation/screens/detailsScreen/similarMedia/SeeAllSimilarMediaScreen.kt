@@ -2,7 +2,6 @@ package com.madrid.presentation.screens.detailsScreen.similarMedia
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,10 +27,6 @@ fun SeeAllSimilarMediaScreen(
 ) {
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
-
-    // Log the count of similar media
-    Log.d("SimilarMediaDebug", "Total similar media items: ${uiState.medias.size}")
-
     val similarMovies = uiState.medias.map { media ->
         // Log each media's details including rating
         Log.d("SimilarMediaDebug",
@@ -89,8 +84,7 @@ fun SeeAllSimilarMediaScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Theme.color.surfaces.surface)
-            .padding(start = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(horizontal = 6.dp),
         ) {
             items(similarMovies.size) { index ->
                 val movie = similarMovies[index]
@@ -107,11 +101,12 @@ fun SeeAllSimilarMediaScreenContent(
                     movieImage = movie.imageUrl,
                     rate = movie.rating,
                     width = 101.dp,
-                    modifier = Modifier.padding(top = 16.dp),
                     height = 136.dp,
                     onClick = {
                         onClickMedia(movie.id, isMovie)
-                    }
+                    },
+                    modifier = Modifier.padding(top = 16.dp, start = 6.dp),
+
                 )
             }
         }

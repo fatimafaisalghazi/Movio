@@ -13,6 +13,7 @@ data class HomeScreenState(
     val movieTabUiState: MovieTabUiState = MovieTabUiState(),
     val tvShowTabUiState: TvShowTabUiState = TvShowTabUiState(),
     val categoryTabUiState: CategoryTabUiState = CategoryTabUiState(),
+    val selectedTabIndex: Int = 0
 )
 
 data class AllTabUiState(
@@ -40,6 +41,7 @@ data class TvShowTabUiState(
 )
 
 data class CategoryTabUiState(
+    val isLoading: Boolean = false,
     val categories: List<CategoryUiState> = emptyList(),
     val selectedCategory: CategoryUiState = CategoryUiState(),
     val media: Flow<PagingData<MediaUiState>> = emptyFlow(),
