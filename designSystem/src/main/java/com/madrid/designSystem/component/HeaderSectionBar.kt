@@ -111,7 +111,9 @@ fun HeaderSectionBar(
 fun underlineGlowBrush(): Brush {
     return Brush.horizontalGradient(
         colors = listOf(
-            Color(0x33EBE6FE), Color(0xFFFFF5F3), Color(0x33FFFFFF)
+            Theme.color.system.firstColorForUnderlineGlowBrush,
+            Theme.color.system.secondColorForUnderlineGlowBrush,
+            Theme.color.system.thirdColorForUnderlineGlowBrush
         )
     )
 }

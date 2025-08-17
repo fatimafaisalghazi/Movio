@@ -48,7 +48,10 @@ data class System(
     val dropShadow: Color,
     val defaultImageBackground: Color,
     val startColorForCardShadow: Color,
-    val endColorForCardShadow: Color
+    val endColorForCardShadow: Color,
+    val firstColorForUnderlineGlowBrush: Color,
+    val secondColorForUnderlineGlowBrush: Color,
+    val thirdColorForUnderlineGlowBrush: Color
 )
 
 data class Gradients(
