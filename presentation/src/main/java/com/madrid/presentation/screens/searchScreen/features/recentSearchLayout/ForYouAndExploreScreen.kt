@@ -35,6 +35,7 @@ import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
+import com.madrid.presentation.modifier.removeWidthPaddingFromParent
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
@@ -104,7 +105,7 @@ fun LazyGridScope.forYouAndExploreScreen(
                     LazyRow(
                         modifier = Modifier
                             .padding(bottom = 32.dp)
-                            .fillWidthOfParent(parentPadding = parentPadding),
+                            .removeWidthPaddingFromParent(parentPadding = parentPadding),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(horizontal = 16.dp)
                     ) {
