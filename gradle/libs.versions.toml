@@ -35,7 +35,7 @@ junit = "4.12"
 truth = "1.4.4"
 mockk = "1.14.5"
 junitJupiter = "5.13.4"
-kotlinxCoroutinesTest = "1.10.2"
+kotlinxCoroutinesTest = "1.7.3"
 
 
 [libraries]
