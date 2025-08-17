@@ -118,8 +118,7 @@ fun SeriesDetailsScreen(
         uiState.showLoadingScreen -> {
             LoadingScreen(message = stringResource(R.string.loading))
         }
-
-        uiState.isNoInternet -> {
+        uiState.isLoading  -> {
             Box(
                 modifier = Modifier
                     .fillMaxSize()

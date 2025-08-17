@@ -97,14 +97,13 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        updateState { it.copy(showLoadingScreen = true, isLoading = true) }
+        updateState { it.copy(showLoadingScreen = true, isLoading = false) }
         tryToExecute(
             function = { getSeriesDetailsUseCase(args.seriesId) },
             onSuccess = { series ->
                 updateState {
                     it.copy(
                         seriesId = series.id,
-                        isLoading = false,
                         topImageUrl = series.imageUrl,
                         seriesName = series.title,
                         seriesGenre = series.genre.map { it.name },
@@ -114,7 +113,8 @@ class SeriesDetailsViewModel @Inject constructor(
                         description = series.description,
                         currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
                         selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState(),
-                        showLoadingScreen = false
+                        showLoadingScreen = false,
+                        isLoading = false,
                     )
                 }
                 loadAllSeasonsEpisodes()
@@ -124,16 +124,13 @@ class SeriesDetailsViewModel @Inject constructor(
                 loadTrailer()
                 loadSeasonEpisodes(if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber)
             },
-            onError = { throwable ->
-                onError(throwable)
+            onError = {
+                onError()
             },
         )
     }
 
     fun retryLoadData() {
-        val currentState = state.value
-        if (currentState.isLoading) return
-        updateState { it.copy(isNoInternet = false) }
         loadData()
     }
 
@@ -293,25 +290,12 @@ class SeriesDetailsViewModel @Inject constructor(
             onError = {},
         )
     }
-    private fun onError(throwable:Throwable){
-        when (throwable) {
-            is java.io.IOException -> {
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        showLoadingScreen = false,
-                        isNoInternet = true
-                    )
-                }
-            }
-            else -> {
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        showLoadingScreen = false
-                    )
-                }
-            }
+    private fun onError() {
+        updateState {
+            it.copy(
+                isLoading = true,
+                showLoadingScreen = false
+            )
         }
     }
     private fun checkIfFavoriteSeriesUseCase() {
