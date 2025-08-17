@@ -32,15 +32,22 @@ class LoginViewModel @Inject constructor(
         val currentState = state.value
         if (currentState.isLoading || currentState.isGuestLoading) return
         val errorMessage = when {
-            currentState.username.isBlank() && currentState.password.isBlank() ->
-                R.string.username_and_password_are_required
-            currentState.username.isBlank() -> R.string.username_is_required
+            currentState.username.isBlank() && currentState.password.isBlank()->{
+                updateState { it.copy(isUsernameValid=true,isPasswordValid=true)}
+                R.string.username_and_password_are_required}
+            currentState.username.isBlank() ->{
+                updateState { it.copy(isUsernameValid=true)}
+                R.string.username_is_required}
 
-            currentState.password.isBlank() ->R.string.password_is_required
+            currentState.password.isBlank() ->{
+                updateState { it.copy(isPasswordValid=true)}
+
+
+                R.string.password_is_required}
             else -> null
         }
         if (errorMessage != null) {
-            updateState { it.copy(errorMessage = errorMessage) }
+            updateState { it.copy(errorMessage = errorMessage ) }
             return
         }
 

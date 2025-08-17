@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -29,14 +26,13 @@ fun LoginErrorAndForgotPassword(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 24.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+
+,        horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
         if (state.errorMessage != null) {
             MovioText(
-                text = stringResource(state.errorMessage), // التحويل هنا
+                text = stringResource(state.errorMessage),
                 textStyle = Theme.textStyle.label.mediumMedium12,
                 color = Theme.color.system.onError,
                 maxLines = 2,

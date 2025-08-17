@@ -29,10 +29,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.Theme
 
 @Composable
@@ -61,7 +63,7 @@ fun BasicTextInputField(
 
     val borderModifier = when {
         isError -> Modifier.border(
-            width = 1.dp,
+            width = 2.dp,
             brush = errorBorderBrush,
             shape = RoundedCornerShape(8.dp)
         )
@@ -88,10 +90,8 @@ fun BasicTextInputField(
         visualTransformation = visualTransformation,
         modifier = modifier
             .fillMaxWidth()
+            .then(borderModifier)
             .background(Theme.color.surfaces.surfaceContainer, RoundedCornerShape(8.dp))
-            .then(
-                borderModifier
-            )
             .padding(horizontal = 12.dp, vertical = 14.dp),
 
         decorationBox = { innerTextField ->
@@ -129,7 +129,7 @@ fun BasicTextInputField(
                 if (endIconPainter != null && value.isNotEmpty()) {
                     Crossfade(
                         targetState = endIconPainter,
-                        label = "PasswordIconAnimation"
+                        label = stringResource(R.string.passwordiconanimation)
                     ) { icon ->
                         Icon(
                             painter = icon,
