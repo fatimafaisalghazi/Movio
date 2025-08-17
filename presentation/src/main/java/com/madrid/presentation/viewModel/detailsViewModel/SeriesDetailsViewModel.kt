@@ -98,45 +98,41 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadData() {
         updateState { it.copy(showLoadingScreen = true, isLoading = true) }
-        viewModelScope.launch {
-            delay(1050)
-            tryToExecute(
-                function = { getSeriesDetailsUseCase(args.seriesId) },
-                onSuccess = { series ->
-                    updateState {
-                        it.copy(
-                            seriesId = series.id,
-                            isLoading = false,
-                            topImageUrl = series.imageUrl,
-                            seriesName = series.title,
-                            seriesGenre = series.genre.map { it.name },
-                            rate = RateFormatter.formatRate(series.rate),
-                            numberOfSeasons = series.seasons.size,
-                            productionDate = formatDateKotlinx(series.airDate),
-                            description = series.description,
-                            currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
-                            selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState(),
-                            showLoadingScreen = false
-                        )
-                    }
-                    loadAllSeasonsEpisodes()
-                    loadCastData()
-                    loadReviews()
-                    loadSimilarSeries()
-                    loadTrailer()
-                    loadSeasonEpisodes(if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber)
-                },
-                onError = { throwable ->
-                    onError(throwable)
-                },
-            )
-        }
+        tryToExecute(
+            function = { getSeriesDetailsUseCase(args.seriesId) },
+            onSuccess = { series ->
+                updateState {
+                    it.copy(
+                        seriesId = series.id,
+                        isLoading = false,
+                        topImageUrl = series.imageUrl,
+                        seriesName = series.title,
+                        seriesGenre = series.genre.map { it.name },
+                        rate = RateFormatter.formatRate(series.rate),
+                        numberOfSeasons = series.seasons.size,
+                        productionDate = formatDateKotlinx(series.airDate),
+                        description = series.description,
+                        currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
+                        selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState(),
+                        showLoadingScreen = false
+                    )
+                }
+                loadAllSeasonsEpisodes()
+                loadCastData()
+                loadReviews()
+                loadSimilarSeries()
+                loadTrailer()
+                loadSeasonEpisodes(if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber)
+            },
+            onError = { throwable ->
+                onError(throwable)
+            },
+        )
     }
 
     fun retryLoadData() {
         val currentState = state.value
         if (currentState.isLoading) return
-
         updateState { it.copy(isNoInternet = false) }
         loadData()
     }
