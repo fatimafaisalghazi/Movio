@@ -388,6 +388,7 @@ fun FilterSearchScreen(
                                     modifier = Modifier.width(cardWidth),
                                     paddingBetweenImageAndText = 8.dp,
                                     artistsName = artist[index]!!.name,
+                                    paddingBetweenImageAndText = 8.dp,
                                     imageUrl = artist[index]!!.imageUrl,
                                     onClick = { onActorClick(artist[index]!!.id.toInt()) },
                                     circleImageSize = circleImageSize

@@ -15,13 +15,12 @@ import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 
-
 @Composable
 fun MovioArtistsCard(
     imageUrl: String,
     circleImageSize: Dp,
     artistsName: String,
-    paddingBetweenImageAndText: Dp = 4.dp,
+    paddingBetweenImageAndText: Dp,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -54,7 +53,8 @@ fun MovioArtistsCardPreview() {
         MovioArtistsCard(
             imageUrl = "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
             artistsName = "Leonardo DiCaprio",
-            circleImageSize = 88.dp
+            circleImageSize = 88.dp,
+            paddingBetweenImageAndText = 8.dp
         )
     }
 }
