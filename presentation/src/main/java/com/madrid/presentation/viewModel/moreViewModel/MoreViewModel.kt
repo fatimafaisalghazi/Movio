@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.madrid.domain.usecase.authentication.GetCurrentUserDetailsUseCase
 import com.madrid.domain.usecase.authentication.LoginUseCase
+import com.madrid.domain.usecase.genre.ClearGenresCacheUseCase
 import com.madrid.domain.usecase.movie.ClearHomeMoviesCacheUseCase
 import com.madrid.domain.usecase.preferences.GetAppThemeUseCase
 import com.madrid.domain.usecase.preferences.SetAppThemeUseCase
@@ -20,7 +21,8 @@ class MoreViewModel @Inject constructor(
     private val getCurrentUserDetailsUseCase: GetCurrentUserDetailsUseCase,
     private val getAppThemeUseCase: GetAppThemeUseCase,
     private val setAppThemeUseCase: SetAppThemeUseCase,
-    private val clearHomeMoviesCacheUseCase: ClearHomeMoviesCacheUseCase
+    private val clearHomeMoviesCacheUseCase: ClearHomeMoviesCacheUseCase,
+    private val clearGenresCacheUseCase: ClearGenresCacheUseCase
 ) :
     BaseViewModel<MoreUiState, MoreEffect>(MoreUiState()),
     MoreInteractionListener {
@@ -122,7 +124,10 @@ class MoreViewModel @Inject constructor(
 
     override fun onConfirmLanguage() {
         tryToExecute(
-            function = { clearHomeMoviesCacheUseCase() },
+            function = {
+                clearHomeMoviesCacheUseCase()
+                clearGenresCacheUseCase()
+            },
             onSuccess = {
                 updateState { it.copy(isLanguageSheetVisible = false) }
             },
