@@ -126,7 +126,10 @@ fun SearchScreen(
             },
             onArtistClick = { actorId ->
                 navController.navigate(Destinations.ActorDetails(actorId))
-            }
+            },
+            isDoAction = uiState.isDoAction,
+            isChangeSearchQuery = uiState.searchUiState.isChangeSearchQuery,
+            changeValueOfIsChangeSearchQuery = viewModel::changeValueOfIsChangeSearchQuery,
         )
         uiState.searchUiState.errorMessage?.let { errorMsg ->
             LaunchedEffect(errorMsg) {
@@ -180,6 +183,9 @@ fun ContentSearchScreen(
     onTopResultClick: (Int) -> Unit,
     onSearchedClick: (Int) -> Unit,
     onArtistClick: (Int) -> Unit,
+    isChangeSearchQuery : Boolean,
+    isDoAction : Boolean,
+    changeValueOfIsChangeSearchQuery : () -> Unit,
     highLightRecentSearch: (String, String, Color, Color, TextStyle) -> AnnotatedString,
 ) {
     val showSearchResults = searchQuery.isNotBlank()
@@ -187,22 +193,31 @@ fun ContentSearchScreen(
     var showRecentSearch by remember { mutableIntStateOf(0) }
     var previousSelectedTabIndex by remember { mutableIntStateOf(-1) }
 
-    LaunchedEffect(searchQuery) {
-        snapshotFlow { searchQuery }
-            .debounce(1000)
-            .collect { query ->
-                showRecentSearch = 0
-                if (query.isNotBlank()) {
-                    onSearchBarClick()
-                    addRecentSearch(query)
-                    when (typeOfFilterSearch) {
-                        FilterPagesItem.TOP_RATED -> onClickTopRated()
-                        FilterPagesItem.MOVIES -> onClickMovies()
-                        FilterPagesItem.SERIES -> onClickSeries()
-                        FilterPagesItem.ARTISTS -> onClickArtist()
+    LaunchedEffect(isDoAction) {
+        if(searchQuery.isEmpty() || searchQuery.isBlank()){
+            showRecentSearch = 0
+        }
+        else{
+            showRecentSearch = 1
+            snapshotFlow { searchQuery }
+                .debounce(1500)
+                .collect { query ->
+                    showRecentSearch = 0
+
+                    if (query.isNotBlank() && isChangeSearchQuery ) {
+                        onSearchBarClick()
+                        changeValueOfIsChangeSearchQuery()
+                        addRecentSearch(query)
+                        when (typeOfFilterSearch) {
+                            FilterPagesItem.TOP_RATED -> onClickTopRated()
+                            FilterPagesItem.MOVIES -> onClickMovies()
+                            FilterPagesItem.SERIES -> onClickSeries()
+                            FilterPagesItem.ARTISTS -> onClickArtist()
+                        }
                     }
                 }
-            }
+        }
+
     }
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
