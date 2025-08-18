@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.FilterBar
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.MovioText
@@ -70,7 +70,12 @@ fun SeeAllTVShowsScreen(
             uiState.title,
             secondIcon = null,
             thirdIcon = null,
-            onFirstIconClick = { navController.navigate(Destinations.HomeScreen) },
+            onFirstIconClick = {
+                navController.popBackStack(
+                    Destinations.HomeScreen,
+                    inclusive = false
+                )
+            },
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .statusBarsPadding()
@@ -118,12 +123,16 @@ fun SeeAllTVShowsScreen(
                     item(
                         span = { GridItemSpan(maxLineSpan) }
                     ) {
-                        EmptySearchLayout(
+                        DialogWithButtonLayout(
                             title = stringResource(R.string.empty_no_internet_title),
                             description = stringResource(R.string.empty_no_internet_description),
-                            modifier = Modifier.fillMaxSize(),
-                            image = com.madrid.designSystem.R.drawable.no_internet,
-                            imageSize = 180,
+                            image = R.drawable.img_no_internet,
+                            buttonText = stringResource(R.string.try_again),
+                            onClick = { viewModel.onTryAgainClick() },
+                            imageSize = 150,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 32.dp),
                         )
                     }
                 }
