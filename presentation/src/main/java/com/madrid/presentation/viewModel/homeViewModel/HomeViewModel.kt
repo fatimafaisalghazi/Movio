@@ -137,7 +137,14 @@ class HomeViewModel @Inject constructor(
         when (index) {
             0 -> loadMoviesLayoutData()
             1 -> loadSeriesLayoutData()
-            2 -> loadGenres()
+            2 -> {
+                updateState { state ->
+                    state.copy(
+                        categoryTabUiState = CategoryTabUiState()
+                    )
+                }
+                loadGenres()
+            }
         }
     }
 
