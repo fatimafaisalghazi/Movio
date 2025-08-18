@@ -29,6 +29,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.text.contains
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -59,15 +60,20 @@ class SearchViewModel @Inject constructor(
     }
 
     fun updateSearchQuery(
-        newSearchQuery : String ,
-    ){
-        updateState {searchScreenState->
+        newSearchQuery: String,
+    ) {
+        updateState { searchScreenState ->
             searchScreenState.copy(
+                isDoAction = !searchScreenState.isDoAction,
                 searchUiState = searchScreenState.searchUiState.copy(
-                    searchQuery = newSearchQuery
-                )
+                    searchQuery = newSearchQuery,
+                    isChangeSearchQuery = true
+                ),
+
             )
         }
+        onChangeRecentSearchUiState()
+
     }
     fun addRecentSearch(recentSearch: String) {
         tryToExecute(
@@ -75,37 +81,54 @@ class SearchViewModel @Inject constructor(
                 addRecentSearchUseCase(item = recentSearch)
                 getRecentSearchesUseCase()
             },
-            onSuccess = { result -> updateState { it.copy(recentSearchUiState = result) } },
+            onSuccess = ::onUpdateRecentSuccess,
             onError = {}
         )
     }
 
     fun clearAll() {
+        updateState {searchScreenStat->
+            searchScreenStat.copy(
+                isDoAction = !searchScreenStat.isDoAction
+            )
+        }
+
         tryToExecute(
             function = {
                 clearAllRecentSearchesUseCase()
                 getRecentSearchesUseCase()
             },
-            onSuccess = { result -> updateState { it.copy(recentSearchUiState = result) } },
+            onSuccess = ::onUpdateRecentSuccess,
             onError = {}
         )
     }
 
     fun removeRecentSearch(searchItem: String) {
+        updateState {searchScreenStat->
+            searchScreenStat.copy(
+                isDoAction = !searchScreenStat.isDoAction
+            )
+        }
         tryToExecute(
             function = {
                 removeRecentSearchUseCase(searchItem)
                 getRecentSearchesUseCase()
             },
-            onSuccess = { result ->
-                updateState {
-                    it.copy(
-                        recentSearchUiState = result
-                    )
-                }
+            onSuccess = {
+                onUpdateRecentSuccess(it)
+
             },
             onError = {},
         )
+    }
+    fun changeValueOfIsChangeSearchQuery(){
+        updateState {searchScreenState->
+           searchScreenState.copy(
+               searchScreenState.searchUiState.copy(
+                   isChangeSearchQuery = false
+               )
+           )
+        }
     }
 
     private fun loadInitialData() {
@@ -248,9 +271,28 @@ class SearchViewModel @Inject constructor(
 
 
     private fun onUpdateRecentSuccess(result: List<String>) {
-        updateState {
-            it.copy(
-                recentSearchUiState = result
+        updateState {searchScreenState->
+            searchScreenState.copy(
+                allRecentSearchTextsUiStat = result,
+            )
+        }
+        onChangeRecentSearchUiState()
+    }
+
+    private fun onChangeRecentSearchUiState() {
+        updateState {searchScreenState->
+            searchScreenState.copy(
+                recentSearchUiState = if (searchScreenState.searchUiState.searchQuery.isEmpty() ||
+                    searchScreenState.searchUiState.searchQuery.isBlank()
+                ) {
+                    searchScreenState.allRecentSearchTextsUiStat
+                } else {
+                    searchScreenState
+                        .allRecentSearchTextsUiStat
+                        .filter {
+                            it.contains(searchScreenState.searchUiState.searchQuery)
+                        }
+                }
             )
         }
     }
@@ -441,15 +483,15 @@ class SearchViewModel @Inject constructor(
                         searchIndex = foundIndex + pureQuery.length
                     }
                 }
-            for (index in 0 until fullText.length){
-                val color = if (index in numberSet) {
-                    matchColor
-                } else {
-                    normalColor
-                }
-                builder.pushStyle(textStyle.copy(color = color).toSpanStyle())
-                builder.append(fullText[index])
-                builder.pop()
+
+            builder.append(fullText)
+            fullText.forEachIndexed { index, _ ->
+                val color = if (index in numberSet) matchColor else normalColor
+                builder.addStyle(
+                    textStyle.copy(color = color).toSpanStyle(),
+                    start = index,
+                    end = index + 1
+                )
             }
 
             return builder.toAnnotatedString()
