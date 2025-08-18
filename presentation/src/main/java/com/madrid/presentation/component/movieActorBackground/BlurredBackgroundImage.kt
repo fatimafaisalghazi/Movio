@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import com.madrid.detectImageContent.FilteredImage
+import com.madrid.designSystem.component.ImageViewer
 
 @Composable
 fun BlurredBackgroundImage(
@@ -16,8 +16,8 @@ fun BlurredBackgroundImage(
     blurRadius: Dp = 16.dp
 ) {
     Box(Modifier.fillMaxSize()) {
-        FilteredImage(
-            imageUrl = posterImageUrl,
+        ImageViewer(
+            model = posterImageUrl,
             modifier = Modifier
                 .fillMaxSize()
                 .blur(blurRadius),
@@ -25,4 +25,4 @@ fun BlurredBackgroundImage(
             contentScale = ContentScale.Crop
         )
     }
-} 
+}
