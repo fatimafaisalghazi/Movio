@@ -22,15 +22,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.header.ActorDateOfBirthInfo
-import com.madrid.presentation.component.header.ActorLocationInfo
 import com.madrid.presentation.component.header.ActorDetailsHeader
+import com.madrid.presentation.component.header.ActorLocationInfo
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
@@ -70,10 +70,18 @@ fun ActorDetails(
                     .padding(top = 64.dp),
                 contentAlignment = Alignment.Center
             ) {
-                EmptySearchLayout(
+                DialogWithButtonLayout(
                     title = stringResource(R.string.internet_is_not_available),
-                    stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                    image = R.drawable.img_no_internet
+                    description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                    image = R.drawable.img_no_internet,
+                    buttonText = stringResource(R.string.try_again),
+                    onClick = {
+                        viewModel.retryLoadData()
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .navigationBarsPadding()
+                        .padding(16.dp)
                 )
             }
         }
@@ -139,7 +147,7 @@ private fun ActorDetailsContent(
                     )
                 }
 
-                 if (actor.location.isNotEmpty()) {
+                if (actor.location.isNotEmpty()) {
                     ActorLocationInfo(
                         location = actor.location,
                         modifier = Modifier.padding(vertical = 4.dp)
