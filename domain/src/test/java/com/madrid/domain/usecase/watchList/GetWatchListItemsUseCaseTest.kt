@@ -1,6 +1,5 @@
 package com.madrid.domain.usecase.watchList
 
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Series

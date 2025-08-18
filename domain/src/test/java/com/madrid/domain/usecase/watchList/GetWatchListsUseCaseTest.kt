@@ -1,6 +1,5 @@
 package com.madrid.domain.usecase.watchList
 
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import com.madrid.domain.entity.WatchList
 import com.madrid.domain.repository.AuthenticationRepository

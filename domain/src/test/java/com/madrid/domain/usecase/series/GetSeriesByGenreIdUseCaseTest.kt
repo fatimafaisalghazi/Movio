@@ -1,6 +1,5 @@
 package com.madrid.domain.usecase.series
 
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import com.madrid.domain.entity.Series
 import com.madrid.domain.entity.SortType
