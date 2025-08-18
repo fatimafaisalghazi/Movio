@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.Theme
@@ -47,7 +46,7 @@ fun BasicTextInputField(
     modifier: Modifier = Modifier,
     onClickEndIcon: () -> Unit = { },
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    borderBrushColors: Brush = Theme.color.gradients.borderGradient ,
+    borderBrushColors: Brush = Theme.color.gradients.borderGradient,
     errorBorderBrush: Brush = Theme.color.gradients.errorBorderGradient,
     isError: Boolean = false,
     iconColorInFocus: Color = Theme.color.surfaces.onSurface,
@@ -67,11 +66,13 @@ fun BasicTextInputField(
             brush = errorBorderBrush,
             shape = RoundedCornerShape(8.dp)
         )
+
         isFocused || value.isNotEmpty() -> Modifier.border(
             width = 1.dp,
             brush = borderBrushColors,
             shape = RoundedCornerShape(8.dp)
         )
+
         else -> Modifier
     }
 

@@ -25,7 +25,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun MovioSnakBar(
     message: String,
-
     modifier: Modifier = Modifier,
     duration: ToastDuration = ToastDuration.SHORT,
     icon: Painter? = painterResource(id = R.drawable.danger),
@@ -41,7 +40,8 @@ fun MovioSnakBar(
 
     if (alpha > 0f) {
         Row(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier
+                .fillMaxWidth()
                 .padding(16.dp)
                 .height(48.dp)
                 .background(
@@ -82,9 +82,9 @@ enum class ToastDuration(val timeMillis: Long) {
 @Composable
 private fun MovioToastPreview() {
 
-    MovioSnakBar(
-            message = "Something went wrong",
-            onDismiss = {}
-        )
-    }
+    MovioToast(
+        message = "Something went wrong",
+        onDismiss = {}
+    )
+}
 
