@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,29 +25,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.ImageViewer
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.component.ImageViewer
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.component.movioCards.MovioArtistsCard
 
 @Composable
 fun ReviewCard(
     reviewerName: String,
-    reviewerImageUrl: String?,
+    reviewerImageUrl: String,
     rating: Float,
     date: String,
     content: String,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
-
     var isExpanded by remember { mutableStateOf(false) }
     val maxLines = if (isExpanded) Int.MAX_VALUE else 4
     val showReadMore = remember(content) { content.length > 100 }
+
     Column(
         modifier = modifier
             .width(258.dp)
@@ -68,32 +65,13 @@ fun ReviewCard(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (reviewerImageUrl?.isNotBlank() == true) {
-                ImageViewer(
-                    model = reviewerImageUrl,
-                    contentDescription = "$reviewerName profile picture",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(32.dp)
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clip(CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    MovioArtistsCard(
-                        imageUrl = com.madrid.presentation.R.drawable.img_artist_placeholder.toString(),
-                        modifier = Modifier
-                            .clip(CircleShape),
-                        circleImageSize = 118.dp,
-                        artistsName = reviewerName,
-                        paddingBetweenImageAndText = 0.dp,
-                    )
-                }
-            }
-
+            ImageViewer(
+                model = reviewerImageUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(32.dp),
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
                 modifier = Modifier.weight(1f),
@@ -103,9 +81,7 @@ fun ReviewCard(
                     text = reviewerName,
                     color = Theme.color.surfaces.onSurface,
                     textStyle = Theme.textStyle.title.mediumMedium14,
-                    modifier = Modifier.padding(bottom = 4.dp),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    modifier = Modifier.padding(bottom = 4.dp)
                 )
                 MovioText(
                     text = date,
@@ -120,13 +96,13 @@ fun ReviewCard(
             ) {
                 MovioIcon(
                     painter = painterResource(id = R.drawable.bold_star),
-                    contentDescription = stringResource(R.string.Rating),
+                    contentDescription = null,
                     tint = Theme.color.system.warning,
                     modifier = Modifier.size(16.dp)
                 )
                 MovioText(
-                    text = String.format("%.1f", rating),
-                    color = Theme.color.surfaces.onSurface,
+                    text = rating.toString(),
+                    color = Theme.color.system.onWarning,
                     textStyle = Theme.textStyle.label.smallRegular12
                 )
             }
@@ -134,29 +110,28 @@ fun ReviewCard(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Column {
-            MovioText(
-                text = content,
-                color = Theme.color.surfaces.onSurfaceVariant,
-                textStyle = Theme.textStyle.label.smallRegular12,
-                maxLines = maxLines,
-                modifier = Modifier.fillMaxWidth()
-            )
+        MovioText(
+            text = content,
+            color = Theme.color.surfaces.onSurfaceVariant,
+            textStyle = Theme.textStyle.label.smallRegular12,
+            maxLines = maxLines,
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            if (showReadMore) {
-                Spacer(modifier = Modifier.height(4.dp))
-                MovioText(
-                    text = if (isExpanded) stringResource(R.string.less) else stringResource(R.string.more),
-                    textStyle = Theme.textStyle.label.mediumMedium12,
-                    color = Theme.color.brand.onPrimaryContainer,
-                    modifier = Modifier
-                        .clickable { isExpanded = !isExpanded }
-                        .padding(top = 4.dp)
-                )
-            }
+        if (showReadMore) {
+            Spacer(modifier = Modifier.height(4.dp))
+            MovioText(
+                text = if (isExpanded) stringResource(R.string.read_less) else stringResource(R.string.read_more),
+                textStyle = Theme.textStyle.label.mediumMedium12,
+                color = Theme.color.brand.onPrimaryContainer,
+                modifier = Modifier
+                    .clickable { isExpanded = !isExpanded }
+                    .padding(top = 4.dp)
+            )
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -166,18 +141,6 @@ private fun ReviewCardPreview() {
         reviewerImageUrl = "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
         rating = 4.5f,
         date = "June 14, 2025",
-        content = "This isn't a film, it's a live action video game with a predictable plot and loads of technologically choreographed CGI to substitute for anything vaguely akin to emotion. The characters are shallow and the story feels rushed."
-    )
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun ReviewCardNoImagePreview() {
-    ReviewCard(
-        reviewerName = "Anonymous User",
-        reviewerImageUrl = "",
-        rating = 2.3f,
-        date = "June 14, 2025",
-        content = "Short review without profile image.",
+        content = "This isn't a film, it's a live action video game with a predictable plot and loads of technologically choreographed CGI to substitute for anything vaguely akin to emotion."
     )
 }

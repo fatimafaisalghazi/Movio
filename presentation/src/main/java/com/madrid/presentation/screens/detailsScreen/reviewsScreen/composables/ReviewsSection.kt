@@ -60,7 +60,7 @@ private fun ReviewsList(reviews: List<ReviewUiState>) {
         reviews.forEach { review ->
             ReviewCard(
                 reviewerName = review.reviewerName,
-                reviewerImageUrl = review.reviewerImageUrl,
+                reviewerImageUrl = review.reviewerImageUrl.toString(),
                 rating = review.rating,
                 date = review.date,
                 content = review.content
