@@ -1,4 +1,4 @@
-package com.madrid.presentation.screens.detailsScreen.detailsMovieScreen
+package com.madrid.presentation.screens.detailsScreen.movieDetail
 
 import android.content.ActivityNotFoundException
 import android.content.ClipData
@@ -66,8 +66,8 @@ import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.R
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.toReviewScreenUiState
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
-import com.madrid.presentation.viewModel.libraryViewModel.addtolist.MovieListViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.DetailsMovieViewModel
+import com.madrid.presentation.viewModel.libraryViewModel.addtolist.MovieListViewModel
 
 
 @Composable
@@ -91,7 +91,6 @@ fun MovieDetailsScreen(
 
     fun shareToApp(appPackage: String, url: String) {
         val intent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, url)
             setPackage(appPackage)
         }
@@ -99,7 +98,6 @@ fun MovieDetailsScreen(
             context.startActivity(intent)
         } catch (e: Exception) {
             val fallback = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, url)
             }
             context.startActivity(Intent.createChooser(fallback, "Share via"))
@@ -140,7 +138,7 @@ fun MovieDetailsScreen(
                     .offset(y = 342.dp)
                     .background(
                         Brush.verticalGradient(
-                            colors = listOf(Color.Transparent , Theme.color.surfaces.surface)
+                            colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
                         )
                     )
             )
@@ -265,7 +263,8 @@ fun MovieDetailsScreen(
                                         .height(48.dp),
                                     onClick = {
                                         showAddRatingBottomSheet = false
-                                        navController.navigate(Destinations.AuthenticationScreen)                                    },
+                                        navController.navigate(Destinations.AuthenticationScreen)
+                                    },
                                     colors = ButtonDefaults.buttonColors(
                                         backgroundColor = Theme.color.brand.primary,
                                     ),
@@ -286,7 +285,7 @@ fun MovieDetailsScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                                horizontalAlignment = CenterHorizontally
                             ) {
                                 MovioArtistsCard(
                                     imageUrl = uiState.topImageUrl,
@@ -370,7 +369,9 @@ fun MovieDetailsScreen(
                                     .padding(bottom = 16.dp)
                             )
                             Row(
-                                modifier = Modifier.padding(top = 16.dp).align(Alignment.CenterHorizontally),
+                                modifier = Modifier
+                                    .padding(top = 16.dp)
+                                    .align(CenterHorizontally),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 (1..5).forEach { i ->

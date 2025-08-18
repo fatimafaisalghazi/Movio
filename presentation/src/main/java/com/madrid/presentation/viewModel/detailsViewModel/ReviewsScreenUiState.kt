@@ -1,5 +1,8 @@
 package com.madrid.presentation.viewModel.detailsViewModel
 
+import com.madrid.domain.entity.Review
+import com.madrid.presentation.utils.formatDate
+
 data class ReviewsScreenUiState(
     val reviews: List<ReviewUiState> = emptyList(),
 )
@@ -11,3 +14,24 @@ data class ReviewUiState(
     val date: String,
     val content: String
 )
+
+fun Review.toReviewUiState(): ReviewUiState {
+    return ReviewUiState(
+        reviewerName = this.reviewerName,
+        reviewerImageUrl = this.reviewerPhotoUrl,
+        rating = this.rate.toFloat(),
+        date = formatDate(this.date),
+        content = this.comment
+    )
+}
+
+fun Review.toFormattedReview(): Review {
+    return Review(
+        reviewId = this.reviewId,
+        reviewerName = this.reviewerName,
+        reviewerPhotoUrl = this.reviewerPhotoUrl,
+        rate = this.rate,
+        date = formatDate(this.date),
+        comment = this.comment
+    )
+}

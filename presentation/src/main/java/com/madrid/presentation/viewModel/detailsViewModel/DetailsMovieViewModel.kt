@@ -16,8 +16,7 @@ import com.madrid.domain.usecase.movie.IsFavoriteMovieUseCase
 import com.madrid.domain.usecase.movie.SetMovieFavoriteStatusUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
-import com.madrid.presentation.utils.RateFormatter
-import com.madrid.presentation.utils.RateFormatter.toReviewUiState
+import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
@@ -74,7 +73,7 @@ class DetailsMovieViewModel @Inject constructor(
                         topImageUrl = movie.imageUrl,
                         dataMovie = movie.releaseDate,
                         movieName = movie.title,
-                        rate = RateFormatter.formatRate(movie.rate),
+                        rate = formatRate(movie.rate),
                         movieDuration = formatDuration(movie.movieDuration),
                         description = movie.description,
                         genreMovie = movie.genre.map { it.name },
@@ -125,7 +124,7 @@ class DetailsMovieViewModel @Inject constructor(
                         id = movie.id,
                         title = movie.title,
                         imageUrl = movie.imageUrl,
-                        rating = RateFormatter.formatRate(movie.rate)
+                        rating = formatRate(movie.rate)
                     )
                 }
                 updateState { currentState ->
@@ -218,7 +217,6 @@ class DetailsMovieViewModel @Inject constructor(
             dispatcher = Dispatchers.IO
         )
     }
-
     private fun checkIfFavoriteMovie() {
         tryToExecute(
             function = { isFavoriteMovieUseCase(args.movieId) },

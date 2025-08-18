@@ -120,7 +120,7 @@ fun ReviewCard(
             ) {
                 MovioIcon(
                     painter = painterResource(id = R.drawable.bold_star),
-                    contentDescription = "Rating",
+                    contentDescription = stringResource(R.string.Rating),
                     tint = Theme.color.system.warning,
                     modifier = Modifier.size(16.dp)
                 )
@@ -146,7 +146,7 @@ fun ReviewCard(
             if (showReadMore) {
                 Spacer(modifier = Modifier.height(4.dp))
                 MovioText(
-                    text = if (isExpanded) stringResource(R.string.read_less) else stringResource(R.string.read_more),
+                    text = if (isExpanded) stringResource(R.string.less) else stringResource(R.string.more),
                     textStyle = Theme.textStyle.label.mediumMedium12,
                     color = Theme.color.brand.onPrimaryContainer,
                     modifier = Modifier
