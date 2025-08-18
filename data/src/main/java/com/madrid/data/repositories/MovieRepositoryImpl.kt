@@ -10,13 +10,11 @@ import com.madrid.data.dataSource.mapper.toListOperationStatus
 import com.madrid.data.dataSource.mapper.toMovieGenreTable
 import com.madrid.data.dataSource.mapper.toMovieTable
 import com.madrid.data.dataSource.remote.dto.list.MovieListBody
-import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.movie.MovieResult
 import com.madrid.data.dataSource.remote.mapper.toArtist
 import com.madrid.data.dataSource.remote.mapper.toMovie
 import com.madrid.data.dataSource.remote.mapper.toRatedMovie
 import com.madrid.data.dataSource.remote.mapper.toReview
-import com.madrid.data.dataSource.remote.mapper.toReviewWithFormattedDate
 import com.madrid.data.dataSource.remote.mapper.toSimilarMovie
 import com.madrid.data.dataSource.remote.mapper.toTrailer
 import com.madrid.data.repositories.local.LocalDataSource
@@ -57,7 +55,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMovieReviewsById(movieId: Int): List<Review> {
-        return remoteDataSource.getMovieReviewsById(movieId).results?.map { it.toReviewWithFormattedDate() }
+        return remoteDataSource.getMovieReviewsById(movieId).results?.map { it.toReview() }
             ?: emptyList()
     }
 
@@ -95,7 +93,8 @@ class MovieRepositoryImpl @Inject constructor(
             if (localMovies.isNotEmpty()) {
                 return localMovies.map {
                     val genres = localDataSource
-                        .getMovieGenresByIds(listOf(it.genresIds)).map { genreTable -> genreTable.toGenre() }
+                        .getMovieGenresByIds(listOf(it.genresIds))
+                        .map { genreTable -> genreTable.toGenre() }
                     it.toMovie(genres)
                 }
             }
