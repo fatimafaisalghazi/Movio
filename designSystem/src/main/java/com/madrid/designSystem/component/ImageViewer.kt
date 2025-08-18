@@ -8,12 +8,8 @@ import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.SubcomposeAsyncImageScope
-import com.madrid.designSystem.theme.Theme
 
 /**
  * A customizable image viewer component that uses SubcomposeAsyncImage for efficient image loading.
@@ -33,7 +29,6 @@ import com.madrid.designSystem.theme.Theme
  * @param alpha Optional opacity to be applied to the image when it is rendered onscreen.
  * @param colorFilter Optional [ColorFilter] to apply for the image when it is rendered onscreen.
  * @param filterQuality Sampling algorithm applied to a bitmap when it is scaled and drawn into the destination.
- * @param clipToBounds If true, clips the content to its bounds. Otherwise, it will not be clipped.
  */
 @Composable
 fun ImageViewer(
@@ -67,6 +62,5 @@ fun ImageViewer(
         alpha = alpha,
         colorFilter = colorFilter,
         filterQuality = filterQuality,
-        clipToBounds = true
     )
 }
