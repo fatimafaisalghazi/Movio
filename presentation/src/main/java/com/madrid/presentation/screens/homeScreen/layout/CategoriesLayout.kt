@@ -14,14 +14,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.FilterBar
-import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.modifier.removeWidthPaddingFromParent
+import com.madrid.designSystem.theme.Theme
+import com.madrid.presentation.R
+import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.homeViewModel.CategoryUiState
 import com.madrid.presentation.viewModel.homeViewModel.SortingType
 import com.madrid.presentation.viewModel.shared.MediaType
@@ -51,7 +54,9 @@ fun CategoriesLayout(
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             FilterBar(
-                modifier = Modifier.removeWidthPaddingFromParent(16.dp).padding(top = 4.dp),
+                modifier = Modifier
+                    .removeWidthPaddingFromParent(16.dp)
+                    .padding(top = 4.dp),
                 contentHorizontalPadding = 16.dp,
                 items = categories.map { it.name },
                 selectedItem = selectedCategory.name,
@@ -77,30 +82,47 @@ fun CategoriesLayout(
             )
         }
 
-        if (mediaItems.loadState.refresh is LoadState.Loading || isLoading) {
-            items(9) {
-                ShimmerCard(
-                    isLoading = true,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .width(150.dp)
-                        .height(180.dp)
-                )
+        when (mediaItems.loadState.refresh) {
+            is LoadState.Loading -> {
+                items(9) {
+                    ShimmerCard(
+                        isLoading = true,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .width(150.dp)
+                            .height(180.dp)
+                    )
+                }
             }
-        } else {
-            items(mediaItems.itemCount) { index ->
-                MovioVerticalCard(
-                    description = mediaItems[index]?.title ?: "",
-                    movieImage = mediaItems[index]?.imageUrl ?: "",
-                    rate = mediaItems[index]?.rating ?: "",
-                    height = 180.dp,
-                    onClick = {
-                        onMediaItemClicked(
-                            mediaItems[index]?.id?.toIntOrNull() ?: 0,
-                            mediaItems[index]?.mediaType ?: MediaType.MOVIE
-                        )
-                    }
-                )
+
+            is LoadState.Error -> {
+                item(
+                    span = { GridItemSpan(maxLineSpan) }
+                ) {
+                    EmptySearchLayout(
+                        title = stringResource(R.string.empty_no_internet_title),
+                        description = stringResource(R.string.empty_no_internet_description),
+                        modifier = Modifier.fillMaxSize(),
+                        image = com.madrid.designSystem.R.drawable.no_internet,
+                        imageSize = 180,
+                    )
+                }
+            }
+            else -> {
+                items(mediaItems.itemCount) { index ->
+                    MovioVerticalCard(
+                        description = mediaItems[index]?.title ?: "",
+                        movieImage = mediaItems[index]?.imageUrl ?: "",
+                        rate = mediaItems[index]?.rating ?: "",
+                        height = 180.dp,
+                        onClick = {
+                            onMediaItemClicked(
+                                mediaItems[index]?.id?.toIntOrNull() ?: 0,
+                                mediaItems[index]?.mediaType ?: MediaType.MOVIE
+                            )
+                        }
+                    )
+                }
             }
         }
     }
