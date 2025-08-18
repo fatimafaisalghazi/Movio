@@ -12,7 +12,7 @@ import com.madrid.designSystem.theme.Theme
 
 
 @Composable
-fun ActorNameAndRole(
+fun ActorDetailsHeader(
     actorName: String,
     actorRole: String,
     modifier: Modifier = Modifier,

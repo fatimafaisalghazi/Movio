@@ -3,6 +3,7 @@ package com.madrid.presentation.screens.detailsScreen.castDetails
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,8 +28,9 @@ import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
-import com.madrid.presentation.component.header.ActorDobAndLocation
-import com.madrid.presentation.component.header.ActorNameAndRole
+import com.madrid.presentation.component.header.ActorDateOfBirthInfo
+import com.madrid.presentation.component.header.ActorLocationInfo
+import com.madrid.presentation.component.header.ActorDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
@@ -80,7 +82,7 @@ fun ActorDetails(
 
 
 @Composable
-fun ActorDetailsContent(
+private fun ActorDetailsContent(
     actor: MovieDetailsUiState.CastUiState,
     onBackClick: () -> Unit,
     onKnownForClick: (Int) -> Unit
@@ -122,19 +124,31 @@ fun ActorDetailsContent(
             }
         }
         item {
-            ActorNameAndRole(
+            ActorDetailsHeader(
                 actorName = actor.actorName,
                 actorRole = actor.actorRole,
             )
         }
-        if (actor.dateOfBirth.isNotEmpty() && actor.location.isNotEmpty()) {
-            item {
-                ActorDobAndLocation(
-                    dateOfBirth = actor.dateOfBirth,
-                    location = actor.location
-                )
+
+        item {
+            Row {
+                if (actor.dateOfBirth != "Unknown") {
+                    ActorDateOfBirthInfo(
+                        dateOfBirth = actor.dateOfBirth,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+                }
+
+                 if (actor.location.isNotEmpty()) {
+                    ActorLocationInfo(
+                        location = actor.location,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
+
+                }
             }
         }
+
         if (actor.description.isNotEmpty()) {
             item {
                 TextWithReadMore(
