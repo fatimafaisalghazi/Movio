@@ -69,8 +69,8 @@ fun ReviewCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (reviewerImageUrl?.isNotBlank() == true) {
-                FilteredImage(
-                    imageUrl = reviewerImageUrl,
+                ImageViewer(
+                    model = reviewerImageUrl,
                     contentDescription = "$reviewerName profile picture",
                     modifier = Modifier
                         .clip(CircleShape)
