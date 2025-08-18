@@ -1,27 +1,29 @@
-package com.madrid.presentation.viewModel.detailsViewModel
+package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
+
+import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 
 data class SeriesDetailsUiState(
     val seriesId: Int = 0,
-    val isFavourite: Boolean = false,
-    val topImageUrl: String = "",
     val seriesName: String = "",
-    val seriesGenre: List<String> = emptyList(),
+    val description: String = "",
+    val topImageUrl: String = "",
     val rate: String = "",
+    val seriesGenre: List<String> = emptyList(),
     val numberOfSeasons: Int = 0,
     val productionDate: String = "",
-    val isRated: Boolean = false,
-    val isAddedToList: Boolean = false,
-    val description: String = "",
     val topCast: List<ArtistUiState> = emptyList(),
     val currentSeasonsUiStates: List<SeasonUiState> = emptyList(),
     val reviews: List<ReviewUiState> = emptyList(),
     val similarSeries: List<SeriesUiState> = emptyList(),
     val selectedSeasonUiState: SeasonUiState = SeasonUiState(),
-    val isError :Boolean = false,
-    val userRating: Int = 0,
-    val isGuest: Boolean = true,
     val trailerKey: String = "",
+    val isError: Boolean = false,
     val showLoadingScreen: Boolean = false,
+    val isRated: Boolean = false,
+    val isFavourite: Boolean = false,
+    val isAddedToList: Boolean = false,
+    val userRating: Int = 0,
+    val isGuest: Boolean = true
 )
 
 data class SeriesUiState(
@@ -40,7 +42,7 @@ data class ArtistUiState(
 
 data class SeasonUiState(
     val id: Int = 0,
-    val title :String="",
+    val title: String = "",
     val imageUrl: String = "",
     val seasonNumber: Int = 0,
     val productionDate: String = "",

@@ -1,8 +1,12 @@
-package com.madrid.presentation.viewModel.detailsViewModel
+package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
 
 import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Episode
+import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Season
+import com.madrid.domain.entity.Series
+import com.madrid.presentation.utils.RateFormatter
+import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 
 fun Episode.toUiState(): EpisodeUiState {
     return EpisodeUiState(
@@ -32,5 +36,24 @@ fun Artist.mapToUiState(): ArtistUiState {
         id = this.id,
         imageUrl = this.imageUrl,
         name = this.name
+    )
+}
+
+fun Series.toUiState(): SeriesUiState {
+    return SeriesUiState(
+        id = this.id,
+        name = this.title,
+        imageUrl = this.imageUrl,
+        rate = RateFormatter.formatRate(this.rate)
+    )
+}
+
+fun Review.toUiState(): ReviewUiState {
+    return ReviewUiState(
+        reviewerName = this.reviewerName,
+        reviewerImageUrl = this.reviewerPhotoUrl,
+        rating = this.rate.toFloat(),
+        date = (this.date),
+        content = this.comment
     )
 }
