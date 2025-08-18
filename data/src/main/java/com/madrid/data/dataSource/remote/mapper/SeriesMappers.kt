@@ -101,7 +101,7 @@ fun AiringTodaySeriesResult.toSeries(): Series {
     )
 }
 
-fun RecommendedSeriesResult.toSeries(): Series {
+fun RecommendedSeriesResult.toSeries(genres: List<Genre> = emptyList()): Series {
     return Series(
         id = this.id ?: 0,
         title = this.name ?: "",
@@ -109,7 +109,7 @@ fun RecommendedSeriesResult.toSeries(): Series {
         rate = this.voteAverage ?: 0.0,
         airDate = this.firstAirDate ?: "",
         description = this.overview ?: "",
-        genre = this.genreIds.map { Genre(id = it ?: 0, name = "") },
+        genre = genres,
         seasons = emptyList(),
     )
 }
@@ -187,7 +187,7 @@ fun EpisodeDto.toEpisode(): Episode {
     )
 }
 
-private fun getDefaultSeries(): Series {
+ fun getDefaultSeries(): Series {
     return Series(
         id = 0,
         title = "",
