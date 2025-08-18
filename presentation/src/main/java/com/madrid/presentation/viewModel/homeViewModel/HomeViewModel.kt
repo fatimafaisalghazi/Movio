@@ -177,6 +177,12 @@ class HomeViewModel @Inject constructor(
         emitNewEffect(HomeScreenEffect.NavigateToMediaDetails(mediaId, mediaType))
     }
 
+    override fun onClickTryAgainButton() {
+        val selectedCategoryId = state.value.categoryTabUiState.selectedCategory.id
+        val selectedSortingType = state.value.categoryTabUiState.sortingType
+        fetchMediaByCategory(selectedCategoryId, selectedSortingType)
+    }
+
     override fun onClickProfile() {
         emitNewEffect(HomeScreenEffect.NavigateToProfile)
     }

@@ -2,6 +2,7 @@ package com.madrid.presentation.screens.homeScreen.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -12,13 +13,14 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.FilterBar
 import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.modifier.removeWidthPaddingFromParent
@@ -40,6 +42,7 @@ fun CategoriesLayout(
     onCategorySelected: (CategoryUiState) -> Unit,
     mediaItems: LazyPagingItems<MediaUiState>,
     onMediaItemClicked: (Int, MediaType) -> Unit,
+    onTryAgainClicked: () -> Unit,
     isLoading: Boolean
 ) {
     LazyVerticalGrid(
@@ -96,18 +99,27 @@ fun CategoriesLayout(
             }
 
             is LoadState.Error -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    EmptySearchLayout(
-                        title = stringResource(R.string.empty_no_internet_title),
-                        description = stringResource(R.string.empty_no_internet_description),
-                        modifier = Modifier.fillMaxSize(),
-                        image = com.madrid.designSystem.R.drawable.no_internet,
-                        imageSize = 180,
-                    )
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        DialogWithButtonLayout(
+                            title = stringResource(R.string.empty_no_internet_title),
+                            description = stringResource(R.string.empty_no_internet_description),
+                            image = R.drawable.img_no_internet,
+                            buttonText = stringResource(R.string.try_again),
+                            onClick =  onTryAgainClicked,
+                            imageSize = 150,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 32.dp),
+                        )
+                    }
                 }
             }
+
             else -> {
                 items(mediaItems.itemCount) { index ->
                     MovioVerticalCard(
