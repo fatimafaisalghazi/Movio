@@ -1,10 +1,10 @@
 package com.madrid.presentation.screens.homeScreen.layout
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -63,28 +64,16 @@ fun CategoriesLayout(
     ) {
         when (mediaItems.loadState.refresh) {
             is LoadState.Loading -> {
-                FilterBar(
-                    modifier = Modifier,
-                    contentHorizontalPadding = 16.dp,
-                    items = displayedCategories.map { it.name },
-                    selectedItem = selectedCategory?.name ?: stringResource(R.string.all),
-                    onItemClick = { category ->
-                        onCategorySelected(
-                            displayedCategories.find { it.name == category } ?: CategoryUiState()
-                        )
-                    }
+                CategorySection(
+                    displayedCategories = displayedCategories,
+                    selectedCategory = selectedCategory,
+                    onCategorySelected = onCategorySelected,
                 )
-                FilterBar(
+                SortingSection(
                     modifier = Modifier.padding(top = 44.dp),
-                    contentHorizontalPadding = 16.dp,
-                    items = SortingType.entries.map { stringResource(it.value) },
-                    selectedItem = stringResource(sortingType.value),
-                    onItemClick = { sortingValue ->
-                        val sorting =
-                            SortingType.entries.find { context.getString(it.value) == sortingValue }
-                                ?: SortingType.ALL
-                        onSortingTypeSelected(sorting)
-                    }
+                    sortingType = sortingType,
+                    onSortingTypeSelected = onSortingTypeSelected,
+                    context = context
                 )
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 101.33.dp),
@@ -108,28 +97,16 @@ fun CategoriesLayout(
             }
 
             is LoadState.Error -> {
-                FilterBar(
-                    modifier = Modifier,
-                    contentHorizontalPadding = 16.dp,
-                    items = displayedCategories.map { it.name },
-                    selectedItem = selectedCategory?.name ?: stringResource(R.string.all),
-                    onItemClick = { category ->
-                        onCategorySelected(
-                            displayedCategories.find { it.name == category } ?: CategoryUiState()
-                        )
-                    }
+                CategorySection(
+                    displayedCategories = displayedCategories,
+                    selectedCategory = selectedCategory,
+                    onCategorySelected = onCategorySelected,
                 )
-                FilterBar(
+                SortingSection(
                     modifier = Modifier.padding(top = 44.dp),
-                    contentHorizontalPadding = 16.dp,
-                    items = SortingType.entries.map { stringResource(it.value) },
-                    selectedItem = stringResource(sortingType.value),
-                    onItemClick = { sortingValue ->
-                        val sorting =
-                            SortingType.entries.find { context.getString(it.value) == sortingValue }
-                                ?: SortingType.ALL
-                        onSortingTypeSelected(sorting)
-                    }
+                    sortingType = sortingType,
+                    onSortingTypeSelected = onSortingTypeSelected,
+                    context = context
                 )
                 Box(
                     modifier = Modifier
@@ -160,34 +137,22 @@ fun CategoriesLayout(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        FilterBar(
+                        CategorySection(
                             modifier = Modifier
-                                .removeWidthPaddingFromParent(16.dp)
-                                .padding(top = 4.dp),
-                            contentHorizontalPadding = 16.dp,
-                            items = displayedCategories.map { it.name },
-                            selectedItem = selectedCategory?.name ?: stringResource(R.string.all),
-                            onItemClick = { category ->
-                                onCategorySelected(
-                                    displayedCategories.find { it.name == category }
-                                        ?: CategoryUiState()
-                                )
-                            }
+                                .removeWidthPaddingFromParent(16.dp),
+                            displayedCategories = displayedCategories,
+                            selectedCategory = selectedCategory,
+                            onCategorySelected = onCategorySelected
                         )
                     }
 
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        FilterBar(
-                            modifier = Modifier.padding(bottom = 12.dp),
-                            contentHorizontalPadding = 0.dp,
-                            items = SortingType.entries.map { stringResource(it.value) },
-                            selectedItem = stringResource(sortingType.value),
-                            onItemClick = { sortingValue ->
-                                val sorting =
-                                    SortingType.entries.find { context.getString(it.value) == sortingValue }
-                                        ?: SortingType.ALL
-                                onSortingTypeSelected(sorting)
-                            }
+                        SortingSection(
+                            modifier = Modifier,
+                            sortingType = sortingType,
+                            onSortingTypeSelected = onSortingTypeSelected,
+                            context = context,
+                            contentHorizontalPadding = 0.dp
                         )
                     }
                     items(mediaItems.itemCount) { index ->
@@ -213,4 +178,46 @@ fun CategoriesLayout(
             }
         }
     }
+}
+
+@Composable
+private fun CategorySection(
+    modifier: Modifier = Modifier,
+    displayedCategories: List<CategoryUiState>,
+    selectedCategory: CategoryUiState?,
+    onCategorySelected: (CategoryUiState) -> Unit
+) {
+    FilterBar(
+        modifier = modifier,
+        contentHorizontalPadding = 16.dp,
+        items = displayedCategories.map { it.name },
+        selectedItem = selectedCategory?.name ?: stringResource(R.string.all),
+        onItemClick = { category ->
+            onCategorySelected(
+                displayedCategories.find { it.name == category } ?: CategoryUiState()
+            )
+        }
+    )
+}
+
+@Composable
+private fun SortingSection(
+    modifier: Modifier = Modifier,
+    sortingType: SortingType,
+    onSortingTypeSelected: (SortingType) -> Unit,
+    context: Context = LocalContext.current,
+    contentHorizontalPadding: Dp = 16.dp,
+) {
+    FilterBar(
+        modifier = modifier,
+        contentHorizontalPadding = contentHorizontalPadding,
+        items = SortingType.entries.map { stringResource(it.value) },
+        selectedItem = stringResource(sortingType.value),
+        onItemClick = { sortingValue ->
+            val sorting =
+                SortingType.entries.find { context.getString(it.value) == sortingValue }
+                    ?: SortingType.ALL
+            onSortingTypeSelected(sorting)
+        }
+    )
 }
