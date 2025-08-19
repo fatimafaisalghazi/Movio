@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 data class SearchScreenState(
     val searchUiState: SearchUiState = SearchUiState(),
     val recentSearchUiState: List<String> = emptyList(),
-    val allRecentSearchTextsUiStat : List<String> = emptyList(),
+    val allRecentSearchTexts : List<String> = emptyList(),
     val isDoAction : Boolean = false,
     val filteredScreenUiState: FilteredScreenUiState = FilteredScreenUiState()
 ) {
@@ -19,8 +19,8 @@ data class SearchScreenState(
         val exploreMoreMovies: Flow<PagingData<MovieUiState>> = flow {},
         val searchResults: Flow<PagingData<MovieUiState>> = flow {},
         val searchQuery : String = "",
-        val isChangeSearchQuery : Boolean = false,
-        val isError: Boolean = false ,
+        val isSearchQueryChange : Boolean = false,
+        val isError: Boolean = false,
         val isLoading: Boolean = false,
         val refreshState: Boolean = false,
         val errorMessage: String? = null

@@ -67,7 +67,7 @@ class SearchViewModel @Inject constructor(
                 isDoAction = !searchScreenState.isDoAction,
                 searchUiState = searchScreenState.searchUiState.copy(
                     searchQuery = newSearchQuery,
-                    isChangeSearchQuery = true
+                    isSearchQueryChange = true
                 ),
 
             )
@@ -125,7 +125,7 @@ class SearchViewModel @Inject constructor(
         updateState {searchScreenState->
            searchScreenState.copy(
                searchScreenState.searchUiState.copy(
-                   isChangeSearchQuery = false
+                   isSearchQueryChange = false
                )
            )
         }
@@ -273,7 +273,7 @@ class SearchViewModel @Inject constructor(
     private fun onUpdateRecentSuccess(result: List<String>) {
         updateState {searchScreenState->
             searchScreenState.copy(
-                allRecentSearchTextsUiStat = result,
+                allRecentSearchTexts = result,
             )
         }
         onChangeRecentSearchUiState()
@@ -285,7 +285,7 @@ class SearchViewModel @Inject constructor(
                 recentSearchUiState = if (searchScreenState.searchUiState.searchQuery.isEmpty() ||
                     searchScreenState.searchUiState.searchQuery.isBlank()
                 ) {
-                    searchScreenState.allRecentSearchTextsUiStat
+                    searchScreenState.allRecentSearchTexts
                 } else {
                     val queryWords = searchScreenState
                         .searchUiState
@@ -297,7 +297,7 @@ class SearchViewModel @Inject constructor(
                         .filter { it.isNotEmpty() }
 
                    searchScreenState
-                        .allRecentSearchTextsUiStat
+                        .allRecentSearchTexts
                         .filter { recentText ->
                             queryWords.all { recentText.contains(it) }
                         }

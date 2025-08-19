@@ -131,7 +131,7 @@ fun SearchScreen(
                 navController.navigate(Destinations.ActorDetails(actorId))
             },
             isDoAction = uiState.isDoAction,
-            isChangeSearchQuery = uiState.searchUiState.isChangeSearchQuery,
+            isChangeSearchQuery = uiState.searchUiState.isSearchQueryChange,
             changeValueOfIsChangeSearchQuery = viewModel::changeValueOfIsChangeSearchQuery,
             doAction = viewModel::doAction
         )
