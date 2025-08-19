@@ -5,7 +5,7 @@ import com.madrid.domain.entity.Episode
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Season
 import com.madrid.domain.entity.Series
-import com.madrid.presentation.utils.RateFormatter
+import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 
 fun Episode.toUiState(): EpisodeUiState {
@@ -44,7 +44,7 @@ fun Series.toUiState(): SeriesUiState {
         id = this.id,
         name = this.title,
         imageUrl = this.imageUrl,
-        rate = RateFormatter.formatRate(this.rate)
+        rate = formatRate(this.rate)
     )
 }
 

@@ -92,7 +92,7 @@ fun SeriesDetailsScreen(
                 }
 
                 is SeriesDetailsEffect.NavigateToAuthenticationScreen -> {
-                    navController.navigate(Destinations.AuthenticationScreen)
+                    navController.navigate(Destinations.LoginScreen)
                 }
             }
         }

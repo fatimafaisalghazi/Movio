@@ -21,7 +21,7 @@ import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.domain.usecase.series.IsFavoriteSeriesUseCase
 import com.madrid.domain.usecase.series.SetSeriesFavoriteStatusUseCase
 import com.madrid.presentation.navigation.Destinations
-import com.madrid.presentation.utils.RateFormatter
+import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -121,15 +121,9 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun addRating() {
-        tryToExecute(
-            function = {
-               addRatingSeriesUseCase(
-                   state.value.seriesId, state.value.userRating.toDouble() * 2
-                )
-            },
-            onSuccess = {},
-            onError = {}
-        )
+        viewModelScope.launch {
+            addRatingSeriesUseCase(state.value.seriesId, state.value.userRating.toDouble() * 2)
+        }
     }
 
     private fun checkIfFavoriteSeries() {
@@ -295,7 +289,7 @@ class SeriesDetailsViewModel @Inject constructor(
                 topImageUrl = series.imageUrl,
                 seriesName = series.title,
                 seriesGenre = series.genre.map { it.name },
-                rate = RateFormatter.formatRate(series.rate),
+                rate = formatRate(series.rate),
                 numberOfSeasons = series.seasons.size,
                 productionDate = formatDateKotlinx(series.airDate),
                 description = series.description,

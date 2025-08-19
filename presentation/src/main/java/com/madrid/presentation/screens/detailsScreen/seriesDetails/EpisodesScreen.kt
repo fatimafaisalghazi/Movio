@@ -40,7 +40,6 @@ import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.EpisodeU
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsViewModel
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsViewModel1
 
 @Composable
 fun EpisodesScreen(viewModel: SeriesDetailsViewModel = hiltViewModel()
