@@ -1,0 +1,2 @@
+com.madrid.detectimagecontent
+drawable place_holder
