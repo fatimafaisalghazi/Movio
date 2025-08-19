@@ -1,6 +1,5 @@
 package com.madrid.presentation.navigation
 
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
@@ -11,7 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.madrid.presentation.screens.detailsScreen.castDetails.ActorDetails
 import com.madrid.presentation.screens.detailsScreen.castDetails.TopCastDetailsScreen
-import com.madrid.presentation.screens.detailsScreen.detailsMovieScreen.MovieDetailsScreen
+import com.madrid.presentation.screens.detailsScreen.movieDetail.MovieDetailsScreen
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.ReviewsScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.EpisodesScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.SeasonsScreen
@@ -66,10 +65,10 @@ fun MovioNavHost(
             } else if (isLoggedIn.not()) Destinations.LoginScreen
             else Destinations.HomeScreen,
         enterTransition = {
-            fadeIn(tween(0))
+            fadeIn()
         },
         exitTransition = {
-            fadeOut(tween(0))
+            fadeOut()
         }
     ) {
         composable<Destinations.SeeAllForYouScreen> {
