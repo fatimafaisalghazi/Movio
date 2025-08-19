@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
@@ -130,6 +133,7 @@ fun SearchScreen(
             isDoAction = uiState.isDoAction,
             isChangeSearchQuery = uiState.searchUiState.isChangeSearchQuery,
             changeValueOfIsChangeSearchQuery = viewModel::changeValueOfIsChangeSearchQuery,
+            doAction = viewModel::doAction
         )
         uiState.searchUiState.errorMessage?.let { errorMsg ->
             LaunchedEffect(errorMsg) {
@@ -185,17 +189,20 @@ fun ContentSearchScreen(
     onArtistClick: (Int) -> Unit,
     isChangeSearchQuery : Boolean,
     isDoAction : Boolean,
+    doAction : () -> Unit ,
     changeValueOfIsChangeSearchQuery : () -> Unit,
     highLightRecentSearch: (String, String, Color, Color, TextStyle) -> AnnotatedString,
 ) {
     val showSearchResults = searchQuery.isNotBlank()
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var showRecentSearch by remember { mutableIntStateOf(0) }
+    var isPressSearchIconInKeyboard by remember { mutableIntStateOf(0) }
     var previousSelectedTabIndex by remember { mutableIntStateOf(-1) }
 
     LaunchedEffect(isDoAction) {
-        if(searchQuery.isEmpty() || searchQuery.isBlank()){
+        if(searchQuery.isEmpty() || searchQuery.isBlank() || isPressSearchIconInKeyboard == 1){
             showRecentSearch = 0
+            isPressSearchIconInKeyboard = 0
         }
         else{
             showRecentSearch = 1
@@ -246,7 +253,27 @@ fun ContentSearchScreen(
                     .fillMaxWidth()
                     .clickable { onSearchBarClick() }
                     .padding(top = 16.dp),
-                onClickEndIcon = { onSearchQueryChange("") }
+                onClickEndIcon = { onSearchQueryChange("") },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        isPressSearchIconInKeyboard = 1
+                        doAction()
+                        if (searchQuery.isNotBlank() && isChangeSearchQuery ) {
+                            onSearchBarClick()
+                            changeValueOfIsChangeSearchQuery()
+                            addRecentSearch(searchQuery)
+                            when (typeOfFilterSearch) {
+                                FilterPagesItem.TOP_RATED -> onClickTopRated()
+                                FilterPagesItem.MOVIES -> onClickMovies()
+                                FilterPagesItem.SERIES -> onClickSeries()
+                                FilterPagesItem.ARTISTS -> onClickArtist()
+                            }
+                        }
+                    }
+                )
             )
         }
 

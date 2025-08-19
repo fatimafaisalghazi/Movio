@@ -530,5 +530,12 @@ class SearchViewModel @Inject constructor(
         return ranges
     }
 
+    fun doAction(){
+        updateState {searchScreenStat->
+            searchScreenStat.copy(
+                isDoAction = !searchScreenStat.isDoAction
+            )
+        }
+    }
 
 }
