@@ -20,8 +20,8 @@ import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsViewModel
 import com.madrid.presentation.viewModel.shared.parser.formatFullDateKtx
 import com.madrid.presentation.viewModel.shared.parser.formatYearKtx
 

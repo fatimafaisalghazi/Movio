@@ -41,9 +41,7 @@ fun SimilarSeriesSection(
     onSeeAllClick: () -> Unit = {},
     onSeriesClick: (SimilarSeries) -> Unit = {}
 ) {
-    Log.d("SimilarSeriesSection", "SimilarSeriesSection: $similarSeries")
     Column(modifier = modifier) {
-
         CustomTextTitle(
             primaryText = stringResource(R.string.similar_series),
             secondaryText = stringResource(R.string.see_all),
