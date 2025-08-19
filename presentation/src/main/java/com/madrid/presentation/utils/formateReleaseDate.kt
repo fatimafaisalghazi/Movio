@@ -1,9 +1,7 @@
-package com.madrid.presentation.viewModel.shared
+package com.madrid.presentation.utils
 
 
 fun formatDate(dateString: String): String {
-    if (dateString.isBlank()) return "Unknown"
-
     return try {
         val parts = dateString.split("-")
         val year = parts[0]
