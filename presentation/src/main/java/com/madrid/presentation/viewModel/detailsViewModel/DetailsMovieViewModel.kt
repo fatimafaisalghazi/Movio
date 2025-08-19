@@ -20,6 +20,7 @@ import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.utils.formatDate
 import com.madrid.presentation.viewModel.shared.formatDuration
+import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -61,7 +62,6 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        Log.d("TAG lol", "=== LOADING MOVIE DETAILS ===")
         tryToExecute(
             function = {
                 getMovieDetailsUseCase.invoke(args.movieId)
@@ -72,7 +72,7 @@ class DetailsMovieViewModel @Inject constructor(
                     it.copy(
                         movieId = movie.id,
                         topImageUrl = movie.imageUrl,
-                        dataMovie =formatDate(movie.releaseDate),
+                        dataMovie = formatDateKotlinx(movie.releaseDate),
                         movieName = movie.title,
                         rate = formatRate(movie.rate),
                         movieDuration = formatDuration(movie.movieDuration),
@@ -94,14 +94,12 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadCast() {
-        Log.d("TAG lol", "=== LOADING CAST ===")
         tryToExecute(
             function = { getMovieTopCastUseCase(args.movieId) },
             onSuccess = { result ->
                 val formattedResult = result.map { artist ->
                     artist.copy(dateOfBirth = formatDateOfBirth(artist.dateOfBirth))
                 }
-                Log.d("TAG lol", "Cast loaded: ${formattedResult.size}")
                 updateState {
                     it.copy(casts = formattedResult)
                 }
@@ -114,7 +112,6 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadSimilarMovies() {
-        Log.d("TAG lol", "=== LOADING SIMILAR MOVIES ===")
         tryToExecute(
             function = {
                 getSimilarMoviesUseCase(args.movieId)
@@ -143,7 +140,6 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadReviews() {
-        Log.d("REVIEW_DEBUG", ">>> loadReviews started <<<")
         tryToExecute(
             function = {
                 getMovieReviewsUseCase(args.movieId)
@@ -152,13 +148,11 @@ class DetailsMovieViewModel @Inject constructor(
                 val formattedReviews: List<ReviewUiState> = domainReviews.map { review ->
                     review.toReviewUiState()
                 }
-                Log.d("REVIEW_DEBUG", "Formatted ${formattedReviews.size} reviews")
                 updateState { currentState ->
                     currentState.copy(reviews = formattedReviews)
                 }
             },
             onError = { error ->
-                Log.e("REVIEW_DEBUG", "Error loading reviews: $error")
                 updateState { currentState ->
                     currentState.copy(reviews = emptyList())
                 }
