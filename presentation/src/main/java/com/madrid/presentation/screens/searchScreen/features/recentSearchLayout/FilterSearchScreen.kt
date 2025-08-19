@@ -1,13 +1,13 @@
 package com.madrid.presentation.screens.searchScreen.features.recentSearchLayout
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -154,7 +154,7 @@ fun FilterSearchScreen(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
                     SearchResultMessage(
-                        items = topRated.itemCount.toString()
+                        items = movies.itemCount.toString()
                     )
                 }
 
@@ -240,7 +240,7 @@ fun FilterSearchScreen(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
                     SearchResultMessage(
-                        items = topRated.itemCount.toString()
+                        items = series.itemCount.toString()
                     )
                 }
 
@@ -327,7 +327,7 @@ fun FilterSearchScreen(
                     span = { GridItemSpan(maxLineSpan) }
                 ) {
                     SearchResultMessage(
-                        items = topRated.itemCount.toString()
+                        items = artist.itemCount.toString()
                     )
                 }
 
