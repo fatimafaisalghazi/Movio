@@ -14,10 +14,8 @@ class LoginUseCase @Inject constructor(
         return try {
             authenticationRepository.login(username, password)
         } catch (e: MovioException) {
-
             throw e
         } catch (e: Exception) {
-
             throw UnknownException("Unexpected error during login: ${e.message ?: "Unknown"}")
         }
     }
