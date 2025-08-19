@@ -182,16 +182,6 @@ private fun MovioPagerIndicator(
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Box(contentAlignment = Alignment.Center){
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(30.dp)
-//                    .background(
-//                        Brush.verticalGradient(
-//                            colors = listOf(Color.Transparent , Theme.color.surfaces.surface)
-//                        )
-//                    )
-//            )
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
