@@ -148,7 +148,6 @@ class DetailsMovieViewModel @Inject constructor(
                 getMovieReviewsUseCase(args.movieId)
             },
             onSuccess = { domainReviews ->
-                // Option 1: Using the extension function (Recommended)
                 val formattedReviews: List<ReviewUiState> = domainReviews.map { review ->
                     review.toReviewUiState()
                 }
