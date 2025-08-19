@@ -287,10 +287,19 @@ class SearchViewModel @Inject constructor(
                 ) {
                     searchScreenState.allRecentSearchTextsUiStat
                 } else {
-                    searchScreenState
+                    val queryWords = searchScreenState
+                        .searchUiState
+                        .searchQuery
+                        .trim()
+                        .lowercase()
+                        .split(" ")
+                        .map { it.trim() }
+                        .filter { it.isNotEmpty() }
+
+                   searchScreenState
                         .allRecentSearchTextsUiStat
-                        .filter {
-                            it.contains(searchScreenState.searchUiState.searchQuery)
+                        .filter { recentText ->
+                            queryWords.all { recentText.contains(it) }
                         }
                 }
             )
@@ -484,19 +493,42 @@ class SearchViewModel @Inject constructor(
                     }
                 }
 
+            builder.pushStyle(textStyle.copy(color = normalColor).toSpanStyle())
             builder.append(fullText)
-            fullText.forEachIndexed { index, _ ->
-                val color = if (index in numberSet) matchColor else normalColor
+
+            numberSet.toRanges().forEach { range ->
                 builder.addStyle(
-                    textStyle.copy(color = color).toSpanStyle(),
-                    start = index,
-                    end = index + 1
+                    textStyle.copy(color = matchColor).toSpanStyle(),
+                    start = range.first,
+                    end = range.last + 1
                 )
             }
-
             return builder.toAnnotatedString()
 
         }
     }
+
+    private fun Set<Int>.toRanges(): List<IntRange> {
+        if (isEmpty()) return emptyList()
+
+        val sorted = this.sorted()
+        val ranges = mutableListOf<IntRange>()
+
+        var rangeStart = sorted.first()
+        var prev = sorted.first()
+
+        for (i in 1 until sorted.size) {
+            val current = sorted[i]
+            if (current != prev + 1) {
+                ranges.add(rangeStart..prev)
+                rangeStart = current
+            }
+            prev = current
+        }
+        ranges.add(rangeStart..prev)
+
+        return ranges
+    }
+
 
 }
