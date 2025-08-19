@@ -21,11 +21,11 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()), LoginInteractionListener {
 
     override fun onUsernameChanged(username: String) {
-        updateState { it.copy(username = username, errorMessage = null) }
+        updateState { it.copy(username = username, errorMessage = null, isUsernameValid = false) }
     }
 
     override fun onPasswordChanged(password: String) {
-        updateState { it.copy(password = password, errorMessage = null) }
+        updateState { it.copy(password = password, errorMessage = null, isPasswordValid = false) }
     }
 
     override fun onLoginClicked() {

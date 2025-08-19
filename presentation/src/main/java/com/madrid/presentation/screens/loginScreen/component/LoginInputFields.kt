@@ -30,8 +30,7 @@ fun LoginInputFields(
             value = state.username,
             onValueChange = onUsernameChange,
             modifier = Modifier.padding(bottom = 12.dp),
-            isError = state.errorMessage != null ||
-                    (state.errorMessage == com.madrid.presentation.R.string.username_is_required ),
+            isError = state.isUsernameValid,
             errorBorderBrush = Theme.color.gradients.errorBorderGradient,
             endIconPainter = null
         )
@@ -48,8 +47,7 @@ fun LoginInputFields(
             ),
             onClickEndIcon = onTogglePassword,
             modifier = Modifier.padding(bottom = 12.dp),
-            isError = state.errorMessage != null ||
-                    (state.errorMessage == com.madrid.presentation.R.string.password_is_required),
+            isError =state.isPasswordValid,
             errorBorderBrush = Theme.color.gradients.errorBorderGradient,
 
             letterSpacing = if (state.showPassword) 0 else 8
