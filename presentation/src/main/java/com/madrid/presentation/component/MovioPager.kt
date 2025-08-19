@@ -72,7 +72,7 @@ fun MovioPager(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .height(413.dp)
+                .height(443.dp)
                 ,
             contentAlignment = Alignment.BottomCenter
         ) {
@@ -125,7 +125,6 @@ fun MovioPager(
                         ) {
                             MovieHomeCard(
                                 modifier = Modifier
-                                    .offset(y = 20.dp)
                                     .graphicsLayer {
                                         scaleX = scale
                                         scaleY = scale
@@ -147,25 +146,12 @@ fun MovioPager(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Box(contentAlignment = Alignment.Center){
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(30.dp)
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
-                                )
-                            )
-                            .offset(y = 10.dp)
-                    )
-                    MovioPagerIndicator(
-                        pageCount = medias.size,
-                        currentPage = pagerState.currentPage,
-                        isRtl = isRtl,
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                }
+                MovioPagerIndicator(
+                    pageCount = medias.size,
+                    currentPage = pagerState.currentPage,
+                    isRtl = isRtl,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
             }
         }
     }
