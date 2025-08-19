@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment.Companion.Unbounded
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -74,7 +73,7 @@ fun MovioPager(
             modifier = modifier
                 .fillMaxWidth()
                 .height(413.dp)
-                .shadow(elevation = 8.dp),
+                ,
             contentAlignment = Alignment.BottomCenter
         ) {
             ImageViewer(
@@ -125,7 +124,8 @@ fun MovioPager(
                             contentAlignment = Alignment.Center
                         ) {
                             MovieHomeCard(
-                                modifier = Modifier.offset(y = 20.dp)
+                                modifier = Modifier
+                                    .offset(y = 20.dp)
                                     .graphicsLayer {
                                         scaleX = scale
                                         scaleY = scale
@@ -138,7 +138,8 @@ fun MovioPager(
                                 movieId = medias[page].imageUrl,
                                 name = medias[page].title,
                                 genres = medias[page].category.map { it.name },
-                                onClick = { onClickMediaButton(page) },
+                                onClickButton = { onClickMediaButton(page) },
+                                onClick = { onClickItem(medias[page].id.toInt()) }
                             )
                         }
                     }
@@ -156,6 +157,7 @@ fun MovioPager(
                                     colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
                                 )
                             )
+                            .offset(y = 10.dp)
                     )
                     MovioPagerIndicator(
                         pageCount = medias.size,
