@@ -77,7 +77,7 @@ fun MovieLoginContent(
                 text = stringResource(R.string.continue_as_a_guest),
                 isTransparent= true,
                 showLoadingIndicator = false,
-
+                textColor = Theme.color.surfaces.onSurface,
                 modifier = Modifier.padding(top = screenHeight * 0.02f)
 
 
