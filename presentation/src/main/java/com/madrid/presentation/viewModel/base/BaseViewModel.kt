@@ -100,7 +100,6 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
             is ServerException -> ServerError(message = "Server error ,try again later")
             is NetworkException -> NetworkError(message = "Network error")
             is NotFoundException -> NotFoundError(message = "Not found")
-//            is IOException -> NetworkError(message = "Network error, check your connection")
             else -> UnknownError(message = "Unknown error")
         }
     }

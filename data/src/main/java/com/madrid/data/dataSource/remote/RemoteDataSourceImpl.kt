@@ -39,6 +39,7 @@ import com.madrid.data.dataSource.remote.dto.series.SeriesResult
 import com.madrid.data.dataSource.remote.dto.series.SeriesReviewResponse
 import com.madrid.data.dataSource.remote.dto.series.SimilarSeriesResponse
 import com.madrid.data.dataSource.remote.dto.series.TopRatedSeriesResponse
+import com.madrid.data.dataSource.remote.utils.responseWrapper
 import com.madrid.data.dataSource.remote.utils.retrofitResponseWrapper
 import com.madrid.data.repositories.datasource.UserPreferences
 import com.madrid.data.repositories.remote.RemoteDataSource
@@ -67,7 +68,7 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getPopularMovies(page: Int): SearchMovieResponse {
-        return api.getPopularMovie(page)
+        return responseWrapper { api.getPopularMovie(page) }
     }
 
     override suspend fun getMovieDetailsById(movieId: Int): MovieDetailsResponse {
@@ -168,7 +169,6 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
 
-
     // Artist
     override suspend fun searchArtistByQuery(name: String, page: Int): SearchArtistResponse {
         return api.searchArtistByQuery(name, page)
@@ -258,7 +258,6 @@ class RemoteDataSourceImpl @Inject constructor(
     }
 
 
-
     override suspend fun login(username: String, password: String): String {
 
         return retrofitResponseWrapper {
@@ -343,12 +342,13 @@ class RemoteDataSourceImpl @Inject constructor(
             media_type = "movie"
         )
 
-        // Return the actual API response, not a hardcoded one
-        return api.addMovieToList(
-            listId = listId,
-            sessionId = sessionId,
-            request = request
-        )
+        return responseWrapper {
+            api.addMovieToList(
+                listId = listId,
+                sessionId = sessionId,
+                request = request
+            )
+        }
     }
 
     override suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse {

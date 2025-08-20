@@ -9,6 +9,7 @@ import com.madrid.domain.usecase.movie.AddMovieToListUseCase
 import com.madrid.domain.usecase.movie.CreateMovieListUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -50,32 +51,33 @@ class MovieListViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             updateState { it.copy(isLoadingLists = true, errorMessage = null) }
 
-            try {
-                val userLists = getWatchListsUseCase() // Changed: Call invoke() on the use case
-                // Map domain entities to UI state
-                val uiLists = userLists.map { watchList ->
-                    WatchListItemUiState(
-                        id = watchList.id,
-                        videosSize = watchList.itemCount ?: 0, // Assuming itemCount exists
-                        watchListTitle = watchList.name
-                    )
+            tryToExecute(
+                function = { getWatchListsUseCase() },
+                onSuccess = { userLists ->
+                    val uiLists = userLists.map { watchList ->
+                        WatchListItemUiState(
+                            id = watchList.id,
+                            videosSize = watchList.itemCount ?: 0, // Assuming itemCount exists
+                            watchListTitle = watchList.name
+                        )
+                    }
+                    updateState {
+                        it.copy(
+                            userLists = userLists, // Keep original for other operations
+                            watchListItems = uiLists, // Add UI-specific list
+                            isLoadingLists = false
+                        )
+                    }
+                },
+                onError = { ex ->
+                    updateState {
+                        it.copy(
+                            isLoadingLists = false,
+                            errorMessage = getErrorMessage(ex)
+                        )
+                    }
                 }
-
-                updateState {
-                    it.copy(
-                        userLists = userLists, // Keep original for other operations
-                        watchListItems = uiLists, // Add UI-specific list
-                        isLoadingLists = false
-                    )
-                }
-            } catch (ex: MovioException) {
-                updateState {
-                    it.copy(
-                        isLoadingLists = false,
-                        errorMessage = getErrorMessage(ex)
-                    )
-                }
-            }
+            )
         }
     }
 
@@ -116,7 +118,7 @@ class MovieListViewModel @Inject constructor(
                 updateState {
                     it.copy(
                         isLoading = false,
-                        errorMessage = getErrorMessage(ex)
+                        errorMessage = ex.message //getErrorMessage(ex)
                     )
                 }
             }
@@ -128,41 +130,32 @@ class MovieListViewModel @Inject constructor(
         movieId: Int,
         onSuccess: (() -> Unit)? = null
     ) {
-        viewModelScope.launch(dispatcher) {
-            updateState { it.copy(isLoading = true, errorMessage = null, successMessage = null) }
+        updateState { it.copy(isLoading = true, errorMessage = null, successMessage = null) }
 
-            try {
-                val status: ListOperationStatus = addMovieToListUseCase(
+        tryToExecute(
+            function = {
+                addMovieToListUseCase(
                     listId = listId,
                     movieId = movieId
                 )
-
-                if (status.success) {
-                    updateState {
-                        it.copy(
-                            isLoading = false,
-                            addToListSuccess = true,
-                            successMessage = status.message
-                        )
-                    }
-                    onSuccess?.invoke()
-                } else {
-                    updateState {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = status.message
-                        )
-                    }
-                }
-            } catch (ex: MovioException) {
+            },
+            onSuccess = {
                 updateState {
                     it.copy(
                         isLoading = false,
-                        errorMessage = getErrorMessage(ex)
+                        addToListSuccess = true,
+                    )
+                }
+                onSuccess?.invoke()
+            },
+            onError = {
+                updateState {
+                    it.copy(
+                        isLoading = false,
                     )
                 }
             }
-        }
+        )
     }
 
     fun updateUserLists(lists: List<WatchList>) {
@@ -179,6 +172,7 @@ class MovieListViewModel @Inject constructor(
                     )
                 }
             }
+
             MovieListEvent.DismissNotification -> {
                 updateState {
                     it.copy(
@@ -189,6 +183,7 @@ class MovieListViewModel @Inject constructor(
                     )
                 }
             }
+
             MovieListEvent.LoadUserLists -> {
                 loadUserLists()
             }
@@ -209,10 +204,7 @@ class MovieListViewModel @Inject constructor(
         }
     }
 
-    private fun getErrorMessage(exception: MovioException): String {
-        return when (exception) {
-            is NetworkException -> "Network error. Please try again."
-            else -> exception.message ?: "An unknown error occurred"
-        }
+    private fun getErrorMessage(exception: ErrorState): String {
+        return exception.message
     }
 }
