@@ -25,9 +25,9 @@ class MovieInterceptor(
             .url(url)
             .build()
 
-        val response: Response = chain.proceed(newRequest)
-
-        return responseWrapper(response)
+        return responseWrapper {
+            chain.proceed(newRequest)
+        }
     }
 
 }

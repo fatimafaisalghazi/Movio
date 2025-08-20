@@ -6,6 +6,7 @@ import com.madrid.domain.usecase.series.GetSeriesGenresUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
 import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.base.ErrorState
 import com.madrid.presentation.viewModel.libraryViewModel.WatchListState
 import com.madrid.presentation.viewModel.libraryViewModel.toWatchListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -104,7 +105,7 @@ class WatchlistViewAllViewModel @Inject constructor(
         loadWatchLists()
     }
 
-    private fun onError(error: Throwable) {
+    private fun onError(error: ErrorState) {
         updateState {
             it.copy(
                 isLoading = false,
