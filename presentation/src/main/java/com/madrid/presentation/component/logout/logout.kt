@@ -74,6 +74,7 @@ fun LogoutConfirmationBottomSheet(
                 viewModel.logout(onSuccess = {})
             },
             onClearError = { viewModel.clearError() },
+            modifier = modifier,
             title = title,
             description = description,
             textButton = actionButtonText,
