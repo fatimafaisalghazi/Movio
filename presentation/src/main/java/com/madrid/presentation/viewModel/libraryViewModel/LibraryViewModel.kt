@@ -1,10 +1,13 @@
 package com.madrid.presentation.viewModel.libraryViewModel
 
+import android.util.Log
 import com.madrid.domain.usecase.authentication.LoginUseCase
 import com.madrid.domain.usecase.movie.CreateMovieListUseCase
 import com.madrid.domain.usecase.movie.GetAllMoviesInHistoryUseCase
 import com.madrid.domain.usecase.movie.GetFavoriteMoviesUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
+import com.madrid.domain.usecase.series.GetAllSeriesInHistoryUseCase
+
 import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.libraryViewModel.viewAll.factory.ViewAllType
@@ -16,7 +19,8 @@ import javax.inject.Inject
 class LibraryViewModel @Inject constructor(
     private val getWatchListUseCase: GetWatchListsUseCase,
     private val getFavoriteUseCase: GetFavoriteMoviesUseCase,
-    private val getHistoryUseCase: GetAllMoviesInHistoryUseCase,
+    private val getMovieHistoryUseCase: GetAllMoviesInHistoryUseCase,
+    private val getSeriesHistoryUseCase: GetAllSeriesInHistoryUseCase,
     private val isLoggedInUseCase: LoginUseCase,
     private val createMovieListUseCase: CreateMovieListUseCase
 ) : BaseViewModel<LibraryScreenState, LibraryScreenEffect>(
@@ -163,6 +167,7 @@ class LibraryViewModel @Inject constructor(
     }
 
     private fun getHistoryList() {
+        Log.d("in get history","getHistoryList")
         updateState {
             it.copy(
                 isLoading = true,
@@ -170,17 +175,20 @@ class LibraryViewModel @Inject constructor(
         }
         tryToExecute(
             function = {
-                getHistoryUseCase()
+                getMovieHistoryUseCase().map { it.toMediaUiState() } +
+                        getSeriesHistoryUseCase().map { it.toMediaUiState() }
             },
             onSuccess = { historyList ->
+                Log.d("in get history","success , $historyList")
                 updateState {
                     it.copy(
                         isLoading = false,
-                        historyList = historyList.map { it.toMediaUiState() }
+                        historyList = historyList
                     )
                 }
             },
             onError = { throwable ->
+                Log.d("in get history","success , ${throwable.message}")
                 updateState {
                     it.copy(
                         isLoading = false,
