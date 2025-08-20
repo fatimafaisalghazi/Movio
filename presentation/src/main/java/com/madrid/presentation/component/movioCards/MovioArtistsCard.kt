@@ -45,20 +45,6 @@ fun MovioArtistsCard(
             modifier = Modifier
                 .size(circleImageSize)
                 .clip(RoundedCornerShape(1000.dp)),
-            error = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .size(circleImageSize),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(com.madrid.designSystem.R.drawable.image_placeholder_circular),
-                        contentDescription = null,
-                        contentScale = ContentScale.FillBounds,
-                    )
-                }
-            }
         )
         MovioText(
             text = artistsName,
