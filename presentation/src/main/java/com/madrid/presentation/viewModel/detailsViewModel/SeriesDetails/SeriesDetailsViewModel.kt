@@ -78,7 +78,7 @@ class SeriesDetailsViewModel @Inject constructor(
                 function = {
                     getEpisodesForSeasonUseCase(args.seriesId, season.seasonNumber)
                 },
-                onSuccess = { episodes -> ::onSuccessLoadSeasonsEpisodes.invoke(episodes) },
+                onSuccess = { episodes -> ::onSuccessLoadAllSeasonsEpisodes.invoke(episodes) },
                 onError = { ::onError.invoke() }
             )
         }
@@ -116,7 +116,9 @@ class SeriesDetailsViewModel @Inject constructor(
        tryToExecute(
             function = { setSeriesFavoriteStatusUseCase(seriesId, state.value.isFavourite.not()) },
             onSuccess = { ::onSuccessLoadFavourite.invoke() },
-            onError = {::onError.invoke()}
+            onError = {
+//                ::onError.invoke()
+            }
        )
     }
 
@@ -146,7 +148,7 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState { it.copy(userRating = rating) }
     }
 
-    private fun loadSeasonEpisodes(seasonNumber: Int = 1) {
+    private fun loadSelectedSeasonEpisodes(seasonNumber: Int = 1) {
         tryToExecute(
             function = { getEpisodesForSeasonUseCase(args.seriesId, seasonNumber) },
             onSuccess = { episodes -> ::onSuccessLoadSeasonEpisodes.invoke(episodes,seasonNumber) },
@@ -157,7 +159,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun isGuest() {
        tryToCollect(function = { isGuestUseCase.isGuest()},
            onNewValue = { result-> ::onCheckGuestNewValue.invoke(result)},
-           onError = {::onGuestError.invoke()}
+           onError = {::onGuestCheckError.invoke()}
        )
     }
 
@@ -174,7 +176,7 @@ class SeriesDetailsViewModel @Inject constructor(
         )
     }
 
-    fun updateSelectedSeason(seasonNumber: Int) = loadSeasonEpisodes(seasonNumber)
+    fun updateSelectedSeason(seasonNumber: Int) = loadSelectedSeasonEpisodes(seasonNumber)
 
     override fun onBackClick() {
         emitNewEffect(effect = SeriesDetailsEffect.NavigateBack)
@@ -209,8 +211,8 @@ class SeriesDetailsViewModel @Inject constructor(
         emitNewEffect(effect = SeriesDetailsEffect.NavigateToSeriesDetails(args.seriesId))
     }
 
-    override fun onSeeAllClick() {
-        TODO("Not yet implemented")
+    override fun onSeeAllClick(seriesId: Int,seeAllType: SeeAllType) {
+        emitNewEffect(effect=SeriesDetailsEffect.NavigateToSeeAllScreen(seriesId =seriesId, seeAllType =seeAllType ))
     }
 
     override fun onActorCardClick(actorId: Int) {
@@ -218,11 +220,11 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     override fun onSimilarSeriesCardClick(seriesId: Int) {
-        emitNewEffect(effect = SeriesDetailsEffect.NavigateToSeriesDetails(seriesId))
+        emitNewEffect(effect = SeriesDetailsEffect.NavigateToSeriesDetails(seriesId = seriesId))
     }
 
     override fun onCurrentSeasonCardClick(seriesId: Int,seasonNumber: Int) {
-        emitNewEffect(effect = SeriesDetailsEffect.NavigateToEpisodesScreen(seriesId, seasonNumber =  seasonNumber))
+        emitNewEffect(effect = SeriesDetailsEffect.NavigateToEpisodesScreen(seriesId = seriesId, seasonNumber =  seasonNumber))
     }
 
     override fun onRetryClick() {
@@ -257,21 +259,19 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState { it.copy(showAddRatingBottomSheet= false) }
     }
 
-    override fun onShowAddToListBottomSheet() {
-        updateState { it.copy(showAddToListBottomSheet = true) }
-    }
-
-    override fun onDismissAddToListBottomSheet() {
-        updateState { it.copy(showAddToListBottomSheet = false) }
-    }
-
     private fun onError() {
         updateState {
             it.copy(isError = true, showLoadingScreen = false)
         }
     }
 
-    private fun onGuestError(){
+//    private fun onAddToListErrorMessage(){
+//        updateState {
+//            it.copy(errorMessage = "not supported in series")
+//        }
+//    }
+
+    private fun onGuestCheckError(){
          updateState { it.copy(isGuest = true)
         }
     }
@@ -301,7 +301,7 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onSuccessLoadSeasonsEpisodes(episode: List<Episode>) {
+    private fun onSuccessLoadAllSeasonsEpisodes(episode: List<Episode>) {
         state.value.currentSeasonsUiStates.forEachIndexed { index, season ->
             updateState { currentState ->
                 currentState.copy(
@@ -313,7 +313,8 @@ class SeriesDetailsViewModel @Inject constructor(
                                 episodesUiStates = episode.map { episode -> episode.toUiState()})
                         else
                             currentSeason
-                    }
+                    },
+                    seeAllType = SeeAllType.Season
                 )
             }
         }
@@ -321,13 +322,17 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun onSuccessLoadCast(artists:List<Artist>){
         updateState {
-            it.copy(topCast = artists.map { artist -> artist.mapToUiState() })
+            it.copy(topCast = artists.map { artist -> artist.mapToUiState() },
+                seeAllType = SeeAllType.TopCast
+            )
         }
     }
 
     private fun onSuccessLoadReviews(reviews:List<Review>){
         updateState {
-            it.copy(reviews = reviews.map { review -> review.toUiState() })
+            it.copy(reviews = reviews.map { review -> review.toUiState() },
+                seeAllType = SeeAllType.Review
+            )
         }
     }
 
@@ -352,9 +357,9 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun onSuccessLoadSimilarSeries(allSeries:List<Series>){
         updateState {
-            it.copy(similarSeries = allSeries.map { series ->
-                series.toUiState()
-            })
+            it.copy(similarSeries = allSeries.map { series -> series.toUiState() },
+                seeAllType = SeeAllType.SimilarSeries
+            )
         }
     }
 

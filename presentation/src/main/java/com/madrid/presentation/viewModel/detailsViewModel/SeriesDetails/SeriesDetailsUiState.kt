@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
 
+import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 
 data class SeriesDetailsUiState(
@@ -28,6 +29,7 @@ data class SeriesDetailsUiState(
     val showAddRatingBottomSheet: Boolean = false,
     val showDoneRatingBottomSheet: Boolean = false,
     val showAddToListBottomSheet: Boolean = false,
+    val seeAllType: SeeAllType =SeeAllType.TopCast
 )
 
 data class SeriesUiState(
@@ -35,7 +37,6 @@ data class SeriesUiState(
     val imageUrl: String = "",
     val rate: String = "",
     val name: String = "",
-    val date: String = ""
 )
 
 data class ArtistUiState(
@@ -64,3 +65,10 @@ data class EpisodeUiState(
     val rate: String = "",
     val trailerKey: String?
 )
+
+enum class SeeAllType (val stringResId: Int){
+    TopCast(R.string.top_cast),
+    Season(R.string.current_seasons),
+    Review(R.string.reviews),
+    SimilarSeries(R.string.similar_series)
+}

@@ -54,7 +54,6 @@ import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
-import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastHorizontalScroll
 import com.madrid.presentation.component.header.MovieDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
@@ -63,10 +62,10 @@ import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.addtolist.ListManagementBottomSheet
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
-import com.madrid.presentation.screens.detailsScreen.seriesDetails.toReviewScreenUiState
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
 import com.madrid.presentation.viewModel.detailsViewModel.DetailsMovieViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.ArtistUiState
 import com.madrid.presentation.viewModel.libraryViewModel.addtolist.MovieListViewModel
 
 
@@ -452,15 +451,15 @@ fun MovieDetailsScreen(
                     },
                     modifier = Modifier.padding(top = 32.dp),
                     castMembers = uiState.casts.map { cast ->
-                        CastMember(
-                            id = cast.id.toString(),
+                        ArtistUiState(
+                            id = cast.id,
                             name = cast.name,
                             imageUrl = cast.imageUrl
                         )
                     }
                 )
                 ReviewScreen(
-                    modifier = Modifier.padding(top = 32.dp),
+                    reviews = uiState.reviews,
                     onSeeAllReviews = {
                         navController.navigate(
                             Destinations.ReviewsScreen(
@@ -469,7 +468,7 @@ fun MovieDetailsScreen(
                             )
                         )
                     },
-                    uiState = uiState.reviews.toReviewScreenUiState()
+                    modifier = Modifier.padding(top = 32.dp),
                 )
                 SimilarMoviesSection(
                     modifier = Modifier.padding(vertical = 32.dp),

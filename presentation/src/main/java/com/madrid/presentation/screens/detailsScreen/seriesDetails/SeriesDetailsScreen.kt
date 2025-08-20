@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.TopAppBar
@@ -36,7 +35,6 @@ import com.madrid.presentation.component.header.SeriesDetailsHeader
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.screens.addtolist.ListManagementBottomSheet
 import com.madrid.presentation.screens.detailsScreen.castDetails.LoadingScreen
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.AddRatingBottomSheet
@@ -49,18 +47,15 @@ import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.Sim
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.TopCastSection
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.copyToClipboard
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.playSeriesTrailer
-import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
-import com.madrid.presentation.viewModel.detailsViewModel.ReviewsScreenUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsEffect
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsViewModel
-import com.madrid.presentation.viewModel.libraryViewModel.addtolist.MovieListViewModel
 
 @Composable
 fun SeriesDetailsScreen(
     viewModel: SeriesDetailsViewModel = hiltViewModel(),
-    addToListViewModel: MovieListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val interactionListener = viewModel as SeriesDetailsInteractionListener
@@ -93,6 +88,14 @@ fun SeriesDetailsScreen(
 
                 is SeriesDetailsEffect.NavigateToAuthenticationScreen -> {
                     navController.navigate(Destinations.LoginScreen)
+                }
+                is SeriesDetailsEffect.NavigateToSeeAllScreen -> {
+                   when (effect.seeAllType){
+                       SeeAllType.TopCast -> navController.navigate(Destinations.TopCast(effect.seriesId,false))
+                       SeeAllType.Season -> navController.navigate(Destinations.SeasonsScreen(effect.seriesId,1))
+                       SeeAllType.SimilarSeries -> navController.navigate(Destinations.SimilarMediaScreen(effect.seriesId,false))
+                       SeeAllType.Review -> navController.navigate(Destinations.ReviewsScreen(effect.seriesId,false))
+                    }
                 }
             }
         }
@@ -132,8 +135,6 @@ fun SeriesDetailsScreen(
                 uiState = uiState,
                 interactionListener = interactionListener,
                 viewModel = viewModel,
-                navController = navController,
-                addToListViewModel = addToListViewModel
             )
         }
     }
@@ -145,8 +146,6 @@ private fun SeriesDetailsScreenContent(
     context: Context,
     interactionListener: SeriesDetailsInteractionListener,
     viewModel: SeriesDetailsViewModel,
-    navController: NavHostController,
-    addToListViewModel: MovieListViewModel
 ) {
     ShareBottomSheet(
         copyToClipboard = { text -> copyToClipboard(text, context) },
@@ -154,16 +153,15 @@ private fun SeriesDetailsScreenContent(
         uiState = uiState,
         interactionListener = interactionListener
     )
+
     Box(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .background(Theme.color.surfaces.surface)
     ) {
-        MoviePosterDetailScreen(
-            imageUrl = uiState.topImageUrl,
-            modifier = Modifier.fillMaxSize()
-        )
+        MoviePosterDetailScreen(imageUrl = uiState.topImageUrl, modifier = Modifier.fillMaxSize())
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -175,6 +173,7 @@ private fun SeriesDetailsScreenContent(
                     )
                 )
         )
+
         TopAppBar(
             text = null,
             modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
@@ -189,6 +188,7 @@ private fun SeriesDetailsScreenContent(
                 .padding(bottom = 32.dp)
         ) {
             Spacer(modifier = Modifier.height(360.dp))
+
             SeriesDetailsHeader(
                 movieName = uiState.seriesName,
                 seriesCategory = uiState.seriesGenre,
@@ -200,6 +200,7 @@ private fun SeriesDetailsScreenContent(
                 rate = uiState.rate.take(3),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
             )
+
             BottomMediaActions(
                 onRateClick = {
                     interactionListener.onShowAddRatingBottomSheetClick()
@@ -208,7 +209,7 @@ private fun SeriesDetailsScreenContent(
                     interactionListener.onPlayItClick()
                     playSeriesTrailer(context, uiState)
                 },
-                onAddToListClick = { interactionListener.onShowAddToListBottomSheet() },
+                onAddToListClick = { TODO("implement with snack bar") },
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
@@ -223,57 +224,33 @@ private fun SeriesDetailsScreenContent(
                     }
                 }
             )
-            DoneAddRating(
-                uiState = uiState,
-                interactionListener = interactionListener
-            )
-            Spacer(
-                modifier = Modifier.height(16.dp)
-            )
-            DescriptionSection(
-                uiState = uiState
-            )
-            TopCastSection(
-                uiState = uiState, navController = navController,
-                interactionListener = interactionListener
-            )
-            CurrentSeasonsSection(
-                navController = navController, uiState = uiState,
-                interactionListener = interactionListener
-            )
+
+            DoneAddRating(uiState = uiState, interactionListener = interactionListener)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            DescriptionSection(uiState = uiState)
+
+            TopCastSection(uiState = uiState, interactionListener = interactionListener)
+
+            CurrentSeasonsSection(uiState = uiState, interactionListener = interactionListener)
 
             Spacer(modifier = Modifier.height(32.dp))
 
             if (uiState.reviews.isNotEmpty()) {
                 ReviewScreen(
+                    reviews = uiState.reviews,
                     onSeeAllReviews = {
-                        navController.navigate(
-                            Destinations.ReviewsScreen(
-                                uiState.seriesId,
-                                isMovie = false
-                            )
-                        )
+                        interactionListener.onSeeAllClick(uiState.seriesId, SeeAllType.Review)
                     },
-                    uiState = uiState.reviews.toReviewScreenUiState()
                 )
                 Spacer(modifier = Modifier.height(32.dp))
             }
 
             SimilarSeriesHorizontalSection(
-                navController = navController,
                 uiState = uiState,
                 interactionListener = interactionListener
             )
         }
     }
-    ListManagementBottomSheet(
-        isVisible = uiState.showAddToListBottomSheet,
-        onDismiss = { interactionListener.onDismissAddToListBottomSheet() },
-        movieId = uiState.seriesId,
-        viewModel = addToListViewModel
-    )
-}
-
-fun List<ReviewUiState>.toReviewScreenUiState(): ReviewsScreenUiState {
-    return ReviewsScreenUiState(reviews = this)
 }

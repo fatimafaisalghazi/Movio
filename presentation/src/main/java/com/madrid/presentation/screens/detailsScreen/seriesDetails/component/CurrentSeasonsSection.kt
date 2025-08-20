@@ -11,11 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
-import com.madrid.presentation.navigation.Destinations
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
 import com.madrid.presentation.viewModel.shared.parser.formatFullDateKtx
@@ -23,14 +22,13 @@ import com.madrid.presentation.viewModel.shared.parser.formatYearKtx
 
 @Composable
 fun CurrentSeasonsSection(
-    navController: NavHostController,
-    interactionListener: SeriesDetailsInteractionListener,
-    uiState: SeriesDetailsUiState
+    uiState: SeriesDetailsUiState,
+    interactionListener: SeriesDetailsInteractionListener
 ) {
     val seasons = uiState.currentSeasonsUiStates
 
     CurrentSeasonsTitle(
-        uiState = uiState, navController = navController
+        uiState = uiState, interactionListener=interactionListener
     )
     LazyRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -58,16 +56,12 @@ fun CurrentSeasonsSection(
 }
 
 @Composable
-fun CurrentSeasonsTitle(uiState: SeriesDetailsUiState, navController: NavHostController) {
+fun CurrentSeasonsTitle(uiState: SeriesDetailsUiState,interactionListener:SeriesDetailsInteractionListener) {
     CustomTextTitle(
-        primaryText = stringResource(R.string.current_seasons),
+        primaryText = stringResource(SeeAllType.Season.stringResId),
         secondaryText = stringResource(R.string.see_all),
         endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_alt_arrow_left),
-        onSeeAllClick = {
-            navController.navigate(
-                Destinations.SeasonsScreen(uiState.seriesId,1)
-            )
-        },
+        onSeeAllClick = { interactionListener.onSeeAllClick(uiState.seriesId,SeeAllType.Season) },
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 32.dp, bottom = 12.dp)
     )

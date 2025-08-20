@@ -26,6 +26,7 @@ import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
 
 data class SimilarSeries(
     val id: Int,
@@ -43,7 +44,7 @@ fun SimilarSeriesSection(
 ) {
     Column(modifier = modifier) {
         CustomTextTitle(
-            primaryText = stringResource(R.string.similar_series),
+            primaryText = stringResource(SeeAllType.SimilarSeries.stringResId),
             secondaryText = stringResource(R.string.see_all),
             endIcon = painterResource(com.madrid.designSystem.R.drawable.outline_alt_arrow_left),
             onSeeAllClick = { onSeeAllClick() },

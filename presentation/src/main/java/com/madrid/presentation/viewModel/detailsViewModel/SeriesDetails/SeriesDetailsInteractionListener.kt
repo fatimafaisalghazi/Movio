@@ -11,7 +11,7 @@ interface SeriesDetailsInteractionListener {
         ,episodeNumber: Int, onTrailerLoaded: (String?) -> Unit
     )
     fun onSeriesClick()
-    fun onSeeAllClick()
+    fun onSeeAllClick(seriesId: Int, seeAllType:SeeAllType)
     fun onActorCardClick(actorId:Int)
     fun onSimilarSeriesCardClick(seriesId: Int)
     fun onCurrentSeasonCardClick(seriesId: Int,seasonNumber:Int)
@@ -23,6 +23,4 @@ interface SeriesDetailsInteractionListener {
     fun onShowDoneRatingBottomSheetClick()
     fun onDismissShowDoneRatingBottomSheetClick()
     fun onDismissAddRatingBottomSheet()
-    fun onShowAddToListBottomSheet()
-    fun onDismissAddToListBottomSheet()
 }
