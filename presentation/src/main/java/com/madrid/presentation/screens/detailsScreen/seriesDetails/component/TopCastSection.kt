@@ -2,7 +2,6 @@ package com.madrid.presentation.screens.detailsScreen.seriesDetails.component
 
 import androidx.compose.runtime.Composable
 import com.madrid.presentation.component.TopCastHorizontalScroll
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.ArtistUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
@@ -15,13 +14,7 @@ fun TopCastSection(
     val artists = uiState.topCast
 
     TopCastHorizontalScroll(
-        castMembers = artists.map { cast ->
-            ArtistUiState(
-                id = cast.id,
-                name = cast.name,
-                imageUrl = cast.imageUrl
-            )
-        },
+        castMembers = artists,
         onSeeAllClick = {
             interactionListener.onSeeAllClick(uiState.seriesId, seeAllType = SeeAllType.TopCast)
         },

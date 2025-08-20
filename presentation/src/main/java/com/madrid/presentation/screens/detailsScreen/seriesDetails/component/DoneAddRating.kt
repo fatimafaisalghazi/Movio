@@ -75,10 +75,8 @@ fun DoneAddRating(
                         .fillMaxWidth()
                         .padding(top = 40.dp, bottom = 32.dp, start = 16.dp, end = 16.dp)
                         .height(48.dp),
-                    onClick = { interactionListener.onDismissShareShareBottomSheetClick() },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = Theme.color.brand.primary,
-                    ),
+                    onClick = { interactionListener.onDismissShowDoneRatingBottomSheetClick() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Theme.color.brand.primary,),
                     shape = RoundedCornerShape(24.dp),
                     elevation = ButtonDefaults.elevation(0.dp)
                 ) {
