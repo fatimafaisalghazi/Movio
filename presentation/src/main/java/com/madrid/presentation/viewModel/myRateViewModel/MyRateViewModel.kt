@@ -29,7 +29,7 @@ class MyRateViewModel @Inject constructor(
     }
 
     private fun loadRatedMedia() {
-        updateState { it.copy(showLoadingScreen = true, isError = true) }
+        updateState { it.copy(showLoadingScreen = true, isError = false) }
 
         viewModelScope.launch {
             tryToExecute(
