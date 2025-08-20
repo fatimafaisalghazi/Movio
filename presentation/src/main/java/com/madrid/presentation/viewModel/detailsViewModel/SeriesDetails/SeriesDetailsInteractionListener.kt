@@ -23,4 +23,6 @@ interface SeriesDetailsInteractionListener {
     fun onShowDoneRatingBottomSheetClick()
     fun onDismissShowDoneRatingBottomSheetClick()
     fun onDismissAddRatingBottomSheet()
+    fun onShowSnackBar()
+    fun onDismissSnackBar()
 }

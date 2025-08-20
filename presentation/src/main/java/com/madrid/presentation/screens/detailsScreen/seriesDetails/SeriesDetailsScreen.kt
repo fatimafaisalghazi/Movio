@@ -27,6 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.MovioBottomSheet
+import com.madrid.designSystem.component.MovioSnakBar
+import com.madrid.designSystem.component.ToastDuration
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -128,7 +130,6 @@ fun SeriesDetailsScreen(
                 )
             }
         }
-
         else -> {
             SeriesDetailsScreenContent(
                 context = context,
@@ -209,7 +210,9 @@ private fun SeriesDetailsScreenContent(
                     interactionListener.onPlayItClick()
                     playSeriesTrailer(context, uiState)
                 },
-                onAddToListClick = { TODO("implement with snack bar") },
+                onAddToListClick = { interactionListener.onShowSnackBar()
+
+                     },
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
@@ -250,6 +253,18 @@ private fun SeriesDetailsScreenContent(
             SimilarSeriesHorizontalSection(
                 uiState = uiState,
                 interactionListener = interactionListener
+            )
+        }
+    }
+    if (uiState.showSnackBar) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            MovioSnakBar(
+                message = stringResource(uiState.errorResMessageId),
+                duration = ToastDuration.SHORT,
+                onDismiss = { interactionListener.onDismissSnackBar() },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomCenter)
             )
         }
     }

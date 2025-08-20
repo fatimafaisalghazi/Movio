@@ -20,6 +20,7 @@ import com.madrid.domain.usecase.series.GetSeriesTrailersUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.domain.usecase.series.IsFavoriteSeriesUseCase
 import com.madrid.domain.usecase.series.SetSeriesFavoriteStatusUseCase
+import com.madrid.presentation.R
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
@@ -116,9 +117,7 @@ class SeriesDetailsViewModel @Inject constructor(
        tryToExecute(
             function = { setSeriesFavoriteStatusUseCase(seriesId, state.value.isFavourite.not()) },
             onSuccess = { ::onSuccessLoadFavourite.invoke() },
-            onError = {
-//                ::onError.invoke()
-            }
+            onError = {}
        )
     }
 
@@ -259,17 +258,22 @@ class SeriesDetailsViewModel @Inject constructor(
         updateState { it.copy(showAddRatingBottomSheet= false) }
     }
 
+    override fun onShowSnackBar(){
+        updateState {
+            it.copy(isError = false, errorResMessageId = R.string.feature_not_supported , showSnackBar = true)
+        }
+    }
+    override fun onDismissSnackBar(){
+        updateState {
+            it.copy(isError = false , showSnackBar = false)
+        }
+    }
+
     private fun onError() {
         updateState {
             it.copy(isError = true, showLoadingScreen = false)
         }
     }
-
-//    private fun onAddToListErrorMessage(){
-//        updateState {
-//            it.copy(errorMessage = "not supported in series")
-//        }
-//    }
 
     private fun onGuestCheckError(){
          updateState { it.copy(isGuest = true)

@@ -29,7 +29,9 @@ data class SeriesDetailsUiState(
     val showAddRatingBottomSheet: Boolean = false,
     val showDoneRatingBottomSheet: Boolean = false,
     val showAddToListBottomSheet: Boolean = false,
-    val seeAllType: SeeAllType =SeeAllType.TopCast
+    val seeAllType: SeeAllType = SeeAllType.TopCast,
+    val errorResMessageId: Int = R.string.feature_not_supported,
+    val showSnackBar: Boolean = false
 )
 
 data class SeriesUiState(
@@ -66,7 +68,7 @@ data class EpisodeUiState(
     val trailerKey: String?
 )
 
-enum class SeeAllType (val stringResId: Int){
+enum class SeeAllType(val stringResId: Int) {
     TopCast(R.string.top_cast),
     Season(R.string.current_seasons),
     Review(R.string.reviews),
