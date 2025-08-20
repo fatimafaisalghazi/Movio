@@ -30,7 +30,7 @@ import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.SettingsItem
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.screens.logOut.LogoutConfirmationBottomSheet
+import com.madrid.presentation.component.logout.LogoutConfirmationBottomSheet
 import com.madrid.presentation.screens.moreScreen.component.OptionUiState
 import com.madrid.presentation.screens.moreScreen.component.ProfileSection
 import com.madrid.presentation.screens.moreScreen.component.SelectionBottomSheet
@@ -65,7 +65,7 @@ fun MoreScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is MoreEffect.navigateToLogin -> {
-                    navController.navigate(Destinations.AuthenticationScreen)
+                    navController.navigate(Destinations.LoginScreen)
                 }
 
                 is MoreEffect.navigateToMyRatings -> {
@@ -87,7 +87,7 @@ fun MoreScreen(
         isVisible = state.isLogoutSheetVisible,
         onDismiss = { viewModel.dismissLogoutSheet() },
         onNavigateToAuth = {
-            navController.navigate(Destinations.AuthenticationScreen) {
+            navController.navigate(Destinations.LoginScreen) {
                 popUpTo(0) { inclusive = true }
             }
         },

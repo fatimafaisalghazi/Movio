@@ -16,8 +16,9 @@ import com.madrid.domain.usecase.movie.IsFavoriteMovieUseCase
 import com.madrid.domain.usecase.movie.SetMovieFavoriteStatusUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
-import com.madrid.presentation.utils.RateFormatter
+import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.utils.formatDate
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
@@ -61,7 +62,6 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        Log.d("TAG lol", "=== LOADING MOVIE DETAILS ===")
         tryToExecute(
             function = {
                 getMovieDetailsUseCase.invoke(args.movieId)
@@ -74,7 +74,7 @@ class DetailsMovieViewModel @Inject constructor(
                         topImageUrl = movie.imageUrl,
                         dataMovie = formatDateKotlinx(movie.releaseDate),
                         movieName = movie.title,
-                        rate = RateFormatter.formatRate(movie.rate),
+                        rate = formatRate(movie.rate),
                         movieDuration = formatDuration(movie.movieDuration),
                         description = movie.description,
                         genreMovie = movie.genre.map { it.name },
@@ -94,14 +94,12 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadCast() {
-        Log.d("TAG lol", "=== LOADING CAST ===")
         tryToExecute(
             function = { getMovieTopCastUseCase(args.movieId) },
             onSuccess = { result ->
                 val formattedResult = result.map { artist ->
                     artist.copy(dateOfBirth = formatDateOfBirth(artist.dateOfBirth))
                 }
-                Log.d("TAG lol", "Cast loaded: ${formattedResult.size}")
                 updateState {
                     it.copy(casts = formattedResult)
                 }
@@ -114,7 +112,6 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadSimilarMovies() {
-        Log.d("TAG lol", "=== LOADING SIMILAR MOVIES ===")
         tryToExecute(
             function = {
                 getSimilarMoviesUseCase(args.movieId)
@@ -125,7 +122,7 @@ class DetailsMovieViewModel @Inject constructor(
                         id = movie.id,
                         title = movie.title,
                         imageUrl = movie.imageUrl,
-                        rating = RateFormatter.formatRate(movie.rate) // Format rate here too
+                        rating = formatRate(movie.rate)
                     )
                 }
                 updateState { currentState ->
@@ -143,23 +140,16 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     private fun loadReviews() {
-        Log.d("REVIEW_DEBUG", ">>> loadReviews started <<<")
         tryToExecute(
             function = {
                 getMovieReviewsUseCase(args.movieId)
             },
             onSuccess = { domainReviews ->
-                val reviewUiStates = domainReviews.map { review ->
-                    ReviewUiState(
-                        reviewerName = review.reviewerName,
-                        reviewerImageUrl = "",
-                        rating = review.rate.toFloat(),
-                        date = review.date,
-                        content = review.comment,
-                    )
+                val formattedReviews: List<ReviewUiState> = domainReviews.map { review ->
+                    review.toReviewUiState()
                 }
                 updateState { currentState ->
-                    currentState.copy(reviews = reviewUiStates)
+                    currentState.copy(reviews = formattedReviews)
                 }
             },
             onError = { error ->
@@ -216,13 +206,11 @@ class DetailsMovieViewModel @Inject constructor(
                 }
             },
             onError = {
-                // Log or handle error if needed
             },
             scope = viewModelScope,
             dispatcher = Dispatchers.IO
         )
     }
-
     private fun checkIfFavoriteMovie() {
         tryToExecute(
             function = { isFavoriteMovieUseCase(args.movieId) },
@@ -236,6 +224,10 @@ class DetailsMovieViewModel @Inject constructor(
     }
 
     fun addRating() {
+        if (state.value.userRating == 0) {
+            return
+        }
+
         tryToExecute(
             function = {
                 getAddRatingMoviesUseCase(

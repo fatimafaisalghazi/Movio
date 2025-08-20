@@ -1,8 +1,10 @@
 package com.madrid.presentation.screens.homeScreen.layout
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,14 +24,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
-import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.MovioPager
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
@@ -43,6 +42,7 @@ import com.madrid.presentation.viewModel.seeAll.tvShows.SeeAllTvShowType
 import com.madrid.presentation.viewModel.shared.MediaUiState
 import kotlinx.coroutines.flow.distinctUntilChanged
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun TvShowsLayout(
     trendingSeries: List<MediaUiState>,
@@ -110,11 +110,6 @@ fun TvShowsLayout(
                         .fillMaxWidth()
                         .height(30.dp)
                         .offset(y = 390.dp)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
-                            )
-                        )
                         .removeWidthPaddingFromParent(16.dp)
                 )
             }
@@ -278,20 +273,25 @@ fun TvShowsLayout(
             }
         } else {
             itemsIndexed(recommendedSeries) { index, media ->
-                MovioVerticalCard(
-                    description = media.title,
-                    movieImage = media.imageUrl,
-                    rate = media.rating.take(3),
-                    height = 220.dp,
-                    onClick = {
-                        navController.navigate(
-                            Destinations.SeriesDetailsScreen(
-                                media.id.toInt(),
-                                1
+                BoxWithConstraints {
+                    val cardWidth = maxWidth
+                    val cardHeight = cardWidth * (180f / 158)
+                    MovioVerticalCard(
+                        modifier = Modifier.width(cardWidth),
+                        description = media.title,
+                        movieImage = media.imageUrl,
+                        rate = media.rating.take(3),
+                        imageHeight = cardHeight,
+                        onClick = {
+                            navController.navigate(
+                                Destinations.SeriesDetailsScreen(
+                                    media.id.toInt(),
+                                    1
+                                )
                             )
-                        )
-                    },
-                )
+                        },
+                    )
+                }
             }
         }
     }

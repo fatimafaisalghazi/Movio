@@ -1,6 +1,5 @@
 package com.madrid.presentation.viewModel.seeAll.movies
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -12,7 +11,7 @@ import com.madrid.domain.entity.Movie
 import com.madrid.domain.usecase.movie.GetMovieGenresUseCase
 import com.madrid.presentation.pagination.SeeAllMoviesPagingSource
 import com.madrid.presentation.pagination.SeeAllMoviesWithGenrePagingSource
-import com.madrid.presentation.utils.RateFormatter
+import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -34,6 +33,7 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
             strategy: SeeAllMoviesStrategy,
         ): SeeAllMoviesViewModel
     }
+
     init {
         loadTitle()
         loadGenres()
@@ -77,7 +77,7 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
             launchPagingRequest(
                 pagingSourceFactory = {
                     SeeAllMoviesWithGenrePagingSource(
-                        genreId =  genre.id,
+                        genreId = genre.id,
                         getAllMovie = strategy::getMoviesBasedOnCategory
                     )
                 },
@@ -87,7 +87,7 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
                             MoviesUiState(
                                 id = movie.id.toString(),
                                 imageUrl = movie.imageUrl,
-                                rate = RateFormatter.formatRate(movie.rate),
+                                rate = formatRate(movie.rate),
                                 name = movie.title,
                                 genre = movie.genre.map { it.toCategoryUiState() },
                             )
@@ -97,6 +97,7 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
                     updateState {
                         it.copy(
                             filteredMovies = result,
+                            selectedGenre = genre.name,
                             isLoading = false
                         )
                     }
@@ -104,6 +105,16 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
                 }
             )
         }
+    }
+
+    override fun onTryAgainClick() {
+        val genres = state.value.genre
+        val selectedGenre = state.value.selectedGenre
+        onGenreSelect(
+            if (selectedGenre != null) {
+                genres.find { it.name == selectedGenre }
+            } else null
+        )
     }
 
     override fun onMovieClick(movieId: Int) {
