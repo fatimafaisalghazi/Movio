@@ -1,6 +1,9 @@
 package com.madrid.presentation.screens.homeScreen
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,7 +69,10 @@ fun SeeAllTVShowsScreen(
         }
     }
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
 
         TopAppBar(
             uiState.title,
@@ -81,9 +86,9 @@ fun SeeAllTVShowsScreen(
             },
             modifier = Modifier
                 .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
                 .statusBarsPadding()
         )
-        Spacer(Modifier.height(16.dp))
         val updatedItems: MutableList<String> = items.map { it.name }.toMutableList()
         updatedItems.add(0, "All")
         FilterBar(
@@ -101,7 +106,7 @@ fun SeeAllTVShowsScreen(
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 101.33.dp),
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(Theme.color.surfaces.surface)
                 .navigationBarsPadding(),
             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -122,50 +127,23 @@ fun SeeAllTVShowsScreen(
                     }
                 }
 
-                listOfItem.itemCount == 0 && listOfItem.loadState.refresh is LoadState.Error -> {
-                    item(
-                        span = { GridItemSpan(maxLineSpan) }
-                    ) {
-                        DialogWithButtonLayout(
-                            title = stringResource(R.string.empty_no_internet_title),
-                            description = stringResource(R.string.empty_no_internet_description),
-                            image = R.drawable.img_no_internet,
-                            buttonText = stringResource(R.string.try_again),
-                            onClick = { viewModel.onTryAgainClick() },
-                            imageSize = 150,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp, vertical = 32.dp),
-                        )
-                    }
-                }
-
-                listOfItem.itemCount == 0 && listOfItem.loadState.refresh is LoadState.NotLoading -> {
-                    item(span = { GridItemSpan(maxLineSpan) }) {
-                        EmptySearchLayout(
-                            title = stringResource(R.string.nothing_here_yet),
-                            description = stringResource(R.string.category_empty_description),
-                            image = R.drawable.img_no_sesrch_found,
-                            imageSize = 150
-                        )
-                    }
-                }
-
                 listOfItem.itemCount > 0 -> {
                     items(
                         count = listOfItem.itemCount,
                     ) { index ->
-                        BoxWithConstraints {
+                        BoxWithConstraints(
+                            modifier = Modifier
+                        ) {
                             val cardWidth = maxWidth
                             val cardHeight = cardWidth * (136f / 101.33f)
                             val movie = listOfItem[index]
                             MovioVerticalCard(
                                 modifier = Modifier.width(cardWidth),
-                            description = movie?.name ?: "no description",
-                            movieImage = movie?.imageUrl
-                                ?: "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
-                            rate = movie?.rate?.take(3) ?: "4.3",
-                            imageHeight = cardHeight,
+                                description = movie?.name ?: "no description",
+                                movieImage = movie?.imageUrl
+                                    ?: "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",
+                                rate = movie?.rate?.take(3) ?: "4.3",
+                                imageHeight = cardHeight,
                                 onClick = {
                                     navController.navigate(
                                         Destinations.SeriesDetailsScreen(
@@ -181,6 +159,39 @@ fun SeeAllTVShowsScreen(
             }
 
         }
-    }
 
+        AnimatedVisibility(
+            visible = listOfItem.itemCount == 0 && listOfItem.loadState.refresh is LoadState.Error,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            DialogWithButtonLayout(
+                title = stringResource(R.string.empty_no_internet_title),
+                description = stringResource(R.string.empty_no_internet_description),
+                image = R.drawable.img_no_internet,
+                buttonText = stringResource(R.string.try_again),
+                onClick = { viewModel.onTryAgainClick() },
+                imageSize = 170,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 32.dp),
+            )
+        }
+
+        AnimatedVisibility(
+            visible = listOfItem.itemCount == 0 && listOfItem.loadState.refresh is LoadState.NotLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            EmptySearchLayout(
+                title = stringResource(R.string.nothing_here_yet),
+                description = stringResource(R.string.category_empty_description),
+                image = R.drawable.img_no_sesrch_found,
+                imageSize = 170,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 32.dp),
+            )
+        }
+    }
 }
