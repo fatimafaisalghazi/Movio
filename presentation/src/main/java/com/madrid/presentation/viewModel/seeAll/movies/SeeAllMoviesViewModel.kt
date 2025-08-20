@@ -97,6 +97,7 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
                     updateState {
                         it.copy(
                             filteredMovies = result,
+                            selectedGenre = genre.name,
                             isLoading = false
                         )
                     }
@@ -104,6 +105,16 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
                 }
             )
         }
+    }
+
+    override fun onTryAgainClick() {
+        val genres = state.value.genre
+        val selectedGenre = state.value.selectedGenre
+        onGenreSelect(
+            if (selectedGenre != null) {
+                genres.find { it.name == selectedGenre }
+            } else null
+        )
     }
 
     override fun onMovieClick(movieId: Int) {
