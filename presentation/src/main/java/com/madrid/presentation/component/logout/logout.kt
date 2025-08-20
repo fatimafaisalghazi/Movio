@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -147,7 +146,7 @@ private fun LogoutTextSection(
     description: String
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -177,7 +176,6 @@ private fun ErrorMessageSection(errorMessage: String) {
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
     )
 }
 
@@ -197,7 +195,6 @@ private fun LogoutActionButton(
         },
         enabled = !isLoading,
         modifier = Modifier
-            .width(328.dp)
             .height(48.dp)
             .clip(RoundedCornerShape(24.dp))
             .background(
