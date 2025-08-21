@@ -138,7 +138,10 @@ class LoginViewModel @Inject constructor(
     private fun handleMovioException(ex: MovioException, isGuestFlow: Boolean = false) {
         val messageResId = when (ex.message) {
             "validation.invalid_password" -> R.string.invalid_username_or_password
-            "auth.invalid_credentials" -> R.string.invalid_username_or_password
+            "auth.invalid_credentials" -> {
+                updateState { it.copy(isUsernameValid = true, isPasswordValid = true) }
+                R.string.invalid_username_or_password
+            }
             "auth.unauthorized" -> R.string.unauthorized
             "network.timeout" -> R.string.network_timeout
             "network.error" -> R.string.network_error
@@ -160,3 +163,6 @@ class LoginViewModel @Inject constructor(
             emitNewEffect(LoginEffect.ShowToast(messageResId))
         }
     }}
+
+
+
