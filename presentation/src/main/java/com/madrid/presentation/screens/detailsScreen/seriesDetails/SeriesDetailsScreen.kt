@@ -202,7 +202,6 @@ fun SeriesDetailsScreen(
                             .fillMaxSize()
                             .padding(bottom = 32.dp)
                     ) {
-                        Spacer(modifier = Modifier.height(30.dp))
                         SeriesDetailsHeader(
                             movieName = uiState.seriesName,
                             seriesCategory = uiState.seriesGenre,
@@ -212,7 +211,11 @@ fun SeriesDetailsScreen(
                                 uiState.numberOfSeasons.toString()
                             ),
                             rate = uiState.rate.take(3),
-                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                            modifier = Modifier.padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 16.dp
+                            )
                         )
                         BottomMediaActions(
                             onRateClick = { showAddRatingBottomSheet = true },

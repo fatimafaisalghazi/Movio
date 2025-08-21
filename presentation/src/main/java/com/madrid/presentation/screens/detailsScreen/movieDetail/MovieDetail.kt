@@ -184,7 +184,6 @@ fun MovieDetailsScreen(
                         .fillMaxSize()
                         .padding(bottom = 32.dp)
                 ) {
-                    Spacer(modifier = Modifier.height(30.dp))
                     MovieDetailsHeader(
                         movieName = uiState.movieName,
                         movieCategory = uiState.genreMovie,
@@ -192,7 +191,11 @@ fun MovieDetailsScreen(
                         time = uiState.movieDuration.takeIf { it != "0" && it != "0min" && it.isNotBlank() },
                         rate = uiState.rate.takeIf { it != "0.0" && it != "0" && it.isNotBlank() }
                             ?.take(3),
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            bottom = 16.dp
+                        )
                     )
                     BottomMediaActions(
                         onAddToListClick = {
