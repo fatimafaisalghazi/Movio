@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeries
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarSeriesSection
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
 
 @Composable
 fun SimilarSeriesHorizontalSection(
@@ -25,7 +25,7 @@ fun SimilarSeriesHorizontalSection(
                 )
             },
             onSeeAllClick = {
-                interactionListener.onSeeAllClick(uiState.seriesId,SeeAllType.SimilarSeries)
+                interactionListener.onSeeAllClick(uiState.seriesId, SeeAllType.SimilarSeries)
             },
             onSeriesClick = { series ->
                 interactionListener.onSimilarSeriesCardClick(series.id)

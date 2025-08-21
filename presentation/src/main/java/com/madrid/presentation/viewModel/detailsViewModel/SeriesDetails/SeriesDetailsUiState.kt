@@ -1,5 +1,7 @@
 package com.madrid.presentation.viewModel.detailsViewModel
 
+import com.madrid.presentation.R
+
 data class SeriesDetailsUiState(
     val seriesId: Int = 0,
     val seriesName: String = "",

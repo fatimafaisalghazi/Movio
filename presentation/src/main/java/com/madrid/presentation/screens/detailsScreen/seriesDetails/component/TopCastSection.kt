@@ -2,8 +2,8 @@ package com.madrid.presentation.screens.detailsScreen.seriesDetails.component
 
 import androidx.compose.runtime.Composable
 import com.madrid.presentation.component.TopCastHorizontalScroll
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.ArtistUiState
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.ArtistUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
 
 @Composable

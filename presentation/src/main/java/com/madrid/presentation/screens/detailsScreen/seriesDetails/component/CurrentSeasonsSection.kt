@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioSeasonCard
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeasonUiState
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.SeasonUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
 import com.madrid.presentation.viewModel.shared.parser.formatFullDateKtx
 import com.madrid.presentation.viewModel.shared.parser.formatYearKtx

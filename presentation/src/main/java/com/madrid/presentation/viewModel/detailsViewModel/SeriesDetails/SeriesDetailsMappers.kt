@@ -6,7 +6,11 @@ import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Season
 import com.madrid.domain.entity.Series
 import com.madrid.presentation.utils.formatRate
+import com.madrid.presentation.viewModel.detailsViewModel.ArtistUiState
+import com.madrid.presentation.viewModel.detailsViewModel.EpisodeUiState
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeasonUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesUiState
 
 fun Episode.toUiState(): EpisodeUiState {
     return EpisodeUiState(

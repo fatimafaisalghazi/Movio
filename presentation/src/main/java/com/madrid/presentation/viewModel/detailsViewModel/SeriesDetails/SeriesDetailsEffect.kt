@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
 
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 
 sealed interface SeriesDetailsEffect {
     data object NavigateBack : SeriesDetailsEffect

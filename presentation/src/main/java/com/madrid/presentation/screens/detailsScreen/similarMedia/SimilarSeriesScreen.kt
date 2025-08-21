@@ -1,6 +1,5 @@
 package com.madrid.presentation.screens.detailsScreen.similarMedia
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +25,7 @@ import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 
 data class SimilarSeries(
     val id: Int,
@@ -71,7 +70,6 @@ private fun SeriesCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Log.d("SeriesCard", "SeriesCard: $series")
     Column(
         modifier = modifier
             .width(124.dp)

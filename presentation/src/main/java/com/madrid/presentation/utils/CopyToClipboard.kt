@@ -1,4 +1,4 @@
-package com.madrid.presentation.screens.detailsScreen.seriesDetails.component
+package com.madrid.presentation.utils
 
 import android.content.ClipData
 import android.content.ClipboardManager

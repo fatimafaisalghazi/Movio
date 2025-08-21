@@ -16,8 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
-import com.madrid.presentation.viewModel.detailsViewModel.ReviewsScreenUiState
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 
 @Composable
 fun ReviewScreen(

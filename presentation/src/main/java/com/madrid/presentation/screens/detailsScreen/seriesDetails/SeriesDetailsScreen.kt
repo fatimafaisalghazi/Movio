@@ -1,18 +1,9 @@
 package com.madrid.presentation.screens.detailsScreen.seriesDetails
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
-import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,32 +11,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.component.DialogWithButtonLayout
@@ -56,12 +33,9 @@ import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
-import com.madrid.presentation.component.CastMember
-import com.madrid.presentation.component.TopCastHorizontalScroll
 import com.madrid.presentation.component.header.SeriesDetailsHeader
+import com.madrid.presentation.component.logout.LogoutConfirmationBottomSheet
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
-import com.madrid.presentation.component.movioCards.MovioArtistsCard
-import com.madrid.presentation.component.movioCards.MovioSeasonCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.detailsScreen.castDetails.LoadingScreen
@@ -74,13 +48,13 @@ import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.Gus
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.ShareBottomSheet
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.SimilarSeriesHorizontalSection
 import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.TopCastSection
-import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.copyToClipboard
-import com.madrid.presentation.screens.detailsScreen.seriesDetails.component.playSeriesTrailer
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
+import com.madrid.presentation.utils.copyToClipboard
+import com.madrid.presentation.utils.playSeriesTrailer
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsEffect
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsInteractionListener
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
 
 @Composable
 fun SeriesDetailsScreen(
@@ -89,10 +63,6 @@ fun SeriesDetailsScreen(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val interactionListener = viewModel as SeriesDetailsInteractionListener
     val navController = LocalNavController.current
-    val seasons = uiState.currentSeasonsUiStates
-    val artists = uiState.topCast
-    var showAddRatingBottomSheet by remember { mutableStateOf(false) }
-    var showDoneRatingBottomSheet by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
@@ -131,7 +101,6 @@ fun SeriesDetailsScreen(
                     }
                 }
             }
-            context.startActivity(Intent.createChooser(fallback, "Share via"))
         }
     }
 
@@ -296,12 +265,8 @@ private fun SeriesDetailsScreenContent(
             description = stringResource(R.string.please_log_in_or_create_an_account_to_save_items_to_your_favorites_and_access_them_later),
             actionButtonText = stringResource(R.string.login),
             isVisible = uiState.isLoginBottomSheetVisible,
-            onDismiss = { viewModel.onDismissLoginBottomSheet() },
-            onNavigateToAuth = {
-                navController.navigate(Destinations.LoginScreen) {
-                    popUpTo(Destinations.LoginScreen) { inclusive = false }
-                }
-            },
+            onDismiss = { listener.onDismissLoginBottomSheet() },
+            onNavigateToAuth = { listener.onLoginButtonClick() },
         )
     }
     if (uiState.showSnackBar) {

@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -24,6 +25,8 @@ import com.madrid.presentation.R
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -102,7 +105,11 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun saveSeriesToHistory() {
-        viewModelScope.launch { addSeriesToHistoryUseCase(args.seriesId) }
+        tryToExecute(
+            function = {addSeriesToHistoryUseCase(args.seriesId)},
+            onSuccess = {},
+            onError = {}
+        )
     }
 
     private fun loadReviews() {
@@ -114,11 +121,15 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun onClickFavoriteIcon(seriesId: Int) {
-       tryToExecute(
-            function = { setSeriesFavoriteStatusUseCase(seriesId, state.value.isFavourite.not()) },
-            onSuccess = { ::onSuccessLoadFavourite.invoke() },
-            onError = {}
-       )
+        if (state.value.isGuest) {
+            updateState { it.copy(isLoginBottomSheetVisible = true) }
+            return
+        }
+           tryToExecute(
+                function = { setSeriesFavoriteStatusUseCase(seriesId, state.value.isFavourite.not()) },
+                onSuccess = { ::onSuccessLoadFavourite.invoke() },
+                onError = {}
+           )
     }
 
     private fun addRating() {
@@ -153,7 +164,9 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun isGuest() {
        tryToCollect(function = { isGuestUseCase.isGuest()},
-           onNewValue = { result-> ::onCheckGuestNewValue.invoke(result)},
+           onNewValue = { result-> onCheckGuestNewValue(result)
+               Log.d("guesst", "isGuest: $result")
+           },
            onError = {::onGuestCheckError.invoke()}
        )
     }
@@ -266,6 +279,10 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
+    override fun onDismissLoginBottomSheet() {
+        updateState { it.copy(isLoginBottomSheetVisible = false) }
+    }
+
     private fun onError() {
         updateState {
             it.copy(isError = true, showLoadingScreen = false)
@@ -273,7 +290,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun onGuestCheckError(){
-         updateState { it.copy(isGuest = true)
+        updateState { it.copy(isGuest = true)
         }
     }
 
@@ -345,6 +362,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun onSuccessLoadFavourite(){
+        Log.d("guesst", "onSuccessLoadFavourite: ------- ${state.value.isFavourite.not()}")
         updateState {
             it.copy(isFavourite = state.value.isFavourite.not())
         }

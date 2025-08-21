@@ -19,8 +19,8 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.presentation.component.movioCards.MovioArtistsCard
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.ArtistUiState
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.ArtistUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 
 @Composable
 fun TopCastHorizontalScroll(

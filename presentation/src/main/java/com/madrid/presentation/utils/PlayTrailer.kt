@@ -1,9 +1,9 @@
-package com.madrid.presentation.screens.detailsScreen.seriesDetails.component
+package com.madrid.presentation.utils
 
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails.SeriesDetailsUiState
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
 
 fun playSeriesTrailer(context: Context, uiState: SeriesDetailsUiState) {
     val trailerKey = uiState.trailerKey
