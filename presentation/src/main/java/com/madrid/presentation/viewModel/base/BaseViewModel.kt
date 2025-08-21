@@ -8,6 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.cachedIn
+import com.madrid.domain.exceptions.AlreadyExistsException
 import com.madrid.domain.exceptions.InvalidCredentialsException
 import com.madrid.domain.exceptions.NetworkException
 import com.madrid.domain.exceptions.NotFoundException
@@ -29,7 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.IOException
+import java.net.UnknownHostException
 
 abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
 
@@ -82,6 +83,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
         function: suspend () -> Unit,
     ): Job {
         val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+            Log.d("BaseViewModel", "Exception caught: ${throwable.message}", throwable)
             val errorState = exceptionMapper(throwable)
             Log.e("BaseViewModel", "Error occurred: ${errorState.message}", throwable)
             onError(errorState)
@@ -98,8 +100,10 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
             is UnauthorizedException -> UnauthorizedError(message = "Unauthorized")
             is TimeoutException -> ServerError(message = "Server error ,try again later")
             is ServerException -> ServerError(message = "Server error ,try again later")
+            is AlreadyExistsException -> AlreadyExistsError(message = "This item already exists")
             is NetworkException -> NetworkError(message = "Network error")
             is NotFoundException -> NotFoundError(message = "Not found")
+            is UnknownHostException -> NetworkError(message = "No internet connection")
             else -> UnknownError(message = "Unknown error")
         }
     }
