@@ -2,7 +2,6 @@ package com.madrid.domain.repository
 
 import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Genre
-import com.madrid.domain.entity.ListOperationStatus
 import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.SortType

@@ -1,6 +1,5 @@
 package com.madrid.domain.usecase.movie
 
-import com.madrid.domain.entity.ListOperationStatus
 import com.madrid.domain.repository.AuthenticationRepository
 import com.madrid.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.first
