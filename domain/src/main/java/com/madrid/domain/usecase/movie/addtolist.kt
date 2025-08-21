@@ -14,7 +14,7 @@ class CreateMovieListUseCase @Inject constructor(
         name: String,
         description: String = "",
         language: String = "en"
-    ): ListOperationStatus {
+    ) {
         val sessionId = authenticationRepository.getSessionId().first()
         return movieRepository.createMovieList(sessionId, name, description, language)
     }

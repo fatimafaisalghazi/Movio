@@ -41,7 +41,7 @@ interface MovieRepository {
         name: String,
         description: String,
         language: String
-    ): ListOperationStatus
+    )
 
     suspend fun addMovieToList(listId: Int, sessionId: String, mediaId: Int)
     suspend fun removeMovieFromList(listId: Int, mediaId: Int, sessionId: String)
