@@ -1,4 +1,4 @@
-package com.madrid.presentation.viewModel.shared
+package com.madrid.presentation.viewModel.shared.parser
 
 
 fun formatDuration(durationInMinutes: String): String {

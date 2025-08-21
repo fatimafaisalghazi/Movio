@@ -19,7 +19,7 @@ import com.madrid.presentation.viewModel.shared.parser.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.review.ReviewUiState
 import com.madrid.presentation.viewModel.detailsViewModel.review.toReviewUiState
-import com.madrid.presentation.viewModel.shared.formatDuration
+import com.madrid.presentation.viewModel.shared.parser.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
 import dagger.hilt.android.lifecycle.HiltViewModel
