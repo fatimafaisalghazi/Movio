@@ -54,7 +54,7 @@ fun MovieLoginContent(
                 onUsernameChange = interactionListener::onUsernameChanged,
                 onPasswordChange = interactionListener::onPasswordChanged,
                 onTogglePassword = interactionListener::onShowPasswordToggled,
-                modifier = Modifier.padding(bottom = 8.dp)
+
             )
 
             LoginErrorAndForgotPassword(
