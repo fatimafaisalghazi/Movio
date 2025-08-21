@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.libraryViewModel.addtolist
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.madrid.domain.entity.ListOperationStatus
 import com.madrid.domain.entity.WatchList
@@ -115,14 +116,28 @@ class MovieListViewModel @Inject constructor(
                     movieId = movieId
                 )
             },
-            onSuccess = {
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        addToListSuccess = true,
-                    )
+            onSuccess = { status ->
+                Log.d("MovieListViewModel", "Add to list status: $status")
+                if (status.success) {
+                    updateState {
+                        it.copy(
+                            isLoading = false,
+                            addToListSuccess = true,
+                            successMessage = status.message,
+                        )
+                    }
+                    onSuccess?.invoke()
+
+                } else {
+                    updateState {
+                        it.copy(
+                            isLoading = false,
+                            addToListSuccess = true,
+                            errorMessage = status.message,
+                            successMessage = status.message
+                        )
+                    }
                 }
-                onSuccess?.invoke()
             },
             onError = {
                 updateState {
