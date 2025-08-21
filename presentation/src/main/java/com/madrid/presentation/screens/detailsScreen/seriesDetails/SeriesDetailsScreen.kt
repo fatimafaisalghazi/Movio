@@ -176,7 +176,7 @@ private fun SeriesDetailsScreenContent(
             text = null,
             modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
             onFirstIconClick = { listener.onBackButtonClick() },
-            onSecondIconClick = { listener.onShareBottomSheetClick() },
+            onSecondIconClick = { listener.onShareIconClick() },
             onThirdIconClick = { listener.onFavoriteClick(uiState.seriesId) },
             isFavorite = uiState.isFavourite
         )

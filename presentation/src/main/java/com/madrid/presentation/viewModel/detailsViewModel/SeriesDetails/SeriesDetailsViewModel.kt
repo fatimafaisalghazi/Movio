@@ -241,7 +241,7 @@ class SeriesDetailsViewModel @Inject constructor(
         emitNewEffect(effect = SeriesDetailsEffect.NavigateToAuthenticationScreen)
     }
 
-    override fun onShareBottomSheetClick() {
+    override fun onShareIconClick() {
         updateState { it.copy(showSheet=true) }
     }
 
@@ -308,8 +308,8 @@ class SeriesDetailsViewModel @Inject constructor(
                 numberOfSeasons = series.seasons.size,
                 productionDate = formatDateKotlinx(series.airDate),
                 description = series.description,
-                currentSeasonsUiStates = series.seasons.map { season -> season.mapToUiState() },
-                selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].mapToUiState(),
+                currentSeasonsUiStates = series.seasons.map { season -> season.toUiState() },
+                selectedSeasonUiState = series.seasons[if (series.seasons.first().seasonNumber == 0) args.seasonNumber else args.seasonNumber - 1].toUiState(),
                 showLoadingScreen = false,
                 isError = false,
             )
@@ -337,7 +337,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun onSuccessLoadCast(artists:List<Artist>){
         updateState {
-            it.copy(topCast = artists.map { artist -> artist.mapToUiState() },
+            it.copy(topCast = artists.map { artist -> artist.toUiState() },
                 seeAllType = SeeAllType.TopCast
             )
         }

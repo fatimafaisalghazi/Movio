@@ -19,7 +19,7 @@ interface SeriesDetailsInteractionListener {
     fun onCurrentSeasonCardClick(seriesId: Int,seasonNumber:Int)
     fun onRetryButtonClick()
     fun onLoginButtonClick()
-    fun onShareBottomSheetClick()
+    fun onShareIconClick()
     fun onDismissShareBottomSheetClick()
     fun onShowAddRatingBottomSheetClick()
     fun onShowDoneRatingBottomSheetClick()

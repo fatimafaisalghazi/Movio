@@ -23,7 +23,7 @@ fun Episode.toUiState(): EpisodeUiState {
     )
 }
 
-fun Season.mapToUiState(): SeasonUiState {
+fun Season.toUiState(): SeasonUiState {
     return SeasonUiState(
         id = this.id,
         title = title,
@@ -35,7 +35,7 @@ fun Season.mapToUiState(): SeasonUiState {
     )
 }
 
-fun Artist.mapToUiState(): ArtistUiState {
+fun Artist.toUiState(): ArtistUiState {
     return ArtistUiState(
         id = this.id,
         imageUrl = this.imageUrl,
