@@ -28,12 +28,12 @@ fun SeeAllSimilarMediaScreen(
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
     val similarMovies = uiState.medias.map { media ->
-        // Log each media's details including rating
         Log.d(
             "SimilarMediaDebug",
             "Media ID: ${media.mediaId}, " +
                     "Title: ${media.mediaName}, " +
                     "Rating: ${media.rate}, " +
+                    "IsMovie: ${media.isMovie}, " +
                     "Image: ${media.imageUrl.take(20)}..."
         )
 
@@ -41,7 +41,7 @@ fun SeeAllSimilarMediaScreen(
             id = media.mediaId,
             title = media.mediaName,
             imageUrl = media.imageUrl,
-            rating = media.rate
+            rating = media.rate,
         )
     }
 
@@ -55,8 +55,11 @@ fun SeeAllSimilarMediaScreen(
                 "SimilarMediaDebug",
                 "Navigating to ${if (isMovie) "movie" else "series"} details for ID: $id"
             )
-            if (!isMovie) navController.navigate(Destinations.SeriesDetailsScreen(id, 1))
-            else navController.navigate(Destinations.MovieDetailsScreen(id))
+            if (isMovie) {
+                navController.navigate(Destinations.MovieDetailsScreen(id))
+            } else {
+                navController.navigate(Destinations.SeriesDetailsScreen(id, 1))
+            }
         }
     )
 }
@@ -88,25 +91,16 @@ fun SeeAllSimilarMediaScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Theme.color.surfaces.surface)
-                .padding(horizontal = 6.dp),
+                .padding(horizontal = 12.dp),
         ) {
             items(similarMovies.size) { index ->
                 val movie = similarMovies[index]
-
-                // Log before rendering each card
-                Log.d(
-                    "SimilarMediaDebug",
-                    "Rendering card #$index: ${movie.title} " +
-                            "| Rating: ${movie.rating} " +
-                            "| Image: ${movie.imageUrl.take(20)}..."
-                )
-
                 MovioVerticalCard(
                     description = movie.title,
                     movieImage = movie.imageUrl,
                     rate = movie.rating,
                     width = 101.dp,
-                    imageHeight = 136.dp,
+                    imageHeight = 178.dp,
                     onClick = {
                         onClickMedia(movie.id, isMovie)
                     },
