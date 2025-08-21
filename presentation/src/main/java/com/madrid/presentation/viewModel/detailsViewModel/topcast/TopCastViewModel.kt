@@ -1,4 +1,4 @@
-package com.madrid.presentation.viewModel.detailsViewModel
+package com.madrid.presentation.viewModel.detailsViewModel.topcast
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -7,7 +7,7 @@ import com.madrid.domain.usecase.movie.GetMovieTopCastUseCase
 import com.madrid.domain.usecase.series.GetSeriesTopCastUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.detailsViewModel.movie.MovieDetailsUiState
+import com.madrid.presentation.viewModel.detailsViewModel.actor.NetworkDetailsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,8 +16,8 @@ class TopCastViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getMovieTopCastUseCase: GetMovieTopCastUseCase,
     private val getSeriesTopCastUseCase: GetSeriesTopCastUseCase
-) : BaseViewModel<MovieDetailsUiState, Nothing>(
-    MovieDetailsUiState()
+) : BaseViewModel<NetworkDetailsUiState, Nothing>(
+    NetworkDetailsUiState()
 ) {
 
     val args = savedStateHandle.toRoute<Destinations.TopCast>()
@@ -33,7 +33,7 @@ class TopCastViewModel @Inject constructor(
                 function = { getMovieTopCastUseCase(args.mediaId) },
                 onSuccess = { castList ->
                     val mappedCast = castList.map { castMember ->
-                        MovieDetailsUiState.CastUiState(
+                        NetworkDetailsUiState.CastUiState(
                             id = castMember.id.toString(),
                             actorImageUrl = castMember.imageUrl,
                             actorName = castMember.name,
@@ -61,7 +61,7 @@ class TopCastViewModel @Inject constructor(
                 function = { getSeriesTopCastUseCase(args.mediaId) },
                 onSuccess = { castList ->
                     val mappedCast = castList.map { castMember ->
-                        MovieDetailsUiState.CastUiState(
+                        NetworkDetailsUiState.CastUiState(
                             id = castMember.id.toString(),
                             actorImageUrl = castMember.imageUrl,
                             actorName = castMember.name,

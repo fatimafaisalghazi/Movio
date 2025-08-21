@@ -17,9 +17,8 @@ import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.viewModel.shared.parser.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
-import com.madrid.presentation.viewModel.detailsViewModel.actor.ActorDetailsUiState
-import com.madrid.presentation.viewModel.detailsViewModel.toReviewUiState
+import com.madrid.presentation.viewModel.detailsViewModel.review.ReviewUiState
+import com.madrid.presentation.viewModel.detailsViewModel.review.toReviewUiState
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
@@ -40,7 +39,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val isGuestUseCase: LoginUseCase,
     private val setMovieFavoriteStatusUseCase: SetMovieFavoriteStatusUseCase,
     private val isFavoriteMovieUseCase: IsFavoriteMovieUseCase
-) : BaseViewModel<ActorDetailsUiState, Nothing>(ActorDetailsUiState()),
+) : BaseViewModel<MovieDetailsUiState, Nothing>(MovieDetailsUiState()),
     MovieDetailsInteractionListener {
     val args = saveStateHandle.toRoute<Destinations.MovieDetailsScreen>()
 

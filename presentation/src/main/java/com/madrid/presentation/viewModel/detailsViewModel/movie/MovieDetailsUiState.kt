@@ -1,27 +1,28 @@
 package com.madrid.presentation.viewModel.detailsViewModel.movie
 
+import com.madrid.domain.entity.Artist
+import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
+import com.madrid.presentation.viewModel.detailsViewModel.review.ReviewUiState
+
 data class MovieDetailsUiState(
-    val movieId : String ="",
-    val cast: List<CastUiState> = emptyList(),
-    val selectedActor: CastUiState? = null,
-    val isLoading: Boolean = true,
-    val errorMessage: String? = null
-) {
-    data class CastUiState(
-        val actorImageUrl: String = "",
-        val actorName: String = "",
-        val actorRole: String = "",
-        val dateOfBirth: String = "",
-        val location: String = "location",
-        val id: String = "",
-        val description: String = "",
-        val knownFor: List<KnownMovieUiState> = emptyList(),
-        val errorMessage: String? = null
-    )
-    data class KnownMovieUiState(
-        val title: String,
-        val imageUrl: String,
-        val rating: String,
-        val mediaId: Int,
-    )
-}
+    val isLoved: Boolean = false,
+    val topImageUrl: String = "",
+    val movieName: String = "",
+    val movieId: Int = 0,
+    val genreMovie: List<String> = emptyList(),
+    val rate: String = "",
+    val movieDuration: String = "",
+    val dataMovie: String = "",
+    val isLoading: Boolean = false,
+    val isRated: Boolean = false,
+    val isAddedToList: Boolean = false,
+    val userRating: Int = 0,
+    val isGuest: Boolean = true,
+    val description: String = "",
+    val casts: List<Artist> = emptyList(),
+    val reviews: List<ReviewUiState> = emptyList(),
+
+    val similarMovies: List<SimilarMovie> = emptyList(),
+    val trailerKey: String = "",
+    val isLoginBottomSheetVisible: Boolean = false
+)

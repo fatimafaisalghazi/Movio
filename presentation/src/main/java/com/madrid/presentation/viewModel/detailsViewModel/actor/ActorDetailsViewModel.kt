@@ -6,7 +6,7 @@ import com.madrid.domain.usecase.artist.GetArtistDetailsUseCase
 import com.madrid.domain.usecase.artist.GetArtistMoviesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.base.BaseViewModel
-import com.madrid.presentation.viewModel.detailsViewModel.movie.MovieDetailsUiState
+import com.madrid.presentation.viewModel.detailsViewModel.actor.NetworkDetailsUiState
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
 import com.madrid.presentation.viewModel.shared.parser.formatRate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +17,8 @@ class ActorDetailsViewModel @Inject constructor(
     private val getArtistDetailsUseCase: GetArtistDetailsUseCase,
     private val getArtistMoviesUseCase: GetArtistMoviesUseCase,
     saveStateHandle: SavedStateHandle
-) : BaseViewModel<MovieDetailsUiState, Nothing>(
-    MovieDetailsUiState()
+) : BaseViewModel<NetworkDetailsUiState, Nothing>(
+    NetworkDetailsUiState()
 ) {
     val args = saveStateHandle.toRoute<Destinations.ActorDetails>()
 
@@ -39,7 +39,7 @@ class ActorDetailsViewModel @Inject constructor(
             },
             onSuccess = { (actor, knownForList) ->
                 val mappedActor = actor.let {
-                    MovieDetailsUiState.CastUiState(
+                    NetworkDetailsUiState.CastUiState(
                         actorImageUrl = actor.imageUrl,
                         actorName = actor.name,
                         actorRole = actor.role,
@@ -48,7 +48,7 @@ class ActorDetailsViewModel @Inject constructor(
                         id = actor.id.toString(),
                         description = actor.overview,
                         knownFor = knownForList.map { known ->
-                            MovieDetailsUiState.KnownMovieUiState(
+                            NetworkDetailsUiState.KnownMovieUiState(
                                 title = known.title,
                                 imageUrl = known.imageUrl,
                                 rating = formatRate(known.rate),

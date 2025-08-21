@@ -1,4 +1,4 @@
-package com.madrid.presentation.viewModel.detailsViewModel
+package com.madrid.presentation.viewModel.detailsViewModel.review
 
 import com.madrid.domain.entity.Review
 import com.madrid.presentation.viewModel.shared.parser.formatDate

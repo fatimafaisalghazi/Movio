@@ -22,6 +22,7 @@ import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.shared.parser.formatDate
 import com.madrid.presentation.viewModel.shared.parser.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.review.ReviewUiState
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
