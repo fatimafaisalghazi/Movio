@@ -1,6 +1,5 @@
 package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -42,7 +41,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private val getEpisodesForSeasonUseCase: GetEpisodesForSeasonUseCase,
     private val addSeriesToHistoryUseCase: AddSeriesToHistoryUseCase,
     private val addRatingSeriesUseCase: AddRatingSeriesUseCase,
-    private val isGuestUseCase: LoginUseCase,
+    private val loginUseCase: LoginUseCase,
     private val getSeriesTrailersUseCase: GetSeriesTrailersUseCase,
     private val setSeriesFavoriteStatusUseCase: SetSeriesFavoriteStatusUseCase,
     private val isFavoriteSeriesUseCase: IsFavoriteSeriesUseCase,
@@ -70,7 +69,7 @@ class SeriesDetailsViewModel @Inject constructor(
     private fun loadSeries() {
         updateState { it.copy(showLoadingScreen = true) }
         tryToExecute(
-            function = { getSeriesDetailsUseCase(args.seriesId) },
+            function = { getSeriesDetailsUseCase.invoke(args.seriesId) },
             onSuccess = {series-> ::onSuccessLoadSeries.invoke(series) },
             onError = { ::onError.invoke() }
         )
@@ -80,7 +79,7 @@ class SeriesDetailsViewModel @Inject constructor(
         state.value.currentSeasonsUiStates.forEachIndexed { index, season ->
             tryToExecute(
                 function = {
-                    getEpisodesForSeasonUseCase(args.seriesId, season.seasonNumber)
+                    getEpisodesForSeasonUseCase.invoke(args.seriesId, season.seasonNumber)
                 },
                 onSuccess = { episodes -> ::onSuccessLoadAllSeasonsEpisodes.invoke(episodes) },
                 onError = { ::onError.invoke() }
@@ -90,7 +89,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadCastData() {
         tryToExecute(
-            function = { getSeriesTopCastUseCase(args.seriesId) },
+            function = { getSeriesTopCastUseCase.invoke(args.seriesId) },
             onSuccess = { artists -> ::onSuccessLoadCast.invoke(artists)},
             onError = { ::onError.invoke() }
         )
@@ -98,7 +97,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadTrailer() {
         tryToExecute(
-            function = { getSeriesTrailersUseCase(args.seriesId) },
+            function = { getSeriesTrailersUseCase.invoke(args.seriesId) },
             onSuccess = { trailers -> ::onSuccessLoadTrailer.invoke(trailers) },
             onError = { ::onError.invoke() }
         )
@@ -106,7 +105,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun saveSeriesToHistory() {
         tryToExecute(
-            function = {addSeriesToHistoryUseCase(args.seriesId)},
+            function = {addSeriesToHistoryUseCase.invoke(args.seriesId)},
             onSuccess = {},
             onError = {}
         )
@@ -114,7 +113,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadReviews() {
         tryToExecute(
-            function = { getSeriesReviewsUseCase(args.seriesId) },
+            function = { getSeriesReviewsUseCase.invoke(args.seriesId) },
             onSuccess = { reviews -> ::onSuccessLoadReviews.invoke(reviews) },
             onError = { ::onError.invoke() },
         )
@@ -126,7 +125,7 @@ class SeriesDetailsViewModel @Inject constructor(
             return
         }
            tryToExecute(
-                function = { setSeriesFavoriteStatusUseCase(seriesId, state.value.isFavourite.not()) },
+                function = { setSeriesFavoriteStatusUseCase.invoke(seriesId, state.value.isFavourite.not()) },
                 onSuccess = { ::onSuccessLoadFavourite.invoke() },
                 onError = {}
            )
@@ -140,7 +139,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun checkIfFavoriteSeries() {
         tryToExecute(
-            function = { isFavoriteSeriesUseCase(args.seriesId) },
+            function = { isFavoriteSeriesUseCase.invoke(args.seriesId)},
             onSuccess = { isFavorite -> ::onSuccessCheckIfFavoriteSeries.invoke(isFavorite) },
             onError = { ::onErrorCheckIfFavoriteSeries.invoke() },
         )
@@ -148,7 +147,7 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadSimilarSeries() {
         tryToExecute(
-            function = { getSimilarSeriesUseCase(args.seriesId) },
+            function = { getSimilarSeriesUseCase.invoke(args.seriesId) },
             onSuccess = { allSeries -> ::onSuccessLoadSimilarSeries.invoke(allSeries) },
             onError = { ::onError.invoke() },
         )
@@ -156,17 +155,15 @@ class SeriesDetailsViewModel @Inject constructor(
 
     private fun loadSelectedSeasonEpisodes(seasonNumber: Int = 1) {
         tryToExecute(
-            function = { getEpisodesForSeasonUseCase(args.seriesId, seasonNumber) },
+            function = { getEpisodesForSeasonUseCase.invoke(args.seriesId, seasonNumber) },
             onSuccess = { episodes -> ::onSuccessLoadSeasonEpisodes.invoke(episodes,seasonNumber) },
             onError = { ::onError.invoke() },
         )
     }
 
     private fun isGuest() {
-       tryToCollect(function = { isGuestUseCase.isGuest()},
-           onNewValue = { result-> onCheckGuestNewValue(result)
-               Log.d("guesst", "isGuest: $result")
-           },
+       tryToCollect(function = { loginUseCase.isGuest()},
+           onNewValue = { result-> onCheckGuestNewValue(result) },
            onError = {::onGuestCheckError.invoke()}
        )
     }
@@ -178,7 +175,7 @@ class SeriesDetailsViewModel @Inject constructor(
         onTrailerLoaded: (String?) -> Unit
     ) {
         tryToExecute(
-            function = { getEpisodeTrailersUseCase(seriesId, seasonNumber, episodeNumber) },
+            function = { getEpisodeTrailersUseCase.invoke(seriesId, seasonNumber, episodeNumber) },
             onSuccess = { trailers -> ::onSuccessLoadEpisodeTrailer.invoke(trailers,onTrailerLoaded)},
             onError = { onTrailerLoaded(null) }
         )
@@ -362,7 +359,6 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun onSuccessLoadFavourite(){
-        Log.d("guesst", "onSuccessLoadFavourite: ------- ${state.value.isFavourite.not()}")
         updateState {
             it.copy(isFavourite = state.value.isFavourite.not())
         }
