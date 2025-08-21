@@ -1,13 +1,11 @@
 package com.madrid.presentation.viewModel.libraryViewModel.addtolist
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.madrid.domain.entity.ListOperationStatus
-import com.madrid.domain.entity.WatchList
-import com.madrid.domain.exceptions.MovioException
-import com.madrid.domain.exceptions.NetworkException
 import com.madrid.domain.usecase.movie.AddMovieToListUseCase
 import com.madrid.domain.usecase.movie.CreateMovieListUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
+import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,29 +13,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-data class MovieListUiState(
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null,
-    val successMessage: String? = null,
-    val createListSuccess: Boolean = false,
-    val addToListSuccess: Boolean = false,
-    val userLists: List<WatchList> = emptyList(),
-    val watchListItems: List<WatchListItemUiState> = emptyList(),
-    val isLoadingLists: Boolean = false
-)
-
-data class WatchListItemUiState(
-    val id: Int = 0,
-    val videosSize: Int = 0,
-    val watchListTitle: String = ""
-)
-
-sealed class MovieListEvent {
-    object ClearMessages : MovieListEvent()
-    object DismissNotification : MovieListEvent()
-    object LoadUserLists : MovieListEvent()
-}
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
@@ -63,7 +38,6 @@ class MovieListViewModel @Inject constructor(
                     }
                     updateState {
                         it.copy(
-                            userLists = userLists, // Keep original for other operations
                             watchListItems = uiLists, // Add UI-specific list
                             isLoadingLists = false
                         )
@@ -82,47 +56,37 @@ class MovieListViewModel @Inject constructor(
     }
 
     fun createMovieList(
-        name: String,
-        onSuccess: (() -> Unit)? = null
+        name: String
     ) {
-        viewModelScope.launch(dispatcher) {
-            updateState { it.copy(isLoading = true, errorMessage = null, successMessage = null) }
-
-            try {
-                val status: ListOperationStatus = createMovieListUseCase(
+        updateState { it.copy(isLoading = true, errorMessage = null, successMessage = null) }
+        tryToExecute(
+            function = {
+                createMovieListUseCase(
                     name = name,
                     description = "My new list",
                     language = "en"
                 )
-
-                if (status.success) {
-                    updateState {
-                        it.copy(
-                            isLoading = false,
-                            createListSuccess = true,
-                            successMessage = status.message
-                        )
-                    }
-                    // Reload lists after creating a new one
-                    loadUserLists()
-                    onSuccess?.invoke()
-                } else {
-                    updateState {
-                        it.copy(
-                            isLoading = false,
-                            errorMessage = status.message
-                        )
-                    }
-                }
-            } catch (ex: MovioException) {
+            },
+            onSuccess = {
                 updateState {
                     it.copy(
                         isLoading = false,
-                        errorMessage = ex.message //getErrorMessage(ex)
+                        createListSuccess = true,
+                        successMessage = R.string.new_list_created_successfully,
+                    )
+                }
+                loadUserLists()
+            },
+            onError = { ex ->
+                updateState {
+                    it.copy(
+                        isLoading = false,
+                        createListSuccess = true,
+                        errorMessage = ex.message
                     )
                 }
             }
-        }
+        )
     }
 
     fun addMovieToList(
@@ -130,7 +94,13 @@ class MovieListViewModel @Inject constructor(
         movieId: Int,
         onSuccess: (() -> Unit)? = null
     ) {
-        updateState { it.copy(isLoading = true, errorMessage = null, successMessage = null) }
+        updateState {
+            it.copy(
+                isLoading = true,
+                errorMessage = null,
+                successMessage = null
+            )
+        }
 
         tryToExecute(
             function = {
@@ -144,50 +114,22 @@ class MovieListViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         addToListSuccess = true,
+                        successMessage = R.string.success_message
                     )
                 }
                 onSuccess?.invoke()
             },
-            onError = {
+            onError = { ex ->
+                Log.d("MovieListViewModel", "addMovieToList: ${ex.message}")
                 updateState {
                     it.copy(
                         isLoading = false,
+                        addToListSuccess = true,
+                        errorMessage = ex.message,
                     )
                 }
             }
         )
-    }
-
-    fun updateUserLists(lists: List<WatchList>) {
-        updateState { it.copy(userLists = lists) }
-    }
-
-    fun handleEvent(event: MovieListEvent) {
-        when (event) {
-            MovieListEvent.ClearMessages -> {
-                updateState {
-                    it.copy(
-                        errorMessage = null,
-                        successMessage = null
-                    )
-                }
-            }
-
-            MovieListEvent.DismissNotification -> {
-                updateState {
-                    it.copy(
-                        createListSuccess = false,
-                        addToListSuccess = false,
-                        errorMessage = null,
-                        successMessage = null
-                    )
-                }
-            }
-
-            MovieListEvent.LoadUserLists -> {
-                loadUserLists()
-            }
-        }
     }
 
     fun clearError() {

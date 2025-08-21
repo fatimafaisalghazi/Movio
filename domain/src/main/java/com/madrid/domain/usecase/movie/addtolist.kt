@@ -1,6 +1,5 @@
 package com.madrid.domain.usecase.movie
 
-import com.madrid.domain.entity.ListOperationStatus
 import com.madrid.domain.repository.AuthenticationRepository
 import com.madrid.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.first
@@ -14,7 +13,7 @@ class CreateMovieListUseCase @Inject constructor(
         name: String,
         description: String = "",
         language: String = "en"
-    ): ListOperationStatus {
+    ) {
         val sessionId = authenticationRepository.getSessionId().first()
         return movieRepository.createMovieList(sessionId, name, description, language)
     }
@@ -27,7 +26,7 @@ class AddMovieToListUseCase @Inject constructor(
     suspend operator fun invoke(
         listId: Int,
         movieId: Int
-    ): ListOperationStatus {
+    ) {
         val sessionId = authenticationRepository.getSessionId().first()
         return movieRepository.addMovieToList(listId, sessionId, movieId)
     }

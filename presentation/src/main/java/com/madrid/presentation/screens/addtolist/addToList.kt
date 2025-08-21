@@ -18,9 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.component.MovioBottomSheet
+import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.libraryViewModel.addtolist.MovieListViewModel
 import kotlinx.coroutines.delay
 
@@ -41,7 +43,7 @@ fun ListManagementBottomSheet(
 
     var currentMode by remember { mutableStateOf(ListBottomSheetMode.LIST_SELECTION) }
     var showSuccessNotification by remember { mutableStateOf(false) }
-    var successMessage: String? by remember { mutableStateOf("") }
+    var successMessage: Int by remember { mutableStateOf(R.string.success_message) }
     var bottomSheetVisible by remember(isVisible) { mutableStateOf(isVisible) }
     LaunchedEffect(isVisible) {
         if (isVisible) {
@@ -54,8 +56,12 @@ fun ListManagementBottomSheet(
     }
 
     LaunchedEffect(uiState.createListSuccess) {
-        if (uiState.createListSuccess && uiState.successMessage != null) {
-            successMessage = uiState.successMessage
+        if (uiState.createListSuccess) {
+            successMessage = if (uiState.successMessage != null) {
+                uiState.successMessage ?: R.string.success_message
+            } else {
+                R.string.unknown_error
+            }
             bottomSheetVisible = false
             delay(200)
             showSuccessNotification = true
@@ -65,8 +71,12 @@ fun ListManagementBottomSheet(
     }
 
     LaunchedEffect(uiState.addToListSuccess) {
-        if (uiState.addToListSuccess && uiState.successMessage != null) {
-            successMessage = uiState.successMessage
+        if (uiState.addToListSuccess) {
+            successMessage = if (uiState.successMessage != null) {
+                uiState.successMessage ?: R.string.success_message
+            } else {
+                R.string.unknown_error
+            }
             bottomSheetVisible = false
             delay(200)
             showSuccessNotification = true
@@ -103,7 +113,7 @@ fun ListManagementBottomSheet(
                 when (mode) {
                     ListBottomSheetMode.LIST_SELECTION -> {
                         ListSelectionContent(
-                            initialUserLists = uiState.userLists, // Use lists from ViewModel state
+                            initialUserLists = uiState.watchListItems, // Use lists from ViewModel state
                             isLoading = uiState.isLoadingLists, // Use loading state from ViewModel
                             onCreateNewListClick = {
                                 currentMode = ListBottomSheetMode.CREATE_NEW_LIST
@@ -146,7 +156,8 @@ fun ListManagementBottomSheet(
                     isVisible = showSuccessNotification,
                     onDismiss = {
                         showSuccessNotification = false
-                    }
+                    },
+                    message = stringResource(successMessage)
                 )
             }
         }
