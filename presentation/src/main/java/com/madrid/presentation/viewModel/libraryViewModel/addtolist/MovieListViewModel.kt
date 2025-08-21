@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.madrid.domain.usecase.movie.AddMovieToListUseCase
 import com.madrid.domain.usecase.movie.CreateMovieListUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
+import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -72,7 +73,7 @@ class MovieListViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         createListSuccess = true,
-                        successMessage = "${name} created successfully!",
+                        successMessage = R.string.new_list_created_successfully,
                     )
                 }
                 loadUserLists()
@@ -82,7 +83,6 @@ class MovieListViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         createListSuccess = true,
-                        successMessage = ex.message,
                         errorMessage = ex.message
                     )
                 }
@@ -115,7 +115,7 @@ class MovieListViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         addToListSuccess = true,
-                        successMessage = "Movie added to list successfully!",
+                        successMessage = R.string.success_message
                     )
                 }
                 onSuccess?.invoke()
@@ -127,7 +127,6 @@ class MovieListViewModel @Inject constructor(
                         isLoading = false,
                         addToListSuccess = true,
                         errorMessage = ex.message,
-                        successMessage = ex.message
                     )
                 }
             }
