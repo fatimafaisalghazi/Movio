@@ -1,16 +1,16 @@
-package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
+package com.madrid.presentation.viewModel.detailsViewModel.seriesDetails
 
 import com.madrid.domain.entity.Artist
 import com.madrid.domain.entity.Episode
 import com.madrid.domain.entity.Review
 import com.madrid.domain.entity.Season
 import com.madrid.domain.entity.Series
-import com.madrid.presentation.utils.formatRate
 import com.madrid.presentation.viewModel.detailsViewModel.ArtistUiState
 import com.madrid.presentation.viewModel.detailsViewModel.EpisodeUiState
-import com.madrid.presentation.viewModel.detailsViewModel.ReviewUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeasonUiState
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesUiState
+import com.madrid.presentation.viewModel.detailsViewModel.review.ReviewUiState
+import com.madrid.presentation.viewModel.shared.parser.formatRate
 
 fun Episode.toUiState(): EpisodeUiState {
     return EpisodeUiState(

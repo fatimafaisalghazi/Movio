@@ -1,4 +1,4 @@
-package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
+package com.madrid.presentation.viewModel.detailsViewModel.seriesDetails
 
 import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
 
