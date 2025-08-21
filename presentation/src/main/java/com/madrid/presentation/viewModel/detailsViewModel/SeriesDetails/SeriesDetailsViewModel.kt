@@ -57,6 +57,7 @@ class SeriesDetailsViewModel @Inject constructor(
         checkIfFavoriteSeries()
         isGuest()
         loadAllSeasonsEpisodes()
+        updateSelectedSeason(args.seasonNumber)
     }
 
     private fun loadData() {
