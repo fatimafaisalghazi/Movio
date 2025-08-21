@@ -31,7 +31,7 @@ fun SeasonsScreen(viewModel: SeriesDetailsViewModel = hiltViewModel()) {
     val navController = LocalNavController.current
     SeasonsScreenContent(
         uiState = uiState,
-        onClickBack = { navController.navigate(Destinations.SeriesDetailsScreen(uiState.seriesId, seasonNumber = 1)) },
+        onClickBack = { navController.popBackStack() },
         onClickSeason = { seasonNumber ->
             navController.navigate(
                 Destinations.EpisodesScreen(
