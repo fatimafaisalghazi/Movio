@@ -2,23 +2,23 @@ package com.madrid.presentation.viewModel.detailsViewModel.SeriesDetails
 
 
 interface SeriesDetailsInteractionListener {
-    fun onBackClick()
-    fun onRateClick()
+    fun onBackButtonClick()
+    fun onRateButtonClick()
     fun onFavoriteClick(seriesId: Int)
     fun onPlayItClick()
+    fun onPickRatingNumber(rating: Int)
     fun onEpisodePlayItClick(
         seriesId: Int, seasonNumber: Int
         ,episodeNumber: Int, onTrailerLoaded: (String?) -> Unit
     )
-    fun onSeriesClick()
     fun onSeeAllClick(seriesId: Int, seeAllType:SeeAllType)
     fun onActorCardClick(actorId:Int)
     fun onSimilarSeriesCardClick(seriesId: Int)
     fun onCurrentSeasonCardClick(seriesId: Int,seasonNumber:Int)
-    fun onRetryClick()
-    fun onLoginClick()
-    fun onShareShareBottomSheetClick()
-    fun onDismissShareShareBottomSheetClick()
+    fun onRetryButtonClick()
+    fun onLoginButtonClick()
+    fun onShareBottomSheetClick()
+    fun onDismissShareBottomSheetClick()
     fun onShowAddRatingBottomSheetClick()
     fun onShowDoneRatingBottomSheetClick()
     fun onDismissShowDoneRatingBottomSheetClick()
