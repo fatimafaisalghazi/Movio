@@ -39,7 +39,8 @@ class MovieDetailsViewModel @Inject constructor(
     private val isGuestUseCase: LoginUseCase,
     private val setMovieFavoriteStatusUseCase: SetMovieFavoriteStatusUseCase,
     private val isFavoriteMovieUseCase: IsFavoriteMovieUseCase
-) : BaseViewModel<DetailsMovieUiState, Nothing>(DetailsMovieUiState()) {
+) : BaseViewModel<DetailsMovieUiState, Nothing>(DetailsMovieUiState()),
+    MovieDetailsInteractionListener {
     val args = saveStateHandle.toRoute<Destinations.MovieDetailsScreen>()
 
     init {
@@ -170,7 +171,7 @@ class MovieDetailsViewModel @Inject constructor(
         )
     }
 
-    fun onClickLoveIcon(movieId: Int) {
+    override fun onClickLoveIcon(movieId: Int) {
         if (state.value.isGuest) {
             updateState { it.copy(isLoginBottomSheetVisible = true) }
             return
@@ -188,7 +189,7 @@ class MovieDetailsViewModel @Inject constructor(
         )
     }
 
-    fun onPickRatingNumber(rating: Int) {
+    override fun onPickRatingNumber(rating: Int) {
         updateState {
             it.copy(
                 userRating = rating
@@ -240,7 +241,7 @@ class MovieDetailsViewModel @Inject constructor(
         )
     }
 
-    fun onDismissLoginBottomSheet() {
+    override fun onDismissLoginBottomSheet() {
         updateState { it.copy(isLoginBottomSheetVisible = false) }
     }
 }
