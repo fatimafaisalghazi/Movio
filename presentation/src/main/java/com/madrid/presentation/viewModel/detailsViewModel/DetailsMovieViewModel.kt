@@ -15,7 +15,7 @@ import com.madrid.domain.usecase.movie.IsFavoriteMovieUseCase
 import com.madrid.domain.usecase.movie.SetMovieFavoriteStatusUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
-import com.madrid.presentation.utils.formatRate
+import com.madrid.presentation.viewModel.shared.parser.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.shared.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx

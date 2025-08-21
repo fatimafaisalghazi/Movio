@@ -11,7 +11,7 @@ import com.madrid.domain.entity.Movie
 import com.madrid.domain.usecase.movie.GetMovieGenresUseCase
 import com.madrid.presentation.pagination.SeeAllMoviesPagingSource
 import com.madrid.presentation.pagination.SeeAllMoviesWithGenrePagingSource
-import com.madrid.presentation.utils.formatRate
+import com.madrid.presentation.viewModel.shared.parser.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

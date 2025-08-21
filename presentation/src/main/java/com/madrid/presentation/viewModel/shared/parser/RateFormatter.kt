@@ -1,4 +1,4 @@
-package com.madrid.presentation.utils
+package com.madrid.presentation.viewModel.shared.parser
 
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat

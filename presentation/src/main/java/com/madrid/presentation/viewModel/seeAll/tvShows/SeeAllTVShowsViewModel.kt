@@ -10,7 +10,7 @@ import androidx.paging.map
 import com.madrid.domain.usecase.series.GetSeriesGenresUseCase
 import com.madrid.presentation.pagination.SeeAllSeriesPagingSource
 import com.madrid.presentation.pagination.SeeAllSeriesWithGenrePagingSource
-import com.madrid.presentation.utils.formatRate
+import com.madrid.presentation.viewModel.shared.parser.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

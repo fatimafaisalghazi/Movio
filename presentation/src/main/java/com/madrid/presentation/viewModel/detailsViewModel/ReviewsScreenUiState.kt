@@ -1,7 +1,7 @@
 package com.madrid.presentation.viewModel.detailsViewModel
 
 import com.madrid.domain.entity.Review
-import com.madrid.presentation.utils.formatDate
+import com.madrid.presentation.viewModel.shared.parser.formatDate
 
 data class ReviewsScreenUiState(
     val reviews: List<ReviewUiState> = emptyList(),
