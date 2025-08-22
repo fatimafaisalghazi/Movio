@@ -63,7 +63,9 @@ fun SeasonsScreenContent(
             modifier = Modifier.padding(top = 36.dp),
         )
         Spacer(Modifier.height(20.dp))
+        
         val seasons = uiState.currentSeasonsUiStates
+        
         LazyColumn(
             contentPadding = PaddingValues(vertical = 6.dp)
         ) {
