@@ -342,6 +342,8 @@ private fun SeriesDetailsScreenContent(
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Alignment.BottomCenter)
+                    .background(Theme.color.surfaces.surfaceContainer)
+
             )
         }
     }
