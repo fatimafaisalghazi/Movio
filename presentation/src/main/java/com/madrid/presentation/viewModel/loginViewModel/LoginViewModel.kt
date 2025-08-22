@@ -31,36 +31,33 @@ class LoginViewModel @Inject constructor(
     override fun onLoginClicked() {
         val currentState = state.value
         if (currentState.isLoading || currentState.isGuestLoading) return
+
+        val usernameError = currentState.username.isBlank()
+        val passwordError = currentState.password.isBlank()
+
         val errorMessage = when {
-            currentState.username.isBlank() && currentState.password.isBlank()->{
-                updateState { it.copy(isUsernameValid=true,isPasswordValid=true)}
-                R.string.username_and_password_are_required}
-            currentState.username.isBlank() ->{
-                updateState { it.copy(isUsernameValid=true)}
-                R.string.username_is_required}
-
-            currentState.password.isBlank() ->{
-                updateState { it.copy(isPasswordValid=true)}
-
-
-                R.string.password_is_required}
+            usernameError && passwordError -> R.string.username_and_password_are_required
+            usernameError -> R.string.username_is_required
+            passwordError -> R.string.password_is_required
             else -> null
         }
-        if (errorMessage != null) {
-            updateState { it.copy(errorMessage = errorMessage ) }
-            return
+
+        updateState {
+            it.copy(
+                isUsernameValid = usernameError,
+                isPasswordValid = passwordError,
+                errorMessage = errorMessage
+            )
         }
 
+        if (usernameError || passwordError) return
 
         updateState { it.copy(isLoading = true, isGuestLoading = false, errorMessage = null) }
 
         viewModelScope.launch(dispatcher) {
             tryToExecute(
                 function = {
-                    loginUseCase.login(
-                        username = currentState.username,
-                        password = currentState.password
-                    )
+                    loginUseCase.login(currentState.username, currentState.password)
                 },
                 onSuccess = { sessionId ->
                     updateState {
@@ -68,7 +65,9 @@ class LoginViewModel @Inject constructor(
                             isLoading = false,
                             isGuestLoading = false,
                             loginSuccess = true,
-                            isGuest = false
+                            isGuest = false,
+                            isUsernameValid = false,
+                            isPasswordValid = false
                         )
                     }
                     emitNewEffect(LoginEffect.OnLoginSuccess("Login success"))
@@ -81,7 +80,7 @@ class LoginViewModel @Inject constructor(
                                 it.copy(
                                     isLoading = false,
                                     isGuestLoading = false,
-                                    errorMessage =R.string.unknown_error
+                                    errorMessage = R.string.unknown_error
                                 )
                             }
                             emitNewEffect(LoginEffect.ShowToast(R.string.unknown_error))
@@ -91,6 +90,7 @@ class LoginViewModel @Inject constructor(
             )
         }
     }
+
 
 
 
