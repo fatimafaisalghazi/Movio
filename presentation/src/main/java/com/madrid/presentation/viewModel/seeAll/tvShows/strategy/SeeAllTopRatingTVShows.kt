@@ -4,14 +4,15 @@ import android.util.Log
 import com.madrid.domain.entity.Series
 import com.madrid.domain.usecase.series.FilterSeriesByCategoryUseCase
 import com.madrid.domain.usecase.series.GetTopRatedSeriesUseCase
+import com.madrid.presentation.R
 
 class SeeAllTopRatingTVShows(
     private val getTopRateSeriesUseCase: GetTopRatedSeriesUseCase,
     private val filterSeriesByCategoryUseCase: FilterSeriesByCategoryUseCase
 ) : SeeAllTVShowsStrategy {
 
-    override fun getTitle(): String {
-        return "Top Rating"
+    override fun getTitle(): Int {
+        return R.string.top_rating
     }
 
     override suspend fun getAllTvShows(page: Int): List<Series> {

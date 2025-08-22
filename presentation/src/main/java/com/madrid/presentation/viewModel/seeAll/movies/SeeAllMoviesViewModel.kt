@@ -68,7 +68,13 @@ class SeeAllMoviesViewModel @AssistedInject constructor(
                 val mappedFlow = moviesFlow.map { pagingData ->
                     pagingData.map { movie -> movie.toUiState() }
                 }
-                updateState { it.copy(filteredMovies = mappedFlow, isLoading = false) }
+                updateState {
+                    it.copy(
+                        filteredMovies = mappedFlow,
+                        selectedGenre = null,
+                        isLoading = false
+                    )
+                }
             },
         )
     }

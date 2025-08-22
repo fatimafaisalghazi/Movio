@@ -111,6 +111,7 @@ class SeeAllTVShowsViewModel @AssistedInject constructor(
                 updateState {
                     it.copy(
                         filteredSeries = result,
+                        selectedGenre = null,
                         isLoading = false
                     )
                 }
@@ -123,7 +124,6 @@ class SeeAllTVShowsViewModel @AssistedInject constructor(
     override fun onGenreSelect(genre: CategoryUiState?) {
         if (genre == null) {
             loadAllSeries()
-
         } else {
             launchPagingRequest(
                 pagingSourceFactory = {
@@ -148,7 +148,7 @@ class SeeAllTVShowsViewModel @AssistedInject constructor(
                         it.copy(
                             filteredSeries = result,
                             isLoading = false,
-                            selectedGenre = genre.name
+                            selectedGenre = genre.name ,
                         )
                     }
 

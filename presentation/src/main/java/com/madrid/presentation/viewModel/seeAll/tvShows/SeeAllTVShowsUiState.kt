@@ -1,12 +1,14 @@
 package com.madrid.presentation.viewModel.seeAll.tvShows
 
+import androidx.annotation.StringRes
 import androidx.paging.PagingData
+import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.shared.CategoryUiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class SeeAllTVShowsUiState(
-    val title: String = "",
+    @StringRes val title: Int = R.string.see_all,
     val selectedGenre: String? = null,
     val genre: List<CategoryUiState> = emptyList(),
     val isLoading: Boolean = false,

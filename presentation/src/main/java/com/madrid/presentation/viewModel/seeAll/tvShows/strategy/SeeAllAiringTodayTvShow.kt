@@ -4,13 +4,14 @@ import android.util.Log
 import com.madrid.domain.entity.Series
 import com.madrid.domain.usecase.series.FilterSeriesByCategoryUseCase
 import com.madrid.domain.usecase.series.GetAiringTodaySeriesUseCase
+import com.madrid.presentation.R
 
 class SeeAllAiringTodayTvShow(
     private val getAiringTodaySeriesUseCase: GetAiringTodaySeriesUseCase,
     private val filterSeriesByCategoryUseCase: FilterSeriesByCategoryUseCase
 ) : SeeAllTVShowsStrategy {
-    override fun getTitle(): String {
-        return "Airing Today"
+    override fun getTitle(): Int {
+        return R.string.airing_today
     }
 
     override suspend fun getAllTvShows(page: Int): List<Series> {
