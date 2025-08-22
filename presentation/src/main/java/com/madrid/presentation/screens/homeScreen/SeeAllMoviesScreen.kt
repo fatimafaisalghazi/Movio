@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,14 +19,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,8 +32,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.FilterBar
-import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.TopAppBar
+import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
@@ -55,24 +51,12 @@ fun SeeAllMoviesScreen(
     val items = uiState.genre
     val listOfItem = uiState.filteredMovies.collectAsLazyPagingItems()
 
-    var selectedItem by remember { mutableStateOf("All") }
-
-    LaunchedEffect(Unit) {
-        if (uiState.genre.isNotEmpty()) {
-            val firstGenre = uiState.selectedGenre
-            if (firstGenre != null) {
-                selectedItem = firstGenre
-            }
-            if (selectedItem.isNotEmpty())
-                viewModel.onGenreSelect(uiState.genre.find { it.name == selectedItem })
-        }
-    }
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
-    ){
+    ) {
         TopAppBar(
-            uiState.title,
+            stringResource(uiState.title),
             secondIcon = null,
             thirdIcon = null,
             onFirstIconClick = { navController.navigate(Destinations.HomeScreen) },
@@ -82,14 +66,13 @@ fun SeeAllMoviesScreen(
         )
         Spacer(Modifier.height(16.dp))
         val updatedItems: MutableList<String> = items.map { it.name }.toMutableList()
-        updatedItems.add(0, "All")
+        updatedItems.add(0, stringResource(R.string.all))
         FilterBar(
             items = updatedItems,
-            selectedItem = selectedItem,
+            selectedItem = uiState.selectedGenre ?: stringResource(R.string.all),
             onItemClick = { genre ->
-                selectedItem = genre
                 viewModel.onGenreSelect(
-                    if (selectedItem != "All") items.find { it.name == genre } else null
+                    items.find { it.name == genre }
                 )
             },
             scrollable = true
@@ -108,15 +91,14 @@ fun SeeAllMoviesScreen(
 
             when {
                 listOfItem.itemCount == 0 && listOfItem.loadState.refresh is LoadState.Loading -> {
-                    items(9) {
-                        Box(
+                    items(12) {
+                        ShimmerCard(
+                            isLoading = true,
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(200.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            LoadingSearchCard()
-                        }
+                                .clip(RoundedCornerShape(8.dp))
+                                .width(150.dp)
+                                .height(180.dp)
+                        )
                     }
                 }
 
@@ -157,7 +139,7 @@ fun SeeAllMoviesScreen(
             DialogWithButtonLayout(
                 title = stringResource(R.string.empty_no_internet_title),
                 description = stringResource(R.string.empty_no_internet_description),
-                image = R.drawable.img_no_internet,
+                image = Theme.drawables.noInternetId,
                 buttonText = stringResource(R.string.try_again),
                 onClick = { viewModel.onTryAgainClick() },
                 imageSize = 170,
@@ -175,7 +157,7 @@ fun SeeAllMoviesScreen(
             EmptySearchLayout(
                 title = stringResource(R.string.nothing_here_yet),
                 description = stringResource(R.string.category_empty_description),
-                image = R.drawable.img_no_sesrch_found,
+                image = Theme.drawables.notFoundLayoutId,
                 imageSize = 170,
                 modifier = Modifier
                     .fillMaxSize()

@@ -155,11 +155,13 @@
     <!-- Network Errors -->
     <string name="network_error_try_again">خطأ في الشبكة حاول مرة أخرى</string>
     <string name="network_error">لا يوجد اتصال بالانترنت </string>
-    <string name="network_timeout">"انتهت مهلة الطلبt</string>
+    <string name="network_timeout">"انتهت مهلة الطلب</string>
     <!-- Server Errors -->
     <string name="server_error">خطأ في الخادم، يرجى المحاولة لاحقًا</string>
     <string name="bad_request">طلب سيء</string>
     <string name="resource.not_found">لم يتم العثور على المورد</string>
+    <string name="already_exists">لقد تم إضافته سابقا</string>
+
     <!-- General Errors -->
     <string name="unknown_error">لقد حدث خطأ ما </string>
     <!-- UI Labels -->
@@ -173,4 +175,6 @@
     <string name="don_t_have_an_account">ليس لديك حساب؟</string>
     <string name="sign_up">إنشاء حساب</string>
     <string name="success_message">تمت الاضافة الى القائمة بنجاح</string>
+    <string name="feature_not_supported">هذه الخاصية غير متوفرة.</string>
+    <string name="party_icon">ايقونة احتفال</string>
 </resources>

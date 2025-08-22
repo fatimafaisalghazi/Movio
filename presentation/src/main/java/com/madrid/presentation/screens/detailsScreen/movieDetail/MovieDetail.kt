@@ -7,8 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,13 +31,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,25 +55,25 @@ import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
-import com.madrid.presentation.component.CastMember
 import com.madrid.presentation.component.TopCastHorizontalScroll
+import com.madrid.presentation.component.addtolist.ListManagementBottomSheet
 import com.madrid.presentation.component.header.MovieDetailsHeader
 import com.madrid.presentation.component.logout.LogoutConfirmationBottomSheet
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioArtistsCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.screens.addtolist.ListManagementBottomSheet
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
-import com.madrid.presentation.screens.detailsScreen.seriesDetails.toReviewScreenUiState
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
-import com.madrid.presentation.viewModel.detailsViewModel.DetailsMovieViewModel
-import com.madrid.presentation.viewModel.libraryViewModel.addtolist.MovieListViewModel
+import com.madrid.presentation.viewModel.addtolist.MovieListViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.ArtistUiState
+import com.madrid.presentation.viewModel.detailsViewModel.movie.MovieDetailsViewModel
+
 
 @Composable
 fun MovieDetailsScreen(
-    viewModel: DetailsMovieViewModel = hiltViewModel(),
+    viewModel: MovieDetailsViewModel = hiltViewModel(),
     addToListViewModel: MovieListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsState()
@@ -84,34 +82,7 @@ fun MovieDetailsScreen(
     val context = LocalContext.current
     var showShareSheet by remember { mutableStateOf(false) }
     var showAddToListBottomSheet by remember { mutableStateOf(false) }
-
-
-    val scrollState = rememberScrollState()
-    val scrollThreshold = 200.dp.value
-    val scrollProgress = (scrollState.value / scrollThreshold).coerceIn(0f, 1f)
-
-
-    val animatedStartColor by animateColorAsState(
-        targetValue = lerp(
-            start = Color.Transparent,
-            stop = Theme.color.surfaces.surface,
-            fraction = scrollProgress
-        ),
-        animationSpec = tween(durationMillis = 250),
-        label = "topAppBarStartColor"
-    )
-    val animatedEndColor by animateColorAsState(
-        targetValue = lerp(
-            start = Color.Transparent,
-            stop = Theme.color.surfaces.surface,
-            fraction = scrollProgress
-        ),
-        animationSpec = tween(durationMillis = 250),
-        label = "topAppBarEndColor"
-    )
-    val animatedBrush = Brush.verticalGradient(
-        colors = listOf(animatedStartColor, animatedEndColor)
-    )
+    var showLogOutBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     fun copyToClipboard(text: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -148,178 +119,30 @@ fun MovieDetailsScreen(
             EmptySearchLayout(
                 title = stringResource(R.string.internet_is_not_available),
                 description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                image = R.drawable.img_no_internet
+                image = Theme.drawables.noInternetId
             )
         }
     } else {
         Box(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
+                .background(Theme.color.surfaces.surface)
         ) {
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-            ) {
-
-                MoviePosterDetailScreen(
-                    imageUrl = uiState.topImageUrl,
-                    modifier = Modifier.fillMaxSize()
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(30.dp)
-                        .offset(y = (-30).dp)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
-                            )
-                        )
-                )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(bottom = 32.dp)
-                ) {
-                    MovieDetailsHeader(
-                        movieName = uiState.movieName,
-                        movieCategory = uiState.genreMovie,
-                        date = uiState.dataMovie,
-                        time = uiState.movieDuration.takeIf { it != "0" && it != "0min" && it.isNotBlank() },
-                        rate = uiState.rate.takeIf { it != "0.0" && it != "0" && it.isNotBlank() }
-                            ?.take(3),
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            bottom = 16.dp
-                        )
-                    )
-                    BottomMediaActions(
-                        onAddToListClick = {
-                            showAddToListBottomSheet = true
-                        },
-                        onRateClick = {
-                            showAddRatingBottomSheet = true
-                        },
-                        onPlayClick = {
-                            uiState.trailerKey?.let { key ->
-                                val youtubeAppIntent =
-                                    Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$key"))
-                                val youtubeWebIntent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("https://www.youtube.com/watch?v=$key")
-                                )
-                                try {
-                                    context.startActivity(youtubeAppIntent)
-                                } catch (e: ActivityNotFoundException) {
-                                    context.startActivity(youtubeWebIntent)
-                                }
-                            }
-                        },
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    TextWithReadMore(
-                        description = uiState.description,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        maxLines = 5
-                    )
-                    TopCastHorizontalScroll(
-                        onSeeAllClick = {
-                            navController.navigate(
-                                Destinations.TopCast(
-                                    mediaId = uiState.movieId,
-                                    isMovie = true
-                                )
-                            )
-                        },
-                        onCastMemberClick = { castId ->
-                            navController.navigate(
-                                Destinations.ActorDetails(
-                                    artistId = castId
-                                )
-                            )
-                        },
-                        modifier = Modifier.padding(top = 32.dp),
-                        castMembers = uiState.casts.map { cast ->
-                            CastMember(
-                                id = cast.id.toString(),
-                                name = cast.name,
-                                imageUrl = cast.imageUrl
-                            )
-                        }
-                    )
-                    ReviewScreen(
-                        modifier = Modifier.padding(top = 32.dp),
-                        onSeeAllReviews = {
-                            navController.navigate(
-                                Destinations.ReviewsScreen(
-                                    uiState.movieId,
-                                    isMovie = true
-                                )
-                            )
-                        },
-                        uiState = uiState.reviews.toReviewScreenUiState()
-                    )
-                    SimilarMoviesSection(
-                        modifier = Modifier.padding(vertical = 32.dp),
-                        onSeeAllClick = {
-                            navController.navigate(
-                                Destinations.SimilarMediaScreen(
-                                    mediaId = uiState.movieId,
-                                    isMovie = true
-                                )
-                            )
-                        },
-                        onMovieClick = { movie ->
-                            navController.navigate(
-                                Destinations.MovieDetailsScreen(
-                                    movieId = movie.id
-                                )
-                            )
-                        },
-                        similarMovies = uiState.similarMovies.map { movie ->
-                            SimilarMovie(
-                                id = movie.id,
-                                title = movie.title,
-                                imageUrl = movie.imageUrl,
-                                rating = movie.rating
-                            )
-                        }
-                    )
-
-                    LogoutConfirmationBottomSheet(
-                        title = stringResource(R.string.you_dont_have_an_account),
-                        description = stringResource(R.string.please_log_in_or_create_an_account_to_save_items_to_your_favorites_and_access_them_later),
-                        actionButtonText = stringResource(R.string.login),
-                        isVisible = uiState.isLoginBottomSheetVisible,
-                        onDismiss = { viewModel.onDismissLoginBottomSheet() },
-                        onNavigateToAuth = {
-                            navController.navigate(Destinations.LoginScreen) {
-                                popUpTo(Destinations.LoginScreen) { inclusive = false }
-                            }
-                        },
-                    )
-                }
-            }
-
-
-            TopAppBar(
-                text = null,
+            MoviePosterDetailScreen(
+                imageUrl = uiState.topImageUrl,
+                modifier = Modifier.fillMaxSize()
+            )
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(animatedBrush)
-                    .padding(start = 16.dp, top = 36.dp, end = 16.dp, bottom = 8.dp),
-                onFirstIconClick = { navController.popBackStack() },
-                onSecondIconClick = { showShareSheet = true },
-                onThirdIconClick = {
-                    viewModel.onClickLoveIcon(uiState.movieId)
-                },
-                isFavorite = uiState.isLoved
+                    .height(30.dp)
+                    .offset(y = 342.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(Color.Transparent, Theme.color.surfaces.surface)
+                        )
+                    )
             )
 
             MovioBottomSheet(
@@ -349,88 +172,223 @@ fun MovieDetailsScreen(
                 )
             }
 
-            MovioBottomSheet(
-                show = showAddRatingBottomSheet,
-                onDismiss = { showAddRatingBottomSheet = false },
-                content = {
-                    if (uiState.isGuest) {
-                        Column {
-                            Image(
-                                painter = painterResource(id = drawable.library_main_icon),
-                                contentDescription = "Search Icon",
-                                modifier = Modifier
-                                    .size(width = 60.dp, height = 66.dp)
-                                    .align(CenterHorizontally)
-                                    .padding(bottom = 16.dp),
+            TopAppBar(
+                text = null,
+                modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
+                onFirstIconClick = { navController.popBackStack() },
+                onSecondIconClick = { showShareSheet = true },
+                onThirdIconClick = {
+                    viewModel.onClickLoveIcon(uiState.movieId)
+                },
+                isFavorite = uiState.isLoved
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 32.dp)
+            ) {
+                Spacer(modifier = Modifier.height(360.dp))
+                MovieDetailsHeader(
+                    movieName = uiState.movieName,
+                    movieCategory = uiState.genreMovie,
+                    date = uiState.dataMovie,
+                    time = uiState.movieDuration.takeIf { it != "0" && it != "0min" && it.isNotBlank() },
+                    rate = uiState.rate.takeIf { it != "0.0" && it != "0" && it.isNotBlank() }
+                        ?.take(3),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                )
+                BottomMediaActions(
+                    onAddToListClick = {
+                        showAddToListBottomSheet = uiState.isGuest.not()
+                        showLogOutBottomSheet = uiState.isGuest
+                    },
+                    onRateClick = {
+                        showAddRatingBottomSheet = true
+                    },
+                    onPlayClick = {
+                        uiState.trailerKey?.let { key ->
+                            val youtubeAppIntent =
+                                Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$key"))
+                            val youtubeWebIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://www.youtube.com/watch?v=$key")
                             )
-                            MovioText(
-                                text = stringResource(R.string.you_dont_have_an_account),
-                                textStyle = Theme.textStyle.title.mediumMedium16,
-                                color = Theme.color.surfaces.onSurface,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 8.dp)
-                            )
-                            MovioText(
-                                text = stringResource(R.string.this_rating_is_only_available_to_registered_users_Login_to_share_your_rating),
-                                textStyle = Theme.textStyle.label.smallRegular12,
-                                color = Theme.color.surfaces.onSurfaceContainer,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
-                            )
-                            Button(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(
-                                        top = 40.dp,
-                                        bottom = 32.dp,
-                                        start = 16.dp,
-                                        end = 16.dp
-                                    )
-                                    .height(48.dp),
-                                onClick = {
-                                    showAddRatingBottomSheet = false
-                                    navController.navigate(Destinations.LoginScreen)
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Theme.color.brand.primary,
-                                ),
-                                shape = RoundedCornerShape(24.dp),
-                                elevation = ButtonDefaults.elevation(0.dp)
-                            ) {
+
+                            try {
+                                context.startActivity(youtubeAppIntent)
+                            } catch (e: ActivityNotFoundException) {
+                                context.startActivity(youtubeWebIntent)
+                            }
+                        }
+                    },
+                )
+
+                MovioBottomSheet(
+                    show = showAddRatingBottomSheet,
+                    onDismiss = { showAddRatingBottomSheet = false },
+                    content = {
+                        if (uiState.isGuest) {
+                            Column {
+                                Image(
+                                    painter = painterResource(id = drawable.library_main_icon),
+                                    contentDescription = "Search Icon",
+                                    modifier = Modifier
+                                        .size(width = 60.dp, height = 66.dp)
+                                        .align(CenterHorizontally)
+                                        .padding(bottom = 16.dp),
+                                )
                                 MovioText(
-                                    text = stringResource(R.string.login),
-                                    textStyle = Theme.textStyle.label.mediumMedium14,
-                                    color = Theme.color.brand.onPrimary,
+                                    text = stringResource(R.string.you_dont_have_an_account),
+                                    textStyle = Theme.textStyle.title.mediumMedium16,
+                                    color = Theme.color.surfaces.onSurface,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
                                         .fillMaxWidth()
+                                        .padding(bottom = 8.dp)
                                 )
+                                MovioText(
+                                    text = stringResource(R.string.this_rating_is_only_available_to_registered_users_Login_to_share_your_rating),
+                                    textStyle = Theme.textStyle.label.smallRegular12,
+                                    color = Theme.color.surfaces.onSurfaceContainer,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                )
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 40.dp,
+                                            bottom = 32.dp,
+                                            start = 16.dp,
+                                            end = 16.dp
+                                        )
+                                        .height(48.dp),
+                                    onClick = {
+                                        showAddRatingBottomSheet = false
+                                        navController.navigate(Destinations.LoginScreen)
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = Theme.color.brand.primary,
+                                    ),
+                                    shape = RoundedCornerShape(24.dp),
+                                    elevation = ButtonDefaults.elevation(0.dp)
+                                ) {
+                                    MovioText(
+                                        text = stringResource(R.string.login),
+                                        textStyle = Theme.textStyle.label.mediumMedium14,
+                                        color = Theme.color.brand.onPrimary,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    )
+                                }
+                            }
+                        } else {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalAlignment = CenterHorizontally
+                            ) {
+                                MovioArtistsCard(
+                                    imageUrl = uiState.topImageUrl,
+                                    circleImageSize = 88.dp,
+                                    artistsName = uiState.movieName,
+                                    paddingBetweenImageAndText = 8.dp,
+                                )
+                                MovioText(
+                                    modifier = Modifier.padding(top = 24.dp),
+                                    text = stringResource(R.string.add_your_overall_rating_for_this_movie),
+                                    color = Theme.color.surfaces.onSurfaceContainer,
+                                    textStyle = Theme.textStyle.label.smallRegular14
+                                )
+                                Row(
+                                    modifier = Modifier.padding(top = 16.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    (1..5).forEach { i ->
+                                        MovioIcon(
+                                            painter = painterResource(drawable.bold_star),
+                                            contentDescription = null,
+                                            tint = if (i <= uiState.userRating) Theme.color.system.warning else Theme.color.surfaces.onSurfaceVariant,
+                                            modifier = Modifier
+                                                .size(28.dp)
+                                                .clickable { viewModel.onPickRatingNumber(i) }
+                                        )
+                                    }
+                                }
+                                Button(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(
+                                            top = 40.dp,
+                                            bottom = 32.dp,
+                                            start = 16.dp,
+                                            end = 16.dp
+                                        )
+                                        .height(48.dp),
+                                    onClick = {
+                                        // Only proceed if user has selected a rating
+                                        if (uiState.userRating > 0) {
+                                            viewModel.addRating()
+                                            showAddRatingBottomSheet = false
+                                            showDoneRatingBottomSheet = true
+                                        }
+                                    },
+                                    enabled = uiState.userRating > 0, // Disable button when no rating selected
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = if (uiState.userRating > 0)
+                                            Theme.color.brand.primary
+                                        else
+                                            Theme.color.surfaces.onSurfaceVariant.copy(alpha = 0.3f),
+                                        disabledBackgroundColor = Theme.color.surfaces.onSurfaceVariant.copy(
+                                            alpha = 0.3f
+                                        )
+                                    ),
+                                    shape = RoundedCornerShape(24.dp),
+                                    elevation = ButtonDefaults.elevation(0.dp)
+                                ) {
+                                    MovioText(
+                                        text = stringResource(R.string.submit),
+                                        color = if (uiState.userRating > 0)
+                                            Theme.color.brand.onPrimary
+                                        else
+                                            Theme.color.surfaces.onSurfaceVariant.copy(alpha = 0.6f),
+                                        textStyle = Theme.textStyle.label.mediumMedium14
+                                    )
+                                }
                             }
                         }
-                    } else {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalAlignment = CenterHorizontally
-                        ) {
-                            MovioArtistsCard(
-                                imageUrl = uiState.topImageUrl,
-                                circleImageSize = 88.dp,
-                                artistsName = uiState.movieName,
-                                paddingBetweenImageAndText = 8.dp,
+                    }
+                )
+
+                MovioBottomSheet(
+                    show = showDoneRatingBottomSheet,
+                    onDismiss = { showDoneRatingBottomSheet = false },
+                    content = {
+                        Column {
+                            Image(
+                                painter = painterResource(id = R.drawable.party_icon),
+                                contentDescription = "Party Icon",
+                                modifier = Modifier
+                                    .size(68.dp)
+                                    .align(CenterHorizontally)
+                                    .padding(bottom = 8.dp),
                             )
                             MovioText(
-                                modifier = Modifier.padding(top = 24.dp),
-                                text = stringResource(R.string.add_your_overall_rating_for_this_movie),
+                                text = stringResource(R.string.thank_you_for_your_rating),
+                                textStyle = Theme.textStyle.label.smallRegular14,
                                 color = Theme.color.surfaces.onSurfaceContainer,
-                                textStyle = Theme.textStyle.label.smallRegular14
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 16.dp)
                             )
                             Row(
-                                modifier = Modifier.padding(top = 16.dp),
+                                modifier = Modifier
+                                    .padding(top = 16.dp)
+                                    .align(CenterHorizontally),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 (1..5).forEach { i ->
@@ -439,8 +397,8 @@ fun MovieDetailsScreen(
                                         contentDescription = null,
                                         tint = if (i <= uiState.userRating) Theme.color.system.warning else Theme.color.surfaces.onSurfaceVariant,
                                         modifier = Modifier
-                                            .size(28.dp)
-                                            .clickable { viewModel.onPickRatingNumber(i) }
+                                            .size(if (i == uiState.userRating) 48.dp else 28.dp)
+                                            .align(Alignment.CenterVertically)
                                     )
                                 }
                             }
@@ -455,112 +413,128 @@ fun MovieDetailsScreen(
                                     )
                                     .height(48.dp),
                                 onClick = {
-                                    if (uiState.userRating > 0) {
-                                        viewModel.addRating()
-                                        showAddRatingBottomSheet = false
-                                        showDoneRatingBottomSheet = true
-                                    }
+                                    showDoneRatingBottomSheet = false
                                 },
-                                enabled = uiState.userRating > 0,
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = if (uiState.userRating > 0)
-                                        Theme.color.brand.primary
-                                    else
-                                        Theme.color.surfaces.onSurfaceVariant.copy(alpha = 0.3f),
-                                    disabledBackgroundColor = Theme.color.surfaces.onSurfaceVariant.copy(
-                                        alpha = 0.3f
-                                    )
+                                    backgroundColor = Theme.color.brand.primary,
                                 ),
                                 shape = RoundedCornerShape(24.dp),
                                 elevation = ButtonDefaults.elevation(0.dp)
                             ) {
                                 MovioText(
-                                    text = stringResource(R.string.submit),
-                                    color = if (uiState.userRating > 0)
-                                        Theme.color.brand.onPrimary
-                                    else
-                                        Theme.color.surfaces.onSurfaceVariant.copy(alpha = 0.6f),
+                                    text = stringResource(R.string.done),
+                                    color = Theme.color.brand.onPrimary,
                                     textStyle = Theme.textStyle.label.mediumMedium14
                                 )
                             }
                         }
                     }
-                }
-            )
+                )
 
-            MovioBottomSheet(
-                show = showDoneRatingBottomSheet,
-                onDismiss = { showDoneRatingBottomSheet = false },
-                content = {
-                    Column {
-                        Image(
-                            painter = painterResource(id = R.drawable.party_icon),
-                            contentDescription = "Party Icon",
-                            modifier = Modifier
-                                .size(68.dp)
-                                .align(CenterHorizontally)
-                                .padding(bottom = 8.dp),
-                        )
-                        MovioText(
-                            text = stringResource(R.string.thank_you_for_your_rating),
-                            textStyle = Theme.textStyle.label.smallRegular14,
-                            color = Theme.color.surfaces.onSurfaceContainer,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 16.dp)
-                        )
-                        Row(
-                            modifier = Modifier
-                                .padding(top = 16.dp)
-                                .align(CenterHorizontally),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            (1..5).forEach { i ->
-                                MovioIcon(
-                                    painter = painterResource(drawable.bold_star),
-                                    contentDescription = null,
-                                    tint = if (i <= uiState.userRating) Theme.color.system.warning else Theme.color.surfaces.onSurfaceVariant,
-                                    modifier = Modifier
-                                        .size(if (i == uiState.userRating) 48.dp else 28.dp)
-                                        .align(Alignment.CenterVertically)
-                                )
-                            }
-                        }
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    top = 40.dp,
-                                    bottom = 32.dp,
-                                    start = 16.dp,
-                                    end = 16.dp
-                                )
-                                .height(48.dp),
-                            onClick = {
-                                showDoneRatingBottomSheet = false
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Theme.color.brand.primary,
-                            ),
-                            shape = RoundedCornerShape(24.dp),
-                            elevation = ButtonDefaults.elevation(0.dp)
-                        ) {
-                            MovioText(
-                                text = stringResource(R.string.done),
-                                color = Theme.color.brand.onPrimary,
-                                textStyle = Theme.textStyle.label.mediumMedium14
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TextWithReadMore(
+                    description = uiState.description,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    maxLines = 5
+                )
+                TopCastHorizontalScroll(
+                    onSeeAllClick = {
+                        navController.navigate(
+                            Destinations.TopCast(
+                                mediaId = uiState.movieId,
+                                isMovie = true
                             )
-                        }
+                        )
+                    },
+                    onCastMemberClick = { castId ->
+                        navController.navigate(
+                            Destinations.ActorDetails(
+                                artistId = castId
+                            )
+                        )
+                    },
+                    modifier = Modifier.padding(top = 32.dp),
+                    castMembers = uiState.casts.map { cast ->
+                        ArtistUiState(
+                            id = cast.id,
+                            name = cast.name,
+                            imageUrl = cast.imageUrl
+                        )
                     }
-                }
-            )
+                )
+                ReviewScreen(
+                    reviews = uiState.reviews,
+                    onSeeAllReviews = {
+                        navController.navigate(
+                            Destinations.ReviewsScreen(
+                                uiState.movieId,
+                                isMovie = true
+                            )
+                        )
+                    },
+                    modifier = Modifier.padding(top = 32.dp),
+                )
+                SimilarMoviesSection(
+                    modifier = Modifier.padding(top = 32.dp),
+                    onSeeAllClick = {
+                        navController.navigate(
+                            Destinations.SimilarMediaScreen(
+                                mediaId = uiState.movieId,
+                                isMovie = true
+                            )
+                        )
+                    },
+                    onMovieClick = { movie ->
+                        navController.navigate(
+                            Destinations.MovieDetailsScreen(
+                                movieId = movie.id
+                            )
+                        )
+                    },
+                    similarMovies = uiState.similarMovies.map { movie ->
+                        SimilarMovie(
+                            id = movie.id,
+                            title = movie.title,
+                            imageUrl = movie.imageUrl,
+                            rating = movie.rating
+                        )
+                    }
+                )
+
+                LogoutConfirmationBottomSheet(
+                    title = stringResource(R.string.you_dont_have_an_account),
+                    description = stringResource(R.string.please_log_in_or_create_an_account_to_save_items_to_your_favorites_and_access_them_later),
+                    actionButtonText = stringResource(R.string.login),
+                    isVisible = uiState.isLoginBottomSheetVisible,
+                    onDismiss = { viewModel.onDismissLoginBottomSheet() },
+                    onNavigateToAuth = {
+                        navController.navigate(Destinations.LoginScreen) {
+                            popUpTo(Destinations.LoginScreen) { inclusive = false }
+                        }
+                    },
+                )
+
+                LogoutConfirmationBottomSheet(
+                    title = stringResource(R.string.you_dont_have_an_account),
+                    description = stringResource(R.string.please_log_in_or_create_an_account_to_save_items_to_your_favorites_and_access_them_later),
+                    actionButtonText = stringResource(R.string.login),
+                    isVisible = showLogOutBottomSheet,
+                    onDismiss = { showLogOutBottomSheet = false },
+                    onNavigateToAuth = {
+                        navController.navigate(Destinations.LoginScreen) {
+                            popUpTo(Destinations.LoginScreen) { inclusive = false }
+                        }
+                    },
+                )
+            }
         }
-        ListManagementBottomSheet(
-            isVisible = showAddToListBottomSheet,
-            onDismiss = { showAddToListBottomSheet = false },
-            movieId = uiState.movieId,
-            viewModel = addToListViewModel
-        )
     }
+
+    ListManagementBottomSheet(
+        isVisible = showAddToListBottomSheet,
+        onDismiss = { showAddToListBottomSheet = false },
+        movieId = uiState.movieId,
+        viewModel = addToListViewModel
+    )
 }
