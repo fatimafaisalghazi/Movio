@@ -1,5 +1,6 @@
 package com.madrid.presentation.viewModel.detailsViewModel.seriesDetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
@@ -56,6 +57,7 @@ class SeriesDetailsViewModel @Inject constructor(
         checkIfFavoriteSeries()
         isGuest()
         loadAllSeasonsEpisodes()
+        updateSelectedSeason(args.seasonNumber)
     }
 
     private fun loadData() {
@@ -75,13 +77,19 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun loadAllSeasonsEpisodes() {
+        updateState { it.copy(showLoadingScreen = true) }
         state.value.currentSeasonsUiStates.forEachIndexed { index, season ->
             tryToExecute(
                 function = {
                     getEpisodesForSeasonUseCase.invoke(args.seriesId, season.seasonNumber)
                 },
-                onSuccess = { episodes -> ::onSuccessLoadAllSeasonsEpisodes.invoke(episodes) },
-                onError = { ::onError.invoke() }
+                onSuccess = { episodes ->
+                    onSuccessLoadAllSeasonsEpisodes(episodes, season.seasonNumber)
+                    updateState { it.copy(showLoadingScreen = false) }
+                },
+                onError = { error ->
+                    onError()
+                }
             )
         }
     }
@@ -158,6 +166,7 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun loadSelectedSeasonEpisodes(seasonNumber: Int = 1) {
+        updateState { it.copy(showLoadingScreen = true) }
         tryToExecute(
             function = { getEpisodesForSeasonUseCase.invoke(args.seriesId, seasonNumber) },
             onSuccess = { episodes ->
@@ -165,6 +174,7 @@ class SeriesDetailsViewModel @Inject constructor(
                     episodes,
                     seasonNumber
                 )
+                updateState { it.copy(showLoadingScreen = false) }
             },
             onError = { ::onError.invoke() },
         )
@@ -184,6 +194,7 @@ class SeriesDetailsViewModel @Inject constructor(
         episodeNumber: Int,
         onTrailerLoaded: (String?) -> Unit
     ) {
+        updateState { it.copy(showLoadingScreen = true) }
         tryToExecute(
             function = { getEpisodeTrailersUseCase.invoke(seriesId, seasonNumber, episodeNumber) },
             onSuccess = { trailers ->
@@ -191,6 +202,7 @@ class SeriesDetailsViewModel @Inject constructor(
                     trailers,
                     onTrailerLoaded
                 )
+                updateState { it.copy(showLoadingScreen = false) }
             },
             onError = { onTrailerLoaded(null) }
         )
@@ -346,23 +358,24 @@ class SeriesDetailsViewModel @Inject constructor(
                 isError = false,
             )
         }
+        loadAllSeasonsEpisodes()
     }
 
-    private fun onSuccessLoadAllSeasonsEpisodes(episode: List<Episode>) {
-        state.value.currentSeasonsUiStates.forEachIndexed { index, season ->
-            updateState { currentState ->
-                currentState.copy(
-                    currentSeasonsUiStates = currentState.currentSeasonsUiStates.mapIndexed { seasonIndex, currentSeason ->
-                        if (season.seasonNumber == currentSeason.seasonNumber)
-                            currentSeason.copy(
-                                numberOfEpisodes = episode.size,
-                                episodesUiStates = episode.map { episode -> episode.toUiState() })
-                        else
-                            currentSeason
-                    },
-                    seeAllType = SeeAllType.Season
-                )
-            }
+    private fun onSuccessLoadAllSeasonsEpisodes(episode: List<Episode>, seasonNumber: Int) {
+        updateState { currentState ->
+            currentState.copy(
+                currentSeasonsUiStates = currentState.currentSeasonsUiStates.map { currentSeason ->
+                    if (currentSeason.seasonNumber == seasonNumber) {
+                        currentSeason.copy(
+                            numberOfEpisodes = episode.size,
+                            episodesUiStates = episode.map { ep -> ep.toUiState() }
+                        )
+                    } else {
+                        currentSeason
+                    }
+                },
+                seeAllType = SeeAllType.Season
+            )
         }
     }
 
