@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -67,7 +66,7 @@ fun ImageViewer(
             contentAlignment = Alignment.Center
         ) {
             Image(
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.fillMaxSize(0.3f),
                 imageVector = ImageVector.vectorResource(id = R.drawable.placeholder_icon),
                 contentDescription = stringResource(R.string.image_loading_error),
                 colorFilter = ColorFilter.tint(Color(0xFFEFF1F5))
