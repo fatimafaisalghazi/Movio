@@ -2,8 +2,12 @@ package com.madrid.presentation.screens.detailsScreen.similarMedia
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -84,33 +88,25 @@ fun SeeAllSimilarMediaScreenContent(
         )
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 101.dp),
+            columns = GridCells.Adaptive(minSize = 101.33.dp),
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .background(Theme.color.surfaces.surface)
-                .padding(horizontal = 6.dp),
+                .navigationBarsPadding(),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(similarMovies.size) { index ->
                 val movie = similarMovies[index]
-
-                // Log before rendering each card
-                Log.d(
-                    "SimilarMediaDebug",
-                    "Rendering card #$index: ${movie.title} " +
-                            "| Rating: ${movie.rating} " +
-                            "| Image: ${movie.imageUrl.take(20)}..."
-                )
-
                 MovioVerticalCard(
                     description = movie.title,
                     movieImage = movie.imageUrl,
                     rate = movie.rating,
-                    width = 101.dp,
                     imageHeight = 136.dp,
                     onClick = {
                         onClickMedia(movie.id, isMovie)
                     },
-                    modifier = Modifier.padding(top = 16.dp, start = 6.dp),
                 )
             }
         }
