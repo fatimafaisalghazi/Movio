@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -73,12 +73,12 @@ private fun SeeAllForYouScreenContent(
 
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 100.dp),
+        columns = GridCells.Adaptive(minSize = 101.33.dp),
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(Theme.color.surfaces.surface)
-            .statusBarsPadding(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+            .navigationBarsPadding(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -109,7 +109,6 @@ private fun SeeAllForYouScreenContent(
 
             }
             Spacer(Modifier.height(16.dp))
-
         }
 
         when {
@@ -169,7 +168,6 @@ private fun SeeAllForYouScreenContent(
                         description = exploreMoreMovies[index]!!.title,
                         movieImage = exploreMoreMovies[index]!!.imageUrl,
                         rate = exploreMoreMovies[index]!!.rating,
-                        width = 101.dp,
                         imageHeight = 136.dp,
                         onClick = { onMovieClick(exploreMoreMovies[index]!!.id.toInt()) }
                     )

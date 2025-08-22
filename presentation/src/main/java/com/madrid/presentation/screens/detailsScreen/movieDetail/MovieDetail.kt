@@ -55,19 +55,19 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.TopCastHorizontalScroll
+import com.madrid.presentation.component.addtolist.ListManagementBottomSheet
 import com.madrid.presentation.component.header.MovieDetailsHeader
 import com.madrid.presentation.component.logout.LogoutConfirmationBottomSheet
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioArtistsCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.component.addtolist.ListManagementBottomSheet
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
+import com.madrid.presentation.viewModel.addtolist.MovieListViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.ArtistUiState
 import com.madrid.presentation.viewModel.detailsViewModel.movie.MovieDetailsViewModel
-import com.madrid.presentation.viewModel.addtolist.MovieListViewModel
 
 
 @Composable
