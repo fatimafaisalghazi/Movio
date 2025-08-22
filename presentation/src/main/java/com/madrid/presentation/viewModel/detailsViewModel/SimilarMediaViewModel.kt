@@ -86,7 +86,7 @@ fun List<Series>.toSeriesUiState(): List<MediaUiState> {
     return this.map { series ->
         MediaUiState(
             mediaId = series.id,
-            isMovie = false, // Correct: false for series
+            isMovie = false,
             imageUrl = series.imageUrl,
             mediaName = series.title,
             rate = series.rate?.let {
