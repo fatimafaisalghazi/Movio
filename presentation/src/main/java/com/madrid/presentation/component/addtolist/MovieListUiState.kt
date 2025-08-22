@@ -1,7 +1,6 @@
-package com.madrid.presentation.viewModel.libraryViewModel.addtolist
+package com.madrid.presentation.component.addtolist
 
 import com.madrid.presentation.R
-import com.madrid.presentation.viewModel.shared.WatchListUiState
 
 
 data class MovieListUiState(

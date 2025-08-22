@@ -1,4 +1,4 @@
-package com.madrid.presentation.viewModel.detailsViewModel
+package com.madrid.presentation.viewModel.detailsViewModel.similarMedia
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle

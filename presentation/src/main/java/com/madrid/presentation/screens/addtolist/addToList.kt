@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.presentation.R
-import com.madrid.presentation.viewModel.libraryViewModel.addtolist.MovieListViewModel
+import com.madrid.presentation.component.addtolist.MovieListViewModel
 import kotlinx.coroutines.delay
 
 enum class ListBottomSheetMode {

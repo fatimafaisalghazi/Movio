@@ -20,9 +20,7 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
-import com.madrid.domain.entity.WatchList
-import com.madrid.presentation.viewModel.libraryViewModel.addtolist.WatchListItemUiState
-import com.madrid.presentation.viewModel.shared.WatchListUiState
+import com.madrid.presentation.component.addtolist.WatchListItemUiState
 
 @Composable
 fun UserListItem(

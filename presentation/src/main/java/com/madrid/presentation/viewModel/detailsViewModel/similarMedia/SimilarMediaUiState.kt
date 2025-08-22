@@ -1,6 +1,4 @@
-package com.madrid.presentation.viewModel.detailsViewModel
-
-import android.util.Log
+package com.madrid.presentation.viewModel.detailsViewModel.similarMedia
 
 private const val TAG = "SimilarMediaUiState"
 

@@ -8,9 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.madrid.domain.entity.WatchList
-import com.madrid.presentation.viewModel.libraryViewModel.addtolist.WatchListItemUiState
-import com.madrid.presentation.viewModel.shared.WatchListUiState
+import com.madrid.presentation.component.addtolist.WatchListItemUiState
 
 @Composable
 fun ListSelectionContent(
