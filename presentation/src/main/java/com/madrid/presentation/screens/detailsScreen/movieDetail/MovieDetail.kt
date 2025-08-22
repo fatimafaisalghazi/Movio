@@ -476,7 +476,7 @@ fun MovieDetailsScreen(
                     modifier = Modifier.padding(top = 32.dp),
                 )
                 SimilarMoviesSection(
-                    modifier = Modifier.padding(vertical = 32.dp),
+                    modifier = Modifier.padding(top = 32.dp),
                     onSeeAllClick = {
                         navController.navigate(
                             Destinations.SimilarMediaScreen(
