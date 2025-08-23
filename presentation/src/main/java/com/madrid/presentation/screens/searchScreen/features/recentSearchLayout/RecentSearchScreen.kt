@@ -31,6 +31,7 @@ fun LazyGridScope.recentSearchScreen(
     onClearAll: () -> Unit,
     highlightCharactersInText: (String, String, Color, Color, TextStyle) -> AnnotatedString,
     isWrite: Boolean = false,
+    sizeOfSuggestionKeywords : Int = 0
 ) {
     item(span = { GridItemSpan(maxLineSpan) }) {
         Row(
@@ -83,7 +84,11 @@ fun LazyGridScope.recentSearchScreen(
                 overflow = TextOverflow.Ellipsis,
                 textStyle = Theme.textStyle.label.smallRegular14,
                 textAlign = null,
-                startIcon = painterResource(com.madrid.designSystem.R.drawable.outline_history),
+                startIcon = if(index < sizeOfSuggestionKeywords ) {
+                    painterResource(com.madrid.designSystem.R.drawable.search_normal)
+                }else{
+                    painterResource(com.madrid.designSystem.R.drawable.outline_history)
+                },
                 endIcon = if (isWrite) {
                     painterResource(com.madrid.designSystem.R.drawable.outline_add)
                 } else {
