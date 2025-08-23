@@ -172,10 +172,13 @@ fun MovieDetailsScreen(
 
             TopAppBar(
                 text = null,
+                startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            preEndIcon = com.madrid.designSystem.R.drawable.share_arrow,
+            endIcon = com.madrid.designSystem.R.drawable.outline_heart,
                 modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
-                onFirstIconClick = { navController.popBackStack() },
-                onSecondIconClick = { showShareSheet = true },
-                onThirdIconClick = {
+                onStartIconClick = { navController.popBackStack() },
+                onPreEndIconClick = { showShareSheet = true },
+                onEndIconClick = {
                     viewModel.onClickLoveIcon(uiState.movieId)
                 },
                 isFavorite = uiState.isLoved

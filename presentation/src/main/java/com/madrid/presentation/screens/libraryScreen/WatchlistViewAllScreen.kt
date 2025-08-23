@@ -70,9 +70,8 @@ fun WatchlistViewAllScreen(
         }
     }
 
-    val interactionListener = viewModel as WatchListViewAllInteractionListener
     WatchlistViewAllScreenContent(
-        interactionListener = interactionListener,
+        interactionListener = viewModel,
         state = state
     )
 }
@@ -87,9 +86,8 @@ fun WatchlistViewAllScreenContent(
     ) {
         TopAppBar(
             text = stringResource(presentationR.string.watchlist),
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = { interactionListener.onBackButtonClicked() },
+            startIcon = R.drawable.arrow_left,
+            onStartIconClick = { interactionListener.onBackButtonClicked() },
             modifier = Modifier.padding(
                 horizontal = 16.dp
             )
@@ -127,8 +125,10 @@ fun WatchlistViewAllScreenContent(
                 showCreateListBottomSheet = state.showCreateListBottomSheet
             )
         }
+
         AnimatedVisibility(
-            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.watchLists.isEmpty().not(),
+            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.watchLists.isEmpty()
+                .not(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -195,7 +195,9 @@ private fun EmptyListContent() {
         description = stringResource(presentationR.string.add_movies_and_tv_shows_to_build_your_personal_watchlist), //stringResource(presentationR.string.no_results_found),
         image = R.drawable.empty,
         imageSize = 180,
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     )
 }
 
@@ -242,7 +244,8 @@ private fun CreateListSection(
             icon = painterResource(id = R.drawable.add),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
+                .padding(16.dp),
+            contentDescription = "Create List"
         )
         SuccessNotificationRow(
             isVisible = showSnackBar,

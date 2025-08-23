@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.madrid.designSystem.component.HeaderSectionBar
+import com.madrid.presentation.screens.homeScreen.component.HeaderHomeSectionBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.header.HomeAppBar
@@ -120,7 +120,7 @@ fun HomeScreenContent(
                 imageUrl = state.profileImage,
                 onClickIcon = { interactionListener.onClickProfile() }
             )
-            HeaderSectionBar(
+            HeaderHomeSectionBar(
                 tabs = listOf(
                     stringResource(R.string.Movies),
                     stringResource(R.string.TV_Shows),

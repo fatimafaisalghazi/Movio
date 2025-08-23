@@ -68,9 +68,9 @@ private fun WatchListDetailsScreenContent(
             .padding(horizontal = 16.dp)
             .statusBarsPadding(),
         text = state.headerTitle,
-        secondIcon = null,
-        thirdIcon = null,
-        onFirstIconClick = interaction::onNavigateBack,
+        preEndIcon = null,
+        endIcon = null,
+        onStartIconClick = interaction::onNavigateBack,
     )
     Column(
         modifier = Modifier

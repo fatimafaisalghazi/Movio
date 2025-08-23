@@ -83,10 +83,9 @@ fun EpisodesScreenContent(
             Box {
                 TopAppBar(
                     text = null,
-                    secondIcon = null,
-                    thirdIcon = null,
+                    startIcon = com.madrid.designSystem.R.drawable.arrow_left,
                     modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
-                    onFirstIconClick = { onClickBack() }
+                    onStartIconClick = { onClickBack() }
                 )
                 Box(
                     modifier = Modifier

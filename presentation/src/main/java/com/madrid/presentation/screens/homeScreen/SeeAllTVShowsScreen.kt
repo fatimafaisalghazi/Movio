@@ -73,12 +73,10 @@ fun SeeAllTVShowsScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-
         TopAppBar(
-            uiState.title,
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = {
+            text = uiState.title,
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            onStartIconClick = {
                 navController.popBackStack(
                     Destinations.HomeScreen,
                     inclusive = false
@@ -92,7 +90,7 @@ fun SeeAllTVShowsScreen(
         val updatedItems: MutableList<String> = items.map { it.name }.toMutableList()
         updatedItems.add(0, "All")
         FilterBar(
-            items = updatedItems,
+            tabs = updatedItems,
             selectedItem = selectedItem,
             onItemClick = { genre ->
                 selectedItem = genre

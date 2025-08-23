@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.madrid.designSystem.R
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
@@ -77,10 +78,9 @@ fun SeeAllSimilarMediaScreenContent(
     ) {
         TopAppBar(
             text = headerName,
-            secondIcon = null,
-            thirdIcon = null,
+            startIcon = R.drawable.arrow_left,
             modifier = Modifier.padding(start = 16.dp, top = 32.dp, end = 16.dp),
-            onFirstIconClick = { onClickBack() }
+            onStartIconClick = { onClickBack() }
         )
 
         LazyVerticalGrid(

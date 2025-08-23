@@ -119,15 +119,14 @@ private fun ActorDetailsContent(
                         )
                 )
                 TopAppBar(
-                    null,
-                    secondIcon = null,
-                    thirdIcon = null,
+                    text = null,
+                    startIcon = com.madrid.designSystem.R.drawable.arrow_left,
                     modifier = Modifier
                         .padding(top = 6.dp)
                         .padding(16.dp)
                         .align(Alignment.TopCenter)
                         .background(Color.Transparent),
-                    onFirstIconClick = { onBackClick() }
+                    onStartIconClick = { onBackClick() }
                 )
             }
         }

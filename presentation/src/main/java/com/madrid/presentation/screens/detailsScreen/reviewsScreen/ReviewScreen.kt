@@ -48,10 +48,9 @@ fun ReviewsScreenContent(
     ) {
         TopAppBar(
             text = stringResource(R.string.reviews),
-            secondIcon = null,
-            thirdIcon = null,
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
             modifier = Modifier.padding(start = 16.dp, top = 36.dp),
-            onFirstIconClick = { onClickBack() }
+            onStartIconClick = { onClickBack() }
         )
 
         Spacer(modifier = Modifier.height(16.dp))

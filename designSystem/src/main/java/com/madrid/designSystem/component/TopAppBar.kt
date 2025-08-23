@@ -24,78 +24,112 @@ import com.madrid.designSystem.theme.Theme
 fun TopAppBar(
     text: String?,
     modifier: Modifier = Modifier,
-    firstIcon: Int? = R.drawable.arrow_left,
-    secondIcon: Int? = R.drawable.share_arrow,
-    thirdIcon: Int? = R.drawable.outline_heart,
-    onFirstIconClick: () -> Unit = {},
-    onSecondIconClick: () -> Unit = {},
-    onThirdIconClick: () -> Unit = {},
+    startIcon: Int? = null,
+    preEndIcon: Int? = null,
+    endIcon: Int? = null,
+    onStartIconClick: () -> Unit = {},
+    onPreEndIconClick: () -> Unit = {},
+    onEndIconClick: () -> Unit = {},
     isFavorite: Boolean = false
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .zIndex(1f)
-            .padding(vertical = 12.dp),
+            .padding(vertical = 12.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        firstIcon?.let { iconRes ->
-            MovioIcon(
-                painter = painterResource(id = iconRes),
-                contentDescription = "back_button",
-                tint = Theme.color.surfaces.onSurface,
-                modifier = Modifier.clickable { onFirstIconClick() }
-            )
+        startIcon?.let { iconRes ->
+            StartIcon(iconRes = iconRes, onFirstIconClick = onStartIconClick)
         } ?: Box(modifier = Modifier.size(24.dp))
 
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 8.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            if (text != null) {
-                MovioText(
-                    text = text,
-                    textStyle = Theme.textStyle.headline.largeBold18,
-                    color = Theme.color.surfaces.onSurface
-                )
-            }
-        }
+        text?.let { TopAppBarTitle(modifier = Modifier.weight(1f), text = text) }
 
         Row(
-            modifier = Modifier.padding(end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            secondIcon?.let { iconRes ->
-                MovioIcon(
-                    painter = painterResource(id = iconRes),
-                    contentDescription = "share_button",
-                    tint = Theme.color.surfaces.onSurface,
-                    modifier = Modifier.clickable { onSecondIconClick() }
-                )
+            preEndIcon?.let { iconRes ->
+                PreEndIcon(iconRes = iconRes, onSecondIconClick = onPreEndIconClick)
             }
-
-            thirdIcon?.let { iconRes ->
-                MovioIcon(
-                    painter = painterResource(
-                        id = if (isFavorite) R.drawable.bold_heart
-                        else R.drawable.outline_heart
-                    ),
-                    contentDescription = "favorite_button",
-                    tint = if (isFavorite) Theme.color.system.onErrorContainer
-                    else Theme.color.surfaces.onSurface,
-                    modifier = Modifier.clickable(
-                        onClick = onThirdIconClick,
-                        interactionSource = MutableInteractionSource(),
-                        indication = null
-                    )
-                )
+            endIcon?.let { iconRes ->
+                EndIcon(isFavorite = isFavorite, onThirdIconClick = onEndIconClick)
             }
         }
     }
+}
+
+@Composable
+private fun TopAppBarTitle(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        MovioText(
+            text = text,
+            textStyle = Theme.textStyle.headline.largeBold18,
+            color = Theme.color.surfaces.onSurface
+        )
+    }
+}
+
+@Composable
+private fun StartIcon(
+    iconRes: Int,
+    onFirstIconClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    MovioIcon(
+        painter = painterResource(id = iconRes),
+        contentDescription = "back_button",
+        tint = Theme.color.surfaces.onSurface,
+        modifier = modifier.clickable { onFirstIconClick() }
+    )
+}
+
+@Composable
+private fun PreEndIcon(
+    iconRes: Int,
+    onSecondIconClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    MovioIcon(
+        painter = painterResource(id = iconRes),
+        contentDescription = "share_button",
+        tint = Theme.color.surfaces.onSurface,
+        modifier = modifier.clickable { onSecondIconClick() }
+    )
+
+}
+
+@Composable
+private fun EndIcon(
+    isFavorite: Boolean,
+    onThirdIconClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    MovioIcon(
+        painter = painterResource(
+            id = if (isFavorite)
+                R.drawable.bold_heart
+            else
+                R.drawable.outline_heart
+        ),
+        contentDescription = "favorite_button",
+        tint = if (isFavorite)
+            Theme.color.system.onErrorContainer
+        else
+            Theme.color.surfaces.onSurface,
+        modifier = modifier.clickable(
+            onClick = onThirdIconClick,
+            interactionSource = MutableInteractionSource(),
+            indication = null
+        )
+    )
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
@@ -104,9 +138,9 @@ private fun TopAppBarPreview() {
     MovioTheme {
         TopAppBar(
             text = "Movie Name",
-            firstIcon = R.drawable.arrow_left,
-            secondIcon = R.drawable.share_arrow,
-            thirdIcon = R.drawable.outline_heart
+            startIcon = R.drawable.arrow_left,
+            preEndIcon = R.drawable.share_arrow,
+            endIcon = R.drawable.outline_heart
         )
     }
 }

@@ -73,9 +73,8 @@ fun SeeAllMoviesScreen(
     ){
         TopAppBar(
             uiState.title,
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = { navController.navigate(Destinations.HomeScreen) },
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            onStartIconClick = { navController.navigate(Destinations.HomeScreen) },
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .statusBarsPadding()
@@ -84,7 +83,7 @@ fun SeeAllMoviesScreen(
         val updatedItems: MutableList<String> = items.map { it.name }.toMutableList()
         updatedItems.add(0, "All")
         FilterBar(
-            items = updatedItems,
+            tabs = updatedItems,
             selectedItem = selectedItem,
             onItemClick = { genre ->
                 selectedItem = genre

@@ -31,7 +31,14 @@ fun SeasonsScreen(viewModel: SeriesDetailsViewModel = hiltViewModel()) {
     val navController = LocalNavController.current
     SeasonsScreenContent(
         uiState = uiState,
-        onClickBack = { navController.navigate(Destinations.SeriesDetailsScreen(uiState.seriesId, seasonNumber = 1)) },
+        onClickBack = {
+            navController.navigate(
+                Destinations.SeriesDetailsScreen(
+                    uiState.seriesId,
+                    seasonNumber = 1
+                )
+            )
+        },
         onClickSeason = { seasonNumber ->
             navController.navigate(
                 Destinations.EpisodesScreen(
@@ -56,9 +63,10 @@ fun SeasonsScreenContent(
     ) {
         TopAppBar(
             text = stringResource(R.string.current_seasons),
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = { onClickBack() },
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            preEndIcon = null,
+            endIcon = null,
+            onStartIconClick = { onClickBack() },
             modifier = Modifier.padding(top = 36.dp),
         )
         Spacer(Modifier.height(20.dp))

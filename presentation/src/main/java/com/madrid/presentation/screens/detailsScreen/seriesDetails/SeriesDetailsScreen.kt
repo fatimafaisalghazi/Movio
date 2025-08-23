@@ -118,6 +118,7 @@ fun SeriesDetailsScreen(
         uiState.showLoadingScreen -> {
             LoadingScreen(message = stringResource(R.string.loading))
         }
+
         uiState.isError -> {
             Box(
                 modifier = Modifier
@@ -140,6 +141,7 @@ fun SeriesDetailsScreen(
                 )
             }
         }
+
         else -> {
             MovioBottomSheet(
                 show = showSheet,
@@ -191,10 +193,13 @@ fun SeriesDetailsScreen(
                 )
                 TopAppBar(
                     text = null,
+                    startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+                    preEndIcon = com.madrid.designSystem.R.drawable.share_arrow,
+                    endIcon = com.madrid.designSystem.R.drawable.outline_heart,
                     modifier = Modifier.padding(start = 16.dp, top = 36.dp, end = 16.dp),
-                    onFirstIconClick = { navController.popBackStack() },
-                    onSecondIconClick = { showSheet = true },
-                    onThirdIconClick = { viewModel.onClickFavoriteIcon(uiState.seriesId) },
+                    onStartIconClick = { navController.popBackStack() },
+                    onPreEndIconClick = { showSheet = true },
+                    onEndIconClick = { viewModel.onClickFavoriteIcon(uiState.seriesId) },
                     isFavorite = uiState.isFavourite
                 )
                 Column(
