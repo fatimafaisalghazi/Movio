@@ -36,7 +36,7 @@ fun LazyGridScope.recentSearchScreen(
 ) {
 
     item(span = { GridItemSpan(maxLineSpan) }) {
-        AnimatedVisibility(isWrite) {
+        AnimatedVisibility(isWrite || searchQuery.trim().isEmpty() || searchQuery.trim().isBlank() ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -57,7 +57,7 @@ fun LazyGridScope.recentSearchScreen(
                 )
             }
         }
-        AnimatedVisibility(!isWrite) {
+        AnimatedVisibility(!isWrite || searchQuery.trim().isNotEmpty() || searchQuery.trim().isNotBlank()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,7 +102,7 @@ fun LazyGridScope.recentSearchScreen(
                 }else{
                     painterResource(com.madrid.designSystem.R.drawable.outline_history)
                 },
-                endIcon = if (isWrite) {
+                endIcon = if (isWrite || searchQuery.trim().isEmpty() || searchQuery.trim().isBlank() ) {
                     painterResource(com.madrid.designSystem.R.drawable.outline_add)
                 } else {
                     painterResource(com.madrid.designSystem.R.drawable.send)
