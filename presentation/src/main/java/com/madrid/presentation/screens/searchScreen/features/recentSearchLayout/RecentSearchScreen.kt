@@ -1,5 +1,6 @@
 package com.madrid.presentation.screens.searchScreen.features.recentSearchLayout
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -33,25 +34,37 @@ fun LazyGridScope.recentSearchScreen(
     isWrite: Boolean = false,
     sizeOfSuggestionKeywords : Int = 0
 ) {
+
     item(span = { GridItemSpan(maxLineSpan) }) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 12.dp, top = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            MovioText(
-                text = stringResource(id = R.string.recent_search),
-                textStyle = Theme.textStyle.title.mediumMedium16,
-                color = Theme.color.surfaces.onSurface
-            )
-            MovioText(
-                text = stringResource(id = R.string.clear_all),
-                textStyle = Theme.textStyle.label.smallRegular14,
-                color = Theme.color.surfaces.onSurfaceVariant,
-                modifier = Modifier.clickable { onClearAll() }
-            )
+        AnimatedVisibility(isWrite) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp,top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                MovioText(
+                    text = stringResource(id = R.string.recent_search),
+                    textStyle = Theme.textStyle.title.mediumMedium16,
+                    color = Theme.color.surfaces.onSurface
+                )
+                MovioText(
+                    text = stringResource(id = R.string.clear_all),
+                    textStyle = Theme.textStyle.label.smallRegular14,
+                    color = Theme.color.surfaces.onSurfaceVariant,
+                    modifier = Modifier.clickable { onClearAll() }
+                )
+            }
+        }
+        AnimatedVisibility(!isWrite) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp,)
+            ) {
+
+            }
         }
     }
 
