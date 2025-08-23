@@ -359,18 +359,18 @@ private fun SeriesDetailsScreenContent(
             onSecondIconClick = { listener.onShareIconClick() },
             onThirdIconClick = { listener.onFavoriteClick(uiState.seriesId) },
             isFavorite = uiState.isFavourite
-        )if (uiState.showSnackBar) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            MovioSnakBar(
-                message = stringResource(uiState.errorResMessageId),
-                duration = ToastDuration.SHORT,
-                onDismiss = { listener.onDismissSnackBar() },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(Theme.color.surfaces.surfaceContainer)
-
-            )}
+        )
+        if (uiState.showSnackBar) {
+            Box(modifier = Modifier
+                .fillMaxSize()) {
+                MovioSnakBar(
+                    message = stringResource(uiState.errorResMessageId),
+                    duration = ToastDuration.SHORT,
+                    onDismiss = { listener.onDismissSnackBar() },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                )
+            }
         }
     }
 }
