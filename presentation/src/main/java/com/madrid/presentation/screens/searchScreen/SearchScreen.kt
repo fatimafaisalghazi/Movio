@@ -1,7 +1,7 @@
 package com.madrid.presentation.screens.searchScreen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -112,6 +112,7 @@ fun SearchScreen(
                 viewModel.updateSearchQuery(query)
 
             },
+            clearSearchQuery  =  viewModel::clearSearchQuery,
             onMovieClick = { movie ->
                 navController.navigate(Destinations.MovieDetailsScreen(movie.id.toInt()))
             },
@@ -178,6 +179,7 @@ fun ContentSearchScreen(
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
     searchQuery: String = "",
     onSearchQueryChange: (String) -> Unit,
+    clearSearchQuery : () -> Unit = {},
     onSearchBarClick: () -> Unit = {},
     onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
     searchHistory: List<String>,
@@ -205,6 +207,11 @@ fun ContentSearchScreen(
     var isFocused by remember { mutableStateOf(false) }
     var isWrite by remember { mutableStateOf(false) }
 
+    BackHandler(enabled = isFocused || searchQuery.isNotEmpty() ) {
+        clearSearchQuery()
+        focusManager.clearFocus(force = true)
+        isFocused = false
+    }
 
     LaunchedEffect(isDoAction) {
         if (isPressSearchIconInKeyboard == 1) {
@@ -217,7 +224,7 @@ fun ContentSearchScreen(
                 .collect { query ->
                     isWrite = false
                     if (query.isNotBlank() && isChangeSearchQuery) {
-                        ////////////////////////
+                        //ToDo suggestion search word
                     }
                 }
         }
@@ -256,7 +263,7 @@ fun ContentSearchScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp),
-                    onClickEndIcon = { onSearchQueryChange("") },
+                    onClickEndIcon = { clearSearchQuery() },
                     onClickInputTextField = { isFocused = true },
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Search

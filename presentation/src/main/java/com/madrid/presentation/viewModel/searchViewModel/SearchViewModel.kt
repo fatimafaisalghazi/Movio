@@ -75,6 +75,16 @@ class SearchViewModel @Inject constructor(
         onChangeRecentSearchUiState()
 
     }
+
+    fun clearSearchQuery(){
+        updateState { searchScreenState ->
+            searchScreenState.copy(
+                searchUiState = searchScreenState.searchUiState.copy(
+                    searchQuery = "",
+                )
+            )
+        }
+    }
     fun addRecentSearch(recentSearch: String) {
         tryToExecute(
             function = {
