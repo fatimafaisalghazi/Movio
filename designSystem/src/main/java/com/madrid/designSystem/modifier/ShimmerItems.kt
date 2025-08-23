@@ -199,7 +199,6 @@ fun ShimmerHorizontalCard(
             secondaryText = secondaryTextForCustomTextTitle,
             endIcon = endIconForCustomTextTitle,
             onSeeAllClick = onSeeAllClick,
-            isListEmpty = isLoading
         )
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),

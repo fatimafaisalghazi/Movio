@@ -34,11 +34,10 @@ fun MovioText(
     Text(
         text = text,
         textAlign = textAlign,
-        style = if (brush != null) {
-            textStyle.copy(brush = brush)
-        } else {
-            textStyle.copy(color = color)
-        },
+        style = if (brush != null)
+            { textStyle.copy(brush = brush) }
+        else
+            { textStyle.copy(color = color) },
         modifier = modifier,
         maxLines = maxLines,
         overflow = overflow
@@ -48,29 +47,27 @@ fun MovioText(
 @Composable
 fun MovioRecentSearchText(
     text: AnnotatedString,
-    modifier: Modifier = Modifier,
     textStyle: TextStyle,
-    maxLines: Int = Int.MAX_VALUE,
-    textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Ellipsis,
     startIcon: Painter,
     endIcon: Painter,
-    onEndIconClick: () -> Unit
+    modifier: Modifier = Modifier,
+    onEndIconClick: () -> Unit,
+    textAlign: TextAlign? = null,
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Ellipsis
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-
         MovioIcon(
             painter = startIcon,
             contentDescription = "start icon",
             tint = Theme.color.surfaces.onSurfaceVariant,
             modifier = Modifier
                 .padding(end = 8.dp)
-                .size(24.dp)
+                .size(size = 24.dp)
         )
 
         Text(
@@ -87,7 +84,7 @@ fun MovioRecentSearchText(
             contentDescription = "end icon",
             tint = Theme.color.surfaces.onSurfaceVariant,
             modifier = Modifier
-                .size(24.dp)
+                .size(size = 24.dp)
                 .clickable { onEndIconClick() }
         )
     }

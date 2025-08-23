@@ -197,7 +197,7 @@ private fun CategorySection(
     FilterBar(
         modifier = modifier,
         contentHorizontalPadding = 16.dp,
-        items = displayedCategories.map { it.name },
+        tabs = displayedCategories.map { it.name },
         selectedItem = selectedCategory?.name ?: stringResource(R.string.all),
         onItemClick = { category ->
             onCategorySelected(
@@ -219,7 +219,7 @@ private fun SortingSection(
     FilterBar(
         modifier = modifier,
         contentHorizontalPadding = contentHorizontalPadding,
-        items = SortingType.entries.map { stringResource(it.value) },
+        tabs = SortingType.entries.map { stringResource(it.value) },
         selectedItem = stringResource(sortingType.value),
         onItemClick = { sortingValue ->
             val sorting =

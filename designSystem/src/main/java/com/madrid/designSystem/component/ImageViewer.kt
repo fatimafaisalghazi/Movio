@@ -15,59 +15,20 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import com.madrid.designSystem.R
 
-/**
- * A customizable image viewer component that uses SubcomposeAsyncImage for efficient image loading.
- * Passes through all the exact same parameters as SubcomposeAsyncImage.
- *
- * @param model Either an [ImageRequest] or the [ImageRequest.data] value.
- * @param contentDescription Text used by accessibility services to describe what this image represents.
- * @param modifier Modifier used to adjust the layout algorithm or draw decoration content.
- * @param loading An optional composable that is displayed while the image is loading.
- * @param success An optional composable that is displayed when the image is successfully loaded.
- * @param error An optional composable that is displayed when the image fails to load.
- * @param onLoading Called when the image request begins loading.
- * @param onSuccess Called when the image request completes successfully.
- * @param onError Called when the image request completes unsuccessfully.
- * @param alignment Optional alignment parameter used to place the [AsyncImagePainter] in the given bounds defined by the width and height.
- * @param contentScale Optional scale parameter used to determine the aspect ratio scaling to be used if the bounds are a different size from the intrinsic size of the image.
- * @param alpha Optional opacity to be applied to the image when it is rendered onscreen.
- * @param colorFilter Optional [ColorFilter] to apply for the image when it is rendered onscreen.
- * @param filterQuality Sampling algorithm applied to a bitmap when it is scaled and drawn into the destination.
- */
+
 @Composable
 fun ImageViewer(
     model: Any?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    loading: (@Composable () -> Unit)? = {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(shape = RoundedCornerShape(8.dp))
-                .shimmerEffect(),
-        )
-    },
+    loading: (@Composable () -> Unit)? = { LoadingShimmerEffect() },
     success: (@Composable () -> Unit)? = null,
-    error: (@Composable () -> Unit)? = {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(R.drawable.image_placeholder),
-                contentDescription = stringResource(R.string.image_loading_error),
-                modifier = Modifier.fillMaxSize(),
-                alignment = Alignment.Center,
-                contentScale = ContentScale.FillBounds,
-            )
-        }
-    },
+    error: (@Composable () -> Unit)? = { ErrorImagePlaceHolder() },
     onLoading: (() -> Unit)? = null,
     onSuccess: (() -> Unit)? = null,
     onError: () -> Unit = {},
@@ -92,5 +53,42 @@ fun ImageViewer(
         alpha = alpha,
         colorFilter = colorFilter,
         filterQuality = filterQuality,
+    )
+}
+
+
+@Composable
+private fun LoadingShimmerEffect(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .clip(shape = RoundedCornerShape(8.dp))
+            .shimmerEffect(),
+    )
+}
+
+@Composable
+fun ErrorImagePlaceHolder(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.image_placeholder),
+            contentDescription = stringResource(R.string.image_loading_error),
+            modifier = Modifier.fillMaxSize(),
+            alignment = Alignment.Center,
+            contentScale = ContentScale.FillBounds,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ImageViewerPreview() {
+    ImageViewer(
+        model = "https://picsum.photos/200",
+        contentDescription = "Image",
     )
 }

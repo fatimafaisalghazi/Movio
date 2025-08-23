@@ -20,7 +20,7 @@ import com.madrid.presentation.pagination.ExplorePagingSource
 import com.madrid.presentation.pagination.SearchArtistPagingSource
 import com.madrid.presentation.pagination.SearchMoviePagingSource
 import com.madrid.presentation.pagination.SearchSeriesPagingSource
-import com.madrid.presentation.screens.searchScreen.utils.FilterPagesItem
+import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.uiStateMapper.toArtistUiState
 import com.madrid.presentation.viewModel.uiStateMapper.toMovieUiState
@@ -361,7 +361,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onRefresh(
-        typeOfFilterSearch : FilterPagesItem
+        typeOfFilterSearch : SearchSections
     ) {
         updateState { current ->
             current.copy(
@@ -443,10 +443,10 @@ class SearchViewModel @Inject constructor(
         }
         else{
             when(typeOfFilterSearch){
-                FilterPagesItem.TOP_RATED -> topResult(state.value.searchUiState.searchQuery)
-                FilterPagesItem.MOVIES -> searchFilteredMovies(state.value.searchUiState.searchQuery)
-                FilterPagesItem.SERIES -> searchSeries(state.value.searchUiState.searchQuery)
-                FilterPagesItem.ARTISTS -> artists(state.value.searchUiState.searchQuery)
+                SearchSections.TOP_RATED -> topResult(state.value.searchUiState.searchQuery)
+                SearchSections.MOVIES -> searchFilteredMovies(state.value.searchUiState.searchQuery)
+                SearchSections.SERIES -> searchSeries(state.value.searchUiState.searchQuery)
+                SearchSections.ARTISTS -> artists(state.value.searchUiState.searchQuery)
             }
             updateState { current ->
                 current.copy(

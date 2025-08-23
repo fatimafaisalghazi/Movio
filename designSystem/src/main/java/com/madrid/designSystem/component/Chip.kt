@@ -40,7 +40,7 @@ fun Chip(
             Theme.color.brand.onPrimaryContainer
         else
             Theme.color.surfaces.onSurfaceVariant,
-        animationSpec = tween(200),
+        animationSpec = tween(durationMillis = 300),
         label = "tabTextColor"
     )
 
@@ -51,7 +51,7 @@ fun Chip(
 
     val underlineAlpha by animateFloatAsState(
         targetValue = if (isSelected) 1f else 0f,
-        animationSpec = tween(200),
+        animationSpec = tween(durationMillis = 300),
         label = "underlineAlpha"
     )
 
@@ -68,9 +68,7 @@ fun Chip(
         MovioText(
             modifier = Modifier
                 .widthIn(min = 48.dp)
-                .onGloballyPositioned { coordinates ->
-                    tabWidth = coordinates.size.width
-                },
+                .onGloballyPositioned { coordinates -> tabWidth = coordinates.size.width },
             text = title,
             color = textColor,
             textStyle = textStyle,
@@ -79,8 +77,8 @@ fun Chip(
 
         Box(
             modifier = Modifier
-                .height(1.dp)
-                .width(with(density) { tabWidth.toDp() })
+                .height(height = 1.dp)
+                .width(width = with(receiver = density) { tabWidth.toDp() })
                 .alpha(underlineAlpha)
                 .background(brush = Theme.color.gradients.underlineGlowBrushGradient)
         )

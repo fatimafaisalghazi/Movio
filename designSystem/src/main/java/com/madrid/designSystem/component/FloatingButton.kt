@@ -15,24 +15,23 @@ import com.madrid.designSystem.theme.Theme
 
 @Composable
 fun FloatingButton(
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     size: Int,
     icon: Painter,
-    contentDescription: String? = null
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    iconSize: Int = 32
 ) {
     FloatingActionButton(
-        modifier = modifier
-            .size(size.dp),
+        modifier = modifier.size(size = size.dp),
         onClick = onClick,
-
         backgroundColor = Theme.color.brand.primary,
         content = {
             Icon(
                 painter = icon,
                 contentDescription = contentDescription,
                 tint = Color.White,
-                modifier = Modifier.size((size / 2).dp)
+                modifier = Modifier.size(size = iconSize.dp)
             )
         }
     )
@@ -45,5 +44,6 @@ fun FloatingButtonPreview() {
         onClick = {},
         size = 60,
         icon = painterResource(id = R.drawable.add),
+        contentDescription = ""
     )
 }

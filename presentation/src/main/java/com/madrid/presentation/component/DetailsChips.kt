@@ -42,6 +42,7 @@ fun DetailsChips(
             )
             .padding(vertical = 8.dp, horizontal = 12.dp),
         contentAlignment = Alignment.Center
+        
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),

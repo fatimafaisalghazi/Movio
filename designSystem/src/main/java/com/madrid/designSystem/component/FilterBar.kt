@@ -27,7 +27,7 @@ import com.madrid.designSystem.theme.Theme
 
 @Composable
 fun FilterBar(
-    items: List<String>,
+    tabs: List<String>,
     selectedItem: String,
     onItemClick: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -42,7 +42,7 @@ fun FilterBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             state = rowState
         ) {
-            itemsIndexed(items) { index, item ->
+            itemsIndexed(tabs) { index, item ->
                 FilterChip(
                     text = item,
                     isSelected = item == selectedItem,
@@ -54,7 +54,7 @@ fun FilterBar(
             modifier = modifier
                 .padding(horizontal = contentHorizontalPadding)
         ) {
-            items.forEach { item ->
+            tabs.forEach { item ->
                 FilterChip(
                     text = item,
                     isSelected = item == selectedItem,
@@ -114,7 +114,7 @@ private fun FilterBarPreview() {
     val selected = remember { mutableStateOf("Movies") }
 
     FilterBar(
-        items = items,
+        tabs = items,
         selectedItem = selected.value,
         onItemClick = { selected.value = it },
     )
