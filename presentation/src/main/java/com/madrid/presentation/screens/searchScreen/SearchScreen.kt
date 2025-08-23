@@ -211,7 +211,6 @@ fun ContentSearchScreen(
     val focusManager = LocalFocusManager.current
     var isFocused by remember { mutableStateOf(false) }
     var isWrite by remember { mutableStateOf(false) }
-    var sizeOfSuggestionWords by remember { mutableStateOf(0) }
 
     BackHandler(enabled = isFocused || searchQuery.isNotEmpty() ) {
         clearSearchQuery()
@@ -315,7 +314,23 @@ fun ContentSearchScreen(
                 recentSearchScreen(
                     searchHistory = searchHistory,
                     searchQuery = searchQuery,
-                    onSearchItemClick = { onSearchItemClick(it) },
+                    onSearchItemClick = { itemInRecent ->
+                        onSearchItemClick(itemInRecent)
+                        isFocused = false
+                        doAction()
+                        onSearchBarClick()
+                        changeValueOfIsChangeSearchQuery()
+                        addRecentSearch(itemInRecent)
+                        when (typeOfFilterSearch) {
+                            FilterPagesItem.TOP_RATED -> onClickTopRated()
+                            FilterPagesItem.MOVIES -> onClickMovies()
+                            FilterPagesItem.SERIES -> onClickSeries()
+                            FilterPagesItem.ARTISTS -> onClickArtist()
+                        }
+
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    },
                     onRemoveItem = { onRemoveItem(it) },
                     onClearAll = { onClearAll() },
                     highlightCharactersInText = highLightRecentSearch,
