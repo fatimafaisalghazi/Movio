@@ -28,13 +28,14 @@ class LibraryViewModel @Inject constructor(
 ), LibraryInteractionListener {
 
     fun loadData() {
+        getIsGuest()
         getWatchList()
         getFavoriteList()
         getHistoryList()
-        getIsGuest()
     }
 
     fun onRefresh() {
+        getIsGuest()
         getWatchList()
         getFavoriteList()
         getHistoryList()
@@ -77,10 +78,13 @@ class LibraryViewModel @Inject constructor(
         updateState { it.copy(isSnackBarVisible = false) }
     }
 
+    override fun onTryAgainButtonClicked() {
+        loadData()
+    }
+
     fun getIsGuest() {
         updateState {
             it.copy(
-                isLoading = true,
                 errorMessage = null
             )
         }
@@ -90,7 +94,7 @@ class LibraryViewModel @Inject constructor(
             },
             onNewValue = { isGuest ->
                 updateState {
-                    it.copy(isGuest = isGuest, isLoading = false)
+                    it.copy(isGuest = isGuest, isLoading = false , errorMessage = null)
                 }
             },
             onError = { throwable -> onError(message = throwable.message) }
@@ -98,7 +102,7 @@ class LibraryViewModel @Inject constructor(
     }
 
     private fun getWatchList() {
-        setLoading(true)
+        setWatchListSectionLoading()
         tryToExecute(
             function = {
                 getWatchListUseCase()
@@ -106,8 +110,9 @@ class LibraryViewModel @Inject constructor(
             onSuccess = { watchList ->
                 updateState {
                     it.copy(
-                        isLoading = false,
-                        watchList = watchList.map { it.toWatchListUiState() }
+                        isWatchListLoading = false,
+                        watchList = watchList.map { it.toWatchListUiState() },
+                        errorMessage = null
                     )
                 }
             },
@@ -116,7 +121,7 @@ class LibraryViewModel @Inject constructor(
     }
 
     private fun getFavoriteList() {
-        setLoading(true)
+        setFavouriteSectionLoading()
         tryToExecute(
             function = {
                 getFavoriteUseCase()
@@ -124,8 +129,9 @@ class LibraryViewModel @Inject constructor(
             onSuccess = { favoriteList ->
                 updateState {
                     it.copy(
-                        isLoading = false,
-                        favoriteList = favoriteList.map { it.toMediaUiState() }
+                        isFavouriteLoading = false,
+                        favoriteList = favoriteList.map { it.toMediaUiState() },
+                        errorMessage = null
                     )
                 }
             },
@@ -134,9 +140,10 @@ class LibraryViewModel @Inject constructor(
     }
 
     private fun getHistoryList() {
+        setHistorySectionLoading()
         updateState {
             it.copy(
-                isLoading = true,
+                isHistoryLoading = true,
             )
         }
         tryToExecute(
@@ -147,8 +154,9 @@ class LibraryViewModel @Inject constructor(
             onSuccess = { historyList ->
                 updateState {
                     it.copy(
-                        isLoading = false,
-                        historyList = historyList
+                        isHistoryLoading = false,
+                        historyList = historyList,
+                        errorMessage = null
                     )
                 }
             },
@@ -156,7 +164,6 @@ class LibraryViewModel @Inject constructor(
         )
 
     }
-
 
     override fun onItemClick(itemId: String) {
         emitNewEffect(
@@ -185,11 +192,19 @@ class LibraryViewModel @Inject constructor(
         )
     }
 
-    fun setLoading(isLoading: Boolean = true) {
-        updateState { it.copy(isLoading = isLoading) }
+    fun setWatchListSectionLoading(isLoading: Boolean = true) {
+        updateState { it.copy(isWatchListLoading = isLoading) }
+    }
+
+    fun setFavouriteSectionLoading(isLoading: Boolean = true) {
+        updateState { it.copy(isFavouriteLoading = isLoading) }
+    }
+
+    fun setHistorySectionLoading(isLoading: Boolean = true) {
+        updateState { it.copy(isHistoryLoading = isLoading) }
     }
 
     fun onError(message: String) {
-        updateState { it.copy(isLoading = false, errorMessage = message) }
+        updateState { it.copy(errorMessage = message) }
     }
 }
