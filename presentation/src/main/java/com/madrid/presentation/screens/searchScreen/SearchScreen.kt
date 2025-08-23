@@ -1,5 +1,6 @@
 package com.madrid.presentation.screens.searchScreen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -72,6 +73,7 @@ fun SearchScreen(
         ContentSearchScreen(
             isError = uiState.searchUiState.isError,
             typeOfFilterSearch = typeOfFilterSearch,
+            suggestionListSize = uiState.suggestionListSize,
             onSeriesClick = { seriesId ->
                 navController.navigate(
                     Destinations.SeriesDetailsScreen(
@@ -80,6 +82,7 @@ fun SearchScreen(
                     )
                 )
             },
+            getSuggestionKeywords =viewModel::getSuggestionKeywords,
             addRecentSearch = {
                 viewModel.addRecentSearch(it)
             },
@@ -170,11 +173,13 @@ fun ContentSearchScreen(
     movies: LazyPagingItems<SearchScreenState.MovieUiState>,
     series: LazyPagingItems<SearchScreenState.SeriesUiState>,
     artist: LazyPagingItems<SearchScreenState.ArtistUiState>,
+    getSuggestionKeywords : () -> Unit = {  } ,
     onClickTopRated: () -> Unit,
     onClickMovies: () -> Unit,
     onClickSeries: () -> Unit,
     onClickArtist: () -> Unit,
     modifier: Modifier = Modifier,
+    suggestionListSize : Int = 0 ,
     forYouMovies: List<SearchScreenState.MovieUiState> = emptyList(),
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
     searchQuery: String = "",
@@ -206,6 +211,7 @@ fun ContentSearchScreen(
     val focusManager = LocalFocusManager.current
     var isFocused by remember { mutableStateOf(false) }
     var isWrite by remember { mutableStateOf(false) }
+    var sizeOfSuggestionWords by remember { mutableStateOf(0) }
 
     BackHandler(enabled = isFocused || searchQuery.isNotEmpty() ) {
         clearSearchQuery()
@@ -224,7 +230,8 @@ fun ContentSearchScreen(
                 .collect { query ->
                     isWrite = false
                     if (query.isNotBlank() && isChangeSearchQuery) {
-                        //ToDo suggestion search word
+                        val res = getSuggestionKeywords()
+                        Log.e("MY_TAG" , " the result size $res")
                     }
                 }
         }
@@ -330,7 +337,8 @@ fun ContentSearchScreen(
 
                         keyboardController?.hide()
                         focusManager.clearFocus()
-                    }
+                    },
+                    sizeOfSuggestionKeywords = suggestionListSize
                 )
             }
             if (isFocused && searchHistory.isEmpty()) {
