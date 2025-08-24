@@ -6,6 +6,7 @@ import com.madrid.data.dataSource.remote.dto.artist.SearchArtistResponse
 import com.madrid.data.dataSource.remote.dto.authentication.AccountDetailsResponse
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.keywordSuggestion.KeyWordsSuggestionsResponse
 import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListDto
 import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
@@ -108,6 +109,7 @@ interface RemoteDataSource {
 
     suspend fun getUserRatingForMovie(sessionId: String): RatingMovieResponse
     suspend fun getUserRatingForSeries(sessionId: String): RatingSeriesResponse
+    suspend fun getSuggestionWords(query: String): KeyWordsSuggestionsResponse
 
     // region addToFavorite
     suspend fun setMovieFavoriteStatus(movieId: Int, sessionId: String, isFavorite: Boolean)
