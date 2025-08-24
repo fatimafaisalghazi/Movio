@@ -9,6 +9,7 @@ import com.madrid.data.dataSource.remote.dto.authentication.CreateSessionRawBody
 import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.common.TrailerResult
 import com.madrid.data.dataSource.remote.dto.genre.RemoteGenreDto
+import com.madrid.data.dataSource.remote.dto.keywordSuggestion.KeyWordsSuggestionsResponse
 import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
 import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListDto
@@ -165,6 +166,8 @@ class RemoteDataSourceImpl @Inject constructor(
             ).results
         }
     }
+    // endregion
+
 
 
     // Artist
@@ -360,5 +363,9 @@ class RemoteDataSourceImpl @Inject constructor(
     override suspend fun getUserRatingForSeries(sessionId: String): RatingSeriesResponse {
         val accountId = api.getAccountDetails(sessionId).id
         return responseWrapper { api.getUserRatingForSeries(accountId, sessionId) }
+    }
+
+    override suspend fun getSuggestionWords(query: String): KeyWordsSuggestionsResponse {
+        return responseWrapper { api.getSuggestionsKeywords(query) }
     }
 }

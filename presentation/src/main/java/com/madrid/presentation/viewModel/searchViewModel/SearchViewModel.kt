@@ -16,6 +16,7 @@ import com.madrid.domain.usecase.search.GetRecentSearchesUseCase
 import com.madrid.domain.usecase.search.GetRecommendedMovieUseCase
 import com.madrid.domain.usecase.search.GetSeriesByQueryUseCase
 import com.madrid.domain.usecase.search.RemoveRecentSearchUseCase
+import com.madrid.domain.usecase.suggestKeywords.GetSuggestionKeywordsUseCase
 import com.madrid.presentation.pagination.ExplorePagingSource
 import com.madrid.presentation.pagination.SearchArtistPagingSource
 import com.madrid.presentation.pagination.SearchMoviePagingSource
@@ -41,7 +42,8 @@ class SearchViewModel @Inject constructor(
     private val getRecentSearchesUseCase: GetRecentSearchesUseCase,
     private val addRecentSearchUseCase: AddRecentSearchUseCase,
     private val removeRecentSearchUseCase: RemoveRecentSearchUseCase,
-    private val clearAllRecentSearchesUseCase: ClearAllRecentSearchesUseCase
+    private val clearAllRecentSearchesUseCase: ClearAllRecentSearchesUseCase,
+    private val getSuggestionKeywordsUseCase: GetSuggestionKeywordsUseCase
 ) : BaseViewModel<SearchScreenState, Nothing>(
     SearchScreenState()
 ) {
@@ -49,6 +51,27 @@ class SearchViewModel @Inject constructor(
     init {
         loadRecentSearches()
         loadInitialData()
+    }
+    fun getSuggestionKeywords() {
+        val query = state.value.searchUiState.searchQuery
+        if(query.isNotBlank() && query.isNotEmpty()){
+            tryToExecute(
+                function = {getSuggestionKeywordsUseCase(query.trim())},
+                onSuccess = {suggestionKeyWords->
+                    updateState {searchScreenState->
+                        searchScreenState.copy(
+                            allRecentSearchTexts = suggestionKeyWords + searchScreenState.allRecentSearchTexts,
+                            suggestionListSize = suggestionKeyWords.size
+                        )
+                    }
+                    onChangeRecentSearchUiState()
+
+                            },
+                onError = {
+
+                },
+            )
+        }
     }
 
     private fun loadRecentSearches() {
@@ -72,8 +95,20 @@ class SearchViewModel @Inject constructor(
 
             )
         }
+        loadRecentSearches()
         onChangeRecentSearchUiState()
 
+    }
+
+    fun clearSearchQuery(){
+        updateState { searchScreenState ->
+            searchScreenState.copy(
+                searchUiState = searchScreenState.searchUiState.copy(
+                    searchQuery = "",
+                )
+            )
+        }
+        loadRecentSearches()
     }
     fun addRecentSearch(recentSearch: String) {
         tryToExecute(
@@ -274,6 +309,7 @@ class SearchViewModel @Inject constructor(
         updateState {searchScreenState->
             searchScreenState.copy(
                 allRecentSearchTexts = result,
+                suggestionListSize = 0
             )
         }
         onChangeRecentSearchUiState()
