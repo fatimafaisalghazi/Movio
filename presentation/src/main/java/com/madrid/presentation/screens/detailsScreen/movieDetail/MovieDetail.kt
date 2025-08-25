@@ -316,6 +316,9 @@ fun MovieDetailsScreen(
 
             TopAppBar(
                 text = null,
+                startIcon = drawable.arrow_left,
+                preEndIcon = drawable.share_arrow,
+                endIcon = drawable.outline_heart,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(animatedBrush)
@@ -352,7 +355,6 @@ fun MovieDetailsScreen(
                     }
                 )
             }
-
             MovioBottomSheet(
                 show = showAddRatingBottomSheet,
                 onDismiss = { showAddRatingBottomSheet = false },

@@ -352,6 +352,9 @@ private fun SeriesDetailsScreenContent(
 
         TopAppBar(
             text = null,
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            preEndIcon = com.madrid.designSystem.R.drawable.share_arrow,
+            endIcon = com.madrid.designSystem.R.drawable.outline_heart,
             modifier = Modifier
                 .background(animatedBrush)
                 .padding(start = 16.dp, top = 36.dp, end = 16.dp),
