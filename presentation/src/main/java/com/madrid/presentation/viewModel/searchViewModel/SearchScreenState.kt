@@ -12,6 +12,7 @@ data class SearchScreenState(
     val recentSearchUiState: List<String> = emptyList(),
     val allRecentSearchTexts : List<String> = emptyList(),
     val isDoAction : Boolean = false,
+    val suggestionListSize : Int = 0 ,
     val filteredScreenUiState: FilteredScreenUiState = FilteredScreenUiState()
 ) {
     data class SearchUiState(

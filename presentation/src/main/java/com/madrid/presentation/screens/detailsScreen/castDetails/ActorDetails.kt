@@ -35,8 +35,8 @@ import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailS
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.viewModel.detailsViewModel.ActorDetailsViewModel
-import com.madrid.presentation.viewModel.detailsViewModel.MovieDetailsUiState
+import com.madrid.presentation.viewModel.detailsViewModel.actor.ActorDetailsViewModel
+import com.madrid.presentation.viewModel.detailsViewModel.actor.NetworkDetailsUiState
 
 
 @Composable
@@ -73,7 +73,7 @@ fun ActorDetails(
                 DialogWithButtonLayout(
                     title = stringResource(R.string.internet_is_not_available),
                     description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                    image = R.drawable.img_no_internet,
+                    image = Theme.drawables.noInternetId,
                     buttonText = stringResource(R.string.try_again),
                     onClick = {
                         viewModel.retryLoadData()
@@ -91,7 +91,7 @@ fun ActorDetails(
 
 @Composable
 private fun ActorDetailsContent(
-    actor: MovieDetailsUiState.CastUiState,
+    actor: NetworkDetailsUiState.CastUiState,
     onBackClick: () -> Unit,
     onKnownForClick: (Int) -> Unit
 ) {

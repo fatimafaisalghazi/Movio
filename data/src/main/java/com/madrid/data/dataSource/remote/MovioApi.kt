@@ -11,6 +11,7 @@ import com.madrid.data.dataSource.remote.dto.authentication.SessionIdResponse
 import com.madrid.data.dataSource.remote.dto.common.AddToFavoriteRequest
 import com.madrid.data.dataSource.remote.dto.common.TrailerResponse
 import com.madrid.data.dataSource.remote.dto.genre.GenresResponse
+import com.madrid.data.dataSource.remote.dto.keywordSuggestion.KeyWordsSuggestionsResponse
 import com.madrid.data.dataSource.remote.dto.list.AddToListRequest
 import com.madrid.data.dataSource.remote.dto.list.CreateListResponse
 import com.madrid.data.dataSource.remote.dto.list.ListOperationResponse
@@ -329,4 +330,9 @@ interface MovioApi {
         @Query("session_id") sessionId: String,
         @Body removeItemRequest: RemoveMovieDto
     )
+
+    @GET("search/keyword")
+    suspend fun getSuggestionsKeywords(
+        @Query("query") query: String
+    ) : KeyWordsSuggestionsResponse
 }

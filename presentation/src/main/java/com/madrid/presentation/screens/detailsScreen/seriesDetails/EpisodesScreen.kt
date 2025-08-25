@@ -1,6 +1,8 @@
 package com.madrid.presentation.screens.detailsScreen.seriesDetails
 
+import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -36,30 +38,29 @@ import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailS
 import com.madrid.presentation.component.movioCards.MovioEpisodesCard
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.viewModel.detailsViewModel.EpisodeUiState
+import com.madrid.presentation.viewModel.detailsViewModel.seriesDetails.SeriesDetailsInteractionListener
+import com.madrid.presentation.viewModel.detailsViewModel.seriesDetails.SeriesDetailsViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
-import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsViewModel
 
 @Composable
-fun EpisodesScreen(viewModel: SeriesDetailsViewModel = hiltViewModel()) {
+fun EpisodesScreen(viewModel: SeriesDetailsViewModel = hiltViewModel()
+) {
     val uiState by viewModel.state.collectAsState()
+    val interactionListener = viewModel as SeriesDetailsInteractionListener
     val navController = LocalNavController.current
     val context = LocalContext.current
+
     EpisodesScreenContent(
         uiState = uiState,
         onSeasonSelection = viewModel::updateSelectedSeason,
         onClickEpisode = { episode ->
-            viewModel.loadEpisodeTrailer(
+
+            interactionListener.onEpisodePlayItClick(
                 seriesId = uiState.seriesId,
                 seasonNumber = uiState.selectedSeasonUiState.seasonNumber,
                 episodeNumber = episode.episodeNumber
             ) { trailerKey ->
-                trailerKey?.let {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        "https://www.youtube.com/watch?v=$it".toUri()
-                    )
-                    context.startActivity(intent)
-                }
+                openTrailer(trailerKey, context)
             }
         },
         onClickBack = { navController.popBackStack() }
@@ -93,7 +94,7 @@ fun EpisodesScreenContent(
                         .background(Theme.color.surfaces.surface)
                 ) {
                     MoviePosterDetailScreen(
-                        imageUrl = uiState.topImageUrl,
+                        imageUrl = uiState.selectedSeasonUiState.imageUrl,
                         modifier = Modifier.fillMaxSize()
                     )
                     Box(
@@ -132,7 +133,10 @@ fun EpisodesScreenContent(
                     uiState.selectedSeasonUiState.seasonNumber.toString()
                 )
                 var selectedItem by remember { mutableStateOf(seasonLabel) }
-                val seasonNumbers = (1..uiState.currentSeasonsUiStates.size).toList()
+
+                val firstSeasonNumber = uiState.currentSeasonsUiStates.firstOrNull()?.seasonNumber ?: 1
+                val lastSeasonNumber = uiState.currentSeasonsUiStates.size - (if (firstSeasonNumber == 0) 1 else 0)
+                val seasonNumbers = (firstSeasonNumber..lastSeasonNumber).toList()
 
                 if (uiState.currentSeasonsUiStates.isNotEmpty()) {
                     CustomDropdown(
@@ -166,5 +170,15 @@ fun EpisodesScreenContent(
                 modifier = Modifier.padding(bottom = 12.dp, start = 16.dp, end = 16.dp)
             )
         }
+    }
+}
+
+private fun openTrailer(trailerKey:String?,context:Context){
+    trailerKey?.let {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "https://www.youtube.com/watch?v=$it".toUri()
+        )
+        context.startActivity(intent)
     }
 }

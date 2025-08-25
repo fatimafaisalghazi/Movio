@@ -4,11 +4,14 @@ import com.madrid.domain.usecase.authentication.LoginUseCase
 import com.madrid.domain.usecase.movie.CreateMovieListUseCase
 import com.madrid.domain.usecase.movie.GetAllMoviesInHistoryUseCase
 import com.madrid.domain.usecase.movie.GetFavoriteMoviesUseCase
+import com.madrid.domain.usecase.series.GetAllSeriesInHistoryUseCase
 import com.madrid.domain.usecase.watchList.GetWatchListsUseCase
 import com.madrid.presentation.R
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.libraryViewModel.viewAll.factory.ViewAllType
+import com.madrid.presentation.viewModel.shared.WatchListUiState
 import com.madrid.presentation.viewModel.shared.toMediaUiState
+import com.madrid.presentation.viewModel.shared.toWatchListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -16,21 +19,23 @@ import javax.inject.Inject
 class LibraryViewModel @Inject constructor(
     private val getWatchListUseCase: GetWatchListsUseCase,
     private val getFavoriteUseCase: GetFavoriteMoviesUseCase,
-    private val getHistoryUseCase: GetAllMoviesInHistoryUseCase,
+    private val getMovieHistoryUseCase: GetAllMoviesInHistoryUseCase,
+    private val getSeriesHistoryUseCase: GetAllSeriesInHistoryUseCase,
     private val isLoggedInUseCase: LoginUseCase,
     private val createMovieListUseCase: CreateMovieListUseCase
 ) : BaseViewModel<LibraryScreenState, LibraryScreenEffect>(
     LibraryScreenState()
 ), LibraryInteractionListener {
 
-    init {
+    fun loadData() {
+        getIsGuest()
         getWatchList()
         getFavoriteList()
         getHistoryList()
-        getIsGuest()
     }
 
     fun onRefresh() {
+        getIsGuest()
         getWatchList()
         getFavoriteList()
         getHistoryList()
@@ -54,14 +59,7 @@ class LibraryViewModel @Inject constructor(
         tryToExecute(
             function = { createMovieListUseCase(name) },
             onSuccess = { onCreateSuccess() },
-            onError = { throwable ->
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = throwable.message.toString()
-                    )
-                }
-            },
+            onError = { throwable -> onError(message = throwable.message) },
         )
     }
 
@@ -80,10 +78,13 @@ class LibraryViewModel @Inject constructor(
         updateState { it.copy(isSnackBarVisible = false) }
     }
 
+    override fun onTryAgainButtonClicked() {
+        loadData()
+    }
+
     fun getIsGuest() {
         updateState {
             it.copy(
-                isLoading = true,
                 errorMessage = null
             )
         }
@@ -93,23 +94,15 @@ class LibraryViewModel @Inject constructor(
             },
             onNewValue = { isGuest ->
                 updateState {
-                    it.copy(isGuest = isGuest, isLoading = false)
+                    it.copy(isGuest = isGuest, isLoading = false , errorMessage = null)
                 }
             },
-            onError = { throwable ->
-                updateState {
-                    it.copy(errorMessage = throwable.message.toString())
-                }
-            }
+            onError = { throwable -> onError(message = throwable.message) }
         )
     }
 
     private fun getWatchList() {
-        updateState {
-            it.copy(
-                isLoading = true,
-            )
-        }
+        setWatchListSectionLoading()
         tryToExecute(
             function = {
                 getWatchListUseCase()
@@ -117,28 +110,18 @@ class LibraryViewModel @Inject constructor(
             onSuccess = { watchList ->
                 updateState {
                     it.copy(
-                        isLoading = false,
-                        watchList = watchList.map { it.toWatchListState() }
+                        isWatchListLoading = false,
+                        watchList = watchList.map { it.toWatchListUiState() },
+                        errorMessage = null
                     )
                 }
             },
-            onError = { throwable ->
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = throwable.message.toString()
-                    )
-                }
-            },
+            onError = { throwable -> onError(throwable.message) },
         )
     }
 
     private fun getFavoriteList() {
-        updateState {
-            it.copy(
-                isLoading = true,
-            )
-        }
+        setFavouriteSectionLoading()
         tryToExecute(
             function = {
                 getFavoriteUseCase()
@@ -146,52 +129,41 @@ class LibraryViewModel @Inject constructor(
             onSuccess = { favoriteList ->
                 updateState {
                     it.copy(
-                        isLoading = false,
-                        favoriteList = favoriteList.map { it.toMediaUiState() }
+                        isFavouriteLoading = false,
+                        favoriteList = favoriteList.map { it.toMediaUiState() },
+                        errorMessage = null
                     )
                 }
             },
-            onError = { throwable ->
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = throwable.message.toString()
-                    )
-                }
-            },
+            onError = { throwable -> onError(throwable.message) },
         )
     }
 
     private fun getHistoryList() {
+        setHistorySectionLoading()
         updateState {
             it.copy(
-                isLoading = true,
+                isHistoryLoading = true,
             )
         }
         tryToExecute(
             function = {
-                getHistoryUseCase()
+                getMovieHistoryUseCase().map { it.toMediaUiState() } +
+                        getSeriesHistoryUseCase().map { it.toMediaUiState() }
             },
             onSuccess = { historyList ->
                 updateState {
                     it.copy(
-                        isLoading = false,
-                        historyList = historyList.map { it.toMediaUiState() }
+                        isHistoryLoading = false,
+                        historyList = historyList,
+                        errorMessage = null
                     )
                 }
             },
-            onError = { throwable ->
-                updateState {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = throwable.message.toString()
-                    )
-                }
-            },
+            onError = { throwable -> onError(throwable.message) },
         )
 
     }
-
 
     override fun onItemClick(itemId: String) {
         emitNewEffect(
@@ -199,7 +171,7 @@ class LibraryViewModel @Inject constructor(
         )
     }
 
-    override fun onItemWatchListClick(watchListItem: WatchListState) {
+    override fun onItemWatchListClick(watchListItem: WatchListUiState) {
         emitNewEffect(
             LibraryScreenEffect.NavigateToWatchListDetails(
                 watchListId = watchListItem.id,
@@ -220,4 +192,19 @@ class LibraryViewModel @Inject constructor(
         )
     }
 
+    fun setWatchListSectionLoading(isLoading: Boolean = true) {
+        updateState { it.copy(isWatchListLoading = isLoading) }
+    }
+
+    fun setFavouriteSectionLoading(isLoading: Boolean = true) {
+        updateState { it.copy(isFavouriteLoading = isLoading) }
+    }
+
+    fun setHistorySectionLoading(isLoading: Boolean = true) {
+        updateState { it.copy(isHistoryLoading = isLoading) }
+    }
+
+    fun onError(message: String) {
+        updateState { it.copy(errorMessage = message) }
+    }
 }

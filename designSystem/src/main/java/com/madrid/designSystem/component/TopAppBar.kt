@@ -48,7 +48,7 @@ fun TopAppBar(
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(18.dp)
         ) {
             preEndIcon?.let { iconRes ->
                 PreEndIcon(iconRes = iconRes, onSecondIconClick = onPreEndIconClick)

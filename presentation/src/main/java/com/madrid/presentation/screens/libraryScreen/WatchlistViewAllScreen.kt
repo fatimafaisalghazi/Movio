@@ -26,16 +26,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.R
-import com.madrid.presentation.component.layout.DialogWithButtonLayout
-import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.designSystem.component.FloatingButton
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.modifier.shimmerEffect
+import com.madrid.designSystem.theme.Theme
+import com.madrid.presentation.component.addtolist.CreateListBottomSheet
+import com.madrid.presentation.component.addtolist.SuccessNotificationRow
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.presentation.component.videoLibrary.VideoLibrary
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.screens.addtolist.CreateListBottomSheet
-import com.madrid.presentation.screens.addtolist.SuccessNotificationRow
 import com.madrid.presentation.viewModel.libraryViewModel.watchlistViewAll.WatchListViewAllInteractionListener
 import com.madrid.presentation.viewModel.libraryViewModel.watchlistViewAll.WatchlistViewAllEffect
 import com.madrid.presentation.viewModel.libraryViewModel.watchlistViewAll.WatchlistViewAllUiState
@@ -53,9 +54,7 @@ fun WatchlistViewAllScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 is WatchlistViewAllEffect.NavigateBack -> {
-                    navController.navigate(
-                        Destinations.LibraryScreen
-                    )
+                    navController.navigateUp()
                 }
 
                 is WatchlistViewAllEffect.NavigateToDetails -> {
@@ -177,7 +176,7 @@ private fun ErrorContent(onClick: () -> Unit = {}) {
     DialogWithButtonLayout(
         title = stringResource(presentationR.string.internet_is_not_available),
         description = stringResource(presentationR.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-        image = R.drawable.no_internet,
+        image = Theme.drawables.noInternetId,
         imageSize = 150,
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -193,7 +192,7 @@ private fun EmptyListContent() {
     EmptySearchLayout(
         title = stringResource(presentationR.string.nothing_here_yet),
         description = stringResource(presentationR.string.add_movies_and_tv_shows_to_build_your_personal_watchlist), //stringResource(presentationR.string.no_results_found),
-        image = R.drawable.empty,
+        image = Theme.drawables.emptyLayoutId,
         imageSize = 180,
         modifier = Modifier
             .fillMaxSize()

@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,18 +26,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.Theme
-
 @Composable
 fun BasicTextInputField(
     value: String,
@@ -46,6 +51,7 @@ fun BasicTextInputField(
     endIconPainter: Painter?,
     modifier: Modifier = Modifier,
     onClickEndIcon: () -> Unit = { },
+    onClickInputTextField : () -> Unit = {},
     visualTransformation: VisualTransformation = VisualTransformation.None,
     borderBrushColors: Brush? = Theme.color.gradients.borderGradient,
     errorBorderBrush: Brush = Theme.color.gradients.errorBorderGradient,
@@ -59,9 +65,24 @@ fun BasicTextInputField(
         autoCorrect = false,
         keyboardType = KeyboardType.Password
     ),
-    keyboardActions : KeyboardActions= KeyboardActions.Default
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
+    var textFieldValue by remember {
+        mutableStateOf(TextFieldValue(text = value))
+    }
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(value) {
+        if (textFieldValue.text != value) {
+            textFieldValue = TextFieldValue(
+                text = value,
+                selection = TextRange(value.length)
+            )
+        }
+    }
+
     val isFocused by interactionSource.collectIsFocusedAsState()
+    val focusManager = LocalFocusManager.current
 
     val borderModifier = when {
         isError -> Modifier.border(
@@ -70,7 +91,7 @@ fun BasicTextInputField(
             shape = RoundedCornerShape(8.dp)
         )
 
-        (isFocused || value.isNotEmpty()) && borderBrushColors != null -> Modifier.border(
+        isFocused  && borderBrushColors != null -> Modifier.border(
             width = 1.dp,
             brush = borderBrushColors,
             shape = RoundedCornerShape(8.dp)
@@ -80,10 +101,13 @@ fun BasicTextInputField(
     }
 
     BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
+        value = textFieldValue,
+        onValueChange = { newValue ->
+            textFieldValue = newValue
+            onValueChange(newValue.text)
+        },
         textStyle = Theme.textStyle.label.smallRegular14.copy(
-            color = if (isFocused || value.isNotEmpty())
+            color = if (isFocused || textFieldValue.text.isNotEmpty())
                 Theme.color.surfaces.onSurface
             else
                 Theme.color.surfaces.onSurfaceContainer,
@@ -94,6 +118,8 @@ fun BasicTextInputField(
         visualTransformation = visualTransformation,
         modifier = modifier
             .fillMaxWidth()
+            .focusRequester(focusRequester)
+            .onFocusChanged { }
             .then(borderModifier)
             .background(Theme.color.surfaces.surfaceContainer, RoundedCornerShape(8.dp))
             .padding(horizontal = 12.dp, vertical = 14.dp),
@@ -119,8 +145,17 @@ fun BasicTextInputField(
                     )
                 }
 
-                Box(modifier = Modifier.weight(1f)) {
-                    if (value.isEmpty()) {
+                Box(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .clickable {
+                                focusManager.clearFocus(force = true)
+                                focusRequester.requestFocus()
+                                onClickInputTextField()
+                            }
+                ) {
+                    if (textFieldValue.text.isEmpty()) {
                         Text(
                             text = hintText,
                             style = Theme.textStyle.label.smallRegular14,

@@ -10,11 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.component.chip.DetailsChips
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
-import com.madrid.designSystem.component.chip.DetailsChips
 
 @Composable
 fun MovieDetailsHeader(
@@ -52,26 +51,32 @@ fun MovieDetailsHeader(
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
             rate?.let {
-                DetailsChips(
-                    icon = painterResource(R.drawable.bold_star),
-                    iconTint = Theme.color.system.warning,
-                    text = it,
-                )
+                if (it.isNotEmpty()) {
+                    DetailsChips(
+                        icon = painterResource(com.madrid.designSystem.R.drawable.bold_star),
+                        iconTint = Theme.color.system.warning,
+                        text = rate,
+                    )
+                }
             }
 
             time?.let {
-                DetailsChips(
-                    icon = painterResource(R.drawable.outline_clock_circle),
-                    iconTint = Theme.color.surfaces.onSurfaceVariant,
-                    text = it,
-                )
+                if (it.isNotEmpty()) {
+                    DetailsChips(
+                        icon = painterResource(com.madrid.designSystem.R.drawable.outline_clock_circle),
+                        iconTint = Theme.color.surfaces.onSurfaceVariant,
+                        text = time,
+                    )
+                }
             }
 
-            DetailsChips(
-                icon = painterResource(R.drawable.outline_calendar),
-                iconTint = Theme.color.surfaces.onSurfaceVariant,
-                text = date,
-            )
+            if (date.isNotEmpty()) {
+                DetailsChips(
+                    icon = painterResource(com.madrid.designSystem.R.drawable.outline_calendar),
+                    iconTint = Theme.color.surfaces.onSurfaceVariant,
+                    text = date,
+                )
+            }
         }
     }
 }
