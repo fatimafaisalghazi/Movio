@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioArtistsCard

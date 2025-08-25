@@ -26,11 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.DialogWithButtonLayout
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.designSystem.component.FloatingButton
 import com.madrid.designSystem.component.TopAppBar
-import com.madrid.designSystem.component.shimmerEffect
+import com.madrid.designSystem.modifier.shimmerEffect
 import com.madrid.presentation.component.videoLibrary.VideoLibrary
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController

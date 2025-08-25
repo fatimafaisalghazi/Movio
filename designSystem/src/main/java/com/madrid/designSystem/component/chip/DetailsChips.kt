@@ -1,4 +1,4 @@
-package com.madrid.presentation.component
+package com.madrid.designSystem.component.chip
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,11 +16,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.madrid.designSystem.theme.Theme
+import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.MovioTheme
-import com.madrid.presentation.R
+import com.madrid.designSystem.theme.Theme
 
 
 @Composable
@@ -42,7 +42,6 @@ fun DetailsChips(
             )
             .padding(vertical = 8.dp, horizontal = 12.dp),
         contentAlignment = Alignment.Center
-        
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -50,7 +49,7 @@ fun DetailsChips(
         ) {
             MovioIcon(
                 painter = icon, contentDescription = "chips icon ",
-                tint = iconTint , modifier = Modifier.size(16.dp)
+                tint = iconTint, modifier = Modifier.size(16.dp)
             )
             MovioText(
                 text,
@@ -64,10 +63,10 @@ fun DetailsChips(
 
 @Preview
 @Composable
-private fun  MovieDetailsHeaderPreview(modifier: Modifier = Modifier) {
+private fun MovieDetailsHeaderPreview(modifier: Modifier = Modifier) {
     MovioTheme {
         DetailsChips(
-            icon = painterResource(R.drawable.icon_home),
+            icon = painterResource(R.drawable.bold_heart),
             iconTint = Theme.color.surfaces.onSurfaceVariant,
             text = "drama",
         )

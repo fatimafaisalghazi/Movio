@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.CustomHorizontalCardForWatchList
 import com.madrid.presentation.navigation.Destinations

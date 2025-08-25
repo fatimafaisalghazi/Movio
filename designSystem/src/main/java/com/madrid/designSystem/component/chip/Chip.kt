@@ -1,4 +1,4 @@
-package com.madrid.designSystem.component
+package com.madrid.designSystem.component.chip
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -23,7 +23,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 
 @Composable
@@ -83,4 +85,14 @@ fun Chip(
                 .background(brush = Theme.color.gradients.underlineGlowBrushGradient)
         )
     }
+}
+
+@Preview
+@Composable
+private fun ChipPreview() {
+    Chip(
+        isSelected = true,
+        title = "All",
+        onSelected = {}
+    )
 }

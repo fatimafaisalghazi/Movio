@@ -42,8 +42,8 @@ import kotlin.math.absoluteValue
 fun MovioPager(
     medias: List<MediaUiState>,
     modifier: Modifier = Modifier,
+
     onClickItem: (Int) -> Unit = {},
-    isLoading: Boolean = true,
     onClickMediaButton: (Int) -> Unit = {},
 ) {
     if (medias.isNotEmpty()) {
@@ -54,9 +54,9 @@ fun MovioPager(
             pageCount = { medias.size }
         )
 
-        LaunchedEffect(medias) {
+        LaunchedEffect(key1 = medias) {
             while (true) {
-                delay(6000)
+                delay(timeMillis = 6000)
                 val nextPage = if (isRtl) {
                     if (pagerState.currentPage == 0) medias.size - 1 else pagerState.currentPage - 1
                 } else {
@@ -69,13 +69,12 @@ fun MovioPager(
         Box(
             modifier = modifier
                 .fillMaxWidth()
-                .height(413.dp)
-                ,
+                .height(height = 413.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             ImageViewer(
                 model = medias[pagerState.currentPage].imageUrl,
-                contentDescription = "null",
+                contentDescription = null,
                 modifier = Modifier
                     .matchParentSize()
                     .blur(radius = 20.dp, edgeTreatment = Unbounded),
@@ -95,23 +94,15 @@ fun MovioPager(
                     ) { page ->
                         val pageOffset =
                             ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction)
-
                         val absOffset = pageOffset.absoluteValue
-
                         val scale = lerp(0.7f, 1f, 1f - absOffset.coerceIn(0f, 1f))
                         val rotation =
                             lerp(
-                                20f,
-                                0f,
-                                1f - absOffset.coerceIn(0f, 1f)
+                                start = 20f,
+                                stop = 0f,
+                                fraction = 1f - absOffset.coerceIn(0f, 1f)
                             ) * if (pageOffset < 0) 1f else -1f
-                        val alphaa = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
-                        val zIndex = if (page == pagerState.currentPage) {
-                            medias.size.toFloat()
-                        } else {
-                            medias.size - absOffset
-                        }
-
+                        val alpha = lerp(0.4f, 1f, 1f - absOffset.coerceIn(0f, 1f))
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -126,7 +117,7 @@ fun MovioPager(
                                         scaleX = scale
                                         scaleY = scale
                                         rotationZ = rotation
-                                        alpha = alphaa
+                                        this.alpha = alpha
                                         cameraDistance = 12 * density
                                     }
                                     .clip(RoundedCornerShape(8.dp))
@@ -140,13 +131,10 @@ fun MovioPager(
                         }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(16.dp))
-
                 MovioPagerIndicator(
                     pageCount = medias.size,
                     currentPage = pagerState.currentPage,
-                    isRtl = isRtl,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }
@@ -160,7 +148,6 @@ fun MovioPager(
 private fun MovioPagerIndicator(
     pageCount: Int,
     currentPage: Int,
-    isRtl: Boolean,
     modifier: Modifier = Modifier
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -169,8 +156,6 @@ private fun MovioPagerIndicator(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
         ) {
-            val indicatorRange =
-                if (isRtl) (pageCount - 1) downTo 0 else 0 until pageCount
             repeat(pageCount) { index ->
                 val isSelected = currentPage == index
                 Box(
@@ -179,7 +164,7 @@ private fun MovioPagerIndicator(
                         .size(if (isSelected) 15.dp else 5.dp, 5.dp)
                         .clip(if (isSelected) RoundedCornerShape(50) else CircleShape)
                         .background(
-                            if (isSelected)
+                            color = if (isSelected)
                                 Theme.color.surfaces.onSurfaceAt1
                             else
                                 Theme.color.surfaces.onSurfaceAt2
@@ -189,6 +174,7 @@ private fun MovioPagerIndicator(
         }
     }
 }
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MovioSliderPreview() {

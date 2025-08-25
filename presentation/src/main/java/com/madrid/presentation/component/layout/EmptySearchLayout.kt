@@ -1,4 +1,4 @@
-package com.madrid.designSystem.component
+package com.madrid.presentation.component.layout
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
+import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 
 @Composable
@@ -45,23 +45,23 @@ fun EmptySearchLayout(
                 .align(CenterHorizontally),
             contentScale = ContentScale.Fit
         )
+
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
+        MovioText(
             text = title,
-            style = Theme.textStyle.title.mediumMedium16,
+            textStyle = Theme.textStyle.title.mediumMedium16,
             color = Theme.color.surfaces.onSurface,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
+        MovioText(
             text = description,
-            style = Theme.textStyle.label.smallRegular12,
+            textStyle = Theme.textStyle.label.smallRegular12,
             color = Theme.color.surfaces.onSurfaceContainer,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

@@ -7,8 +7,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.component.DetailsChips
+import com.madrid.designSystem.component.chip.DetailsChips
 
 @Composable
 fun ActorLocationInfo(
@@ -21,7 +22,7 @@ fun ActorLocationInfo(
     ) {
 
         DetailsChips(
-            icon = painterResource(com.madrid.designSystem.R.drawable.outline_map_point),
+            icon = painterResource(R.drawable.outline_map_point),
             iconTint = Theme.color.surfaces.onSurfaceVariant,
             text = location,
         )

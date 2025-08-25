@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.madrid.designSystem.R
+import com.madrid.designSystem.modifier.shimmerEffect
 
 
 @Composable

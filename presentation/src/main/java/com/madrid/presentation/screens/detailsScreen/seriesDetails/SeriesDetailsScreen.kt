@@ -49,7 +49,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.R.drawable
 import com.madrid.designSystem.component.CustomTextTitle
-import com.madrid.designSystem.component.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText

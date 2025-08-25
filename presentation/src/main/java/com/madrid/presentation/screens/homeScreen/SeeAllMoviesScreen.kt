@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.madrid.designSystem.component.DialogWithButtonLayout
-import com.madrid.designSystem.component.EmptySearchLayout
-import com.madrid.designSystem.component.FilterBar
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
+import com.madrid.presentation.component.FilterBar
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
@@ -45,7 +45,7 @@ import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.viewModel.seeAll.movies.SeeAllMoviesViewModel
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
+@SuppressLint("UnusedBoxWithConstraintsScope") // TODO: Need Refactor
 @Composable
 fun SeeAllMoviesScreen(
     viewModel: SeeAllMoviesViewModel
@@ -91,7 +91,6 @@ fun SeeAllMoviesScreen(
                     if (selectedItem != "All") items.find { it.name == genre } else null
                 )
             },
-            scrollable = true
         )
         Spacer(Modifier.height(24.dp))
         LazyVerticalGrid(
@@ -104,7 +103,6 @@ fun SeeAllMoviesScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
             when {
                 listOfItem.itemCount == 0 && listOfItem.loadState.refresh is LoadState.Loading -> {
                     items(9) {

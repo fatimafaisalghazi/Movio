@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.madrid.designSystem.component.DialogWithButtonLayout
-import com.madrid.designSystem.component.FilterBar
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.FilterBar
 import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.modifier.removeWidthPaddingFromParent
 import com.madrid.presentation.R

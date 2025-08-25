@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.madrid.designSystem.component.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.component.TextWithReadMore
 import com.madrid.designSystem.component.TopAppBar

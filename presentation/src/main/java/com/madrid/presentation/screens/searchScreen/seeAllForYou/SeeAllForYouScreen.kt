@@ -30,7 +30,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.designSystem.component.LoadingSearchCard
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
