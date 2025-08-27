@@ -44,8 +44,8 @@ fun HeaderHomeSectionBar(
 @Composable
 private fun HeaderSectionBarPreview() {
     HeaderHomeSectionBar(
-        tabs = listOf("Yasser", "Ahmed", "Messi", "Mohamed"),
-        selectedTabIndex = 0,
+        tabs = listOf("Movies", "TvShows", "Categories"),
+        selectedTabIndex = HomeScreenSections.MOVIES,
         onTabSelected = {},
         modifier = Modifier
     )

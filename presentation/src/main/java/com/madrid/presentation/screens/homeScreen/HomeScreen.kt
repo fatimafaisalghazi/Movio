@@ -127,7 +127,7 @@ fun HomeScreenContent(
                     stringResource(R.string.TV_Shows),
                     stringResource(R.string.Categories),
                 ),
-                selectedTabIndex = state.selectedTabIndex,
+                selectedTabIndex = state.selectedTabSection,
                 onTabSelected = { homeScreenSection ->
                     interactionListener.onSelectTab(homeScreenSection = homeScreenSection)
                 },
@@ -147,7 +147,7 @@ private fun LayoutContent(
     onMediaSelected: (Int, MediaType) -> Unit = { _, _ -> },
     onTryAgainClicked: () -> Unit = { }
 ) {
-    when (uiState.selectedTabIndex) {
+    when (uiState.selectedTabSection) {
         HomeScreenSections.MOVIES -> LoadMoviesLayout(
             uiState = uiState,
             onScroll = onScroll,

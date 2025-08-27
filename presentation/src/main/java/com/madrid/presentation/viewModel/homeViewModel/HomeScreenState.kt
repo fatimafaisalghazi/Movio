@@ -17,7 +17,7 @@ data class HomeScreenState(
     val movieTabUiState: MovieTabUiState = MovieTabUiState(),
     val tvShowTabUiState: TvShowTabUiState = TvShowTabUiState(),
     val categoryTabUiState: CategoryTabUiState = CategoryTabUiState(),
-    val selectedTabIndex: HomeScreenSections = HomeScreenSections.MOVIES
+    val selectedTabSection: HomeScreenSections = HomeScreenSections.MOVIES
 )
 
 data class AllTabUiState(
