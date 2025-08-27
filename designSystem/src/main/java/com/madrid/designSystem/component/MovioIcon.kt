@@ -47,7 +47,8 @@ fun MovioIcon(
             Icon(
                 painter = painter,
                 contentDescription = contentDescription,
-                modifier = modifier
+                modifier = modifier,
+                tint=Color.Unspecified
             )
         }
     }

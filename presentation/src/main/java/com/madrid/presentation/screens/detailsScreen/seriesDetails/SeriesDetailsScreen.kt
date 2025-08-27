@@ -67,8 +67,6 @@ fun SeriesDetailsScreen(
     val navController = LocalNavController.current
     val context = LocalContext.current
 
-
-
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {

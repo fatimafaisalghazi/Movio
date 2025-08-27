@@ -13,14 +13,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.Theme
 
 @Composable
 fun ProfilePicture(
-    modifier: Modifier = Modifier,
-    image: String? = null,
     size: Dp,
+    modifier: Modifier = Modifier,
+    image: String? = null
 ) {
     Box(
         modifier = modifier
