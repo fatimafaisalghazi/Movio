@@ -2,6 +2,7 @@ package com.madrid.presentation.viewModel.searchViewModel
 
 import androidx.compose.runtime.Immutable
 import androidx.paging.PagingData
+import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.viewModel.shared.MediaType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,7 +13,8 @@ data class SearchScreenState(
     val recentSearchUiState: List<String> = emptyList(),
     val allRecentSearchTexts : List<String> = emptyList(),
     val isDoAction : Boolean = false,
-    val suggestionListSize : Int = 0 ,
+    val suggestionListSize : Int = 0,
+    val selectedSearchSection: SearchSections = SearchSections.TOP_RATED,
     val filteredScreenUiState: FilteredScreenUiState = FilteredScreenUiState()
 ) {
     data class SearchUiState(
