@@ -28,8 +28,7 @@ fun SimilarMoviesSection(
 ) {
     Column(modifier = modifier) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -46,7 +45,7 @@ fun SimilarMoviesSection(
             contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(similarMovies) { movie ->
+            items(items = similarMovies) { movie ->
                 MovioVerticalCard(
                     description = movie.title,
                     movieImage = movie.imageUrl,

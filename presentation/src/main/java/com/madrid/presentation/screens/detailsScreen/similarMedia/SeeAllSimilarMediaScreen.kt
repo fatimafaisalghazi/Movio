@@ -1,10 +1,8 @@
 package com.madrid.presentation.screens.detailsScreen.similarMedia
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -84,20 +82,18 @@ fun SeeAllSimilarMediaScreenContent(
                 .fillMaxWidth()
                 .background(Theme.color.surfaces.surface)
                 .navigationBarsPadding(),
-            contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(similarMovies.size) { index ->
+            items(count = similarMovies.size) { index ->
                 val movie = similarMovies[index]
                 MovioVerticalCard(
                     description = movie.title,
                     movieImage = movie.imageUrl,
                     rate = movie.rating,
-                    imageHeight = 136.dp,
-                    onClick = {
-                        onClickMedia(movie.id, isMovie)
-                    },
+                    width = 101.dp,
+                    imageHeight = 160.dp,
+                    onClick = { onClickMedia(movie.id, isMovie) },
                 )
             }
         }
