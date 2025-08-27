@@ -17,7 +17,7 @@ data class HomeScreenState(
     val movieTabUiState: MovieTabUiState = MovieTabUiState(),
     val tvShowTabUiState: TvShowTabUiState = TvShowTabUiState(),
     val categoryTabUiState: CategoryTabUiState = CategoryTabUiState(),
-    val selectedTabIndex: Int = 0
+    val selectedTabSection: HomeScreenSections = HomeScreenSections.MOVIES
 )
 
 data class AllTabUiState(
@@ -62,4 +62,10 @@ enum class SortingType(@StringRes val value: Int) {
     ALL(R.string.all),
     POPULARITY(R.string.popularity),
     LATEST(R.string.latest),
+}
+
+enum class HomeScreenSections(){
+    MOVIES,
+    TV_SHOWS,
+    CATEGORIES
 }

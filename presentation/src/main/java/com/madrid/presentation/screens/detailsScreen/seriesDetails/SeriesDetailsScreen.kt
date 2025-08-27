@@ -28,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioSnakBar
 import com.madrid.designSystem.component.ToastDuration
@@ -37,6 +36,7 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.header.SeriesDetailsHeader
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
 import com.madrid.presentation.component.logout.LogoutConfirmationBottomSheet
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.navigation.Destinations
@@ -66,8 +66,6 @@ fun SeriesDetailsScreen(
     val interactionListener = viewModel as SeriesDetailsInteractionListener
     val navController = LocalNavController.current
     val context = LocalContext.current
-
-
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -352,17 +350,22 @@ private fun SeriesDetailsScreenContent(
 
         TopAppBar(
             text = null,
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            preEndIcon = com.madrid.designSystem.R.drawable.share_arrow,
+            endIcon = com.madrid.designSystem.R.drawable.outline_heart,
             modifier = Modifier
                 .background(animatedBrush)
                 .padding(start = 16.dp, top = 36.dp, end = 16.dp),
-            onFirstIconClick = { listener.onBackButtonClick() },
-            onSecondIconClick = { listener.onShareIconClick() },
-            onThirdIconClick = { listener.onFavoriteClick(uiState.seriesId) },
+            onStartIconClick = { listener.onBackButtonClick() },
+            onPreEndIconClick = { listener.onShareIconClick() },
+            onEndIconClick = { listener.onFavoriteClick(uiState.seriesId) },
             isFavorite = uiState.isFavourite
         )
         if (uiState.showSnackBar) {
-            Box(modifier = Modifier
-                .fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
                 MovioSnakBar(
                     message = stringResource(uiState.errorResMessageId),
                     duration = ToastDuration.SHORT,

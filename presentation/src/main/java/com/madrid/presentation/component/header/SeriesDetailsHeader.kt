@@ -12,10 +12,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.component.DetailsChips
+import com.madrid.designSystem.component.chip.DetailsChip
 
 @Composable
 fun SeriesDetailsHeader(
@@ -54,18 +55,18 @@ fun SeriesDetailsHeader(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
-            DetailsChips(
-                icon = painterResource(com.madrid.designSystem.R.drawable.bold_star),
+            DetailsChip(
+                icon = painterResource(R.drawable.bold_star),
                 iconTint = Theme.color.system.warning,
                 text = rate,
             )
-            DetailsChips(
-                icon = painterResource(com.madrid.designSystem.R.drawable.outline_video_frame),
+            DetailsChip(
+                icon = painterResource(R.drawable.outline_video_frame),
                 iconTint = Theme.color.surfaces.onSurfaceVariant,
                 text = time,
             )
-            DetailsChips(
-                icon = painterResource(com.madrid.designSystem.R.drawable.outline_calendar),
+            DetailsChip(
+                icon = painterResource(R.drawable.outline_calendar),
                 iconTint = Theme.color.surfaces.onSurfaceVariant,
                 text = date,
             )

@@ -1,4 +1,4 @@
-package com.madrid.designSystem.component
+package com.madrid.designSystem.modifier
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable

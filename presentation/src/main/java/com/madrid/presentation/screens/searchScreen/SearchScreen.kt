@@ -50,7 +50,7 @@ import com.madrid.presentation.screens.refreshScreenHolder.RefreshScreenHolder
 import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.FilterSearchScreen
 import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.ForYouAndExploreScreen
 import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.recentSearchScreen
-import com.madrid.presentation.screens.searchScreen.utils.FilterPagesItem
+import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 import com.madrid.presentation.viewModel.searchViewModel.SearchViewModel
 import kotlinx.coroutines.FlowPreview
@@ -63,7 +63,7 @@ fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsState()
-    var typeOfFilterSearch by remember { mutableStateOf(FilterPagesItem.TOP_RATED) }
+    var typeOfFilterSearch by remember { mutableStateOf(SearchSections.TOP_RATED) }
     val navController = LocalNavController.current
 
     RefreshScreenHolder(
@@ -82,7 +82,7 @@ fun SearchScreen(
                     )
                 )
             },
-            getSuggestionKeywords =viewModel::getSuggestionKeywords,
+            getSuggestionKeywords = viewModel::getSuggestionKeywords,
             addRecentSearch = {
                 viewModel.addRecentSearch(it)
             },
@@ -92,19 +92,19 @@ fun SearchScreen(
             series = uiState.filteredScreenUiState.series.collectAsLazyPagingItems(),
             artist = uiState.filteredScreenUiState.artist.collectAsLazyPagingItems(),
             onClickTopRated = {
-                typeOfFilterSearch = FilterPagesItem.TOP_RATED
+                typeOfFilterSearch = SearchSections.TOP_RATED
                 viewModel.topResult(uiState.searchUiState.searchQuery)
             },
             onClickMovies = {
-                typeOfFilterSearch = FilterPagesItem.MOVIES
+                typeOfFilterSearch = SearchSections.MOVIES
                 viewModel.searchFilteredMovies(uiState.searchUiState.searchQuery)
             },
             onClickSeries = {
-                typeOfFilterSearch = FilterPagesItem.SERIES
+                typeOfFilterSearch = SearchSections.SERIES
                 viewModel.searchSeries(uiState.searchUiState.searchQuery)
             },
             onClickArtist = {
-                typeOfFilterSearch = FilterPagesItem.ARTISTS
+                typeOfFilterSearch = SearchSections.ARTISTS
                 viewModel.artists(uiState.searchUiState.searchQuery)
             },
 
@@ -115,7 +115,7 @@ fun SearchScreen(
                 viewModel.updateSearchQuery(query)
 
             },
-            clearSearchQuery  =  viewModel::clearSearchQuery,
+            clearSearchQuery = viewModel::clearSearchQuery,
             onMovieClick = { movie ->
                 navController.navigate(Destinations.MovieDetailsScreen(movie.id.toInt()))
             },
@@ -167,24 +167,24 @@ fun SearchScreen(
 @Composable
 fun ContentSearchScreen(
     isError: Boolean,
-    typeOfFilterSearch: FilterPagesItem,
+    typeOfFilterSearch: SearchSections,
     addRecentSearch: (String) -> Unit,
     topRated: LazyPagingItems<SearchScreenState.MovieUiState>,
     movies: LazyPagingItems<SearchScreenState.MovieUiState>,
     series: LazyPagingItems<SearchScreenState.SeriesUiState>,
     artist: LazyPagingItems<SearchScreenState.ArtistUiState>,
-    getSuggestionKeywords : () -> Unit = {  } ,
+    getSuggestionKeywords: () -> Unit = { },
     onClickTopRated: () -> Unit,
     onClickMovies: () -> Unit,
     onClickSeries: () -> Unit,
     onClickArtist: () -> Unit,
     modifier: Modifier = Modifier,
-    suggestionListSize : Int = 0 ,
+    suggestionListSize: Int = 0,
     forYouMovies: List<SearchScreenState.MovieUiState> = emptyList(),
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
     searchQuery: String = "",
     onSearchQueryChange: (String) -> Unit,
-    clearSearchQuery : () -> Unit = {},
+    clearSearchQuery: () -> Unit = {},
     onSearchBarClick: () -> Unit = {},
     onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
     searchHistory: List<String>,
@@ -204,15 +204,15 @@ fun ContentSearchScreen(
     highLightRecentSearch: (String, String, Color, Color, TextStyle) -> AnnotatedString,
 ) {
     val showSearchResults = searchQuery.isNotBlank()
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var selectedTabIndex by remember { mutableStateOf(SearchSections.MOVIES) }
+    var showRecentSearch by remember { mutableIntStateOf(0) }
     var isPressSearchIconInKeyboard by remember { mutableIntStateOf(0) }
-    var previousSelectedTabIndex by remember { mutableIntStateOf(-1) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     var isFocused by remember { mutableStateOf(false) }
     var isWrite by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = isFocused || searchQuery.isNotEmpty() ) {
+    BackHandler(enabled = isFocused || searchQuery.isNotEmpty()) {
         clearSearchQuery()
         focusManager.clearFocus(force = true)
         isFocused = false
@@ -230,7 +230,7 @@ fun ContentSearchScreen(
                     isWrite = false
                     if (query.isNotBlank() && isChangeSearchQuery) {
                         val res = getSuggestionKeywords()
-                        Log.e("MY_TAG" , " the result size $res")
+                        Log.e("MY_TAG", " the result size $res")
                     }
                 }
         }
@@ -284,10 +284,10 @@ fun ContentSearchScreen(
                                 changeValueOfIsChangeSearchQuery()
                                 addRecentSearch(searchQuery)
                                 when (typeOfFilterSearch) {
-                                    FilterPagesItem.TOP_RATED -> onClickTopRated()
-                                    FilterPagesItem.MOVIES -> onClickMovies()
-                                    FilterPagesItem.SERIES -> onClickSeries()
-                                    FilterPagesItem.ARTISTS -> onClickArtist()
+                                    SearchSections.TOP_RATED -> onClickTopRated()
+                                    SearchSections.MOVIES -> onClickMovies()
+                                    SearchSections.SERIES -> onClickSeries()
+                                    SearchSections.ARTISTS -> onClickArtist()
                                 }
                             }
                             keyboardController?.hide()
@@ -322,10 +322,10 @@ fun ContentSearchScreen(
                         changeValueOfIsChangeSearchQuery()
                         addRecentSearch(itemInRecent)
                         when (typeOfFilterSearch) {
-                            FilterPagesItem.TOP_RATED -> onClickTopRated()
-                            FilterPagesItem.MOVIES -> onClickMovies()
-                            FilterPagesItem.SERIES -> onClickSeries()
-                            FilterPagesItem.ARTISTS -> onClickArtist()
+                            SearchSections.TOP_RATED -> onClickTopRated()
+                            SearchSections.MOVIES -> onClickMovies()
+                            SearchSections.SERIES -> onClickSeries()
+                            SearchSections.ARTISTS -> onClickArtist()
                         }
 
                         keyboardController?.hide()
@@ -344,10 +344,10 @@ fun ContentSearchScreen(
                         changeValueOfIsChangeSearchQuery()
                         addRecentSearch(itemInRecent)
                         when (typeOfFilterSearch) {
-                            FilterPagesItem.TOP_RATED -> onClickTopRated()
-                            FilterPagesItem.MOVIES -> onClickMovies()
-                            FilterPagesItem.SERIES -> onClickSeries()
-                            FilterPagesItem.ARTISTS -> onClickArtist()
+                            SearchSections.TOP_RATED -> onClickTopRated()
+                            SearchSections.MOVIES -> onClickMovies()
+                            SearchSections.SERIES -> onClickSeries()
+                            SearchSections.ARTISTS -> onClickArtist()
                         }
 
                         keyboardController?.hide()
@@ -373,15 +373,15 @@ fun ContentSearchScreen(
 
                 onChangeSelectedTabIndex = { newIndex ->
                     if (newIndex != selectedTabIndex) {
-                        previousSelectedTabIndex = selectedTabIndex
                         selectedTabIndex = newIndex
-
                         when (newIndex) {
-                            0 -> onClickTopRated()
-                            1 -> onClickMovies()
-                            2 -> onClickSeries()
-                            3 -> onClickArtist()
+                            SearchSections.TOP_RATED -> onClickTopRated()
+                            SearchSections.MOVIES -> onClickMovies()
+                            SearchSections.SERIES -> onClickSeries()
+                            SearchSections.ARTISTS -> onClickArtist()
                         }
+
+
                     }
                 },
                 onChangeTypeFilterSearch = {},

@@ -41,7 +41,6 @@ fun CustomHorizontalCard(
             secondaryText = secondaryTextForCustomTextTitle,
             endIcon = endIconForCustomTextTitle,
             onSeeAllClick = onSeeAllClick,
-            isListEmpty = listOfMedia.isEmpty()
         )
         AnimatedVisibility(listOfMedia.isNotEmpty()) {
             LazyRow(
@@ -85,7 +84,6 @@ fun CustomHorizontalCard(
             secondaryText = secondaryTextForCustomTextTitle,
             endIcon = endIconForCustomTextTitle,
             onSeeAllClick = onSeeAllClick,
-            isListEmpty = listOfMedia.isEmpty()
         )
         AnimatedVisibility(listOfMedia.isNotEmpty()) {
             LazyRow(

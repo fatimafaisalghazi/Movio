@@ -57,15 +57,14 @@ fun SeasonsScreenContent(
     ) {
         TopAppBar(
             text = stringResource(R.string.current_seasons),
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = { onClickBack() },
-            modifier = Modifier.padding(top = 36.dp),
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            onStartIconClick = { onClickBack() },
+            modifier = Modifier.padding(top = 36.dp)
         )
         Spacer(Modifier.height(20.dp))
-        
+
         val seasons = uiState.currentSeasonsUiStates
-        
+
         LazyColumn(
             contentPadding = PaddingValues(vertical = 6.dp)
         ) {

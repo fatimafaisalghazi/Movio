@@ -90,7 +90,6 @@ fun MoviesLayout(
                     medias = trendingMovies.take(7),
                     onClickItem = { id -> navController.navigate(Destinations.MovieDetailsScreen(id)) },
                     onClickMediaButton = { mediaIndex -> onClickMediaButton(mediaIndex) },
-                    isLoading = isLoading,
                     modifier = Modifier.removeWidthPaddingFromParent(16.dp),
                 )
             }

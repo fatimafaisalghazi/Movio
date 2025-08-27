@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -49,10 +50,9 @@ fun ReviewsScreenContent(
     ) {
         TopAppBar(
             text = stringResource(R.string.reviews),
-            secondIcon = null,
-            thirdIcon = null,
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
             modifier = Modifier.padding(start = 16.dp, top = 36.dp),
-            onFirstIconClick = { onClickBack() }
+            onStartIconClick = { onClickBack() }
         )
 
         Spacer(modifier = Modifier.height(16.dp))

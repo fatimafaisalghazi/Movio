@@ -26,7 +26,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
 import com.madrid.designSystem.component.SettingsItem
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
@@ -138,7 +138,7 @@ private fun MoreScreenContent(
                 SettingsItem(
                     icon = R.drawable.outline_star,
                     title = stringResource(presentationR.string.my_ratings),
-                    clickable = true,
+                    isClickable = true,
                     onClick = { interactionListener.onMyRatingsBtnClick() }
                 )
                 SettingsItem(
@@ -148,7 +148,7 @@ private fun MoreScreenContent(
                     else stringResource(
                         presentationR.string.light
                     ),
-                    clickable = true,
+                    isClickable = true,
                     onClick = { interactionListener.onClickTheme() }
                 )
                 SettingsItem(
@@ -157,19 +157,19 @@ private fun MoreScreenContent(
                     text = if (currentLanguage == Language.Arabic.code)
                         stringResource(presentationR.string.arabic)
                     else stringResource(presentationR.string.english),
-                    clickable = true,
+                    isClickable = true,
                     onClick = { interactionListener.onClickLanguage() }
                 )
                 SettingsItem(
                     icon = R.drawable.outline_smartphone,
                     title = stringResource(presentationR.string.app_version),
                     text = appVersion,
-                    clickable = false,
+                    isClickable = false,
                 )
                 SettingsItem(
                     icon = R.drawable.outline_arrows_logout,
                     title = stringResource(presentationR.string.logout),
-                    clickable = true,
+                    isClickable = true,
                     onClick = { interactionListener.onLogoutBtnClick() }
                 )
             }

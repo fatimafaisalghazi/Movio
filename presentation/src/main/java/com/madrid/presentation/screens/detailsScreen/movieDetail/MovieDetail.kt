@@ -48,7 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.R.drawable
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
@@ -80,7 +80,6 @@ fun MovieDetailsScreen(
     addToListViewModel: MovieListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsState()
-    val addToListUiState by addToListViewModel.state.collectAsState()
     val navController = LocalNavController.current
     val context = LocalContext.current
     var showShareSheet by remember { mutableStateOf(false) }
@@ -127,7 +126,7 @@ fun MovieDetailsScreen(
         }
         try {
             context.startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             val fallback = Intent(Intent.ACTION_SEND).apply {
                 putExtra(Intent.EXTRA_TEXT, url)
             }
@@ -199,7 +198,7 @@ fun MovieDetailsScreen(
                             showAddRatingBottomSheet = true
                         },
                         onPlayClick = {
-                            uiState.trailerKey?.let { key ->
+                            uiState.trailerKey.let { key ->
                                 val youtubeAppIntent =
                                     Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$key"))
                                 val youtubeWebIntent = Intent(
@@ -209,7 +208,7 @@ fun MovieDetailsScreen(
 
                                 try {
                                     context.startActivity(youtubeAppIntent)
-                                } catch (e: ActivityNotFoundException) {
+                                } catch (_: ActivityNotFoundException) {
                                     context.startActivity(youtubeWebIntent)
                                 }
                             }
@@ -317,15 +316,16 @@ fun MovieDetailsScreen(
 
             TopAppBar(
                 text = null,
+                startIcon = drawable.arrow_left,
+                preEndIcon = drawable.share_arrow,
+                endIcon = drawable.outline_heart,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(animatedBrush)
                     .padding(start = 16.dp, top = 36.dp, end = 16.dp, bottom = 8.dp),
-                onFirstIconClick = { navController.popBackStack() },
-                onSecondIconClick = { showShareSheet = true },
-                onThirdIconClick = {
-                    viewModel.onClickLoveIcon(uiState.movieId)
-                },
+                onStartIconClick = { navController.popBackStack() },
+                onPreEndIconClick = { showShareSheet = true },
+                onEndIconClick = { viewModel.onClickLoveIcon(movieId = uiState.movieId) },
                 isFavorite = uiState.isLoved
             )
 
@@ -336,26 +336,25 @@ fun MovieDetailsScreen(
             ) {
                 ShareBottomSheetContent(
                     onCopyLink = {
-                        copyToClipboard("https://www.themoviedb.org/movie/${uiState.movieId}")
+                        copyToClipboard(text = "https://www.themoviedb.org/movie/${uiState.movieId}")
                         showShareSheet = false
                     },
                     onShareFacebook = {
                         shareToApp(
-                            "com.facebook.katana",
-                            "https://www.themoviedb.org/movie/${uiState.movieId}"
+                            appPackage = "com.facebook.katana",
+                            url = "https://www.themoviedb.org/movie/${uiState.movieId}"
                         )
                         showShareSheet = false
                     },
                     onShareX = {
                         shareToApp(
-                            "com.twitter.android",
-                            "https://www.themoviedb.org/movie/${uiState.movieId}"
+                            appPackage = "com.twitter.android",
+                            url = "https://www.themoviedb.org/movie/${uiState.movieId}"
                         )
                         showShareSheet = false
                     }
                 )
             }
-
             MovioBottomSheet(
                 show = showAddRatingBottomSheet,
                 onDismiss = { showAddRatingBottomSheet = false },

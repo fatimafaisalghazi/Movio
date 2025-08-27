@@ -1,13 +1,12 @@
 package com.madrid.designSystem.component
 
-import androidx.compose.foundation.Image
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 
@@ -21,7 +20,7 @@ fun MovioIcon(
 ) {
     when {
         brush != null -> {
-            Image(
+            Icon(
                 painter = painter,
                 contentDescription = contentDescription,
                 modifier = modifier
@@ -36,19 +35,20 @@ fun MovioIcon(
         }
 
         tint != null -> {
-            Image(
+            Icon(
                 painter = painter,
                 contentDescription = contentDescription,
                 modifier = modifier,
-                colorFilter = ColorFilter.tint(tint)
+                tint = tint
             )
         }
 
         else -> {
-            Image(
+            Icon(
                 painter = painter,
                 contentDescription = contentDescription,
-                modifier = modifier
+                modifier = modifier,
+                tint=Color.Unspecified
             )
         }
     }

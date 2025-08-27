@@ -29,19 +29,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.madrid.designSystem.component.DialogWithButtonLayout
-import com.madrid.designSystem.component.EmptySearchLayout
-import com.madrid.designSystem.component.FilterBar
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
+import com.madrid.presentation.component.FilterBar
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.viewModel.seeAll.tvShows.SeeAllTVShowsViewModel
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
+@SuppressLint("UnusedBoxWithConstraintsScope") // TODO: Need Refactor
 @Composable
 fun SeeAllTVShowsScreen(
     viewModel: SeeAllTVShowsViewModel
@@ -56,19 +56,16 @@ fun SeeAllTVShowsScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-
         TopAppBar(
-            stringResource(uiState.title),
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = {
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            text = stringResource(uiState.title),
+            onStartIconClick = {
                 navController.popBackStack(
                     Destinations.HomeScreen,
                     inclusive = false
                 )
             },
             modifier = Modifier
-                .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp)
                 .statusBarsPadding()
         )
@@ -77,14 +74,13 @@ fun SeeAllTVShowsScreen(
 
 
         FilterBar(
-            items = updatedItems,
+            tabs = updatedItems,
             selectedItem = uiState.selectedGenre ?: stringResource(R.string.all),
             onItemClick = { genre ->
                 viewModel.onGenreSelect(
                     items.find { it.name == genre }
                 )
             },
-            scrollable = true
         )
         Spacer(Modifier.height(24.dp))
         LazyVerticalGrid(

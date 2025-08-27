@@ -1,6 +1,7 @@
 package com.madrid.presentation.component.movioCards
 
 
+import android.util.Size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -35,13 +37,12 @@ fun MovioHorizontalCard(
     movieRate: String,
     movieCategory: String,
     movieImageUrl: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     height: Dp = 100.dp,
-    onClick: () -> Unit,
     contentScale: ContentScale = ContentScale.Crop
 ) {
-    val layoutDirection = LocalLayoutDirection.current
-    val isRtl = layoutDirection == LayoutDirection.Rtl
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     if (isRtl) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             MovioHorizontalCardContent(
@@ -70,7 +71,7 @@ fun MovioHorizontalCard(
 }
 
 @Composable
-fun MovioHorizontalCardContent(
+private fun MovioHorizontalCardContent(
     movieTitle: String,
     movieRate: String,
     movieCategory: String,

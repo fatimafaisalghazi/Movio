@@ -26,17 +26,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.DialogWithButtonLayout
-import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.FloatingButton
 import com.madrid.designSystem.component.TopAppBar
-import com.madrid.designSystem.component.shimmerEffect
+import com.madrid.designSystem.modifier.shimmerEffect
 import com.madrid.designSystem.theme.Theme
+import com.madrid.presentation.component.addtolist.CreateListBottomSheet
+import com.madrid.presentation.component.addtolist.SuccessNotificationRow
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.presentation.component.videoLibrary.VideoLibrary
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.component.addtolist.CreateListBottomSheet
-import com.madrid.presentation.component.addtolist.SuccessNotificationRow
 import com.madrid.presentation.viewModel.libraryViewModel.watchlistViewAll.WatchListViewAllInteractionListener
 import com.madrid.presentation.viewModel.libraryViewModel.watchlistViewAll.WatchlistViewAllEffect
 import com.madrid.presentation.viewModel.libraryViewModel.watchlistViewAll.WatchlistViewAllUiState
@@ -69,9 +69,8 @@ fun WatchlistViewAllScreen(
         }
     }
 
-    val interactionListener = viewModel as WatchListViewAllInteractionListener
     WatchlistViewAllScreenContent(
-        interactionListener = interactionListener,
+        interactionListener = viewModel,
         state = state
     )
 }
@@ -86,9 +85,8 @@ fun WatchlistViewAllScreenContent(
     ) {
         TopAppBar(
             text = stringResource(presentationR.string.watchlist),
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = { interactionListener.onBackButtonClicked() },
+            startIcon = R.drawable.arrow_left,
+            onStartIconClick = { interactionListener.onBackButtonClicked() },
             modifier = Modifier.padding(
                 horizontal = 16.dp
             )
@@ -126,8 +124,10 @@ fun WatchlistViewAllScreenContent(
                 showCreateListBottomSheet = state.showCreateListBottomSheet
             )
         }
+
         AnimatedVisibility(
-            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.watchLists.isEmpty().not(),
+            visible = state.isLoading.not() && state.errorMessage.isNullOrBlank() && state.watchLists.isEmpty()
+                .not(),
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -194,7 +194,9 @@ private fun EmptyListContent() {
         description = stringResource(presentationR.string.add_movies_and_tv_shows_to_build_your_personal_watchlist), //stringResource(presentationR.string.no_results_found),
         image = Theme.drawables.emptyLayoutId,
         imageSize = 180,
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     )
 }
 
@@ -241,7 +243,8 @@ private fun CreateListSection(
             icon = painterResource(id = R.drawable.add),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
+                .padding(16.dp),
+            contentDescription = "Create List"
         )
         SuccessNotificationRow(
             isVisible = showSnackBar,

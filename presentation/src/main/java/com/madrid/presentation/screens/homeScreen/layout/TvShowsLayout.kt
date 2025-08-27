@@ -100,7 +100,6 @@ fun TvShowsLayout(
                         )
                     },
                     onClickMediaButton = onClickMediaButton,
-                    isLoading = isLoading,
                     modifier = Modifier.removeWidthPaddingFromParent(16.dp),
                 )
                 Box(

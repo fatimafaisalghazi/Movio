@@ -21,23 +21,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.madrid.designSystem.component.EmptySearchLayout
-import com.madrid.designSystem.component.HeaderSectionBar
 import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.presentation.component.movioCards.MovioArtistsCard
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
-import com.madrid.presentation.screens.searchScreen.utils.FilterPagesItem
+import com.madrid.presentation.screens.searchScreen.HeaderSearchSectionBar
+import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun FilterSearchScreen(
-    typeOfFilterSearch: FilterPagesItem,
+    typeOfFilterSearch: SearchSections,
     onChangeTypeFilterSearch: () -> Unit,
-    selectedTabIndex: Int,
-    onChangeSelectedTabIndex: (Int) -> Unit,
+    selectedTabIndex: SearchSections,
+    onChangeSelectedTabIndex: (SearchSections) -> Unit,
     topRated: LazyPagingItems<SearchScreenState.MovieUiState>,
     movies: LazyPagingItems<SearchScreenState.MovieUiState>,
     series: LazyPagingItems<SearchScreenState.SeriesUiState>,
@@ -47,7 +47,7 @@ fun FilterSearchScreen(
     onTopResultClick: (Int) -> Unit,
     onActorClick: (Int) -> Unit,
 ) {
-    HeaderSectionBar(
+    HeaderSearchSectionBar(
         modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
         tabs = listOf(
             stringResource(R.string.top_results),
@@ -63,7 +63,7 @@ fun FilterSearchScreen(
     )
 
     when (typeOfFilterSearch) {
-        FilterPagesItem.TOP_RATED -> {
+        SearchSections.TOP_RATED -> {
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
@@ -149,7 +149,7 @@ fun FilterSearchScreen(
             }
         }
 
-        FilterPagesItem.MOVIES -> {
+        SearchSections.MOVIES -> {
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
@@ -241,7 +241,7 @@ fun FilterSearchScreen(
             }
         }
 
-        FilterPagesItem.SERIES -> {
+        SearchSections.SERIES -> {
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
@@ -334,7 +334,7 @@ fun FilterSearchScreen(
 
         }
 
-        FilterPagesItem.ARTISTS -> {
+        SearchSections.ARTISTS -> {
 
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),

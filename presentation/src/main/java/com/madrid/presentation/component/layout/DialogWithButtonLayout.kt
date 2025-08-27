@@ -1,4 +1,4 @@
-package com.madrid.designSystem.component
+package com.madrid.presentation.component.layout
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +11,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
+import com.madrid.designSystem.component.MovioButton
+import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.Theme
 
 @Composable
@@ -33,31 +35,30 @@ fun DialogWithButtonLayout(
             textStyle = Theme.textStyle.headline.largeBold16,
             color = Theme.color.surfaces.onSurface,
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
+
         EmptySearchLayout(
             title = title,
             description = description,
             image = image,
             imageSize = imageSize,
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
+
         MovioButton(
             onClick = onClick,
             color = Theme.color.brand.primary,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
+                .height(height = 48.dp)
         ) {
             MovioText(
                 text = buttonText,
                 textStyle = Theme.textStyle.label.mediumMedium14,
                 color = Theme.color.brand.onPrimary,
                 textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

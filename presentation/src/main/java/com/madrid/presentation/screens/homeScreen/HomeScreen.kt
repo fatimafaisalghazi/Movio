@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.madrid.designSystem.component.HeaderSectionBar
+import com.madrid.presentation.screens.homeScreen.component.HeaderHomeSectionBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.header.HomeAppBar
@@ -37,6 +37,7 @@ import com.madrid.presentation.screens.homeScreen.layout.TvShowsLayout
 import com.madrid.presentation.screens.refreshScreenHolder.RefreshScreenHolder
 import com.madrid.presentation.viewModel.homeViewModel.HomeInteractionListener
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenEffect
+import com.madrid.presentation.viewModel.homeViewModel.HomeScreenSections
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenState
 import com.madrid.presentation.viewModel.homeViewModel.HomeViewModel
 import com.madrid.presentation.viewModel.homeViewModel.SortingType
@@ -74,7 +75,7 @@ fun HomeScreen(
         refreshState = state.refreshState,
         onRefresh = { homeViewModel.onRefresh() }
     ){
-        HomeScreenContent(state = state, homeViewModel)
+        HomeScreenContent(state = state, interactionListener = homeViewModel)
     }
 }
 
@@ -120,15 +121,15 @@ fun HomeScreenContent(
                 imageUrl = state.profileImage,
                 onClickIcon = { interactionListener.onClickProfile() }
             )
-            HeaderSectionBar(
+            HeaderHomeSectionBar(
                 tabs = listOf(
                     stringResource(R.string.Movies),
                     stringResource(R.string.TV_Shows),
                     stringResource(R.string.Categories),
                 ),
-                selectedTabIndex = state.selectedTabIndex,
-                onTabSelected = { index ->
-                    interactionListener.onSelectTab(index)
+                selectedTabIndex = state.selectedTabSection,
+                onTabSelected = { homeScreenSection ->
+                    interactionListener.onSelectTab(homeScreenSection = homeScreenSection)
                 },
                 modifier = Modifier.padding(horizontal = 38.dp)
             )
@@ -146,20 +147,20 @@ private fun LayoutContent(
     onMediaSelected: (Int, MediaType) -> Unit = { _, _ -> },
     onTryAgainClicked: () -> Unit = { }
 ) {
-    when (uiState.selectedTabIndex) {
-        0 -> LoadMoviesLayout(
+    when (uiState.selectedTabSection) {
+        HomeScreenSections.MOVIES -> LoadMoviesLayout(
             uiState = uiState,
             onScroll = onScroll,
             onClickMediaButton = onClickMediaButton
         )
 
-        1 -> LoadSeriesLayout(
+        HomeScreenSections.TV_SHOWS -> LoadSeriesLayout(
             uiState = uiState,
             onScroll = onScroll,
             onClickMediaButton = onClickMediaButton
         )
 
-        2 -> LoadCategoriesLayout(
+        HomeScreenSections.CATEGORIES -> LoadCategoriesLayout(
             uiState = uiState,
             onSelectCategory = onSelectCategory,
             onSelectSortingType = onSelectSortingType,

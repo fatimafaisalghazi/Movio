@@ -11,9 +11,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.MovioText
+import com.madrid.designSystem.component.chip.DetailsChip
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
-import com.madrid.presentation.component.DetailsChips
 
 @Composable
 fun MovieDetailsHeader(
@@ -52,7 +52,7 @@ fun MovieDetailsHeader(
         ) {
             rate?.let {
                 if (it.isNotEmpty()) {
-                    DetailsChips(
+                    DetailsChip(
                         icon = painterResource(com.madrid.designSystem.R.drawable.bold_star),
                         iconTint = Theme.color.system.warning,
                         text = rate,
@@ -62,7 +62,7 @@ fun MovieDetailsHeader(
 
             time?.let {
                 if (it.isNotEmpty()) {
-                    DetailsChips(
+                    DetailsChip(
                         icon = painterResource(com.madrid.designSystem.R.drawable.outline_clock_circle),
                         iconTint = Theme.color.surfaces.onSurfaceVariant,
                         text = time,
@@ -71,7 +71,7 @@ fun MovieDetailsHeader(
             }
 
             if (date.isNotEmpty()) {
-                DetailsChips(
+                DetailsChip(
                     icon = painterResource(com.madrid.designSystem.R.drawable.outline_calendar),
                     iconTint = Theme.color.surfaces.onSurfaceVariant,
                     text = date,

@@ -20,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.DialogWithButtonLayout
 import com.madrid.designSystem.modifier.ShimmerHorizontalCard
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.CustomHorizontalCard
 import com.madrid.presentation.component.CustomHorizontalCardForWatchList
 import com.madrid.presentation.component.addtolist.CreateListBottomSheet
 import com.madrid.presentation.component.addtolist.SuccessNotificationRow
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.libraryScreen.component.LibraryScreenHeader

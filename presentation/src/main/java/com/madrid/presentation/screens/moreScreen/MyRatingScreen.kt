@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.madrid.designSystem.component.DialogWithButtonLayout
-import com.madrid.designSystem.component.EmptySearchLayout
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.designSystem.component.TopAppBar
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
@@ -85,9 +85,8 @@ fun MyRatingScreen(
 
                 TopAppBar(
                     text = stringResource(R.string.my_ratings),
-                    secondIcon = null,
-                    thirdIcon = null,
-                    onFirstIconClick = viewModel::onBackClick
+                    startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+                    onStartIconClick = viewModel::onBackClick
                 )
                 DialogWithButtonLayout(
                     title = stringResource(R.string.internet_is_not_available),
@@ -120,9 +119,8 @@ fun MyRatingScreen(
                 Column {
                     TopAppBar(
                         text = stringResource(R.string.my_ratings),
-                        secondIcon = null,
-                        thirdIcon = null,
-                        onFirstIconClick = { navController.popBackStack() },
+                        startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+                        onStartIconClick = { navController.popBackStack() },
                         modifier = Modifier.padding(16.dp)
                     )
                     EmptySearchLayout(
@@ -152,9 +150,8 @@ private fun MyRatingScreenContent(
     ) {
         TopAppBar(
             text = stringResource(R.string.my_ratings),
-            secondIcon = null,
-            thirdIcon = null,
-            onFirstIconClick = { onBackClick() },
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
+            onStartIconClick = onBackClick::invoke,
         )
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),

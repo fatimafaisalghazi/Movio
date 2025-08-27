@@ -33,11 +33,11 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.EmptySearchLayout
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.theme.Theme
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController

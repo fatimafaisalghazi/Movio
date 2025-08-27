@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.theme.Theme
 
@@ -34,4 +35,12 @@ fun LoadingSearchCard(modifier: Modifier = Modifier) {
                 .background(Theme.color.surfaces.surfaceContainer),
         )
     }
+}
+
+@Preview
+@Composable
+private fun LoadingSearchCardPreview() {
+    LoadingSearchCard(
+        modifier = Modifier
+    )
 }

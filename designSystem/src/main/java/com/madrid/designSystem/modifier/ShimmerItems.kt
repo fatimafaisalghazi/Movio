@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.CustomTextTitle
-import com.madrid.designSystem.component.shimmerEffect
 import com.madrid.designSystem.theme.Theme
 
 @Composable
@@ -202,7 +201,6 @@ fun ShimmerHorizontalCard(
                 secondaryText = secondaryTextForCustomTextTitle,
                 endIcon = endIconForCustomTextTitle,
                 onSeeAllClick = onSeeAllClick,
-                isListEmpty = isLoading
             )
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),

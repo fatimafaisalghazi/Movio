@@ -52,7 +52,7 @@ class HomeViewModel @Inject constructor(
     HomeScreenState()
 ), HomeInteractionListener {
     init {
-        loadGenres()
+        loadMediaByCategory()
         loadFileImage()
         loadMoviesLayoutData()
     }
@@ -74,7 +74,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun loadGenres() {
+    private fun loadMediaByCategory() {
         tryToExecute(
             function = ::getMixedGenres,
             onSuccess = { genres ->
@@ -132,18 +132,18 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun onSelectTab(index: Int) {
-        updateState { it.copy(selectedTabIndex = index) }
-        when (index) {
-            0 -> loadMoviesLayoutData()
-            1 -> loadSeriesLayoutData()
-            2 -> {
+    override fun onSelectTab(homeScreenSection: HomeScreenSections) {
+        updateState { it.copy(selectedTabSection = homeScreenSection) }
+        when (homeScreenSection) {
+            HomeScreenSections.MOVIES -> loadMoviesLayoutData()
+            HomeScreenSections.TV_SHOWS -> loadSeriesLayoutData()
+            HomeScreenSections.CATEGORIES -> {
                 updateState { state ->
                     state.copy(
                         categoryTabUiState = CategoryTabUiState()
                     )
                 }
-                loadGenres()
+                loadMediaByCategory()
             }
         }
     }
@@ -313,10 +313,10 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onRefresh() {
-        when(state.value.selectedTabIndex){
-            0 -> loadMoviesLayoutData()
-            1 -> loadSeriesLayoutData()
-            2 -> loadGenres()
+        when (state.value.selectedTabSection) {
+            HomeScreenSections.MOVIES -> loadMoviesLayoutData()
+            HomeScreenSections.TV_SHOWS -> loadSeriesLayoutData()
+            HomeScreenSections.CATEGORIES -> loadMediaByCategory()
         }
     }
 

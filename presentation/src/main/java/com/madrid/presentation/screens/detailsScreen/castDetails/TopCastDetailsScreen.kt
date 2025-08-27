@@ -63,11 +63,10 @@ fun TopCastDetailsContent(
     ) {
 
         TopAppBar(
-            stringResource(R.string.top_cast),
-            secondIcon = null,
-            thirdIcon = null,
+            text = stringResource(R.string.top_cast),
+            startIcon = com.madrid.designSystem.R.drawable.arrow_left,
             modifier = Modifier.padding(start = 16.dp, top = 32.dp, end = 16.dp),
-            onFirstIconClick = { onBackClick() }
+            onStartIconClick = { onBackClick() }
         )
         LazyVerticalGrid(
             columns = GridCells.Adaptive(101.dp),

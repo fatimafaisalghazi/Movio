@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.madrid.designSystem.component.DialogWithButtonLayout
-import com.madrid.designSystem.component.FilterBar
+import com.madrid.presentation.component.layout.DialogWithButtonLayout
+import com.madrid.presentation.component.FilterBar
 import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.modifier.removeWidthPaddingFromParent
 import com.madrid.designSystem.theme.Theme
@@ -198,7 +198,7 @@ private fun CategorySection(
     FilterBar(
         modifier = modifier,
         contentHorizontalPadding = 16.dp,
-        items = displayedCategories.map { it.name },
+        tabs = displayedCategories.map { it.name },
         selectedItem = selectedCategory?.name ?: stringResource(R.string.all),
         onItemClick = { category ->
             onCategorySelected(
@@ -220,7 +220,7 @@ private fun SortingSection(
     FilterBar(
         modifier = modifier,
         contentHorizontalPadding = contentHorizontalPadding,
-        items = SortingType.entries.map { stringResource(it.value) },
+        tabs = SortingType.entries.map { stringResource(it.value) },
         selectedItem = stringResource(sortingType.value),
         onItemClick = { sortingValue ->
             val sorting =

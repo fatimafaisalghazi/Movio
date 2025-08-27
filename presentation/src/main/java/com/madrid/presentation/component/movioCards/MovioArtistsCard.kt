@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,8 +34,7 @@ fun MovioArtistsCard(
     onClick: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier
-            .clickable { onClick() },
+        modifier = modifier.clickable { onClick() },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -44,7 +44,7 @@ fun MovioArtistsCard(
             contentDescription = artistsName,
             modifier = Modifier
                 .size(circleImageSize)
-                .clip(RoundedCornerShape(1000.dp)),
+                .clip(CircleShape),
         )
         MovioText(
             text = artistsName,
