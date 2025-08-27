@@ -17,13 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
-
-data class SimilarMovie(
-    val id: Int,
-    val title: String,
-    val imageUrl: String,
-    val rating: String
-)
+import com.madrid.presentation.viewModel.detailsViewModel.movie.SimilarMovie
 
 @Composable
 fun SimilarMoviesSection(

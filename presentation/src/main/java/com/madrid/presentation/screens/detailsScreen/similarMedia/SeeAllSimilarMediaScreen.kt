@@ -24,6 +24,7 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
+import com.madrid.presentation.viewModel.detailsViewModel.movie.SimilarMovie
 import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.SimilarMediaViewModel
 
 @Composable
@@ -33,15 +34,6 @@ fun SeeAllSimilarMediaScreen(
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
     val similarMovies = uiState.medias.map { media ->
-        Log.d(
-            "SimilarMediaDebug",
-            "Media ID: ${media.mediaId}, " +
-                    "Title: ${media.mediaName}, " +
-                    "Rating: ${media.rate}, " +
-                    "IsMovie: ${media.isMovie}, " +
-                    "Image: ${media.imageUrl.take(20)}..."
-        )
-
         SimilarMovie(
             id = media.mediaId,
             title = media.mediaName,
@@ -56,14 +48,10 @@ fun SeeAllSimilarMediaScreen(
         isMovie = uiState.isMovie,
         onClickBack = { navController.popBackStack() },
         onClickMedia = { id, isMovie ->
-            Log.d(
-                "SimilarMediaDebug",
-                "Navigating to ${if (isMovie) "movie" else "series"} details for ID: $id"
-            )
             if (isMovie) {
-                navController.navigate(Destinations.MovieDetailsScreen(id))
+                navController.navigate(route = Destinations.MovieDetailsScreen(movieId = id))
             } else {
-                navController.navigate(Destinations.SeriesDetailsScreen(id, 1))
+                navController.navigate(route = Destinations.SeriesDetailsScreen(seriesId = id, seasonNumber = 1))
             }
         }
     )

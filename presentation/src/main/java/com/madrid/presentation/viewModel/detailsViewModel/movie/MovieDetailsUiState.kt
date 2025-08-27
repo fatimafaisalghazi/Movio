@@ -1,7 +1,6 @@
 package com.madrid.presentation.viewModel.detailsViewModel.movie
 
 import com.madrid.domain.entity.Artist
-import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.viewModel.detailsViewModel.review.ReviewUiState
 
 data class MovieDetailsUiState(
@@ -24,4 +23,10 @@ data class MovieDetailsUiState(
     val similarMovies: List<SimilarMovie> = emptyList(),
     val trailerKey: String = "",
     val isLoginBottomSheetVisible: Boolean = false
+)
+data class SimilarMovie(
+    val id: Int,
+    val title: String,
+    val imageUrl: String,
+    val rating: String
 )
