@@ -37,6 +37,7 @@ import com.madrid.presentation.screens.homeScreen.layout.TvShowsLayout
 import com.madrid.presentation.screens.refreshScreenHolder.RefreshScreenHolder
 import com.madrid.presentation.viewModel.homeViewModel.HomeInteractionListener
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenEffect
+import com.madrid.presentation.viewModel.homeViewModel.HomeScreenSections
 import com.madrid.presentation.viewModel.homeViewModel.HomeScreenState
 import com.madrid.presentation.viewModel.homeViewModel.HomeViewModel
 import com.madrid.presentation.viewModel.homeViewModel.SortingType
@@ -74,7 +75,7 @@ fun HomeScreen(
         refreshState = state.refreshState,
         onRefresh = { homeViewModel.onRefresh() }
     ){
-        HomeScreenContent(state = state, homeViewModel)
+        HomeScreenContent(state = state, interactionListener = homeViewModel)
     }
 }
 
@@ -127,8 +128,8 @@ fun HomeScreenContent(
                     stringResource(R.string.Categories),
                 ),
                 selectedTabIndex = state.selectedTabIndex,
-                onTabSelected = { index ->
-                    interactionListener.onSelectTab(index)
+                onTabSelected = { homeScreenSection ->
+                    interactionListener.onSelectTab(homeScreenSection = homeScreenSection)
                 },
                 modifier = Modifier.padding(horizontal = 38.dp)
             )
@@ -147,19 +148,19 @@ private fun LayoutContent(
     onTryAgainClicked: () -> Unit = { }
 ) {
     when (uiState.selectedTabIndex) {
-        0 -> LoadMoviesLayout(
+        HomeScreenSections.MOVIES -> LoadMoviesLayout(
             uiState = uiState,
             onScroll = onScroll,
             onClickMediaButton = onClickMediaButton
         )
 
-        1 -> LoadSeriesLayout(
+        HomeScreenSections.TV_SHOWS -> LoadSeriesLayout(
             uiState = uiState,
             onScroll = onScroll,
             onClickMediaButton = onClickMediaButton
         )
 
-        2 -> LoadCategoriesLayout(
+        HomeScreenSections.CATEGORIES -> LoadCategoriesLayout(
             uiState = uiState,
             onSelectCategory = onSelectCategory,
             onSelectSortingType = onSelectSortingType,

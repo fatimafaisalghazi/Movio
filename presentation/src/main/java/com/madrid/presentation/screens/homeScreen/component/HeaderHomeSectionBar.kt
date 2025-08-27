@@ -12,12 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.chip.Chip
+import com.madrid.presentation.viewModel.homeViewModel.HomeScreenSections
 
 @Composable
 fun HeaderHomeSectionBar(
     tabs: List<String>,
-    selectedTabIndex: Int,
-    onTabSelected: (Int) -> Unit,
+    selectedTabIndex: HomeScreenSections,
+    onTabSelected: (HomeScreenSections) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -30,9 +31,9 @@ fun HeaderHomeSectionBar(
     ) {
         tabs.forEachIndexed { index, title ->
             Chip(
-                isSelected = index == selectedTabIndex,
+                isSelected = selectedTabIndex == HomeScreenSections.entries[index],
                 title = title,
-                onSelected = { onTabSelected(index) }
+                onSelected = { onTabSelected(HomeScreenSections.entries[index]) }
             )
         }
     }

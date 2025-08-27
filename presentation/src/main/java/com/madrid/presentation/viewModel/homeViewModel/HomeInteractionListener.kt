@@ -4,7 +4,7 @@ import com.madrid.presentation.viewModel.shared.CategoryUiState
 import com.madrid.presentation.viewModel.shared.MediaType
 
 interface HomeInteractionListener {
-    fun onSelectTab(index: Int)
+    fun onSelectTab(homeScreenSection: HomeScreenSections)
     fun onSelectCategory(category: CategoryUiState)
     fun onSelectSortingType(sortType: SortingType)
     fun onMediaSelected(mediaId: Int, mediaType: MediaType)
