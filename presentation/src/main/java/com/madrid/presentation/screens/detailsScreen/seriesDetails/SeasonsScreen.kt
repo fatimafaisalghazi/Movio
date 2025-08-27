@@ -58,10 +58,8 @@ fun SeasonsScreenContent(
         TopAppBar(
             text = stringResource(R.string.current_seasons),
             startIcon = com.madrid.designSystem.R.drawable.arrow_left,
-            preEndIcon = null,
-            endIcon = null,
             onStartIconClick = { onClickBack() },
-            modifier = Modifier.padding(top = 36.dp),
+            modifier = Modifier.padding(top = 36.dp)
         )
         Spacer(Modifier.height(20.dp))
 

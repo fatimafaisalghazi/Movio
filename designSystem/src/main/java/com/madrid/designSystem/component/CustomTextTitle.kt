@@ -67,17 +67,17 @@ private fun SecondaryText(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.clickable { onSeeAllClick?.invoke() }
     ) {
-        secondaryText?.let {
+        secondaryText?.let {text->
             MovioText(
-                text = it,
+                text = text ,
                 color = Theme.color.surfaces.onSurfaceVariant,
                 textStyle = Theme.textStyle.label.smallRegular14,
                 modifier = Modifier.padding(end = 4.dp)
             )
         }
-        endIcon?.let {
+        endIcon?.let {icon->
             MovioIcon(
-                painter = it,
+                painter = icon,
                 contentDescription = "See all",
                 tint = Theme.color.surfaces.onSurfaceVariant,
                 modifier = Modifier.size(16.dp)

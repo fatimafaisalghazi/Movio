@@ -23,10 +23,10 @@ import com.madrid.designSystem.theme.Theme
 @Composable
 fun MovioText(
     text: String,
+    textStyle: TextStyle,
     modifier: Modifier = Modifier,
     brush: Brush? = null,
     color: Color = Color.Unspecified,
-    textStyle: TextStyle,
     maxLines: Int = Int.MAX_VALUE,
     textAlign: TextAlign? = null,
     overflow: TextOverflow = TextOverflow.Ellipsis

@@ -16,7 +16,7 @@ import com.madrid.designSystem.R
 import com.madrid.designSystem.component.MovioText
 import com.madrid.designSystem.theme.MovioTheme
 import com.madrid.designSystem.theme.Theme
-import com.madrid.designSystem.component.chip.DetailsChips
+import com.madrid.designSystem.component.chip.DetailsChip
 
 @Composable
 fun SeriesDetailsHeader(
@@ -55,17 +55,17 @@ fun SeriesDetailsHeader(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(vertical = 4.dp)
         ) {
-            DetailsChips(
+            DetailsChip(
                 icon = painterResource(R.drawable.bold_star),
                 iconTint = Theme.color.system.warning,
                 text = rate,
             )
-            DetailsChips(
+            DetailsChip(
                 icon = painterResource(R.drawable.outline_video_frame),
                 iconTint = Theme.color.surfaces.onSurfaceVariant,
                 text = time,
             )
-            DetailsChips(
+            DetailsChip(
                 icon = painterResource(R.drawable.outline_calendar),
                 iconTint = Theme.color.surfaces.onSurfaceVariant,
                 text = date,

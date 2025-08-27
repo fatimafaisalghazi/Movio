@@ -84,8 +84,6 @@ fun ViewAllScreenContent(
     ) {
         TopAppBar(
             text = stringResource(state.title),
-            preEndIcon = null,
-            endIcon = null,
             onStartIconClick = { interactionListener.onBackClicked() },
             modifier = Modifier.padding(
                 horizontal = 16.dp

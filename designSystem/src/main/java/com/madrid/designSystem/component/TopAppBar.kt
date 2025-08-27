@@ -1,6 +1,8 @@
 package com.madrid.designSystem.component
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -112,6 +114,14 @@ private fun EndIcon(
     onThirdIconClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+     val tintColor = animateColorAsState(
+        targetValue =
+        if (isFavorite)
+            Theme.color.system.onErrorContainer
+        else
+            Theme.color.surfaces.onSurface,
+         animationSpec = tween(durationMillis = 300)
+    )
     MovioIcon(
         painter = painterResource(
             id = if (isFavorite)
@@ -120,10 +130,7 @@ private fun EndIcon(
                 R.drawable.outline_heart
         ),
         contentDescription = "favorite_button",
-        tint = if (isFavorite)
-            Theme.color.system.onErrorContainer
-        else
-            Theme.color.surfaces.onSurface,
+        tint = tintColor.value,
         modifier = modifier.clickable(
             onClick = onThirdIconClick,
             interactionSource = MutableInteractionSource(),

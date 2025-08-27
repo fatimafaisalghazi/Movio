@@ -24,7 +24,7 @@ import com.madrid.designSystem.theme.Theme
 
 
 @Composable
-fun DetailsChips(
+fun DetailsChip(
     icon: Painter,
     iconTint: Color,
     text: String,
@@ -65,7 +65,7 @@ fun DetailsChips(
 @Composable
 private fun MovieDetailsHeaderPreview(modifier: Modifier = Modifier) {
     MovioTheme {
-        DetailsChips(
+        DetailsChip(
             icon = painterResource(R.drawable.bold_heart),
             iconTint = Theme.color.surfaces.onSurfaceVariant,
             text = "drama",

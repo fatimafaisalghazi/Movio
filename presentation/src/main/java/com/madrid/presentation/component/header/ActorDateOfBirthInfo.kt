@@ -9,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.R
 import com.madrid.designSystem.theme.Theme
-import com.madrid.designSystem.component.chip.DetailsChips
+import com.madrid.designSystem.component.chip.DetailsChip
 
 @Composable
 fun ActorDateOfBirthInfo(
@@ -21,7 +21,7 @@ fun ActorDateOfBirthInfo(
         horizontalAlignment = Alignment.Start
     ) {
 
-        DetailsChips(
+        DetailsChip(
             icon = painterResource(R.drawable.outline_calendar),
             iconTint = Theme.color.surfaces.onSurfaceVariant,
             text = dateOfBirth,

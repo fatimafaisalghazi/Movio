@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +28,7 @@ fun SettingsItem(
     modifier: Modifier = Modifier,
     text: String = "",
     onClick: () -> Unit = {},
-    clickable: Boolean = false,
+    isClickable: Boolean = false
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp, Alignment.Start),
@@ -37,23 +36,23 @@ fun SettingsItem(
         modifier = modifier
             .requiredHeight(height = 48.dp)
             .clickable(
-                enabled = clickable,
+                enabled = isClickable,
                 onClick = onClick,
                 indication = null,
                 interactionSource = MutableInteractionSource()
             )
     ) {
-        Icon(
+        MovioIcon(
             painter = painterResource(id = icon),
             contentDescription = "$title Icon",
             tint = Theme.color.surfaces.onSurface,
             modifier = Modifier.clip(shape = RoundedCornerShape(5.dp))
         )
 
-        Text(
+        MovioText(
             text = title,
             color = Theme.color.surfaces.onSurface,
-            style = Theme.textStyle.title.mediumMedium16,
+            textStyle = Theme.textStyle.title.mediumMedium16,
             modifier = Modifier.weight(1f)
         )
 
@@ -62,12 +61,12 @@ fun SettingsItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            Text(
+            MovioText(
                 text = text,
                 color = Theme.color.surfaces.onSurfaceVariant,
-                style = Theme.textStyle.label.smallRegular14,
+                textStyle = Theme.textStyle.label.smallRegular14,
             )
-            if (clickable) {
+            if (isClickable) {
                 Icon(
                     painter = painterResource(id = R.drawable.outline_alt_arrow_left),
                     contentDescription = "on $title Click Arrow",
@@ -87,7 +86,7 @@ private fun SettingsItemPreview() {
             icon = R.drawable.outline_star,
             title = "Settings",
             text = "Dark",
-            clickable = false,
+            isClickable = false,
             onClick = {}
         )
     }
