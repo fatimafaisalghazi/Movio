@@ -3,10 +3,12 @@ package com.madrid.presentation.screens.detailsScreen.similarMedia
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
@@ -28,8 +30,8 @@ import com.madrid.presentation.navigation.Destinations.MovieDetailsScreen
 import com.madrid.presentation.navigation.Destinations.SeriesDetailsScreen
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.detailsScreen.castDetails.LoadingScreen
-import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.SimilarMediaInteractionListener
 import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.SimilarMediaEffect
+import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.SimilarMediaInteractionListener
 import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.SimilarMediaUiState
 import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.SimilarMediaViewModel
 import kotlinx.coroutines.flow.SharedFlow
@@ -72,20 +74,20 @@ private fun HandelNavigation(
 
 @Composable
 fun SeeAllSimilarMediaScreenContent(
-    uiState: SimilarMediaUiState,
     headerName: String,
+    uiState: SimilarMediaUiState,
     listener: SimilarMediaInteractionListener
 ) {
     Column(
         Modifier
             .fillMaxSize()
-            .padding(horizontal = 4.dp, vertical = 16.dp),
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopAppBar(
             text = headerName,
             startIcon = R.drawable.arrow_left,
-            modifier = Modifier.padding(start = 16.dp, top = 32.dp, end = 16.dp),
+            modifier = Modifier.statusBarsPadding(),
             onStartIconClick = listener::onBackClick
         )
 
@@ -117,8 +119,9 @@ fun SeeAllSimilarMediaScreenContent(
                         .fillMaxWidth()
                         .background(color = Theme.color.surfaces.surface)
                         .navigationBarsPadding(),
+                    contentPadding = PaddingValues(vertical =6.dp ),
                     horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(space = 12.dp)
+                    verticalArrangement = Arrangement.spacedBy(space = 6.dp)
                 ) {
                     items(count = uiState.medias.size) { index ->
                         val media = uiState.medias[index]
