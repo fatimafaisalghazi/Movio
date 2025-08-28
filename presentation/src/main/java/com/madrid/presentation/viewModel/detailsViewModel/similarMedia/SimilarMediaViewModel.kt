@@ -1,6 +1,5 @@
 package com.madrid.presentation.viewModel.detailsViewModel.similarMedia
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.madrid.domain.entity.Movie
@@ -17,51 +16,77 @@ class SimilarMediaViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getSimilarSeriesUseCase: GetSimilarSeriesUseCase,
-) : BaseViewModel<SimilarMediaUiState, Nothing>(SimilarMediaUiState()) {
+) : BaseViewModel<SimilarMediaUiState, SimilarMediaEffect>(initialState = SimilarMediaUiState())
+    , SimilarMediaInteractionListener
+{
 
     private val args = savedStateHandle.toRoute<Destinations.SimilarMediaScreen>()
 
     init {
-        if (args.isMovie) loadSimilarMedia()
-        else loadSimilarSeries()
+        if (args.isMovie) loadSimilarMovie() else loadSimilarSeries()
     }
 
-    private fun loadSimilarMedia() {
+    private fun loadSimilarMovie() {
+        ::initFetchData.invoke()
         tryToExecute(
-            function = { getSimilarMoviesUseCase(movieId = args.mediaId) },
-            onSuccess = { allMovies ->
-                updateState {
-                    it.copy(
-                        headerName = "Similar Movies",
-                        medias = allMovies.toMovieUiState(),
-                        isMovie = true
-                    )
-                }
-            },
-            onError = { e ->
-
-            },
+            function = { getSimilarMoviesUseCase.invoke(movieId = args.mediaId) },
+            onSuccess = { allMovies -> ::onSuccessLoadSimilarMovie.invoke(allMovies) },
+            onError = { ::onError }
         )
     }
 
     private fun loadSimilarSeries() {
+        ::initFetchData.invoke()
         tryToExecute(
-            function = { getSimilarSeriesUseCase(seriesId = args.mediaId) },
-            onSuccess = { allSeries ->
-                updateState {
-                    it.copy(
-                        headerName = "Similar Series",
-                        medias = allSeries.toSeriesUiState(),
-                        isMovie = false
-                    )
-                }
-            },
-            onError = { e ->
-                Log.d("TAG lol", "loadCastData: ${e.message}")
-            },
+            function = { getSimilarSeriesUseCase.invoke(seriesId = args.mediaId) },
+            onSuccess = { allSeries -> ::onSuccessLoadSimilarSeries.invoke(allSeries)},
+            onError = { ::onError }
         )
     }
 
+    private fun initFetchData() {
+        updateState { it.copy(showLoadingScreen = true) }
+    }
+
+    private fun onError() {
+        updateState {
+            it.copy(isError = true, showLoadingScreen = false)
+        }
+    }
+
+    private fun onSuccessLoadSimilarMovie(allMovies: List<Movie>) {
+        updateState {
+            it.copy(
+                headerName = "Similar Movies",
+                medias = allMovies.toMovieUiState(),
+                isMovie = true,
+                showLoadingScreen = false,
+                isError = false
+            )
+        }
+    }
+
+    private fun onSuccessLoadSimilarSeries(allSeries: List<Series>) {
+        updateState {
+            it.copy(
+                headerName = "Similar Series",
+                medias = allSeries.toSeriesUiState(),
+                isMovie = false,
+                showLoadingScreen = false,
+                isError = false
+            )
+        }
+    }
+
+    override fun onMediaCardClick(id: Int) {
+        emitNewEffect(effect=SimilarMediaEffect.NavigateToDetails(id))
+    }
+
+    override fun onBackClick() {
+        emitNewEffect(effect= SimilarMediaEffect.NavigateBacK)
+    }
+
+    override fun onRetryButtonClick() {
+        if (args.isMovie) loadSimilarMovie() else loadSimilarSeries()
+    }
 }
-
-

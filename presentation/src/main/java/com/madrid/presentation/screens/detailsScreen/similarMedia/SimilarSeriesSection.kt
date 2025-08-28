@@ -50,10 +50,7 @@ fun SimilarSeriesSection(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(similarSeries) { series ->
-                SeriesCard(
-                    series = series,
-                    onClick = { onSeriesClick(series) }
-                )
+                SeriesCard(series = series, onClick = { onSeriesClick(series) })
             }
         }
     }
@@ -87,6 +84,7 @@ private fun SeriesCard(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

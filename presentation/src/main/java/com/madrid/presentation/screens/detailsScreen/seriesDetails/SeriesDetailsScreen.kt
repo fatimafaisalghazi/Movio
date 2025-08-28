@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioSnakBar
 import com.madrid.designSystem.component.ToastDuration
@@ -57,6 +58,7 @@ import com.madrid.presentation.viewModel.detailsViewModel.SeriesDetailsUiState
 import com.madrid.presentation.viewModel.detailsViewModel.seriesDetails.SeriesDetailsEffect
 import com.madrid.presentation.viewModel.detailsViewModel.seriesDetails.SeriesDetailsInteractionListener
 import com.madrid.presentation.viewModel.detailsViewModel.seriesDetails.SeriesDetailsViewModel
+import kotlinx.coroutines.flow.SharedFlow
 
 @Composable
 fun SeriesDetailsScreen(
@@ -67,8 +69,52 @@ fun SeriesDetailsScreen(
     val navController = LocalNavController.current
     val context = LocalContext.current
 
+    HandelNavigation(effect = viewModel.effect, navController = navController)
+
+
+
+    when {
+        uiState.showLoadingScreen -> {
+            LoadingScreen(message = stringResource(R.string.loading))
+        }
+
+        uiState.isError -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 64.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                DialogWithButtonLayout(
+                    title = stringResource(R.string.internet_is_not_available),
+                    description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                    image = Theme.drawables.noInternetId,
+                    buttonText = stringResource(R.string.try_again),
+                    onClick = {
+                        interactionListener.onRetryButtonClick()
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .navigationBarsPadding()
+                        .padding(16.dp)
+                )
+            }
+        }
+
+        else -> {
+            SeriesDetailsScreenContent(
+                context = context,
+                uiState = uiState,
+                listener = interactionListener,
+            )
+        }
+
+    }
+}
+@Composable
+private fun HandelNavigation(effect: SharedFlow<SeriesDetailsEffect>,navController: NavHostController){
     LaunchedEffect(Unit) {
-        viewModel.effect.collect { effect ->
+        effect.collect { effect ->
             when (effect) {
 
                 is SeriesDetailsEffect.NavigateBack -> {
@@ -125,45 +171,7 @@ fun SeriesDetailsScreen(
             }
         }
     }
-
-    when {
-        uiState.showLoadingScreen -> {
-            LoadingScreen(message = stringResource(R.string.loading))
-        }
-
-        uiState.isError -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 64.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                DialogWithButtonLayout(
-                    title = stringResource(R.string.internet_is_not_available),
-                    description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                    image = Theme.drawables.noInternetId,
-                    buttonText = stringResource(R.string.try_again),
-                    onClick = {
-                        interactionListener.onRetryButtonClick()
-                    },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .navigationBarsPadding()
-                        .padding(16.dp)
-                )
-            }
-        }
-
-        else -> {
-            SeriesDetailsScreenContent(
-                context = context,
-                uiState = uiState,
-                listener = interactionListener,
-            )
-        }
-    }
 }
-
 @Composable
 private fun SeriesDetailsScreenContent(
     context: Context,
@@ -362,10 +370,7 @@ private fun SeriesDetailsScreenContent(
             isFavorite = uiState.isFavourite
         )
         if (uiState.showSnackBar) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 MovioSnakBar(
                     message = stringResource(uiState.errorResMessageId),
                     duration = ToastDuration.SHORT,
