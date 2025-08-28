@@ -4,7 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -13,10 +14,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -25,13 +23,14 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.madrid.designSystem.R
 import com.madrid.designSystem.component.CustomTextTitle
-import com.madrid.designSystem.modifier.ShimmerCard
 import com.madrid.designSystem.modifier.removeWidthPaddingFromParent
+import com.madrid.presentation.component.ShimmerEffectCard
 import com.madrid.presentation.component.layout.NoInternetLayout
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
 fun LazyGridScope.forYouAndExploreSections(
+    isVisible:Boolean,
     showSearchResults: Boolean,
     isLoading: Boolean,
     isError: Boolean,
@@ -39,10 +38,10 @@ fun LazyGridScope.forYouAndExploreSections(
     parentPadding: Dp,
     forYouMovies: List<SearchScreenState.MovieUiState>,
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
-    onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
-    onRetryButtonClick: () -> Unit = {},
+    onMovieClick: (Int) -> Unit = {},
+    onRetryButtonClick: () -> Unit = {}
 ) {
-    if (!showSearchResults) {
+    if (!showSearchResults and isVisible) {
         forYouSection(
             isLoading = isLoading,
             isError = isError,
@@ -67,7 +66,7 @@ private fun LazyGridScope.forYouSection(
     onClickSeeAll: () -> Unit,
     parentPadding: Dp,
     forYouMovies: List<SearchScreenState.MovieUiState>,
-    onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
+    onMovieClick: (Int) -> Unit = {},
     onRetryButtonClick: () -> Unit = {},
 ){
     when {
@@ -94,7 +93,7 @@ private fun LazyGridScope.forYouSectionResult(
     onClickSeeAll: () -> Unit,
     parentPadding: Dp,
     forYouMovies: List<SearchScreenState.MovieUiState>,
-    onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
+    onMovieClick: (Int) -> Unit = {},
 ){
     item(
         span = { GridItemSpan(maxLineSpan) }
@@ -124,7 +123,7 @@ private fun LazyGridScope.forYouSectionResult(
                     movieImage = movie.imageUrl,
                     rate = movie.rating,
                     imageHeight = 160.dp,
-                    onClick = { onMovieClick(movie) }
+                    onClick = { onMovieClick(movie.id) }
                 )
             }
         }
@@ -133,7 +132,7 @@ private fun LazyGridScope.forYouSectionResult(
 
 private fun LazyGridScope.exploreMoreSection(
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
-    onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
+    onMovieClick: (Int) -> Unit = {},
     onRetryButtonClick: () -> Unit = {},
 ){
     when {
@@ -161,45 +160,21 @@ private fun LazyGridScope.exploreMoreSection(
 @SuppressLint("UnusedBoxWithConstraintsScope")
 private fun LazyGridScope.exploreMoreSectionResult(
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
-    onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
+    onMovieClick: (Int) -> Unit = {},
 ) {
-    item(
-        span = { GridItemSpan(maxLineSpan) }
-    ) {
-        CustomTextTitle(
-            modifier = Modifier.padding(bottom = 12.dp),
-            primaryText = stringResource(com.madrid.presentation.R.string.explore_more)
+    items(count = exploreMoreMovies.itemCount) { index ->
+        val movie = exploreMoreMovies[index] ?: return@items
+
+        MovioVerticalCard(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(ratio = 150f / 180f)
+                .padding(bottom = 12.dp),
+            description = movie.title,
+            movieImage = movie.imageUrl,
+            rate = movie.rating,
+            imageHeight = Dp.Unspecified,
+            onClick = { onMovieClick(movie.id) }
         )
     }
-    items(items = exploreMoreMovies.itemSnapshotList) { movie ->
-        if (movie != null) {
-            BoxWithConstraints {
-                val cardWidth = maxWidth
-                val cardHeight = cardWidth * (180f / 158)
-
-                MovioVerticalCard(
-                    modifier = Modifier
-                        .width(cardWidth)
-                        .padding(bottom = 12.dp),
-                    description = movie.title,
-                    movieImage = movie.imageUrl,
-                    rate = movie.rating,
-                    imageHeight = cardHeight,
-                    onClick = { onMovieClick(movie) }
-                )
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun ShimmerEffectCard(modifier: Modifier = Modifier) {
-    ShimmerCard(
-        isLoading = true,
-        modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
-            .width(150.dp)
-            .height(180.dp)
-    )
 }

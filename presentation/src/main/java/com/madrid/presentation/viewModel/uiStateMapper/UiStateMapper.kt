@@ -8,30 +8,30 @@ import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
 fun Movie.toMovieUiState(): SearchScreenState.MovieUiState {
     return SearchScreenState.MovieUiState(
-        id = this.id.toString(),
-        title = this.title,
-        imageUrl = this.imageUrl,
-        rating = formatRate(this.rate),
-        category = this.genre.toString()
+        id = id,
+        title = title,
+        imageUrl = imageUrl,
+        rating = formatRate(rate),
+        category = genre.toString()
     )
 }
 
 fun Series.toSeriesUiState(): SearchScreenState.SeriesUiState {
     return SearchScreenState.SeriesUiState(
-        id = this.id.toString(),
-        title = this.title,
-        imageUrl = this.imageUrl,
-        rating =formatRate(this.rate),
+        id = id.toString(),
+        title = title,
+        imageUrl = imageUrl,
+        rating =formatRate(rate),
     )
 }
 
 fun Artist.toArtistUiState(): SearchScreenState.ArtistUiState {
     return SearchScreenState.ArtistUiState(
-        id = this.id.toString(),
-        name = this.name,
-        imageUrl = this.imageUrl,
-        role = this.role,
-        country = this.country,
-        description = this.overview
+        id = id.toString(),
+        name = name,
+        imageUrl = imageUrl,
+        role = role,
+        country = country,
+        description = overview
     )
 }

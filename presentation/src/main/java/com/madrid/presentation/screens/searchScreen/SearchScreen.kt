@@ -41,8 +41,8 @@ import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.refreshScreenHolder.RefreshScreenHolder
 import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.FilterSearchScreen
-import com.madrid.presentation.screens.searchScreen.forYouAndExploreScreen.forYouAndExploreSections
 import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.recentSearchScreen
+import com.madrid.presentation.screens.searchScreen.forYouAndExploreScreen.forYouAndExploreSections
 import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.screens.searchScreen.utils.highlightCharactersInText
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenInteractionListener
@@ -208,18 +208,17 @@ fun ContentSearchScreen(
                 )
             }
 
-            if (uiState.searchUiState.searchQuery.isEmpty() && !isFocused) {
-                forYouAndExploreSections(
-                    showSearchResults = uiState.searchUiState.searchQuery.isNotBlank(),
-                    isLoading = uiState.searchUiState.isLoading,
-                    isError = uiState.searchUiState.isError,
-                    forYouMovies = uiState.searchUiState.forYouMovies,
-                    onMovieClick = { listener.onMovieClick(it.id.toInt()) },
-                    exploreMoreMovies = exploreMoreMovies,
-                    onClickSeeAll = listener::onSeeAllClick,
-                    parentPadding = 16.dp
-                )
-            }
+            forYouAndExploreSections(
+                isVisible = uiState.searchUiState.searchQuery.isEmpty() && !isFocused,
+                showSearchResults = uiState.searchUiState.searchQuery.isNotBlank(),
+                isLoading = uiState.searchUiState.isLoading,
+                isError = uiState.searchUiState.isError,
+                forYouMovies = uiState.searchUiState.forYouMovies,
+                onMovieClick = listener::onMovieClick,
+                exploreMoreMovies = exploreMoreMovies,
+                onClickSeeAll = listener::onSeeAllClick,
+                parentPadding = 16.dp
+            )
 
             recentSearchScreen(
                 isVisible = isFocused && uiState.recentSearchUiState.isNotEmpty(),
@@ -228,11 +227,12 @@ fun ContentSearchScreen(
                 onSearchItemClick = { itemInRecent ->
                     listener.onSearchQueryChange(itemInRecent)
                     isFocused = false
-                    onSearch(itemInRecent, uiState.selectedSearchSection, listener)
+                    onSearch(itemInRecent,
+                        selectedSearchSection = uiState.selectedSearchSection, listener)
                     keyboardController?.hide()
                     focusManager.clearFocus()
                 },
-                onRemoveItem = { listener.onRemoveRecentSearchItem(it) },
+                onRemoveItem = listener::onRemoveRecentSearchItem,
                 onClearAll = listener::onClearAll,
                 highlightCharactersInText = ::highlightCharactersInText,
                 isWrite = isWrite,
@@ -263,18 +263,17 @@ fun ContentSearchScreen(
             onChangeSelectedTabIndex = { searchSection ->
                 if (searchSection != uiState.selectedSearchSection) {
                     when (searchSection) {
-                        SearchSections.TOP_RATED -> listener.onTopRatedTabClick()
-                        SearchSections.MOVIES -> listener.onMoviesTabClick()
-                        SearchSections.SERIES -> listener.onSeriesTabClick()
-                        SearchSections.ARTISTS -> listener.onActorTabClick()
+                        SearchSections.TOP_RATED -> listener::onTopRatedTabClick
+                        SearchSections.MOVIES -> listener::onMoviesTabClick
+                        SearchSections.SERIES -> listener::onSeriesTabClick
+                        SearchSections.ARTISTS -> listener::onActorTabClick
                     }
                 }
             },
-            onChangeTypeFilterSearch = {},
-            onSeriesClick = { seriesId -> listener.onSeriesClick(seriesId) },
-            onMovieClick = { moviesId -> listener.onMovieClick(moviesId) },
-            onActorClick = { actorId -> listener.onActorClick(actorId) },
-            onTopResultClick = { movieId -> listener.onTopResultClick(movieId) }
+            onSeriesClick = listener::onSeriesClick,
+            onMovieClick = listener::onMovieClick,
+            onActorClick = listener::onActorClick,
+            onTopResultClick = listener::onTopResultClick
         )
     }
 }
@@ -287,11 +286,11 @@ private fun onSearch(
 ) {
     listener.onDoAction()
     listener.onChangeValueOfIsChangeSearchQuery()
-    listener.onAddRecentSearch(itemInRecent)
+    listener.onAddRecentSearch(recentSearch = itemInRecent)
     when (selectedSearchSection) {
-        SearchSections.TOP_RATED -> listener.onTopRatedTabClick()
-        SearchSections.MOVIES -> listener.onMoviesTabClick()
-        SearchSections.SERIES -> listener.onSeriesTabClick()
-        SearchSections.ARTISTS -> listener.onActorTabClick()
+        SearchSections.TOP_RATED -> listener::onTopRatedTabClick
+        SearchSections.MOVIES -> listener::onMoviesTabClick
+        SearchSections.SERIES -> listener::onSeriesTabClick
+        SearchSections.ARTISTS -> listener::onActorTabClick
     }
 }

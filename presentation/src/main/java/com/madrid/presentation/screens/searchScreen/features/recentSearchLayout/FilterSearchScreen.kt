@@ -36,17 +36,17 @@ import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 fun FilterSearchScreen(
     isVisible: Boolean,
     typeOfFilterSearch: SearchSections,
-    onChangeTypeFilterSearch: () -> Unit,
     selectedTabIndex: SearchSections,
     onChangeSelectedTabIndex: (SearchSections) -> Unit,
     topRated: LazyPagingItems<SearchScreenState.MovieUiState>,
     movies: LazyPagingItems<SearchScreenState.MovieUiState>,
     series: LazyPagingItems<SearchScreenState.SeriesUiState>,
     artist: LazyPagingItems<SearchScreenState.ArtistUiState>,
-    onSeriesClick: (Int) -> Unit = {},
     onMovieClick: (Int) -> Unit,
     onTopResultClick: (Int) -> Unit,
     onActorClick: (Int) -> Unit,
+    onSeriesClick: (Int) -> Unit,
+    onChangeTypeFilterSearch: () -> Unit = {},
 ) {
     if(isVisible) {
         HeaderSearchSectionBar(

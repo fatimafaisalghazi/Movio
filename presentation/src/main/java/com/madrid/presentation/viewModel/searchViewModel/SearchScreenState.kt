@@ -40,7 +40,7 @@ data class SearchScreenState(
     )
 
     data class MovieUiState(
-        val id: String = "",
+        val id: Int = -1,
         val mediaType: MediaType = MediaType.MOVIE,
         val title: String = "",
         val imageUrl: String = "",
