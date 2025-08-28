@@ -22,7 +22,7 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
-import com.madrid.presentation.viewModel.detailsViewModel.movie.SimilarMovie
+import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.MediaUiState
 import com.madrid.presentation.viewModel.detailsViewModel.similarMedia.SimilarMediaViewModel
 
 @Composable
@@ -31,17 +31,10 @@ fun SeeAllSimilarMediaScreen(
 ) {
     val uiState by viewModel.state.collectAsState()
     val navController = LocalNavController.current
-    val similarMovies = uiState.medias.map { media ->
-        SimilarMovie(
-            id = media.mediaId,
-            title = media.mediaName,
-            imageUrl = media.imageUrl,
-            rating = media.rate,
-        )
-    }
+    val mediaUiState = uiState.medias
 
     SeeAllSimilarMediaScreenContent(
-        similarMovies = similarMovies,
+        similarMovies = mediaUiState,
         headerName = uiState.headerName,
         isMovie = uiState.isMovie,
         onClickBack = { navController.popBackStack() },
@@ -57,7 +50,7 @@ fun SeeAllSimilarMediaScreen(
 
 @Composable
 fun SeeAllSimilarMediaScreenContent(
-    similarMovies: List<SimilarMovie>,
+    similarMovies: List<MediaUiState>,
     headerName: String,
     isMovie: Boolean,
     onClickBack: () -> Unit = {},
@@ -80,20 +73,20 @@ fun SeeAllSimilarMediaScreenContent(
             columns = GridCells.Adaptive(minSize = 101.33.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Theme.color.surfaces.surface)
+                .background(color = Theme.color.surfaces.surface)
                 .navigationBarsPadding(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(space = 12.dp)
         ) {
             items(count = similarMovies.size) { index ->
                 val movie = similarMovies[index]
                 MovioVerticalCard(
-                    description = movie.title,
+                    description = movie.mediaName,
                     movieImage = movie.imageUrl,
-                    rate = movie.rating,
+                    rate = movie.rate,
                     width = 101.dp,
                     imageHeight = 160.dp,
-                    onClick = { onClickMedia(movie.id, isMovie) },
+                    onClick = { onClickMedia(movie.mediaId, isMovie) },
                 )
             }
         }

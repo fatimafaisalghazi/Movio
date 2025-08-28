@@ -1,7 +1,5 @@
 package com.madrid.presentation.viewModel.detailsViewModel.similarMedia
 
-private const val TAG = "SimilarMediaUiState"
-
 data class SimilarMediaUiState(
     val isMovie: Boolean = true,
     val headerName: String = "",

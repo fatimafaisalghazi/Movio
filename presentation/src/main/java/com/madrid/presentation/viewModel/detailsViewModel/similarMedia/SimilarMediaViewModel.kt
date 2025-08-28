@@ -28,9 +28,7 @@ class SimilarMediaViewModel @Inject constructor(
 
     private fun loadSimilarMedia() {
         tryToExecute(
-            function = {
-                getSimilarMoviesUseCase(args.mediaId)
-            },
+            function = { getSimilarMoviesUseCase(movieId = args.mediaId) },
             onSuccess = { allMovies ->
                 updateState {
                     it.copy(
@@ -41,16 +39,14 @@ class SimilarMediaViewModel @Inject constructor(
                 }
             },
             onError = { e ->
-                Log.d("TAG lol", "loadCastData: ${e.message}")
+
             },
         )
     }
 
     private fun loadSimilarSeries() {
         tryToExecute(
-            function = {
-                getSimilarSeriesUseCase(args.mediaId)
-            },
+            function = { getSimilarSeriesUseCase(seriesId = args.mediaId) },
             onSuccess = { allSeries ->
                 updateState {
                     it.copy(
@@ -68,31 +64,4 @@ class SimilarMediaViewModel @Inject constructor(
 
 }
 
-fun List<Movie>.toMovieUiState(): List<MediaUiState> {
-    return this.map { movie ->
-        MediaUiState(
-            mediaId = movie.id,
-            isMovie = true,
-            imageUrl = movie.imageUrl,
-            mediaName = movie.title,
-            rate = movie.rate?.let {
-                if (it > 0.0) String.format("%.1f", it) else ""
-            } ?: ""
-        )
-    }
-}
-
-fun List<Series>.toSeriesUiState(): List<MediaUiState> {
-    return this.map { series ->
-        MediaUiState(
-            mediaId = series.id,
-            isMovie = false,
-            imageUrl = series.imageUrl,
-            mediaName = series.title,
-            rate = series.rate?.let {
-                if (it > 0.0) String.format("%.1f", it) else ""
-            } ?: ""
-        )
-    }
-}
 
