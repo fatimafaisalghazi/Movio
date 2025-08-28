@@ -1,4 +1,4 @@
-package com.madrid.presentation.screens.searchScreen
+package com.madrid.presentation.viewModel.searchViewModel
 
 interface SearchScreenInteractionListener {
     fun onTopRatedTabClick()

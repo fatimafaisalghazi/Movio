@@ -18,7 +18,7 @@ import com.madrid.presentation.pagination.ExplorePagingSource
 import com.madrid.presentation.pagination.SearchArtistPagingSource
 import com.madrid.presentation.pagination.SearchMoviePagingSource
 import com.madrid.presentation.pagination.SearchSeriesPagingSource
-import com.madrid.presentation.screens.searchScreen.SearchScreenInteractionListener
+import com.madrid.presentation.viewModel.searchViewModel.SearchScreenInteractionListener
 import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.base.ErrorState
