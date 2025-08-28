@@ -18,7 +18,6 @@ import com.madrid.presentation.pagination.ExplorePagingSource
 import com.madrid.presentation.pagination.SearchArtistPagingSource
 import com.madrid.presentation.pagination.SearchMoviePagingSource
 import com.madrid.presentation.pagination.SearchSeriesPagingSource
-import com.madrid.presentation.viewModel.searchViewModel.SearchScreenInteractionListener
 import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.base.ErrorState
@@ -92,28 +91,11 @@ class SearchViewModel @Inject constructor(
                 searchUiState = searchScreenState.searchUiState.copy(
                     searchQuery = query,
                     isSearchQueryChange = true
-                ),
-
                 )
+            )
         }
         loadRecentSearches()
         onChangeRecentSearchUiState()
-    }
-
-    override fun onMovieClick(movieId: Int) {
-        emitNewEffect(effect = SearchScreenUiEffect.NavigateToMovieDetails(movieId))
-    }
-
-    override fun onSeriesClick(seriesId: Int) {
-        emitNewEffect(effect = SearchScreenUiEffect.NavigateToSeriesDetails(seriesId, 1))
-    }
-
-    override fun onTopResultClick(movieId: Int) {
-        emitNewEffect(effect = SearchScreenUiEffect.NavigateToMovieDetails(movieId))
-    }
-
-    override fun onArtistClick(actorId: Int) {
-        emitNewEffect(effect = SearchScreenUiEffect.NavigateToActorDetails(actorId))
     }
 
     override fun onClearSearchQueryClick() {
@@ -324,7 +306,10 @@ class SearchViewModel @Inject constructor(
                 selectedSearchSection = SearchSections.TOP_RATED
             )
         }
+        getTopRatedMovies()
+    }
 
+    private fun getTopRatedMovies() {
         launchPagingRequest(
             pagingSourceFactory = {
                 SearchMoviePagingSource(
@@ -332,23 +317,24 @@ class SearchViewModel @Inject constructor(
                     getMoviesByQueryUseCase = getMoviesByQueryUseCase
                 )
             },
-            onSuccess = { pagingFlow ->
-                val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toMovieUiState() }
-                }
-
-                updateState { current ->
-                    current.copy(
-                        filteredScreenUiState = current.filteredScreenUiState.copy(
-                            topResult = result,
-                            isLoading = false
-                        ),
-                        searchUiState = current.searchUiState.copy(isLoading = false)
-                    )
-                }
-            }
+            onSuccess = ::onSuccessGetTopRatedMovies
         )
     }
+
+    private fun onSuccessGetTopRatedMovies(pagingFlow: Flow<PagingData<Movie>>) {
+        val result = pagingFlow.map { pagingData -> pagingData.map { it.toMovieUiState() } }
+
+        updateState { current ->
+            current.copy(
+                filteredScreenUiState = current.filteredScreenUiState.copy(
+                    topResult = result,
+                    isLoading = false
+                ),
+                searchUiState = current.searchUiState.copy(isLoading = false)
+            )
+        }
+    }
+
 
     override fun onActorTabClick() {
         updateState {
@@ -364,11 +350,11 @@ class SearchViewModel @Inject constructor(
                     getArtistsByQueryUseCase
                 )
             },
-            onSuccess = ::onClickActorTabSuccess
+            onSuccess = ::onSuccessClickActorTab
         )
     }
 
-    private fun onClickActorTabSuccess(pagingFlow: Flow<PagingData<Artist>>) {
+    private fun onSuccessClickActorTab(pagingFlow: Flow<PagingData<Artist>>) {
         val result = pagingFlow.map { pagingData ->
             pagingData.map { it.toArtistUiState() }
         }
@@ -470,4 +456,21 @@ class SearchViewModel @Inject constructor(
             )
         }
     }
+
+    override fun onMovieClick(movieId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToMovieDetails(movieId))
+    }
+
+    override fun onSeriesClick(seriesId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToSeriesDetails(seriesId, 1))
+    }
+
+    override fun onTopResultClick(movieId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToMovieDetails(movieId))
+    }
+
+    override fun onActorClick(actorId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToActorDetails(actorId))
+    }
+
 }

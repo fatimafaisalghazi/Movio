@@ -10,7 +10,7 @@ interface SearchScreenInteractionListener {
     fun onMovieClick(movieId: Int)
     fun onSeriesClick(seriesId: Int)
     fun onTopResultClick(movieId: Int)
-    fun onArtistClick(actorId: Int)
+    fun onActorClick(actorId: Int)
     fun onClearAll()
     fun onRemoveRecentSearchItem(recentSearchItem: String)
     fun onAddRecentSearch(recentSearch: String)
