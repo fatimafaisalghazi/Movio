@@ -8,6 +8,7 @@ import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.madrid.domain.usecase.series.GetSimilarSeriesUseCase
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -31,7 +32,7 @@ class SimilarMediaViewModel @Inject constructor(
         tryToExecute(
             function = { getSimilarMoviesUseCase.invoke(movieId = args.mediaId) },
             onSuccess = { allMovies -> ::onSuccessLoadSimilarMovie.invoke(allMovies) },
-            onError = { ::onError }
+            onError = ::onError
         )
     }
 
@@ -40,7 +41,7 @@ class SimilarMediaViewModel @Inject constructor(
         tryToExecute(
             function = { getSimilarSeriesUseCase.invoke(seriesId = args.mediaId) },
             onSuccess = { allSeries -> ::onSuccessLoadSimilarSeries.invoke(allSeries)},
-            onError = { ::onError }
+            onError = ::onError
         )
     }
 
@@ -48,7 +49,7 @@ class SimilarMediaViewModel @Inject constructor(
         updateState { it.copy(showLoadingScreen = true) }
     }
 
-    private fun onError() {
+    private fun onError(error : ErrorState) {
         updateState {
             it.copy(isError = true, showLoadingScreen = false)
         }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -45,7 +46,11 @@ fun SeeAllSimilarMediaScreen(
 
     HandelNavigation(navController = navController, uiState = uiState, effect = viewModel.effect)
 
-    SeeAllSimilarMediaScreenContent(uiState = uiState, headerName = uiState.headerName, listener = viewModel)
+    SeeAllSimilarMediaScreenContent(
+        uiState = uiState,
+        headerName = uiState.headerName,
+        listener = viewModel
+    )
 }
 
 @Composable
@@ -57,15 +62,12 @@ private fun HandelNavigation(
     LaunchedEffect(effect) {
         effect.collect { effect ->
             when (effect) {
-
                 is SimilarMediaEffect.NavigateToDetails ->
-
                     if (uiState.isMovie) {
                         navController.navigate(route = MovieDetailsScreen(movieId = effect.id))
                     } else {
                         navController.navigate(route = SeriesDetailsScreen(seriesId = effect.id, seasonNumber = 1))
                     }
-
                 is SimilarMediaEffect.NavigateBacK -> navController.popBackStack()
             }
         }
@@ -112,19 +114,16 @@ fun SeeAllSimilarMediaScreenContent(
             }
 
             else -> {
-
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 101.33.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = Theme.color.surfaces.surface)
-                        .navigationBarsPadding(),
-                    contentPadding = PaddingValues(vertical =6.dp ),
+                        .background(color = Theme.color.surfaces.surface),
+                    contentPadding = PaddingValues(vertical = 6.dp),
                     horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(space = 6.dp)
                 ) {
-                    items(count = uiState.medias.size) { index ->
-                        val media = uiState.medias[index]
+                    items(items = uiState.medias) { media ->
                         MovioVerticalCard(
                             description = media.mediaName,
                             movieImage = media.imageUrl,

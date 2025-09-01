@@ -4,7 +4,7 @@ import com.madrid.domain.entity.Movie
 import com.madrid.domain.entity.Series
 
 fun List<Movie>.toMovieUiState(): List<MediaUiState> {
-    return this.map { movie ->
+    return map { movie ->
         MediaUiState(
             mediaId = movie.id,
             isMovie = true,
@@ -18,7 +18,7 @@ fun List<Movie>.toMovieUiState(): List<MediaUiState> {
 }
 
 fun List<Series>.toSeriesUiState(): List<MediaUiState> {
-    return this.map { series ->
+    return map { series ->
         MediaUiState(
             mediaId = series.id,
             isMovie = false,

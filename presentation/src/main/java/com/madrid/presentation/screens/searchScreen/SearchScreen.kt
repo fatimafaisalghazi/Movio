@@ -68,13 +68,8 @@ fun SearchScreen(
 
     RefreshScreenHolder(
         refreshState = uiState.searchUiState.refreshState,
-        onRefresh = { viewModel.onRefresh(uiState.selectedSearchSection) }
-    ) {
-        ContentSearchScreen(
-            uiState = uiState,
-            listener = viewModel
-        )
-    }
+        onRefresh = { viewModel.onRefresh(typeOfFilterSearch = uiState.selectedSearchSection) },
+        content = { ContentSearchScreen(uiState = uiState, listener = viewModel) })
 }
 
 @Composable
@@ -227,8 +222,10 @@ fun ContentSearchScreen(
                 onSearchItemClick = { itemInRecent ->
                     listener.onSearchQueryChange(itemInRecent)
                     isFocused = false
-                    onSearch(itemInRecent,
-                        selectedSearchSection = uiState.selectedSearchSection, listener)
+                    onSearch(
+                        itemInRecent,
+                        selectedSearchSection = uiState.selectedSearchSection, listener
+                    )
                     keyboardController?.hide()
                     focusManager.clearFocus()
                 },
