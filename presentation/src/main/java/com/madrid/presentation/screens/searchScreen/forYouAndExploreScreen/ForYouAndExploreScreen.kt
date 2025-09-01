@@ -159,6 +159,14 @@ private fun LazyGridScope.exploreMoreSectionResult(
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
     onMovieClick: (Int) -> Unit = {},
 ) {
+    item(
+        span = { GridItemSpan(maxLineSpan) }
+    ) {
+        CustomTextTitle(
+            modifier = Modifier.padding(bottom = 12.dp),
+            primaryText = stringResource(com.madrid.presentation.R.string.explore_more)
+        )
+    }
     items(count = exploreMoreMovies.itemCount) { index ->
         val movie = exploreMoreMovies[index] ?: return@items
 
@@ -170,7 +178,7 @@ private fun LazyGridScope.exploreMoreSectionResult(
             description = movie.title,
             movieImage = movie.imageUrl,
             rate = movie.rating,
-            imageHeight = Dp.Unspecified,
+            imageHeight =  (150f / 180f).dp,
             onClick = { onMovieClick(movie.id) }
         )
     }
