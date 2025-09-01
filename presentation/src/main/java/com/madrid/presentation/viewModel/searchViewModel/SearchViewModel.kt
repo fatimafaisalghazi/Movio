@@ -53,11 +53,11 @@ class SearchViewModel @Inject constructor(
     private fun loadRecentSearches() {
         tryToExecute(
             function = getRecentSearchesUseCase::invoke,
-            onSuccess = ::onUpdateRecentSuccess,
+            onSuccess = ::onSuccessUpdateRecent,
         )
     }
 
-    private fun onUpdateRecentSuccess(result: List<String>) {
+    private fun onSuccessUpdateRecent(result: List<String>) {
         updateState { searchScreenState ->
             searchScreenState.copy(allRecentSearchTexts = result, suggestionListSize = 0)
         }
@@ -115,7 +115,7 @@ class SearchViewModel @Inject constructor(
                 addRecentSearchUseCase.invoke(item = recentSearch)
                 getRecentSearchesUseCase.invoke()
             },
-            onSuccess = ::onUpdateRecentSuccess,
+            onSuccess = ::onSuccessUpdateRecent,
         )
     }
 
@@ -131,7 +131,7 @@ class SearchViewModel @Inject constructor(
                 clearAllRecentSearchesUseCase.invoke()
                 getRecentSearchesUseCase.invoke()
             },
-            onSuccess = ::onUpdateRecentSuccess,
+            onSuccess = ::onSuccessUpdateRecent,
         )
     }
 
@@ -142,7 +142,7 @@ class SearchViewModel @Inject constructor(
                 removeRecentSearchUseCase.invoke(recentSearchItem)
                 getRecentSearchesUseCase.invoke()
             },
-            onSuccess = ::onUpdateRecentSuccess,
+            onSuccess = ::onSuccessUpdateRecent,
             onError = ::onError,
         )
     }
