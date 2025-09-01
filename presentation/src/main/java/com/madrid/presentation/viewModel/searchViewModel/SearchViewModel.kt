@@ -53,7 +53,7 @@ class SearchViewModel @Inject constructor(
     private fun loadRecentSearches() {
         tryToExecute(
             function = getRecentSearchesUseCase::invoke,
-            onSuccess = ::onSuccessUpdateRecent,
+            onSuccess = ::onSuccessUpdateRecent
         )
     }
 
@@ -69,7 +69,7 @@ class SearchViewModel @Inject constructor(
         if (query.isNotBlank() && query.isNotEmpty()) {
             tryToExecute(
                 function = { getSuggestionKeywordsUseCase.invoke(query.trim()) },
-                onSuccess = ::onSuccessGetSuggestionKeywords,
+                onSuccess = ::onSuccessGetSuggestionKeywords
             )
         }
     }
@@ -102,7 +102,7 @@ class SearchViewModel @Inject constructor(
         updateState { searchScreenState ->
             searchScreenState.copy(
                 searchUiState = searchScreenState.searchUiState.copy(
-                    searchQuery = "",
+                    searchQuery = ""
                 )
             )
         }
@@ -115,7 +115,7 @@ class SearchViewModel @Inject constructor(
                 addRecentSearchUseCase.invoke(item = recentSearch)
                 getRecentSearchesUseCase.invoke()
             },
-            onSuccess = ::onSuccessUpdateRecent,
+            onSuccess = ::onSuccessUpdateRecent
         )
     }
 
@@ -131,7 +131,7 @@ class SearchViewModel @Inject constructor(
                 clearAllRecentSearchesUseCase.invoke()
                 getRecentSearchesUseCase.invoke()
             },
-            onSuccess = ::onSuccessUpdateRecent,
+            onSuccess = ::onSuccessUpdateRecent
         )
     }
 
@@ -143,7 +143,7 @@ class SearchViewModel @Inject constructor(
                 getRecentSearchesUseCase.invoke()
             },
             onSuccess = ::onSuccessUpdateRecent,
-            onError = ::onError,
+            onError = ::onError
         )
     }
 
@@ -170,7 +170,7 @@ class SearchViewModel @Inject constructor(
         tryToExecute(
             function = { getRecommendedMovieUseCase.invoke(page = 1) },
             onSuccess = ::onSuccessGetRecommendedMovies,
-            onError = ::onError,
+            onError = ::onError
         )
     }
 
@@ -213,7 +213,7 @@ class SearchViewModel @Inject constructor(
         updateState {
             it.copy(
                 searchUiState = it.searchUiState.copy(
-                    isLoading = true,
+                    isLoading = true
                 )
             )
         }
@@ -443,7 +443,7 @@ class SearchViewModel @Inject constructor(
         updateState { current ->
             current.copy(
                 searchUiState = current.searchUiState.copy(
-                    refreshState = false,
+                    refreshState = false
                 )
             )
         }
