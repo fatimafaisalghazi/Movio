@@ -218,7 +218,8 @@ private fun SeriesDetailsScreenContent(
                 .verticalScroll(scrollState)
         ) {
             MoviePosterDetailScreen(
-                imageUrl = uiState.topImageUrl, modifier = Modifier.fillMaxSize()
+                imageUrl = uiState.topImageUrl,
+                modifier = Modifier.fillMaxSize()
             )
 
             Box(

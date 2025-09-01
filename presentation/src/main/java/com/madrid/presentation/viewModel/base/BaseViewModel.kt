@@ -44,7 +44,7 @@ abstract class BaseViewModel<S, E>(initialState: S) : ViewModel() {
     protected fun <T> tryToExecute(
         function: suspend () -> T,
         onSuccess: ((T) -> Unit)? = null,
-        onError: (ErrorState) -> Unit,
+        onError: (ErrorState) -> Unit = {},
         scope: CoroutineScope = viewModelScope,
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ): Job = runWithErrorHandling(onError, scope, dispatcher) {
