@@ -93,7 +93,7 @@ fun MovioVerticalCard(
 @Preview(showBackground = true)
 @Composable
 private fun VerticalCardPreview() {
-    MovioTheme {
+    MovioTheme(isDarkTheme = true) {
         MovioVerticalCard(
             description = "Spider-Man ",
             movieImage = "https://image.tmdb.org/t/p/w500/5xKGk6q5g7mVmg7k7U1RrLSHwz6.jpg",

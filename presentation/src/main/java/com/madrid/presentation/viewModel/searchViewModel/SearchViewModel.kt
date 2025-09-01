@@ -1,12 +1,9 @@
 package com.madrid.presentation.viewModel.searchViewModel
 
-import android.util.Log
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.madrid.domain.entity.Artist
+import com.madrid.domain.entity.Movie
 import com.madrid.domain.usecase.search.AddRecentSearchUseCase
 import com.madrid.domain.usecase.search.ClearAllRecentSearchesUseCase
 import com.madrid.domain.usecase.search.GetArtistsByQueryUseCase
@@ -23,6 +20,7 @@ import com.madrid.presentation.pagination.SearchMoviePagingSource
 import com.madrid.presentation.pagination.SearchSeriesPagingSource
 import com.madrid.presentation.screens.searchScreen.utils.SearchSections
 import com.madrid.presentation.viewModel.base.BaseViewModel
+import com.madrid.presentation.viewModel.base.ErrorState
 import com.madrid.presentation.viewModel.uiStateMapper.toArtistUiState
 import com.madrid.presentation.viewModel.uiStateMapper.toMovieUiState
 import com.madrid.presentation.viewModel.uiStateMapper.toSeriesUiState
@@ -30,7 +28,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import kotlin.text.contains
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -44,85 +41,86 @@ class SearchViewModel @Inject constructor(
     private val removeRecentSearchUseCase: RemoveRecentSearchUseCase,
     private val clearAllRecentSearchesUseCase: ClearAllRecentSearchesUseCase,
     private val getSuggestionKeywordsUseCase: GetSuggestionKeywordsUseCase
-) : BaseViewModel<SearchScreenState, Nothing>(
+) : BaseViewModel<SearchScreenState, SearchScreenUiEffect>(
     SearchScreenState()
-) {
+), SearchScreenInteractionListener {
 
     init {
         loadRecentSearches()
         loadInitialData()
     }
-    fun getSuggestionKeywords() {
+
+    private fun loadRecentSearches() {
+        tryToExecute(
+            function = getRecentSearchesUseCase::invoke,
+            onSuccess = ::onSuccessUpdateRecent
+        )
+    }
+
+    private fun onSuccessUpdateRecent(result: List<String>) {
+        updateState { searchScreenState ->
+            searchScreenState.copy(allRecentSearchTexts = result, suggestionListSize = 0)
+        }
+        onChangeRecentSearchUiState()
+    }
+
+    override fun onGetSuggestionKeywords() {
         val query = state.value.searchUiState.searchQuery
-        if(query.isNotBlank() && query.isNotEmpty()){
+        if (query.isNotBlank() && query.isNotEmpty()) {
             tryToExecute(
-                function = {getSuggestionKeywordsUseCase(query.trim())},
-                onSuccess = {suggestionKeyWords->
-                    updateState {searchScreenState->
-                        searchScreenState.copy(
-                            allRecentSearchTexts = suggestionKeyWords + searchScreenState.allRecentSearchTexts,
-                            suggestionListSize = suggestionKeyWords.size
-                        )
-                    }
-                    onChangeRecentSearchUiState()
-
-                            },
-                onError = {
-
-                },
+                function = { getSuggestionKeywordsUseCase.invoke(query.trim()) },
+                onSuccess = ::onSuccessGetSuggestionKeywords
             )
         }
     }
 
-    private fun loadRecentSearches() {
-        tryToExecute(
-            function = { getRecentSearchesUseCase() },
-            onSuccess = ::onUpdateRecentSuccess,
-            onError = { },
-        )
+    private fun onSuccessGetSuggestionKeywords(suggestionKeyWords: List<String>) {
+        updateState { searchScreenState ->
+            searchScreenState.copy(
+                allRecentSearchTexts = suggestionKeyWords + searchScreenState.allRecentSearchTexts,
+                suggestionListSize = suggestionKeyWords.size
+            )
+        }
+        onChangeRecentSearchUiState()
     }
 
-    fun updateSearchQuery(
-        newSearchQuery: String,
-    ) {
+    override fun onSearchQueryChange(query: String) {
         updateState { searchScreenState ->
             searchScreenState.copy(
                 isDoAction = !searchScreenState.isDoAction,
                 searchUiState = searchScreenState.searchUiState.copy(
-                    searchQuery = newSearchQuery,
+                    searchQuery = query,
                     isSearchQueryChange = true
-                ),
-
+                )
             )
         }
         loadRecentSearches()
         onChangeRecentSearchUiState()
-
     }
 
-    fun clearSearchQuery(){
+    override fun onClearSearchQueryClick() {
         updateState { searchScreenState ->
             searchScreenState.copy(
                 searchUiState = searchScreenState.searchUiState.copy(
-                    searchQuery = "",
+                    searchQuery = ""
                 )
             )
         }
         loadRecentSearches()
     }
-    fun addRecentSearch(recentSearch: String) {
+
+    override fun onAddRecentSearch(recentSearch: String) {
         tryToExecute(
             function = {
-                addRecentSearchUseCase(item = recentSearch)
-                getRecentSearchesUseCase()
+                addRecentSearchUseCase.invoke(item = recentSearch)
+                getRecentSearchesUseCase.invoke()
             },
-            onSuccess = ::onUpdateRecentSuccess,
-            onError = {}
+            onSuccess = ::onSuccessUpdateRecent
         )
     }
 
-    fun clearAll() {
-        updateState {searchScreenStat->
+    override fun onClearAll() {
+        updateState { searchScreenStat ->
             searchScreenStat.copy(
                 isDoAction = !searchScreenStat.isDoAction
             )
@@ -130,118 +128,167 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             function = {
-                clearAllRecentSearchesUseCase()
-                getRecentSearchesUseCase()
+                clearAllRecentSearchesUseCase.invoke()
+                getRecentSearchesUseCase.invoke()
             },
-            onSuccess = ::onUpdateRecentSuccess,
-            onError = {}
+            onSuccess = ::onSuccessUpdateRecent
         )
     }
 
-    fun removeRecentSearch(searchItem: String) {
-        updateState {searchScreenStat->
-            searchScreenStat.copy(
-                isDoAction = !searchScreenStat.isDoAction
-            )
-        }
+    override fun onRemoveRecentSearchItem(recentSearchItem: String) {
+        onDoAction()
         tryToExecute(
             function = {
-                removeRecentSearchUseCase(searchItem)
-                getRecentSearchesUseCase()
+                removeRecentSearchUseCase.invoke(recentSearchItem)
+                getRecentSearchesUseCase.invoke()
             },
-            onSuccess = {
-                onUpdateRecentSuccess(it)
-
-            },
-            onError = {},
+            onSuccess = ::onSuccessUpdateRecent,
+            onError = ::onError
         )
     }
-    fun changeValueOfIsChangeSearchQuery(){
-        updateState {searchScreenState->
-           searchScreenState.copy(
-               searchScreenState.searchUiState.copy(
-                   isSearchQueryChange = false
-               )
-           )
+
+    override fun onChangeValueOfIsChangeSearchQuery() {
+        updateState { searchScreenState ->
+            searchScreenState.copy(
+                searchUiState = searchScreenState.searchUiState.copy(
+                    isSearchQueryChange = false
+                )
+            )
         }
+    }
+
+    override fun onSeeAllClick() {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToSeeAllScreen)
     }
 
     private fun loadInitialData() {
+        getRecommendedMovies()
+        getExploreMoreMovies()
+    }
+
+    private fun getRecommendedMovies() {
         tryToExecute(
-            function = {
-                getRecommendedMovieUseCase(page = 1)
-            },
-            onSuccess = { result ->
-                updateState {
-                    it.copy(
-                        searchUiState = it.searchUiState.copy(
-                            forYouMovies = result.map { movie -> movie.toMovieUiState() },
-                            isLoading = false
-                        )
-                    )
-                }
-            },
-            onError = { throwValue ->
-                updateState {
-                    it.copy(
-                        searchUiState = it.searchUiState.copy(
-                            isLoading = false,
-                            isError = true,
-                            errorMessage = throwValue.message
-                        )
-                    )
-                }
-            },
-        )
-
-        launchPagingRequest(
-            pagingSourceFactory = {
-                ExplorePagingSource(getExploreMoreMovieUseCase)
-            },
-            onSuccess = { pagingFlow ->
-                val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toMovieUiState() }
-                }
-
-                updateState {
-                    it.copy(
-                        searchUiState = it.searchUiState.copy(
-                            exploreMoreMovies = result,
-                            isLoading = false
-                        )
-                    )
-                }
-            }
+            function = { getRecommendedMovieUseCase.invoke(page = 1) },
+            onSuccess = ::onSuccessGetRecommendedMovies,
+            onError = ::onError
         )
     }
 
-    fun searchFilteredMovies(query: String) {
-        launchPagingRequest(
-            pagingSourceFactory = {
-                SearchMoviePagingSource(query, getMoviesByQueryUseCase)
-            },
-            onSuccess = { pagingFlow ->
-                val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toMovieUiState() }
-                }
+    private fun onSuccessGetRecommendedMovies(result: List<Movie>) {
+        updateState {
+            it.copy(
+                searchUiState = it.searchUiState.copy(
+                    forYouMovies = result.map { movie -> movie.toMovieUiState() },
+                    isLoading = false,
+                    refreshState = false
+                )
+            )
+        }
+    }
 
-                updateState { current ->
-                    current.copy(
-                        filteredScreenUiState = current.filteredScreenUiState.copy(
-                            movie = result,
-                            isLoading = false
-                        ),
-                        searchUiState = current.searchUiState.copy(isLoading = false)
-                    )
-                }
-            }
+    private fun getExploreMoreMovies() {
+        launchPagingRequest(
+            pagingSourceFactory = { ExplorePagingSource(getExploreMoreMovieUseCase) },
+            onSuccess = ::onSuccessGetExploreMoreMovies,
+            onStartLoading = ::onStartLoading,
+            onError = ::onErrorPaging
         )
     }
 
-    fun searchSeries(query: String) {
+    private fun onSuccessGetExploreMoreMovies(pagingFlow: Flow<PagingData<Movie>>) {
+        val result = pagingFlow.map { pagingData -> pagingData.map { it.toMovieUiState() } }
+
+        updateState {
+            it.copy(
+                searchUiState = it.searchUiState.copy(
+                    exploreMoreMovies = result,
+                    isLoading = false,
+                    refreshState = false
+                )
+            )
+        }
+    }
+
+    private fun onStartLoading() {
+        updateState {
+            it.copy(
+                searchUiState = it.searchUiState.copy(
+                    isLoading = true
+                )
+            )
+        }
+    }
+
+    private fun onErrorPaging(throwValue: Throwable) {
+        updateState { searchScreenState ->
+            searchScreenState.copy(
+                searchUiState = searchScreenState.searchUiState.copy(
+                    isLoading = false,
+                    isError = true,
+                    errorMessage = throwValue.message
+                )
+            )
+        }
+    }
+
+    private fun onError(throwValue: ErrorState) {
+        updateState { searchScreenState ->
+            searchScreenState.copy(
+                searchUiState = searchScreenState.searchUiState.copy(
+                    isLoading = false,
+                    isError = true,
+                    errorMessage = throwValue.message
+                )
+            )
+        }
+    }
+
+    override fun onMoviesTabClick() {
+        updateState {
+            it.copy(
+                searchUiState = it.searchUiState.copy(isLoading = true),
+                selectedSearchSection = SearchSections.MOVIES
+            )
+        }
         launchPagingRequest(
             pagingSourceFactory = {
-                SearchSeriesPagingSource(query, getSeriesByQueryUseCase)
+                SearchMoviePagingSource(
+                    state.value.searchUiState.searchQuery,
+                    getMoviesByQueryUseCase
+                )
+            },
+            onSuccess = ::onSuccessSearchFilteredMovies,
+            onError = ::onErrorPaging
+        )
+    }
+
+    private fun onSuccessSearchFilteredMovies(pagingFlow: Flow<PagingData<Movie>>) {
+        val result = pagingFlow.map { pagingData -> pagingData.map { it.toMovieUiState() } }
+
+        updateState { current ->
+            current.copy(
+                filteredScreenUiState = current.filteredScreenUiState.copy(
+                    movie = result,
+                    isLoading = false
+                ),
+                searchUiState = current.searchUiState.copy(isLoading = false)
+            )
+        }
+    }
+
+    override fun onSeriesTabClick() {
+        updateState {
+            it.copy(
+                searchUiState = it.searchUiState.copy(isLoading = true),
+                selectedSearchSection = SearchSections.SERIES
+            )
+        }
+        launchPagingRequest(
+            pagingSourceFactory = {
+                SearchSeriesPagingSource(
+                    state.value.searchUiState.searchQuery,
+                    getSeriesByQueryUseCase
+                )
             },
             onSuccess = { pagingFlow ->
                 val result = pagingFlow.map { pagingData ->
@@ -252,71 +299,79 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun topResult(query: String) {
+    override fun onTopRatedTabClick() {
+        updateState {
+            it.copy(
+                searchUiState = it.searchUiState.copy(isLoading = true),
+                selectedSearchSection = SearchSections.TOP_RATED
+            )
+        }
+        getTopRatedMovies()
+    }
+
+    private fun getTopRatedMovies() {
         launchPagingRequest(
             pagingSourceFactory = {
                 SearchMoviePagingSource(
-                    query = query,
+                    query = state.value.searchUiState.searchQuery,
                     getMoviesByQueryUseCase = getMoviesByQueryUseCase
                 )
             },
-            onSuccess = { pagingFlow ->
-                val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toMovieUiState() }
-                }
-
-                Log.d("SearchViewModel", "topResult OO: $result")
-
-                updateState { current ->
-                    current.copy(
-                        filteredScreenUiState = current.filteredScreenUiState.copy(
-                            topResult = result,
-                            isLoading = false
-                        ),
-                        searchUiState = current.searchUiState.copy(isLoading = false)
-                    )
-                }
-            }
+            onSuccess = ::onSuccessGetTopRatedMovies
         )
     }
 
+    private fun onSuccessGetTopRatedMovies(pagingFlow: Flow<PagingData<Movie>>) {
+        val result = pagingFlow.map { pagingData -> pagingData.map { it.toMovieUiState() } }
 
-    fun artists(query: String) {
-        launchPagingRequest(
-            pagingSourceFactory = {
-                SearchArtistPagingSource(query, getArtistsByQueryUseCase)
-            },
-            onSuccess = { pagingFlow ->
-                val result = pagingFlow.map { pagingData ->
-                    pagingData.map { it.toArtistUiState() }
-                }
-
-                updateState { current ->
-                    current.copy(
-                        filteredScreenUiState = current.filteredScreenUiState.copy(
-                            artist = result,
-                            isLoading = false
-                        ),
-                        searchUiState = current.searchUiState.copy(isLoading = false)
-                    )
-                }
-            }
-        )
-    }
-
-
-    private fun onUpdateRecentSuccess(result: List<String>) {
-        updateState {searchScreenState->
-            searchScreenState.copy(
-                allRecentSearchTexts = result,
-                suggestionListSize = 0
+        updateState { current ->
+            current.copy(
+                filteredScreenUiState = current.filteredScreenUiState.copy(
+                    topResult = result,
+                    isLoading = false
+                ),
+                searchUiState = current.searchUiState.copy(isLoading = false)
             )
         }
-        onChangeRecentSearchUiState()
+    }
+
+
+    override fun onActorTabClick() {
+        updateState {
+            it.copy(
+                searchUiState = it.searchUiState.copy(isLoading = true),
+                selectedSearchSection = SearchSections.ARTISTS
+            )
+        }
+        launchPagingRequest(
+            pagingSourceFactory = {
+                SearchArtistPagingSource(
+                    state.value.searchUiState.searchQuery,
+                    getArtistsByQueryUseCase
+                )
+            },
+            onSuccess = ::onSuccessClickActorTab
+        )
+    }
+
+    private fun onSuccessClickActorTab(pagingFlow: Flow<PagingData<Artist>>) {
+        val result = pagingFlow.map { pagingData ->
+            pagingData.map { it.toArtistUiState() }
+        }
+
+        updateState { current ->
+            current.copy(
+                filteredScreenUiState = current.filteredScreenUiState.copy(
+                    artist = result,
+                    isLoading = false
+                ),
+                searchUiState = current.searchUiState.copy(isLoading = false)
+            )
+        }
     }
 
     private fun onChangeRecentSearchUiState() {
-        updateState {searchScreenState->
+        updateState { searchScreenState ->
             searchScreenState.copy(
                 recentSearchUiState = if (searchScreenState.searchUiState.searchQuery.isEmpty() ||
                     searchScreenState.searchUiState.searchQuery.isBlank()
@@ -332,23 +387,12 @@ class SearchViewModel @Inject constructor(
                         .map { it.trim() }
                         .filter { it.isNotEmpty() }
 
-                   searchScreenState
+                    searchScreenState
                         .allRecentSearchTexts
                         .filter { recentText ->
                             queryWords.all { recentText.contains(it) }
                         }
                 }
-            )
-        }
-    }
-
-    private fun onUpdateSearchMovie(result: Flow<PagingData<SearchScreenState.MovieUiState>>) {
-        updateState { current ->
-            current.copy(
-                filteredScreenUiState = current.filteredScreenUiState.copy(
-                    topResult = result,
-                    isLoading = false
-                )
             )
         }
     }
@@ -365,40 +409,25 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun onLoadInitialData() {
-        updateState {
-            it.copy(
-                searchUiState = it.searchUiState.copy(
-                    isLoading = true,
-                    isError = false,
-                    errorMessage = null
-                )
-            )
-        }
-    }
-
-    private fun onUpdateArtistSearch(result: Flow<PagingData<SearchScreenState.ArtistUiState>>) {
-        updateState { current ->
-            current.copy(
-                filteredScreenUiState = current.filteredScreenUiState.copy(
-                    artist = result,
-                    isLoading = false
-                )
-            )
-        }
-    }
-
-    private companion object {
-        val pagingConfig = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = false,
-            prefetchDistance = 5
-        )
-    }
-
     fun onRefresh(
-        typeOfFilterSearch : SearchSections
+        typeOfFilterSearch: SearchSections
     ) {
+        onStartRefresh()
+        if (state.value.searchUiState.searchQuery.isEmpty()) {
+            getRecommendedMovies()
+            getExploreMoreMovies()
+        } else {
+            when (typeOfFilterSearch) {
+                SearchSections.TOP_RATED -> onTopRatedTabClick()
+                SearchSections.MOVIES -> onMoviesTabClick()
+                SearchSections.SERIES -> onSeriesTabClick()
+                SearchSections.ARTISTS -> onActorTabClick()
+            }
+            onFinishRefresh()
+        }
+    }
+
+    private fun onStartRefresh() {
         updateState { current ->
             current.copy(
                 searchUiState = current.searchUiState.copy(
@@ -408,170 +437,40 @@ class SearchViewModel @Inject constructor(
                 )
             )
         }
-        if(state.value.searchUiState.searchQuery.isEmpty() ){
-            tryToExecute(
-                function = {
-                    getRecommendedMovieUseCase(page = 1)
-                },
-                onSuccess = { result ->
-                    updateState {
-                        it.copy(
-                            searchUiState = it.searchUiState.copy(
-                                forYouMovies = result.map { movie -> movie.toMovieUiState() },
-                                isLoading = false,
-                                refreshState = false,
-                            )
-                        )
-                    }
-                },
-                onError = { throwValue ->
-                    updateState {
-                        it.copy(
-                            searchUiState = it.searchUiState.copy(
-                                isLoading = false,
-                                isError = true,
-                                errorMessage = throwValue.message
-                            )
-                        )
-                    }
-                },
-            )
+    }
 
-            launchPagingRequest(
-                pagingSourceFactory = {
-                    ExplorePagingSource(getExploreMoreMovieUseCase)
-                },
-                onSuccess = { pagingFlow ->
-                    val result = pagingFlow.map { pagingData ->
-                        pagingData.map { it.toMovieUiState() }
-                    }
-
-                    updateState {
-                        it.copy(
-                            searchUiState = it.searchUiState.copy(
-                                exploreMoreMovies = result,
-                                isLoading = false,
-                                refreshState = false,
-                            )
-                        )
-                    }
-                },
-                onStartLoading = {updateState {
-                    it.copy(
-                        searchUiState = it.searchUiState.copy(
-                            isLoading = true,
-                        )
-                    )
-                }
-                },
-                onError = { throwValue ->
-                    updateState {
-                        it.copy(
-                            searchUiState = it.searchUiState.copy(
-                                isLoading = false,
-                                isError = true,
-                                errorMessage = throwValue.message
-                            )
-                        )
-                    }
-                }
+    private fun onFinishRefresh() {
+        updateState { current ->
+            current.copy(
+                searchUiState = current.searchUiState.copy(
+                    refreshState = false
+                )
             )
         }
-        else{
-            when(typeOfFilterSearch){
-                SearchSections.TOP_RATED -> topResult(state.value.searchUiState.searchQuery)
-                SearchSections.MOVIES -> searchFilteredMovies(state.value.searchUiState.searchQuery)
-                SearchSections.SERIES -> searchSeries(state.value.searchUiState.searchQuery)
-                SearchSections.ARTISTS -> artists(state.value.searchUiState.searchQuery)
-            }
-            updateState { current ->
-                current.copy(
-                    searchUiState = current.searchUiState.copy(
-                        refreshState = false,
-                    )
-                )
-            }
-        }
     }
 
-    fun highlightCharactersInText(
-        fullText: String,
-        query: String,
-        matchColor: Color,
-        normalColor: Color,
-        textStyle: TextStyle
-    ): AnnotatedString {
-        val builder = AnnotatedString.Builder()
-
-        if (query.isBlank()) {
-            builder.pushStyle(textStyle.copy(color = normalColor).toSpanStyle())
-            builder.append(fullText)
-            return builder.toAnnotatedString()
-        }else {
-            val numberSet = mutableSetOf<Int>()
-            query.trim()
-                .lowercase()
-                .split(" ")
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
-                .forEach { pureQuery ->
-                    var searchIndex = 0
-
-                    while (true) {
-                        val foundIndex = fullText.lowercase().indexOf(pureQuery, searchIndex)
-                        if (foundIndex == -1) break
-
-                        for (i in foundIndex until foundIndex + pureQuery.length) {
-                            numberSet.add(i)
-                        }
-
-                        searchIndex = foundIndex + pureQuery.length
-                    }
-                }
-
-            builder.pushStyle(textStyle.copy(color = normalColor).toSpanStyle())
-            builder.append(fullText)
-
-            numberSet.toRanges().forEach { range ->
-                builder.addStyle(
-                    textStyle.copy(color = matchColor).toSpanStyle(),
-                    start = range.first,
-                    end = range.last + 1
-                )
-            }
-            return builder.toAnnotatedString()
-
-        }
-    }
-
-    private fun Set<Int>.toRanges(): List<IntRange> {
-        if (isEmpty()) return emptyList()
-
-        val sorted = this.sorted()
-        val ranges = mutableListOf<IntRange>()
-
-        var rangeStart = sorted.first()
-        var prev = sorted.first()
-
-        for (i in 1 until sorted.size) {
-            val current = sorted[i]
-            if (current != prev + 1) {
-                ranges.add(rangeStart..prev)
-                rangeStart = current
-            }
-            prev = current
-        }
-        ranges.add(rangeStart..prev)
-
-        return ranges
-    }
-
-    fun doAction(){
-        updateState {searchScreenStat->
+    override fun onDoAction() {
+        updateState { searchScreenStat ->
             searchScreenStat.copy(
                 isDoAction = !searchScreenStat.isDoAction
             )
         }
+    }
+
+    override fun onMovieClick(movieId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToMovieDetails(movieId))
+    }
+
+    override fun onSeriesClick(seriesId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToSeriesDetails(seriesId, 1))
+    }
+
+    override fun onTopResultClick(movieId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToMovieDetails(movieId))
+    }
+
+    override fun onActorClick(actorId: Int) {
+        emitNewEffect(effect = SearchScreenUiEffect.NavigateToActorDetails(actorId))
     }
 
 }

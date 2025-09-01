@@ -34,390 +34,393 @@ import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun FilterSearchScreen(
+    isVisible: Boolean,
     typeOfFilterSearch: SearchSections,
-    onChangeTypeFilterSearch: () -> Unit,
     selectedTabIndex: SearchSections,
-    onChangeSelectedTabIndex: (SearchSections) -> Unit,
+    onChangeSelectedTabSection: (SearchSections) -> Unit,
     topRated: LazyPagingItems<SearchScreenState.MovieUiState>,
     movies: LazyPagingItems<SearchScreenState.MovieUiState>,
     series: LazyPagingItems<SearchScreenState.SeriesUiState>,
     artist: LazyPagingItems<SearchScreenState.ArtistUiState>,
-    onSeriesClick: (Int) -> Unit = {},
     onMovieClick: (Int) -> Unit,
     onTopResultClick: (Int) -> Unit,
     onActorClick: (Int) -> Unit,
+    onSeriesClick: (Int) -> Unit,
+    onChangeTypeFilterSearch: () -> Unit = {},
 ) {
-    HeaderSearchSectionBar(
-        modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
-        tabs = listOf(
-            stringResource(R.string.top_results),
-            stringResource(R.string.Movies),
-            stringResource(R.string.Series),
-            stringResource(R.string.Artists),
-        ),
-        selectedTabIndex = selectedTabIndex,
-        onTabSelected = { index ->
-            onChangeSelectedTabIndex(index)
-            onChangeTypeFilterSearch()
-        },
-    )
+    if(isVisible) {
+        HeaderSearchSectionBar(
+            modifier = Modifier.padding(top = 12.dp, start = 16.dp, end = 16.dp),
+            tabs = listOf(
+                stringResource(R.string.top_results),
+                stringResource(R.string.Movies),
+                stringResource(R.string.Series),
+                stringResource(R.string.Artists),
+            ),
+            selectedTabIndex = selectedTabIndex,
+            onTabSelected = { index ->
+                onChangeSelectedTabSection(index)
+                onChangeTypeFilterSearch()
+            },
+        )
 
-    when (typeOfFilterSearch) {
-        SearchSections.TOP_RATED -> {
+        when (typeOfFilterSearch) {
+            SearchSections.TOP_RATED -> {
 
-            LazyVerticalGrid(
-                modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 101.33.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Adaptive(minSize = 101.33.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    SearchResultMessage(
-                        items = topRated.itemCount.toString()
-                    )
-                }
-
-                when {
-                    topRated.itemCount == 0 && topRated.loadState.refresh is LoadState.Loading -> {
-                        items(12) {
-                            ShimmerCard(
-                                isLoading = true,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .width(150.dp)
-                                    .height(180.dp)
-                            )
-                        }
+                    item(
+                        span = { GridItemSpan(maxLineSpan) }
+                    ) {
+                        SearchResultMessage(
+                            items = topRated.itemCount.toString()
+                        )
                     }
 
-                    topRated.itemCount == 0 && topRated.loadState.refresh is LoadState.Error -> {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.no_results_found),
-                                    description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                    image = Theme.drawables.notFoundLayoutId
+                    when {
+                        topRated.itemCount == 0 && topRated.loadState.refresh is LoadState.Loading -> {
+                            items(12) {
+                                ShimmerCard(
+                                    isLoading = true,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .width(150.dp)
+                                        .height(180.dp)
                                 )
                             }
                         }
-                    }
 
-                    topRated.itemCount == 0 &&
-                            topRated.loadState.refresh is LoadState.NotLoading -> {
-                        item(span = { GridItemSpan(maxLineSpan) }) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.no_results_found),
-                                    description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                    image = Theme.drawables.notFoundLayoutId
-                                )
+                        topRated.itemCount == 0 && topRated.loadState.refresh is LoadState.Error -> {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.no_results_found),
+                                        description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
+                                        image = Theme.drawables.notFoundLayoutId
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    topRated.itemCount > 0 -> {
-                        items(count = topRated.itemCount) { index ->
-                            BoxWithConstraints {
-                                val cardWidth = maxWidth
-                                val cardHeight = cardWidth * (136f / 101.33f)
-
-                                MovioVerticalCard(
-                                    modifier = Modifier.width(cardWidth),
-                                    description = topRated[index]!!.title,
-                                    movieImage = topRated[index]!!.imageUrl,
-                                    rate = topRated[index]!!.rating,
-                                    imageHeight = cardHeight,
-                                    onClick = { onTopResultClick(topRated[index]!!.id.toInt()) }
-                                )
+                        topRated.itemCount == 0 &&
+                                topRated.loadState.refresh is LoadState.NotLoading -> {
+                            item(span = { GridItemSpan(maxLineSpan) }) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.no_results_found),
+                                        description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
+                                        image = Theme.drawables.notFoundLayoutId
+                                    )
+                                }
                             }
                         }
-                    }
-                }
-            }
-        }
 
-        SearchSections.MOVIES -> {
+                        topRated.itemCount > 0 -> {
+                            items(count = topRated.itemCount) { index ->
+                                BoxWithConstraints {
+                                    val cardWidth = maxWidth
+                                    val cardHeight = cardWidth * (136f / 101.33f)
 
-            LazyVerticalGrid(
-                modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 101.33.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    SearchResultMessage(
-                        items = movies.itemCount.toString()
-                    )
-                }
-
-                when {
-                    movies.itemCount == 0 && movies.loadState.refresh is LoadState.Loading -> {
-                        items(12) {
-                            ShimmerCard(
-                                isLoading = true,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .width(150.dp)
-                                    .height(180.dp)
-                            )
-                        }
-                    }
-
-                    movies.itemCount == 0 && movies.loadState.refresh is LoadState.Error -> {
-                        item(
-                            span = { GridItemSpan(maxLineSpan) }
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.no_results_found),
-                                    description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                                    image = Theme.drawables.noInternetId
-                                )
-                            }
-                        }
-                    }
-
-                    movies.itemCount == 0 &&
-                            movies.loadState.refresh is LoadState.NotLoading -> {
-                        item(
-                            span = { GridItemSpan(maxLineSpan) }
-
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.no_results_found),
-                                    description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                    image = Theme.drawables.notFoundLayoutId
-                                )
-                            }
-                        }
-                    }
-
-                    movies.itemCount > 0 -> {
-                        items(count = movies.itemCount) { index ->
-                            BoxWithConstraints {
-                                val cardWidth = maxWidth
-                                val cardHeight = cardWidth * (136f / 101.33f)
-
-                                MovioVerticalCard(
-                                    modifier = Modifier.width(cardWidth),
-                                    description = movies[index]!!.title,
-                                    movieImage = movies[index]!!.imageUrl,
-                                    rate = movies[index]!!.rating,
-                                    imageHeight = cardHeight,
-                                    onClick = { onMovieClick(movies[index]!!.id.toInt()) }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        SearchSections.SERIES -> {
-
-            LazyVerticalGrid(
-                modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 101.33.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    SearchResultMessage(
-                        items = series.itemCount.toString()
-                    )
-                }
-
-                when {
-                    series.itemCount == 0 && series.loadState.refresh is LoadState.Loading -> {
-                        items(12) {
-                            ShimmerCard(
-                                isLoading = true,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .width(150.dp)
-                                    .height(180.dp)
-                            )
-                        }
-                    }
-
-                    series.itemCount == 0 && series.loadState.refresh is LoadState.Error -> {
-                        item(
-                            span = { GridItemSpan(maxLineSpan) }
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.internet_is_not_available),
-                                    description =
-                                        stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
-                                    image = Theme.drawables.noInternetId
-                                )
-                            }
-                        }
-                    }
-
-                    series.itemCount == 0 &&
-                            series.loadState.refresh is LoadState.NotLoading -> {
-                        item(
-                            span = { GridItemSpan(maxLineSpan) }
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.no_results_found),
-                                    description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                    image = Theme.drawables.notFoundLayoutId
-                                )
-                            }
-                        }
-                    }
-
-                    series.itemCount > 0 -> {
-                        items(count = series.itemCount) { index ->
-                            BoxWithConstraints {
-                                val cardWidth = maxWidth
-                                val cardHeight = cardWidth * (136f / 101.33f)
-
-                                MovioVerticalCard(
-                                    modifier = Modifier.width(cardWidth),
-                                    description = series[index]!!.title,
-                                    movieImage = series[index]!!.imageUrl,
-                                    rate = series[index]!!.rating,
-                                    imageHeight = cardHeight,
-                                    onClick = { onSeriesClick(series[index]!!.id.toInt()) }
-                                )
+                                    MovioVerticalCard(
+                                        modifier = Modifier.width(cardWidth),
+                                        description = topRated[index]!!.title,
+                                        movieImage = topRated[index]!!.imageUrl,
+                                        rate = topRated[index]!!.rating,
+                                        imageHeight = cardHeight,
+                                        onClick = { onTopResultClick(topRated[index]!!.id.toInt()) }
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
 
-        }
+            SearchSections.MOVIES -> {
 
-        SearchSections.ARTISTS -> {
-
-            LazyVerticalGrid(
-                modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Adaptive(minSize = 101.33.dp),
-                contentPadding = PaddingValues(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Adaptive(minSize = 101.33.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    SearchResultMessage(
-                        items = artist.itemCount.toString()
-                    )
+
+                    item(
+                        span = { GridItemSpan(maxLineSpan) }
+                    ) {
+                        SearchResultMessage(
+                            items = movies.itemCount.toString()
+                        )
+                    }
+
+                    when {
+                        movies.itemCount == 0 && movies.loadState.refresh is LoadState.Loading -> {
+                            items(12) {
+                                ShimmerCard(
+                                    isLoading = true,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .width(150.dp)
+                                        .height(180.dp)
+                                )
+                            }
+                        }
+
+                        movies.itemCount == 0 && movies.loadState.refresh is LoadState.Error -> {
+                            item(
+                                span = { GridItemSpan(maxLineSpan) }
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.no_results_found),
+                                        description = stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                                        image = Theme.drawables.noInternetId
+                                    )
+                                }
+                            }
+                        }
+
+                        movies.itemCount == 0 &&
+                                movies.loadState.refresh is LoadState.NotLoading -> {
+                            item(
+                                span = { GridItemSpan(maxLineSpan) }
+
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.no_results_found),
+                                        description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
+                                        image = Theme.drawables.notFoundLayoutId
+                                    )
+                                }
+                            }
+                        }
+
+                        movies.itemCount > 0 -> {
+                            items(count = movies.itemCount) { index ->
+                                BoxWithConstraints {
+                                    val cardWidth = maxWidth
+                                    val cardHeight = cardWidth * (136f / 101.33f)
+
+                                    MovioVerticalCard(
+                                        modifier = Modifier.width(cardWidth),
+                                        description = movies[index]!!.title,
+                                        movieImage = movies[index]!!.imageUrl,
+                                        rate = movies[index]!!.rating,
+                                        imageHeight = cardHeight,
+                                        onClick = { onMovieClick(movies[index]!!.id.toInt()) }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            SearchSections.SERIES -> {
+
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Adaptive(minSize = 101.33.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+
+                    item(
+                        span = { GridItemSpan(maxLineSpan) }
+                    ) {
+                        SearchResultMessage(
+                            items = series.itemCount.toString()
+                        )
+                    }
+
+                    when {
+                        series.itemCount == 0 && series.loadState.refresh is LoadState.Loading -> {
+                            items(12) {
+                                ShimmerCard(
+                                    isLoading = true,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .width(150.dp)
+                                        .height(180.dp)
+                                )
+                            }
+                        }
+
+                        series.itemCount == 0 && series.loadState.refresh is LoadState.Error -> {
+                            item(
+                                span = { GridItemSpan(maxLineSpan) }
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.internet_is_not_available),
+                                        description =
+                                            stringResource(R.string.please_make_sure_you_are_connected_to_the_internet_and_try_again),
+                                        image = Theme.drawables.noInternetId
+                                    )
+                                }
+                            }
+                        }
+
+                        series.itemCount == 0 &&
+                                series.loadState.refresh is LoadState.NotLoading -> {
+                            item(
+                                span = { GridItemSpan(maxLineSpan) }
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.no_results_found),
+                                        description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
+                                        image = Theme.drawables.notFoundLayoutId
+                                    )
+                                }
+                            }
+                        }
+
+                        series.itemCount > 0 -> {
+                            items(count = series.itemCount) { index ->
+                                BoxWithConstraints {
+                                    val cardWidth = maxWidth
+                                    val cardHeight = cardWidth * (136f / 101.33f)
+
+                                    MovioVerticalCard(
+                                        modifier = Modifier.width(cardWidth),
+                                        description = series[index]!!.title,
+                                        movieImage = series[index]!!.imageUrl,
+                                        rate = series[index]!!.rating,
+                                        imageHeight = cardHeight,
+                                        onClick = { onSeriesClick(series[index]!!.id.toInt()) }
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
 
-                when {
-                    artist.itemCount == 0 && artist.loadState.refresh is LoadState.Loading -> {
-                        items(12) {
-                            ShimmerCard(
-                                isLoading = true,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .width(150.dp)
-                                    .height(180.dp)
-                            )
-                        }
+            }
+
+            SearchSections.ARTISTS -> {
+
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Adaptive(minSize = 101.33.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+
+                    item(
+                        span = { GridItemSpan(maxLineSpan) }
+                    ) {
+                        SearchResultMessage(
+                            items = artist.itemCount.toString()
+                        )
                     }
 
-                    artist.itemCount == 0 && artist.loadState.refresh is LoadState.Error -> {
-                        item(
-                            span = { GridItemSpan(maxLineSpan) }
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.internet_is_not_available),
-                                    description = "Please make sure you are connected to the internet and try again.",
-                                    image = Theme.drawables.noInternetId
+                    when {
+                        artist.itemCount == 0 && artist.loadState.refresh is LoadState.Loading -> {
+                            items(12) {
+                                ShimmerCard(
+                                    isLoading = true,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .width(150.dp)
+                                        .height(180.dp)
                                 )
                             }
                         }
-                    }
 
-                    artist.itemCount == 0 &&
-                            artist.loadState.refresh is LoadState.NotLoading -> {
-                        item(
-                            span = { GridItemSpan(maxLineSpan) }
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 64.dp),
-                                contentAlignment = Alignment.Center
+                        artist.itemCount == 0 && artist.loadState.refresh is LoadState.Error -> {
+                            item(
+                                span = { GridItemSpan(maxLineSpan) }
                             ) {
-                                EmptySearchLayout(
-                                    title = stringResource(R.string.no_results_found),
-                                    description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
-                                    image = Theme.drawables.notFoundLayoutId
-                                )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.internet_is_not_available),
+                                        description = "Please make sure you are connected to the internet and try again.",
+                                        image = Theme.drawables.noInternetId
+                                    )
+                                }
                             }
                         }
-                    }
 
-                    artist.itemCount > 0 -> {
-                        items(count = artist.itemCount) { index ->
-                            BoxWithConstraints {
-                                val cardWidth = maxWidth
-                                val circleImageSize = cardWidth * (88f / 101.33f)
+                        artist.itemCount == 0 &&
+                                artist.loadState.refresh is LoadState.NotLoading -> {
+                            item(
+                                span = { GridItemSpan(maxLineSpan) }
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(top = 64.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    EmptySearchLayout(
+                                        title = stringResource(R.string.no_results_found),
+                                        description = stringResource(R.string.we_couldn_t_find_anything_matching_your_search_try_checking_the_spelling_or_explore_something_else),
+                                        image = Theme.drawables.notFoundLayoutId
+                                    )
+                                }
+                            }
+                        }
 
-                                MovioArtistsCard(
-                                    modifier = Modifier.width(cardWidth),
-                                    artistsName = artist[index]!!.name,
-                                    paddingBetweenImageAndText = 8.dp,
-                                    imageUrl = artist[index]!!.imageUrl,
-                                    onClick = { onActorClick(artist[index]!!.id.toInt()) },
-                                    circleImageSize = circleImageSize
-                                )
+                        artist.itemCount > 0 -> {
+                            items(count = artist.itemCount) { index ->
+                                BoxWithConstraints {
+                                    val cardWidth = maxWidth
+                                    val circleImageSize = cardWidth * (88f / 101.33f)
+
+                                    MovioArtistsCard(
+                                        modifier = Modifier.width(cardWidth),
+                                        artistsName = artist[index]!!.name,
+                                        paddingBetweenImageAndText = 8.dp,
+                                        imageUrl = artist[index]!!.imageUrl,
+                                        onClick = { onActorClick(artist[index]!!.id.toInt()) },
+                                        circleImageSize = circleImageSize
+                                    )
+                                }
                             }
                         }
                     }

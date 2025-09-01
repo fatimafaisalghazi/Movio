@@ -1,10 +1,8 @@
 package com.madrid.presentation.screens.searchScreen
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,22 +23,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.LazyPagingItems
+import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.madrid.designSystem.R
-import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.textInputField.BasicTextInputField
 import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.component.emptyRecentSearch
@@ -48,207 +41,133 @@ import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.refreshScreenHolder.RefreshScreenHolder
 import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.FilterSearchScreen
-import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.ForYouAndExploreScreen
 import com.madrid.presentation.screens.searchScreen.features.recentSearchLayout.recentSearchScreen
+import com.madrid.presentation.screens.searchScreen.forYouAndExploreScreen.forYouAndExploreSections
 import com.madrid.presentation.screens.searchScreen.utils.SearchSections
+import com.madrid.presentation.screens.searchScreen.utils.highlightCharactersInText
+import com.madrid.presentation.viewModel.searchViewModel.SearchScreenInteractionListener
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
+import com.madrid.presentation.viewModel.searchViewModel.SearchScreenUiEffect
 import com.madrid.presentation.viewModel.searchViewModel.SearchViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.debounce
 
 
 @Composable
 fun SearchScreen(
-    modifier: Modifier = Modifier,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsState()
-    var typeOfFilterSearch by remember { mutableStateOf(SearchSections.TOP_RATED) }
     val navController = LocalNavController.current
+
+    HandleNavigation(
+        navController = navController,
+        effect = viewModel.effect
+    )
 
     RefreshScreenHolder(
         refreshState = uiState.searchUiState.refreshState,
-        onRefresh = { viewModel.onRefresh(typeOfFilterSearch) }
+        onRefresh = { viewModel.onRefresh(uiState.selectedSearchSection) }
     ) {
         ContentSearchScreen(
-            isError = uiState.searchUiState.isError,
-            typeOfFilterSearch = typeOfFilterSearch,
-            suggestionListSize = uiState.suggestionListSize,
-            onSeriesClick = { seriesId ->
-                navController.navigate(
-                    Destinations.SeriesDetailsScreen(
-                        seriesId = seriesId,
-                        seasonNumber = 1
-                    )
-                )
-            },
-            getSuggestionKeywords = viewModel::getSuggestionKeywords,
-            addRecentSearch = {
-                viewModel.addRecentSearch(it)
-            },
-            modifier = modifier,
-            topRated = uiState.filteredScreenUiState.topResult.collectAsLazyPagingItems(),
-            movies = uiState.filteredScreenUiState.movie.collectAsLazyPagingItems(),
-            series = uiState.filteredScreenUiState.series.collectAsLazyPagingItems(),
-            artist = uiState.filteredScreenUiState.artist.collectAsLazyPagingItems(),
-            onClickTopRated = {
-                typeOfFilterSearch = SearchSections.TOP_RATED
-                viewModel.topResult(uiState.searchUiState.searchQuery)
-            },
-            onClickMovies = {
-                typeOfFilterSearch = SearchSections.MOVIES
-                viewModel.searchFilteredMovies(uiState.searchUiState.searchQuery)
-            },
-            onClickSeries = {
-                typeOfFilterSearch = SearchSections.SERIES
-                viewModel.searchSeries(uiState.searchUiState.searchQuery)
-            },
-            onClickArtist = {
-                typeOfFilterSearch = SearchSections.ARTISTS
-                viewModel.artists(uiState.searchUiState.searchQuery)
-            },
-
-            forYouMovies = uiState.searchUiState.forYouMovies,
-            exploreMoreMovies = uiState.searchUiState.exploreMoreMovies.collectAsLazyPagingItems(),
-            searchQuery = uiState.searchUiState.searchQuery,
-            onSearchQueryChange = { query ->
-                viewModel.updateSearchQuery(query)
-
-            },
-            clearSearchQuery = viewModel::clearSearchQuery,
-            onMovieClick = { movie ->
-                navController.navigate(Destinations.MovieDetailsScreen(movie.id.toInt()))
-            },
-            isLoading = uiState.searchUiState.isLoading,
-            searchHistory = uiState.recentSearchUiState,
-            onSearchItemClick = { viewModel.updateSearchQuery(it) },
-            onRemoveItem = { viewModel.removeRecentSearch(it) },
-            onClearAll = { viewModel.clearAll() },
-            onClickSeeAll = {
-                navController.navigate(Destinations.SeeAllForYouScreen)
-            },
-            highLightRecentSearch = viewModel::highlightCharactersInText,
-            onTopResultClick = { movieId ->
-                navController.navigate(Destinations.MovieDetailsScreen(movieId))
-            },
-            onSearchedClick = { movieId ->
-                navController.navigate(Destinations.MovieDetailsScreen(movieId))
-            },
-            onArtistClick = { actorId ->
-                navController.navigate(Destinations.ActorDetails(actorId))
-            },
-            isDoAction = uiState.isDoAction,
-            isChangeSearchQuery = uiState.searchUiState.isSearchQueryChange,
-            changeValueOfIsChangeSearchQuery = viewModel::changeValueOfIsChangeSearchQuery,
-            doAction = viewModel::doAction
+            uiState = uiState,
+            listener = viewModel
         )
-        uiState.searchUiState.errorMessage?.let { errorMsg ->
-            LaunchedEffect(errorMsg) {
+    }
+}
 
-            }
-        }
-        if (uiState.searchUiState.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                MovioIcon(
-                    painter = painterResource(R.drawable.loading),
-                    contentDescription = "Loading",
-                    tint = Theme.color.brand.primary
-                )
+@Composable
+private fun HandleNavigation(
+    navController: NavController,
+    effect: Flow<SearchScreenUiEffect>
+) {
+    LaunchedEffect(effect) {
+        effect.collect { effect ->
+            when (effect) {
+                is SearchScreenUiEffect.NavigateToMovieDetails -> {
+                    navController.navigate(route = Destinations.MovieDetailsScreen(movieId = effect.movieId))
+                }
+
+                is SearchScreenUiEffect.NavigateToSeriesDetails -> {
+                    navController.navigate(
+                        route = Destinations.SeriesDetailsScreen(
+                            seriesId = effect.seriesId,
+                            seasonNumber = effect.seasonNumber
+                        )
+                    )
+                }
+
+                is SearchScreenUiEffect.NavigateToActorDetails -> {
+                    navController.navigate(route = Destinations.ActorDetails(artistId = effect.actorId))
+                }
+
+                is SearchScreenUiEffect.NavigateToSeeAllScreen -> {
+                    navController.navigate(route = Destinations.SeeAllForYouScreen)
+                }
+
+                is SearchScreenUiEffect.NavigateBack -> {
+                    navController.popBackStack()
+                }
             }
         }
     }
 }
 
-
 @OptIn(FlowPreview::class)
 @Composable
 fun ContentSearchScreen(
-    isError: Boolean,
-    typeOfFilterSearch: SearchSections,
-    addRecentSearch: (String) -> Unit,
-    topRated: LazyPagingItems<SearchScreenState.MovieUiState>,
-    movies: LazyPagingItems<SearchScreenState.MovieUiState>,
-    series: LazyPagingItems<SearchScreenState.SeriesUiState>,
-    artist: LazyPagingItems<SearchScreenState.ArtistUiState>,
-    getSuggestionKeywords: () -> Unit = { },
-    onClickTopRated: () -> Unit,
-    onClickMovies: () -> Unit,
-    onClickSeries: () -> Unit,
-    onClickArtist: () -> Unit,
-    modifier: Modifier = Modifier,
-    suggestionListSize: Int = 0,
-    forYouMovies: List<SearchScreenState.MovieUiState> = emptyList(),
-    exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
-    searchQuery: String = "",
-    onSearchQueryChange: (String) -> Unit,
-    clearSearchQuery: () -> Unit = {},
-    onSearchBarClick: () -> Unit = {},
-    onMovieClick: (SearchScreenState.MovieUiState) -> Unit = {},
-    searchHistory: List<String>,
-    onSearchItemClick: (String) -> Unit,
-    onRemoveItem: (String) -> Unit,
-    onClearAll: () -> Unit,
-    isLoading: Boolean = false,
-    onClickSeeAll: () -> Unit,
-    onSeriesClick: (Int) -> Unit,
-    onTopResultClick: (Int) -> Unit,
-    onSearchedClick: (Int) -> Unit,
-    onArtistClick: (Int) -> Unit,
-    isChangeSearchQuery: Boolean,
-    isDoAction: Boolean,
-    doAction: () -> Unit,
-    changeValueOfIsChangeSearchQuery: () -> Unit,
-    highLightRecentSearch: (String, String, Color, Color, TextStyle) -> AnnotatedString,
+    uiState: SearchScreenState,
+    listener: SearchScreenInteractionListener
 ) {
-    val showSearchResults = searchQuery.isNotBlank()
-    var selectedTabIndex by remember { mutableStateOf(SearchSections.MOVIES) }
-    var showRecentSearch by remember { mutableIntStateOf(0) }
+
+    val topRated = uiState.filteredScreenUiState.topResult.collectAsLazyPagingItems()
+    val movies = uiState.filteredScreenUiState.movie.collectAsLazyPagingItems()
+    val series = uiState.filteredScreenUiState.series.collectAsLazyPagingItems()
+    val artist = uiState.filteredScreenUiState.artist.collectAsLazyPagingItems()
+    val exploreMoreMovies = uiState.searchUiState.exploreMoreMovies.collectAsLazyPagingItems()
+
     var isPressSearchIconInKeyboard by remember { mutableIntStateOf(0) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     var isFocused by remember { mutableStateOf(false) }
     var isWrite by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = isFocused || searchQuery.isNotEmpty()) {
-        clearSearchQuery()
+    BackHandler(enabled = isFocused || uiState.searchUiState.searchQuery.isNotEmpty()) {
+        listener.onClearSearchQueryClick()
         focusManager.clearFocus(force = true)
         isFocused = false
     }
 
-    LaunchedEffect(isDoAction) {
+    LaunchedEffect(uiState.isDoAction) {
         if (isPressSearchIconInKeyboard == 1) {
             isFocused = false
             isPressSearchIconInKeyboard = 0
         } else {
             isFocused = true
-            snapshotFlow { searchQuery }
-                .debounce(1200)
+            snapshotFlow { uiState.searchUiState.searchQuery }
+                .debounce(1000)
                 .collect { query ->
                     isWrite = false
-                    if (query.isNotBlank() && isChangeSearchQuery) {
-                        val res = getSuggestionKeywords()
-                        Log.e("MY_TAG", " the result size $res")
+                    if (query.isNotBlank() && uiState.searchUiState.isSearchQueryChange) {
+                        listener.onGetSuggestionKeywords()
                     }
                 }
         }
-
     }
+
     LaunchedEffect(Unit) {
         isFocused = false
     }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding(),
     ) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 158.dp),
-            modifier = modifier
-                .background(Theme.color.surfaces.surface),
+            modifier = Modifier.background(Theme.color.surfaces.surface),
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -257,38 +176,30 @@ fun ContentSearchScreen(
                 span = { GridItemSpan(maxLineSpan) }
             ) {
                 BasicTextInputField(
-                    value = searchQuery,
+                    value = uiState.searchUiState.searchQuery,
                     onValueChange = { newQuery ->
                         isWrite = true
-                        onSearchQueryChange(newQuery)
+                        listener.onSearchQueryChange(newQuery)
                     },
-                    borderBrushColors = null,
                     hintText = stringResource(com.madrid.presentation.R.string.searchdot),
                     startIconPainter = painterResource(R.drawable.search_normal),
                     endIconPainter = painterResource(R.drawable.outline_add),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp),
-                    onClickEndIcon = { clearSearchQuery() },
+                    onClickEndIcon = { listener.onClearSearchQueryClick() },
                     onClickInputTextField = { isFocused = true },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search
-                    ),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(
                         onSearch = {
                             isPressSearchIconInKeyboard = 1
                             isFocused = false
-                            doAction()
-                            if (searchQuery.isNotBlank() && isChangeSearchQuery) {
-                                onSearchBarClick()
-                                changeValueOfIsChangeSearchQuery()
-                                addRecentSearch(searchQuery)
-                                when (typeOfFilterSearch) {
-                                    SearchSections.TOP_RATED -> onClickTopRated()
-                                    SearchSections.MOVIES -> onClickMovies()
-                                    SearchSections.SERIES -> onClickSeries()
-                                    SearchSections.ARTISTS -> onClickArtist()
-                                }
+                            if (uiState.searchUiState.searchQuery.isNotBlank() && uiState.searchUiState.isSearchQueryChange) {
+                                onSearch(
+                                    itemInRecent = uiState.searchUiState.searchQuery,
+                                    selectedSearchSection = uiState.selectedSearchSection,
+                                    listener = listener
+                                )
                             }
                             keyboardController?.hide()
                             focusManager.clearFocus()
@@ -297,108 +208,89 @@ fun ContentSearchScreen(
                 )
             }
 
-            if (searchQuery.isEmpty() && isFocused != true) {
-                ForYouAndExploreScreen(
-                    showSearchResults = showSearchResults,
-                    isLoading = isLoading,
-                    isError = isError,
-                    forYouMovies = forYouMovies,
-                    onMovieClick = onMovieClick,
-                    exploreMoreMovies = exploreMoreMovies,
-                    onClickSeeAll = { onClickSeeAll() },
-                    parentPadding = 16.dp
-                )
-            }
+            forYouAndExploreSections(
+                isVisible = uiState.searchUiState.searchQuery.isEmpty() && !isFocused,
+                showSearchResults = uiState.searchUiState.searchQuery.isNotBlank(),
+                isLoading = uiState.searchUiState.isLoading,
+                isError = uiState.searchUiState.isError,
+                forYouMovies = uiState.searchUiState.forYouMovies,
+                onMovieClick = listener::onMovieClick,
+                exploreMoreMovies = exploreMoreMovies,
+                onClickSeeAll = listener::onSeeAllClick,
+                parentPadding = 16.dp
+            )
 
-            if (isFocused && searchHistory.isNotEmpty()) {
-                recentSearchScreen(
-                    searchHistory = searchHistory,
-                    searchQuery = searchQuery,
-                    onSearchItemClick = { itemInRecent ->
-                        onSearchItemClick(itemInRecent)
-                        isFocused = false
-                        doAction()
-                        onSearchBarClick()
-                        changeValueOfIsChangeSearchQuery()
-                        addRecentSearch(itemInRecent)
-                        when (typeOfFilterSearch) {
-                            SearchSections.TOP_RATED -> onClickTopRated()
-                            SearchSections.MOVIES -> onClickMovies()
-                            SearchSections.SERIES -> onClickSeries()
-                            SearchSections.ARTISTS -> onClickArtist()
-                        }
-
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
-                    },
-                    onRemoveItem = { onRemoveItem(it) },
-                    onClearAll = { onClearAll() },
-                    highlightCharactersInText = highLightRecentSearch,
-                    isWrite = isWrite,
-                    onSearchItem = { itemInRecent ->
-                        onSearchItemClick(itemInRecent)
-                        isPressSearchIconInKeyboard = 1
-                        isFocused = false
-                        doAction()
-                        onSearchBarClick()
-                        changeValueOfIsChangeSearchQuery()
-                        addRecentSearch(itemInRecent)
-                        when (typeOfFilterSearch) {
-                            SearchSections.TOP_RATED -> onClickTopRated()
-                            SearchSections.MOVIES -> onClickMovies()
-                            SearchSections.SERIES -> onClickSeries()
-                            SearchSections.ARTISTS -> onClickArtist()
-                        }
-
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
-                    },
-                    sizeOfSuggestionKeywords = suggestionListSize
-                )
-            }
-            if (isFocused && searchHistory.isEmpty()) {
+            recentSearchScreen(
+                isVisible = isFocused && uiState.recentSearchUiState.isNotEmpty(),
+                searchHistory = uiState.recentSearchUiState,
+                searchQuery = uiState.searchUiState.searchQuery,
+                onSearchItemClick = { itemInRecent ->
+                    listener.onSearchQueryChange(itemInRecent)
+                    isFocused = false
+                    onSearch(itemInRecent,
+                        selectedSearchSection = uiState.selectedSearchSection, listener)
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                },
+                onRemoveItem = listener::onRemoveRecentSearchItem,
+                onClearAll = listener::onClearAll,
+                highlightCharactersInText = ::highlightCharactersInText,
+                isWrite = isWrite,
+                onSearchItem = { itemInRecent ->
+                    listener.onSearchQueryChange(itemInRecent)
+                    isPressSearchIconInKeyboard = 1
+                    isFocused = false
+                    onSearch(itemInRecent, uiState.selectedSearchSection, listener)
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                },
+                sizeOfSuggestionKeywords = uiState.suggestionListSize
+            )
+            if (isFocused && uiState.recentSearchUiState.isEmpty()) {
                 emptyRecentSearch()
             }
         }
 
-        if (searchQuery.isNotEmpty() && isFocused != true) {
 
-            FilterSearchScreen(
-                typeOfFilterSearch = typeOfFilterSearch,
-                topRated = topRated,
-                movies = movies,
-                series = series,
-                artist = artist,
-                selectedTabIndex = selectedTabIndex,
-
-                onChangeSelectedTabIndex = { newIndex ->
-                    if (newIndex != selectedTabIndex) {
-                        selectedTabIndex = newIndex
-                        when (newIndex) {
-                            SearchSections.TOP_RATED -> onClickTopRated()
-                            SearchSections.MOVIES -> onClickMovies()
-                            SearchSections.SERIES -> onClickSeries()
-                            SearchSections.ARTISTS -> onClickArtist()
-                        }
-
-
+        FilterSearchScreen(
+            isVisible = uiState.searchUiState.searchQuery.isNotEmpty() && !isFocused,
+            typeOfFilterSearch = uiState.selectedSearchSection,
+            topRated = topRated,
+            movies = movies,
+            series = series,
+            artist = artist,
+            selectedTabIndex = uiState.selectedSearchSection,
+            onChangeSelectedTabSection = { searchSection ->
+                if (searchSection != uiState.selectedSearchSection) {
+                    when (searchSection) {
+                        SearchSections.TOP_RATED -> listener::onTopRatedTabClick
+                        SearchSections.MOVIES -> listener::onMoviesTabClick
+                        SearchSections.SERIES -> listener::onSeriesTabClick
+                        SearchSections.ARTISTS -> listener::onActorTabClick
                     }
-                },
-                onChangeTypeFilterSearch = {},
-                onSeriesClick = { seriesId ->
-                    onSeriesClick(seriesId)
-                },
-                onMovieClick = { moviesId ->
-                    onSearchedClick(moviesId)
-                },
-                onActorClick = { actorId ->
-                    onArtistClick(actorId)
-                },
-                onTopResultClick = { movieId ->
-                    onTopResultClick(movieId)
                 }
-            )
-        }
+            },
+            onSeriesClick = listener::onSeriesClick,
+            onMovieClick = listener::onMovieClick,
+            onActorClick = listener::onActorClick,
+            onTopResultClick = listener::onTopResultClick
+        )
     }
+}
 
+
+private fun onSearch(
+    itemInRecent: String,
+    selectedSearchSection: SearchSections,
+    listener: SearchScreenInteractionListener
+) {
+    listener.onDoAction()
+    listener.onChangeValueOfIsChangeSearchQuery()
+    listener.onAddRecentSearch(recentSearch = itemInRecent)
+    when (selectedSearchSection) {
+        SearchSections.TOP_RATED -> listener::onTopRatedTabClick
+        SearchSections.MOVIES -> listener::onMoviesTabClick
+        SearchSections.SERIES -> listener::onSeriesTabClick
+        SearchSections.ARTISTS -> listener::onActorTabClick
+    }
 }
