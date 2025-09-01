@@ -260,7 +260,7 @@ fun ContentSearchScreen(
             series = series,
             artist = artist,
             selectedTabIndex = uiState.selectedSearchSection,
-            onChangeSelectedTabIndex = { searchSection ->
+            onChangeSelectedTabSection = { searchSection ->
                 if (searchSection != uiState.selectedSearchSection) {
                     when (searchSection) {
                         SearchSections.TOP_RATED -> listener::onTopRatedTabClick

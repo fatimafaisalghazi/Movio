@@ -37,7 +37,7 @@ fun FilterSearchScreen(
     isVisible: Boolean,
     typeOfFilterSearch: SearchSections,
     selectedTabIndex: SearchSections,
-    onChangeSelectedTabIndex: (SearchSections) -> Unit,
+    onChangeSelectedTabSection: (SearchSections) -> Unit,
     topRated: LazyPagingItems<SearchScreenState.MovieUiState>,
     movies: LazyPagingItems<SearchScreenState.MovieUiState>,
     series: LazyPagingItems<SearchScreenState.SeriesUiState>,
@@ -59,7 +59,7 @@ fun FilterSearchScreen(
             ),
             selectedTabIndex = selectedTabIndex,
             onTabSelected = { index ->
-                onChangeSelectedTabIndex(index)
+                onChangeSelectedTabSection(index)
                 onChangeTypeFilterSearch()
             },
         )
