@@ -27,6 +27,23 @@ plugins {
     jacoco
 }
 
+val excludedPackagesOrClasses = listOf(
+    "com.madrid.domain",
+    "com.madrid.designSystem",
+    "com.madrid.data",
+    "com.madrid.app",
+    "com.madrid.presentation",
+)
+
+val excludedPatterns = excludedPackagesOrClasses.flatMap { path ->
+    val patternBase = path.replace('.', '/')
+    listOf(
+        "**/$patternBase/**",
+        "**/$patternBase.class",
+        "**/$patternBase\$*.class"
+    )
+}
+
 android {
     namespace = "com.madrid.movio"
     compileSdk = 36
@@ -65,9 +82,6 @@ android {
                 signingConfigs.getByName("release")
             } else {
                 signingConfigs.getByName("debug")
-            }
-            ndk {
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
             }
         }
         debug {
@@ -110,23 +124,32 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         html.required.set(true)
     }
 
-    val fileFilter = listOf(
+    val defaultExcludedPackagesOrClasses = listOf(
         "**/R.class",
         "**/R$*.class",
         "**/BuildConfig.*",
         "**/Manifest*.*",
         "**/*Test*.*",
-        "android/**/*.*"
+        "android/**/*.*",
+        "**/*_Impl*.*",
+        "**/ComposableSingletons*.*",
+        "**/*Kt.class",
+        "**/MainActivity.class",
+        "**/di/**",
+        "**/presentation/**",
     )
+
+    val allExcludes = defaultExcludedPackagesOrClasses + excludedPatterns
+
 
     val buildDir = layout.buildDirectory.get().asFile
 
     val debugTree = fileTree(buildDir.resolve("intermediates/javac/debug")) {
-        exclude(fileFilter)
+        exclude(allExcludes)
     }
 
     val kotlinDebugTree = fileTree(buildDir.resolve("tmp/kotlin-classes/debug")) {
-        exclude(fileFilter)
+        exclude(allExcludes)
     }
 
     classDirectories.setFrom(files(debugTree, kotlinDebugTree))
@@ -161,26 +184,19 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":presentation"))
-
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.slf4j.simple)
-
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     implementation (libs.dagger)
-
     implementation(libs.androidx.datasource.preferences)
-
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler.v2511)
-
-    //work manager
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.coil.compose)
 }
