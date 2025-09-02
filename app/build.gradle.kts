@@ -184,26 +184,19 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":presentation"))
-
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.slf4j.simple)
-
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation)
     implementation (libs.dagger)
-
     implementation(libs.androidx.datasource.preferences)
-
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler.v2511)
-
-    //work manager
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.coil.compose)
 }
