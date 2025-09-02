@@ -14,14 +14,13 @@ import com.madrid.domain.usecase.movie.GetSimilarMoviesUseCase
 import com.madrid.domain.usecase.movie.IsFavoriteMovieUseCase
 import com.madrid.domain.usecase.movie.SetMovieFavoriteStatusUseCase
 import com.madrid.presentation.navigation.Destinations
-import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
-import com.madrid.presentation.viewModel.shared.parser.formatRate
 import com.madrid.presentation.viewModel.base.BaseViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.review.ReviewUiState
 import com.madrid.presentation.viewModel.detailsViewModel.review.toReviewUiState
-import com.madrid.presentation.viewModel.shared.parser.formatDuration
 import com.madrid.presentation.viewModel.shared.parser.formatDateKotlinx
 import com.madrid.presentation.viewModel.shared.parser.formatDateOfBirth
+import com.madrid.presentation.viewModel.shared.parser.formatDuration
+import com.madrid.presentation.viewModel.shared.parser.formatRate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject

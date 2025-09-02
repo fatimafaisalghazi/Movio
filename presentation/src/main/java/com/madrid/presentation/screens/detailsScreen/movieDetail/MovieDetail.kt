@@ -48,7 +48,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.madrid.designSystem.R.drawable
-import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.designSystem.component.MovioBottomSheet
 import com.madrid.designSystem.component.MovioIcon
 import com.madrid.designSystem.component.MovioText
@@ -61,13 +60,13 @@ import com.madrid.presentation.component.BottomMediaActions
 import com.madrid.presentation.component.TopCastHorizontalScroll
 import com.madrid.presentation.component.addtolist.ListManagementBottomSheet
 import com.madrid.presentation.component.header.MovieDetailsHeader
+import com.madrid.presentation.component.layout.EmptySearchLayout
 import com.madrid.presentation.component.logout.LogoutConfirmationBottomSheet
 import com.madrid.presentation.component.movieActorBackground.MoviePosterDetailScreen
 import com.madrid.presentation.component.movioCards.MovioArtistsCard
 import com.madrid.presentation.navigation.Destinations
 import com.madrid.presentation.navigation.LocalNavController
 import com.madrid.presentation.screens.detailsScreen.reviewsScreen.composables.ReviewScreen
-import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMovie
 import com.madrid.presentation.screens.detailsScreen.similarMedia.SimilarMoviesSection
 import com.madrid.presentation.viewModel.addtolist.MovieListViewModel
 import com.madrid.presentation.viewModel.detailsViewModel.ArtistUiState
@@ -276,14 +275,7 @@ fun MovieDetailsScreen(
                                 )
                             )
                         },
-                        similarMovies = uiState.similarMovies.map { movie ->
-                            SimilarMovie(
-                                id = movie.id,
-                                title = movie.title,
-                                imageUrl = movie.imageUrl,
-                                rating = movie.rating
-                            )
-                        }
+                        similarMovies = uiState.similarMovies
                     )
 
                     LogoutConfirmationBottomSheet(

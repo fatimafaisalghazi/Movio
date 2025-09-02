@@ -26,20 +26,15 @@ import com.madrid.designSystem.theme.Theme
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.detailsViewModel.SeeAllType
+import com.madrid.presentation.viewModel.detailsViewModel.SeriesUiState
 
-data class SimilarSeries(
-    val id: Int,
-    val title: String,
-    val imageUrl: String,
-    val rating: Double,
-)
 
 @Composable
 fun SimilarSeriesSection(
-    similarSeries: List<SimilarSeries>,
+    similarSeries: List<SeriesUiState>,
     modifier: Modifier = Modifier,
     onSeeAllClick: () -> Unit = {},
-    onSeriesClick: (SimilarSeries) -> Unit = {}
+    onSeriesClick: (SeriesUiState) -> Unit = {}
 ) {
     Column(modifier = modifier) {
         CustomTextTitle(
@@ -50,15 +45,12 @@ fun SimilarSeriesSection(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
         )
         LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             items(similarSeries) { series ->
-                SeriesCard(
-                    series = series,
-                    onClick = { onSeriesClick(series) }
-                )
+                SeriesCard(series = series, onClick = { onSeriesClick(series) })
             }
         }
     }
@@ -66,54 +58,55 @@ fun SimilarSeriesSection(
 
 @Composable
 private fun SeriesCard(
-    series: SimilarSeries,
+    series: SeriesUiState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
-            .width(124.dp)
+            .width(width = 124.dp)
             .clickable(onClick = onClick)
     ) {
         Box(
             modifier = Modifier
-                .height(200.dp)
+                .height(height = 200.dp)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
+                .clip(shape = RoundedCornerShape(size = 8.dp))
         ) {
             MovioVerticalCard(
-                description = series.title,
+                description = series.name,
                 movieImage = series.imageUrl,
-                rate = series.rating.toString(),
+                rate = series.rate,
                 width = 124.dp,
-                imageHeight = 136.dp,
+                imageHeight = 160.dp,
                 onClick = onClick,
             )
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 private fun SimilarMoviesSectionPreview() {
     val fakeMovies = listOf(
-        SimilarSeries(
+        SeriesUiState(
             id = 1,
-            title = "Spider-Man: Into the Spider-Verse",
+            name = "Spider-Man: Into the Spider-Verse",
             imageUrl = "https://image.tmdb.org/t/p/w500/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
-            rating = 4.8
+            rate = 4.8.toString()
         ),
-        SimilarSeries(
+        SeriesUiState(
             id = 2,
-            title = "The Dark Knight",
+            name = "The Dark Knight",
             imageUrl = "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-            rating = 5.0
+            rate = 5.0.toString()
         ),
-        SimilarSeries(
+        SeriesUiState(
             id = 3,
-            title = "Grave of the Fireflies",
+            name = "Grave of the Fireflies",
             imageUrl = "https://image.tmdb.org/t/p/w500/qG3RYlIVpTYclR9TYIsy8p7m7AT.jpg",
-            rating = 4.7
+            rate = 4.7.toString()
         )
     )
     MovioTheme {

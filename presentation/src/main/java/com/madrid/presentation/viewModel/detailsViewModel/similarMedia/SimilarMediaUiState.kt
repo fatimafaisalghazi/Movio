@@ -1,11 +1,11 @@
 package com.madrid.presentation.viewModel.detailsViewModel.similarMedia
 
-private const val TAG = "SimilarMediaUiState"
-
 data class SimilarMediaUiState(
     val isMovie: Boolean = true,
     val headerName: String = "",
-    val medias: List<MediaUiState> = emptyList()
+    val medias: List<MediaUiState> = emptyList(),
+    val showLoadingScreen: Boolean = false,
+    val isError: Boolean =false
 )
 
 data class MediaUiState(

@@ -17,13 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.madrid.designSystem.component.CustomTextTitle
 import com.madrid.presentation.R
 import com.madrid.presentation.component.movioCards.MovioVerticalCard
-
-data class SimilarMovie(
-    val id: Int,
-    val title: String,
-    val imageUrl: String,
-    val rating: String
-)
+import com.madrid.presentation.viewModel.detailsViewModel.movie.SimilarMovie
 
 @Composable
 fun SimilarMoviesSection(
@@ -34,8 +28,7 @@ fun SimilarMoviesSection(
 ) {
     Column(modifier = modifier) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -52,7 +45,7 @@ fun SimilarMoviesSection(
             contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(similarMovies) { movie ->
+            items(items = similarMovies) { movie ->
                 MovioVerticalCard(
                     description = movie.title,
                     movieImage = movie.imageUrl,
