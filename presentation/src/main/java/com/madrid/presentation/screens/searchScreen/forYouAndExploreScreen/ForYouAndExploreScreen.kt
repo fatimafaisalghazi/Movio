@@ -2,11 +2,11 @@ package com.madrid.presentation.screens.searchScreen.forYouAndExploreScreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -27,7 +27,7 @@ import com.madrid.presentation.component.movioCards.MovioVerticalCard
 import com.madrid.presentation.viewModel.searchViewModel.SearchScreenState
 
 fun LazyGridScope.forYouAndExploreSections(
-    isVisible:Boolean,
+    isVisible: Boolean,
     showSearchResults: Boolean,
     isLoading: Boolean,
     isError: Boolean,
@@ -65,7 +65,7 @@ private fun LazyGridScope.forYouSection(
     forYouMovies: List<SearchScreenState.MovieUiState>,
     onMovieClick: (Int) -> Unit = {},
     onRetryButtonClick: () -> Unit = {},
-){
+) {
     when {
         isLoading -> {
             items(12) { ShimmerEffectCard(modifier = Modifier.padding(bottom = 12.dp)) }
@@ -91,7 +91,7 @@ private fun LazyGridScope.forYouSectionResult(
     parentPadding: Dp,
     forYouMovies: List<SearchScreenState.MovieUiState>,
     onMovieClick: (Int) -> Unit = {},
-){
+) {
     item(
         span = { GridItemSpan(maxLineSpan) }
     ) {
@@ -131,7 +131,7 @@ private fun LazyGridScope.exploreMoreSection(
     exploreMoreMovies: LazyPagingItems<SearchScreenState.MovieUiState>,
     onMovieClick: (Int) -> Unit = {},
     onRetryButtonClick: () -> Unit = {},
-){
+) {
     when {
         exploreMoreMovies.itemCount == 0 && exploreMoreMovies.loadState.refresh is LoadState.Loading -> {
             items(12) {
@@ -169,17 +169,19 @@ private fun LazyGridScope.exploreMoreSectionResult(
     }
     items(count = exploreMoreMovies.itemCount) { index ->
         val movie = exploreMoreMovies[index] ?: return@items
-
-        MovioVerticalCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(ratio = 150f / 180f)
-                .padding(bottom = 12.dp),
-            description = movie.title,
-            movieImage = movie.imageUrl,
-            rate = movie.rating,
-            imageHeight =  (150f / 180f).dp,
-            onClick = { onMovieClick(movie.id) }
-        )
+        BoxWithConstraints {
+            val cardWidth = maxWidth
+            val cardHeight = cardWidth * (180f / 158)
+            MovioVerticalCard(
+                modifier = Modifier
+                    .width(cardWidth)
+                    .padding(bottom = 12.dp),
+                description = movie.title,
+                movieImage = movie.imageUrl,
+                rate = movie.rating,
+                imageHeight = cardHeight,
+                onClick = { onMovieClick(movie.id) }
+            )
+        }
     }
 }
