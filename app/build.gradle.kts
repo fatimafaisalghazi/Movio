@@ -27,7 +27,6 @@ plugins {
     jacoco
 }
 
-
 val excludedPackagesOrClasses = listOf(
     "com.madrid.domain",
     "com.madrid.designSystem",
